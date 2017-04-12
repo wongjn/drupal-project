@@ -11,6 +11,10 @@
     ],
     "repositories": [
         {
+            "type": "vcs",
+            "url": "https://github.com/wongjn/drupal8-profile"
+        },
+        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         }
@@ -23,7 +27,8 @@
         "drupal/core": "~8.0",
         "drush/drush": "~8.0",
         "webflo/drupal-finder": "^0.2.1",
-        "webmozart/path-util": "^2.3"
+        "webmozart/path-util": "^2.3",
+        "wongjn/drupal8-profile": "dev-master"
     },
     "require-dev": {
         "behat/mink": "~1.7",
