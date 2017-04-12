@@ -1,13 +1,8 @@
-# Composer template for Drupal projects
+# Drupal 8 project managed with composer
 
 [![Build Status](https://travis-ci.org/drupal-composer/drupal-project.svg?branch=8.x)](https://travis-ci.org/drupal-composer/drupal-project)
 
-This project template should provide a kickstart for managing your site
-dependencies with [Composer](https://getcomposer.org/).
-
-If you want to know how to use it as replacement for
-[Drush Make](https://github.com/drush-ops/drush/blob/master/docs/make.md) visit
-the [Documentation on drupal.org](https://www.drupal.org/node/2471553).
+Complete Drupal 8 project managed with [Composer](https://getcomposer.org/).
 
 ## Usage
 
@@ -20,7 +15,7 @@ for your setup.
 After that you can create the project:
 
 ```
-composer create-project drupal-composer/drupal-project:8.x-dev some-dir --stability dev --no-interaction
+composer create-project wongjn/drupal-project:8.x-dev some-dir --stability dev --no-interaction --repository-url=https://github.com/wongjn/drupal-project
 ```
 
 With `composer require ...` you can download new dependencies to your 
@@ -126,6 +121,3 @@ section of composer.json:
     }
 }
 ```
-### How do I switch from packagist.drupal-composer.org to packages.drupal.org?
-
-Follow the instructions in the [documentation on drupal.org](https://www.drupal.org/docs/develop/using-composer/using-packagesdrupalorg).

@@ -1,12 +1,12 @@
 {
-    "name": "drupal-composer/drupal-project",
-    "description": "Project template for Drupal 8 projects with composer",
+    "name": "wongjn/drupal-project",
+    "description": "Drupal 8 project managed with composer",
     "type": "project",
     "license": "GPL-2.0+",
     "authors": [
         {
-            "name": "",
-            "role": ""
+            "name": "Justin Wong",
+            "role": "Developer"
         }
     ],
     "repositories": [
