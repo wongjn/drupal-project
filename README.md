@@ -15,7 +15,7 @@ for your setup.
 After that you can create the project:
 
 ```
-composer create-project wongjn/drupal-project:8.x-dev some-dir --stability dev --no-interaction --repository-url=https://github.com/wongjn/drupal-project
+composer create-project wongjn/drupal-project:8.x-dev some-dir --stability dev --no-interaction --repository-url="https://wongjn.github.io/composer-repo/repo/"
 ```
 
 With `composer require ...` you can download new dependencies to your 
