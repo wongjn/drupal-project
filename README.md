@@ -18,6 +18,13 @@ After that you can create the project:
 composer create-project wongjn/drupal-project:8.x-dev some-dir --stability dev --no-interaction --repository-url="https://wongjn.github.io/composer-repo/repo/"
 ```
 
+Install Drupal with drush:
+
+```
+cd some-dir/web
+"../vendor/bin/drush" site-install wongjn_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="Site Install"
+```
+
 With `composer require ...` you can download new dependencies to your 
 installation.
 
