@@ -32,7 +32,6 @@
         "drush/drush": "~8.0",
         "webflo/drupal-finder": "^0.2.1",
         "webmozart/path-util": "^2.3",
-        "wongjn/drupal_theme": "dev-master",
         "wongjn/wongjn_profile": "dev-master"
     },
     "require-dev": {
@@ -79,7 +78,6 @@
             "web/modules/contrib/{$name}": ["type:drupal-module"],
             "web/profiles/contrib/{$name}": ["type:drupal-profile"],
             "web/themes/contrib/{$name}": ["type:drupal-theme"],
-            "web/themes/custom/{$name}": ["type:drupal-theme-wongjn"],
             "drush/contrib/{$name}": ["type:drupal-drush"]
         }
     }
