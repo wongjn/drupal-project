@@ -15,6 +15,10 @@
             "url": "https://github.com/wongjn/wongjn_profile"
         },
         {
+            "type": "vcs",
+            "url": "https://github.com/wongjn/drupal_theme"
+        },
+        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         }
@@ -28,6 +32,7 @@
         "drush/drush": "~8.0",
         "webflo/drupal-finder": "^0.2.1",
         "webmozart/path-util": "^2.3",
+        "wongjn/drupal_theme": "dev-master",
         "wongjn/wongjn_profile": "dev-master"
     },
     "require-dev": {
