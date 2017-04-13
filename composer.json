@@ -79,6 +79,7 @@
             "web/modules/contrib/{$name}": ["type:drupal-module"],
             "web/profiles/contrib/{$name}": ["type:drupal-profile"],
             "web/themes/contrib/{$name}": ["type:drupal-theme"],
+            "web/themes/custom/{$name}": ["type:drupal-theme-wongjn"],
             "drush/contrib/{$name}": ["type:drupal-drush"]
         }
     }
