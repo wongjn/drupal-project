@@ -15,14 +15,6 @@
             "url": "https://github.com/wongjn/wongjn_profile"
         },
         {
-            "type": "vcs",
-            "url": "https://github.com/wongjn/drupal_theme"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/wongjn/drupal_theme_helper"
-        },
-        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         }
