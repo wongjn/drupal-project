@@ -36,13 +36,12 @@
         "drush/drush": "~8.0",
         "webflo/drupal-finder": "^0.3.0",
         "webmozart/path-util": "^2.3",
-        "wongjn/drupal_theme": "dev-master",
-        "wongjn/drupal_theme_helper": "dev-master",
         "wongjn/wongjn_profile": "dev-master"
     },
     "require-dev": {
         "behat/mink": "~1.7",
         "behat/mink-goutte-driver": "~1.2",
+        "drupal/devel": "^1.0@RC",
         "jcalderonzumba/gastonjs": "~1.0.2",
         "jcalderonzumba/mink-phantomjs-driver": "~0.3.1",
         "mikey179/vfsstream": "~1.2",
@@ -84,9 +83,7 @@
             "web/modules/contrib/{$name}": ["type:drupal-module"],
             "web/profiles/contrib/{$name}": ["type:drupal-profile"],
             "web/themes/contrib/{$name}": ["type:drupal-theme"],
-            "drush/contrib/{$name}": ["type:drupal-drush"],
-            "web/themes/custom/{$name}": ["wongjn/drupal_theme"],
-            "web/modules/custom/{$name}": ["wongjn/drupal_theme_helper"]
+            "drush/contrib/{$name}": ["type:drupal-drush"]
         }
     }
 }
