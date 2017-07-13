@@ -1,7 +1,5 @@
 # Drupal 8 project managed with composer
 
-[![Build Status](https://travis-ci.org/drupal-composer/drupal-project.svg?branch=8.x)](https://travis-ci.org/drupal-composer/drupal-project)
-
 Complete Drupal 8 project managed with [Composer](https://getcomposer.org/).
 
 ## Usage
@@ -15,14 +13,13 @@ for your setup.
 After that you can create the project:
 
 ```
-composer create-project wongjn/drupal-project:8.x-dev --no-interaction --repository-url="https://wongjn.github.io/composer-repo/repo/" some-dir
+composer install
 ```
 
 Install Drupal with drush:
 
 ```
-cd some-dir/public_html
-../vendor/bin/drush" site-install wongjn_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="Site Install"
+vendor/bin/drush site-install wongjn_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="Site Install"
 ```
 
 With `composer require ...` you can download new dependencies to your
@@ -37,7 +34,7 @@ The `composer create-project` command passes ownership of all files to the
 project that is created. You should create a new git repository, and commit
 all files not excluded by the .gitignore file.
 
-## What does the template do?
+## What does this project do?
 
 When installing the given `composer.json` some tasks are taken care of:
 
@@ -67,7 +64,7 @@ Follow the steps below to update your core files.
 1. Run `git diff` to determine if any of the scaffolding files have changed.
    Review the files for any changes and restore any customizations to
   `.htaccess` or `robots.txt`.
-1. Commit everything all together in a single commit, so `public_html` will remain in
+1. Commit everything all together in a single commit, so `web` will remain in
    sync with the `core` when checking out branches or running `git bisect`.
 1. In the event that there are non-trivial conflicts in step 2, you may wish
    to perform these steps on a branch, and use `git merge` to combine the
@@ -75,13 +72,6 @@ Follow the steps below to update your core files.
    of a [three-way merge tool such as kdiff3](http://www.gitshah.com/2010/12/how-to-setup-kdiff-as-diff-tool-for-git.html). This setup is not necessary if your changes are simple;
    keeping all of your modifications at the beginning or end of the file is a
    good strategy to keep merges easy.
-
-## Generate composer.json from existing project
-
-With using [the "Composer Generate" drush extension](https://www.drupal.org/project/composer_generate)
-you can now generate a basic `composer.json` file from an existing project. Note
-that the generated `composer.json` might differ from this project's file.
-
 
 ## FAQ
 
