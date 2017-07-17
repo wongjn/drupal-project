@@ -90,8 +90,8 @@
 # $options['shell-aliases']['online'] = 'drush sset system.maintenance_mode 0 --input-format=integer';
 # $options['shell-aliases']['cpull'] = 'config-pull @example.prod @self --label=vcs';
 # $options['shell-aliases']['wipe'] = 'cache-rebuild';
-$options['shell-aliases']['don'] = 'pm-enable devel devel_generate kint admin_toolbar_tools views_ui field_ui';
-$options['shell-aliases']['doff'] = 'pm-uninstall devel devel_generate kint admin_toolbar_tools views_ui field_ui';
+$options['shell-aliases']['don'] = 'pm-enable devel devel_generate kint views_ui';
+$options['shell-aliases']['doff'] = 'pm-uninstall devel devel_generate kint views_ui';
 
 #Drupal 7 (and 6).
 # $options['shell-aliases']['offline'] = 'variable-set -y --always-set maintenance_mode 1';
