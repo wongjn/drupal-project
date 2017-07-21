@@ -306,24 +306,16 @@ $options['nocolor'] = TRUE;
 // Use Drupal version specific CLI history instead of per site.
 # $command_specific['core-cli'] = array('version-history' => TRUE);
 
-$command_specific['config-export'] = [
-  'skip-modules' => [
-    'devel',
-    'devel_generate',
-    'kint',
-    'admin_toolbar_tools',
-    'views_ui',
-    'field_ui',
-  ],
+$dev_modules = [
+  'devel',
+  'devel_generate',
+  'kint',
+  'views_ui',
 ];
 
+$command_specific['config-export'] = [
+  'skip-modules' => $dev_modules,
+];
 $command_specific['config-import'] = [
-  'skip-modules' => [
-    'devel',
-    'devel_generate',
-    'kint',
-    'admin_toolbar_tools',
-    'views_ui',
-    'field_ui',
-  ],
+  'skip-modules' => $dev_modules,
 ];
