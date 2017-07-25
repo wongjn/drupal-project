@@ -12,6 +12,10 @@
     "repositories": [
         {
             "type": "vcs",
+            "url": "https://github.com/wongjn/lazy_image"
+        },
+        {
+            "type": "vcs",
             "url": "https://github.com/wongjn/wongjn_profile"
         },
         {
