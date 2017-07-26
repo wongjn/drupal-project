@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+id: dev
+label: Development
+folder: ../config/dev
+module:
+  config_filter: 0
+  config_split: 0
+  devel: 0
+  devel_generate: 0
+  kint: 0
+  views_ui: 0
+theme: {  }
+blacklist: {  }
+graylist:
+  - core.extension
+graylist_dependents: true
+graylist_skip_equal: true
+weight: 0
