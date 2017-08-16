@@ -10,6 +10,7 @@
 # Ignore sensitive information
 /public_html/sites/*/settings.php
 /public_html/sites/*/settings.local.php
+/drush/site-aliases/live.aliases.drushrc.php
 
 # Ignore Drupal's file directory
 /public_html/sites/*/files/
