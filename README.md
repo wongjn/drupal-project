@@ -128,7 +128,7 @@ section of composer.json:
 "extra": {
     "patches": {
         "drupal/foobar": {
-            "Patch description": "URL to patch"
+            "Patch description": "URL or local path to patch"
         }
     }
 }
