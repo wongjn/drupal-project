@@ -1,6 +1,4 @@
-# Drupal 8 project managed with composer
-
-Complete Drupal 8 project managed with [Composer](https://getcomposer.org/).
+# {{ LABEL }} Drupal 8 project managed with [Composer](https://getcomposer.org/)
 
 ## Usage
 
@@ -19,20 +17,15 @@ composer install
 Install Drupal with drush:
 
 ```
-vendor/bin/drush site-install wongjn_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="Site Install"
+vendor/bin/drush site-install {{ NAME }}_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="{{ LABEL }}"
 ```
 
 With `composer require ...` you can download new dependencies to your
 installation.
 
 ```
-cd some-dir
 composer require drupal/devel:~1.0
 ```
-
-The `composer create-project` command passes ownership of all files to the
-project that is created. You should create a new git repository, and commit
-all files not excluded by the .gitignore file.
 
 ## What does this project do?
 

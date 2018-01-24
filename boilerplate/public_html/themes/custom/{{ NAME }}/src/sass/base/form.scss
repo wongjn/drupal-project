@@ -1,0 +1,157 @@
+/**
+ * @file
+ * Base form elements.
+ */
+
+@import '../system';
+
+$form: (
+  color-default: #999,
+  color-active: salmon,
+	font-size: 18,
+	height: 45,
+  line-height: 1.2,
+);
+$form: map-merge($form, (
+  padding: ((map-get($form, height) -  (map-get($form, font-size)) * 1px * map-get($form, line-height)) / 2))
+);
+
+:root {
+  --form-inactive-colour: map-get($form, color-default);
+  --form-active-colour: map-get($form, color-active);
+}
+
+label,
+legend {
+  font-weight: 700;
+}
+
+input,
+textarea,
+select {
+  transition: border-color 250ms, box-shadow 250ms;
+  border: 1px solid map-get($form, color-default);
+  border-color: var(--form-inactive-colour);
+  background-color: transparent;
+  font: inherit;
+  line-height: map-get($form, line-height);
+  color: inherit;
+  @include font-size(map-get($form, font-size));
+  -webkit-appearance: none;
+  appearance: none;
+
+  &:focus {
+    outline: 0;
+    border-color: map-get($form, color-active);
+    border-color: var(--form-active-colour);
+    box-shadow: 0 0 0 1px map-get($form, color-active);
+    box-shadow: 0 0 0 1px var(--form-active-colour);
+  }
+}
+
+input,
+textarea {
+	padding: map-get($form, padding);
+}
+
+input,
+select,
+[type="submit"] {
+	height: (map-get($form, height) * 1em / map-get($form, font-size));
+}
+
+textarea {
+  resize: vertical;
+  font: inherit;
+}
+
+select {
+  cursor: pointer;
+
+  &[size] {
+    overflow: auto;
+    resize: vertical;
+  }
+}
+
+::placeholder {
+  opacity: 1;
+  color: inherit;
+}
+
+button {
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled,
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+// For submit-type `input` form elements
+[type="submit"],
+[type="button"] {
+  border: 1px solid map-get($form, color-active);
+  border-color: var(--form-active-colour);
+	padding:
+		(map-get($form, padding) * 0.9)
+		map-get($form, padding)
+		(map-get($form, padding) * 1.1);
+  background-color: map-get($form, color-active);
+  background-color: var(--form-active-colour);
+  color: #fff;
+  cursor: pointer;
+  transition: color 250ms, background-color 250ms, transform 250ms;
+
+  &:hover,
+  &:focus {
+    background-color: transparent;
+    color: map-get($form, color-active);
+    color: var(--form-active-colour);
+  }
+
+  &:active {
+    transform: scale(0.95);
+    transition-duration: 101ms;
+  }
+}
+
+// Correct the cursor style of increment and decrement buttons in Chrome
+[type="number"] {
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    height: auto;
+  }
+}
+
+[type="search"] {
+  // Correct the odd appearance in Chrome and Safari
+  -webkit-appearance: textfield;
+  // Correct the outline style in Safari. */
+  outline-offset: -2px;
+
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+}
+
+::-webkit-file-upload-button {
+  // Correct the inability to style clickable types in iOS and Safari
+  -webkit-appearance: button;
+  // Change font properties to `inherit` in Safari
+  font: inherit;
+}
+
+fieldset {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}

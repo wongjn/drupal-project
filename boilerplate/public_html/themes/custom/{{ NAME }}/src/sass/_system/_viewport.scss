@@ -1,0 +1,102 @@
+/**
+ * @file
+ * Mixins and functions related to the viewport.
+ */
+
+@import 'unit';
+
+/**
+ * Outputs scaling values.
+ *
+ * @param {string} $property
+ *   The CSS property to scale a value with, e.g. `margin-right`.
+ * @param {number|list} $max-values
+ *   The value(s) at maximum *gate* breakpoint. Works with `px` and `rem` values
+ *   only.
+ * @param {number} $min-value [0]
+ *   The minimum value when (conceptually) at 0vmin.
+ * @param {string|number} $at ['vmin']
+ *   The breakpoint where the scaling should stop at. Possible values are:
+ *   - `vmin`: to *gate* when viewport height and width is more than 980px
+ *   - `Xvw`: to *gate* when viewport width is more than Xpx
+ *   - `Xvh`: to *gate* when viewport height is more than Xpx
+ *
+ * @output Property declaration for scaling value and media query for maximum
+ *   value.
+ */
+@mixin viewport-scale($property, $max-values, $min-value: 0, $at: 'vmin') {
+  $deprecated: if(
+    typeof($max-values) == number,
+    if(unit($max-values) == 'vw' or unit($max-values) == 'vh', true, false),
+    false
+  );
+
+  @if $max-values == 'vmin' or $deprecated {
+    @warn '$at parameter moved to fourth position';
+
+    // Transpose arguments to correct places from old API
+    $temp: $max-values;
+    $max-values: $min-value;
+    $min-value: if($at == 'vmin', 0, $at);
+    $at: $temp;
+  }
+
+  $max-values-unitless: ();
+  @each $max-value in $max-values {
+    $max-values-unitless: append($max-values-unitless, strip-unit(if(unit($max-value) == 'rem', rem-to-px($max-value), $max-value)));
+  }
+
+  $min-value-unitless: strip-unit(if(unit($min-value) == 'rem', rem-to-px($min-value), $min-value));
+
+  $scalers: ();
+  $media-query: null;
+
+  // Vmin special case
+  @if $at == 'vmin' {
+    @each $max-value-unitless in $max-values-unitless {
+      $scalers: append($scalers, (($max-value-unitless - $min-value-unitless) / 9.8 * 1vmin));
+    }
+
+    $media-query: '(orientation: portrait) and (min-width: 980px), (orientation: landscape) and (min-height: 980px)';
+  }
+  // Specified dimension
+  @else if unit($at) == 'vw' or unit($at) == 'vh' {
+    $viewport-gate-length: strip-unit($at);
+    @each $max-value-unitless in $max-values-unitless {
+      $scalers: append(
+        $scalers,
+        ((($max-value-unitless - $min-value-unitless) / ($viewport-gate-length / 100))) * 1#{unit($at)}
+      );
+    }
+
+    // Determine media query from unit
+    @if unit($at) == 'vw' {
+      $media-query: '(min-width: #{strip-unit($at)}px)';
+    } @else {
+      $media-query: '(min-height: #{strip-unit($at)}px)';
+    }
+  }
+  // Invalid unit for $at
+  @else {
+    @error '#{$at} should be a CSS value of vw or vh, with the value being the "maximum gate" breakpoint or literally "vmin".';
+  }
+
+  // Scaling output
+  $calcs: ();
+  @each $scaler in $scalers {
+    $value: if(strip-unit($scaler) == 0,
+      $min-value,
+      if($min-value == 0,
+        $scaler,
+        calc(#{$min-value} + #{$scaler})
+      )
+    );
+    $calcs: append($calcs, $value);
+  }
+  #{$property}: $calcs;
+
+  // Gated maximum output
+  @media #{$media-query} {
+    #{$property}: $max-values;
+  }
+}

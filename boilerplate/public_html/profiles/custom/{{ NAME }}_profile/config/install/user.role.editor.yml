@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies: {  }
+id: editor
+label: Editor
+weight: 2
+is_admin: null
+permissions:
+  - 'access administration pages'
+  - 'access content'
+  - 'access content overview'
+  - 'access in-place editing'
+  - 'access toolbar'
+  - 'administer footer menu items'
+  - 'administer main menu items'
+  - 'administer nodes'
+  - 'bypass node access'
+  - 'create page content'
+  - 'create url aliases'
+  - 'delete all revisions'
+  - 'delete any page content'
+  - 'delete own page content'
+  - 'delete page revisions'
+  - 'edit any page content'
+  - 'edit own page content'
+  - 'revert all revisions'
+  - 'revert page revisions'
+  - 'use text format full_html'
+  - 'view all revisions'
+  - 'view own unpublished content'
+  - 'view page revisions'
+  - 'view the administration theme'

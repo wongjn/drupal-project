@@ -1,0 +1,33 @@
+/**
+ * @file
+ * Base media-related elements, such as images and video.
+ */
+
+embed,
+object,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+img,
+svg {
+  display: block;
+}
+
+// Default fill colour of inline SVGs to be same as text colour.
+svg {
+  max-width: 100%;
+  max-height: 100%;
+  fill: currentColor;
+  // Hide overflowing SVG content in IE
+  overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+
+  &[src] {
+    height: auto;
+  }
+}

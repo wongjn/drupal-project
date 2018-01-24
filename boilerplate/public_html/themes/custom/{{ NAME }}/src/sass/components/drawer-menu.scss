@@ -1,0 +1,126 @@
+/**
+ * Off-canvas drawer menu.
+ */
+
+@import '../system';
+
+$accent: slateblue;
+$bg-accent: purple;
+
+.c-drawer-menu {
+  display: flex;
+  align-items: center;
+
+  // Container for drawer
+  &__drawer {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    background-color: $accent;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 350ms get-easing(out-cubic), visibility 0s 350ms; // 1
+    transform: translateX(105%);
+    transform: translateX(calc(100% + 10px));
+    visibility: hidden; // 1
+    width: 80vw;
+    max-width: 400px;
+
+    // Cross mark for closing indicator
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 100%;
+      padding: 10px 10px 0 0;
+      opacity: 0;
+      transition: opacity 350ms;
+      font-size: 2em;
+      line-height: 1;
+      color: #fff;
+      content: '✗';
+      pointer-events: none;
+    }
+
+    &[aria-expanded="true"] {
+      transform: none;
+      visibility: visible;
+      transition-delay: 0s;
+
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+
+
+  // Open button
+  &__open-btn {
+    display: block;
+    background:
+      linear-gradient(to top, $bg-accent, $bg-accent) center calc(50% - 10px),
+      linear-gradient(to top, $bg-accent, $bg-accent) center,
+      linear-gradient(to top, $bg-accent, $bg-accent) center calc(50% + 10px);
+    background-repeat: no-repeat;
+    background-size: 50% 2px;
+    padding: 10px;
+    height: 50px;
+    width: 50px;
+    font-size: 0;
+  }
+
+
+  // Close button (dark overlay)
+  &__close-btn {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 350ms;
+    font-size: 0;
+    content: '';
+
+    &[aria-hidden="true"] {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+
+  &__title {
+    @include font-size(24);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: $bg-accent;
+    padding: 20px;
+    flex: 0 0 auto;
+    color: $accent;
+  }
+
+  &__menu {
+    &--top {
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      > li {
+        border-top: 1px solid rgba(#000, 0.2);
+      }
+    }
+
+    &--sub {
+      margin-left: 10px;
+      font-size: 0.9em;
+    }
+  }
+
+  &__link {
+    @include viewport-scale(padding, 30px, 10px);
+    display: block;
+  }
+}

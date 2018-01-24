@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Theme override to display a region.
+ *
+ * Available variables:
+ * - content: The content for this region, typically blocks.
+ * - content_attributes: HTML attributes for the region div.
+ * - attributes: HTML attributes for the region wrapper section tag.
+ * - region: The name of the region variable as defined in the theme's
+ *   .info.yml file.
+ *
+ * @see template_preprocess_region()
+ * @see {{ NAME }}_preprocess_region()
+ */
+#}
+{% if content %}
+  <section{{ attributes }}>
+    <div{{ content_attributes }}>
+      {{ content }}
+    </div>
+  </section>
+{% endif %}

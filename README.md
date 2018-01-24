@@ -17,17 +17,20 @@ First you need to [install composer](https://getcomposer.org/doc/00-intro.md#ins
 You might need to replace `composer` with `php composer.phar` (or similar)
 for your setup.
 
-After that you can create the project:
+After that you can create the project (the directory name will be used as module
+and theme names, so should only contain the same valid characters):
 
 ```
-composer create-project wongjn/drupal-project:8.x-dev --no-interaction --repository-url="https://wongjn.github.io/composer-repo/repo/" some-dir
+composer create-project wongjn/drupal-project:8.x-dev --no-interaction --repository-url="https://wongjn.github.io/composer-repo/repo/" some_dir
+cd some_dir
+composer run-script boilerplate 'Project human-readable name' 'Composer vendor name'
 ```
 
 Install Drupal with drush:
 
 ```
 cd some-dir/public_html
-../vendor/bin/drush" site-install wongjn_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="Site Install"
+../vendor/bin/drush" site-install some_dir_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="Site Install"
 ```
 
 With `composer require ...` you can download new dependencies to your

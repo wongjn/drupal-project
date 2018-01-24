@@ -1,0 +1,7 @@
+favicon:
+  mimetype: image/vnd.microsoft.icon
+  path: themes/custom/{{ NAME }}/favicons/favicon.ico
+  use_default: false
+logo:
+  path: themes/custom/{{ NAME }}/logo.svg
+  use_default: false

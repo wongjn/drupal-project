@@ -1,0 +1,86 @@
+/**
+ * @file
+ * Functions and mixins related to fonts.
+ */
+
+@import 'unit';
+
+// List of font sizes that will have scalable custom properties
+$FONT-SIZE-PRESETS: (
+  72,
+  60,
+  48,
+  40,
+  36,
+  30,
+  24,
+  18,
+  16,
+);
+
+// Minimum size for font size to be considered scalable
+$FONT-SIZE-SCALE-MINIMUM: 12px;
+
+// Default font size
+$FONT-SIZE: 16;
+
+// Global default line height ratio
+$LINE-HEIGHT: (24 / $FONT-SIZE);
+
+/**
+ * Outputs font size using fall-back and variables.
+ *
+ * @param {number} $size
+ *   The unitless font size in pixels.
+ */
+@mixin font-size($size) {
+  $rem-size: px-to-rem($size * 1px);
+
+  // Too small to scale
+  @if $size <= $FONT-SIZE-SCALE-MINIMUM {
+    font-size: $rem-size;
+  }
+  // Defined in :root as CSS custom properties
+  @else if index($FONT-SIZE-PRESETS, $size) {
+    font-size: $rem-size;
+    font-size: var(--font-size-#{$size});
+  }
+  @else {
+    @include viewport-scale(font-size, $rem-size, font-scale-minimum($size));
+  }
+}
+
+/**
+ * Outputs custom properties for font size presets.
+ *
+ * @param {bool} [$editor-stylesheet=false]
+ *   Optional. Indicates whether the mixin is in the context of a WYSIWYG
+ *   editor. Default false.
+ *
+ */
+@mixin font-size-custom-properties($editor-stylesheet: false) {
+  @each $size in $FONT-SIZE-PRESETS {
+    $rem-size: px-to-rem($size * 1px);
+
+    @if $size > $FONT-SIZE-SCALE-MINIMUM {
+      @if ($editor-stylesheet) {
+        // No scaling for WYSIWYG editors
+        --font-size-#{$size}: $rem-size;
+      } @else {
+        @include viewport-scale(--font-size-#{$size}, $rem-size, font-scale-minimum($size));
+      }
+    }
+  }
+}
+
+/**
+ * Returns the minimum value to use for font scales.
+ *
+ * @param {number} $size
+ *   The unitless font size in pixels.
+ * @return {number}
+ *   The minimum sizue for the given font size with rem units.
+ */
+@function font-scale-minimum($size) {
+  @return px-to-rem(floor(($size + ($FONT-SIZE-SCALE-MINIMUM * 15))/ 15));
+}
