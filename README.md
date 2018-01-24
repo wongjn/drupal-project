@@ -17,10 +17,13 @@ First you need to [install composer](https://getcomposer.org/doc/00-intro.md#ins
 You might need to replace `composer` with `php composer.phar` (or similar)
 for your setup.
 
-After that you can create the project:
+After that you can create the project (the directory name will be used as module
+and theme names, so should only contain the same valid characters):
 
 ```
-composer create-project wongjn/drupal-project:8.x-dev --no-interaction --repository-url="https://wongjn.github.io/composer-repo/repo/" some_dir -- 'New site'
+composer create-project wongjn/drupal-project:8.x-dev --no-interaction --repository-url="https://wongjn.github.io/composer-repo/repo/" some_dir
+cd some_dir
+composer run-script boilerplate 'Project human-readable name' 'Composer vendor name'
 ```
 
 Install Drupal with drush:
@@ -40,9 +43,7 @@ composer require drupal/devel:~1.0
 
 The `composer create-project` command passes ownership of all files to the
 project that is created. You should create a new git repository, and commit
-all files not excluded by the .gitignore file. There is also a post 
-create-project script that will create boilerplate code from the `boilderplate`
-directory; see `boilerplate.php` for implementation details.
+all files not excluded by the .gitignore file.
 
 ## What does the template do?
 
