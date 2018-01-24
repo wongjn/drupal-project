@@ -1,0 +1,31 @@
+{
+  "presets": [
+    [
+      "env", {
+        "uglify": true,
+        "loose": true,
+        "targets": {
+          "browsers": [
+            "last 2 versions",
+            "not ie < 11"
+          ]
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    [
+      "transform-runtime",
+      {
+        "polyfill": false
+      }
+    ],
+    [
+      "transform-react-jsx",
+      {
+        "pragma": "h"
+      }
+    ]
+  ]
+}

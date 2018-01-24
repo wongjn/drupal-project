@@ -1,0 +1,5 @@
+name: {{ LABEL }} Helper
+description: Tweaks for the {{ LABEL }} theme to work properly and for the site in general.
+package: {{ LABEL }}
+type: module
+core: 8.x

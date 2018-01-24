@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the {{ NAME }}_profile install profile.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function {{ NAME }}_profile_install() {
+  $config = \Drupal::configFactory();
+  $config->getEditable('contact.form.personal')->delete();
+  $config->getEditable('image.style.large')->delete();
+  $config->getEditable('image.style.medium')->delete();
+  $config->getEditable('views.view.content_recent')->delete();
+  $config->getEditable('views.view.frontpage')->delete();
+  $config->getEditable('views.view.glossary')->delete();
+  $config->getEditable('views.view.who_s_new')->delete();
+  $config->getEditable('views.view.who_s_online')->delete();
+}

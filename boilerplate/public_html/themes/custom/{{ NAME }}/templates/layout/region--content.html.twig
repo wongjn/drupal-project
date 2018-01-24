@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Theme override to display the Content region.
+ *
+ * Available variables:
+ * - content: The content for this region, typically blocks.
+ * - content_attributes: HTML attributes for the region div.
+ * - attributes: HTML attributes for the region wrapper main tag.
+ * - region: The name of the region variable as defined in the theme's
+ *   .info.yml file.
+ *
+ * @see template_preprocess_region()
+ * @see {{ NAME }}_preprocess_region()
+ */
+#}
+{% if content %}
+  <main{{ attributes.setAttribute('role', 'main') }}>
+    {# link is in html.html.twig #}
+    <a id="main-content" tabindex="-1"></a>
+    <div{{ content_attributes }}>
+      {{ content }}
+    </div>
+  </main>
+{% endif %}

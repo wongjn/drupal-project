@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Boilerplate copying.
@@ -20,7 +21,7 @@ $upper_camel  = upper_camel($machine_name);
 // Token replacements in filenames or file content.
 $replacements = [
   '{{ NAME }}'   => $machine_name,
-  '{{ HUMAN }}'  => $human_name,
+  '{{ LABEL }}'  => $human_name,
   '{{ CAMEL }}'  => lcfirst($upper_camel),
   '{{ UCAMEL }}' => $upper_camel,
   BOILERPLATE_ROOT . DIRECTORY_SEPARATOR => '',

@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies: {  }
+id: editor
+label: Editor
+description: ''
+conf:
+  extensions: 'jpg png gif doc docx pdf xls xlsx ppt pptx txt csv'
+  maxsize: !!float 4
+  quota: !!float 0
+  maxwidth: 2000
+  maxheight: 2000
+  replace: 0
+  folders:
+    -
+      path: 'users/[user:name]'
+      permissions:
+        all: true
+    -
+      path: users
+      permissions:
+        browse_files: true
+        browse_subfolders: true

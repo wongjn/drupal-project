@@ -1,0 +1,12 @@
+langcode: en
+status: false
+dependencies:
+  module:
+    - node
+id: content
+label: Content
+type: 'canonical_entities:node'
+pattern: '[node:content-type]s/[node:title]'
+selection_logic: and
+weight: -5
+relationships: {  }

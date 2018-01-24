@@ -1,0 +1,68 @@
+global:
+  css:
+    base:
+      dist/css/base/variables.css: {}
+      dist/css/base/form.css: {}
+      dist/css/base/media.css: {}
+      dist/css/base/miscellaneous.css: {}
+      dist/css/base/typography.css: {}
+    layout:
+      dist/css/layout/container.css: {}
+    component:
+      dist/css/components/drawer-menu.css: {}
+      dist/css/components/main-menu.css: {}
+    theme:
+      dist/css/theme.css: {}
+      dist/css/utilities.css:
+        weight: 9999
+  js:
+    dist/js/main.js:
+      preprocess: false
+      minified: true
+  dependencies:
+    - {{ NAME }}/webpack.vendor
+    - {{ NAME }}/polyfill
+    - core/drupal
+    - core/drupalSettings
+
+webpack.vendor:
+  js:
+    dist/js/vendor.js:
+      preprocess: false
+      minified: true
+
+grid:
+  css:
+    layout:
+      dist/css/layout/grid.css: {}
+
+messages:
+  css:
+    component:
+      dist/css/components/messages.css: {}
+
+polyfill:
+  remote: https://polyfill.io/
+  license:
+    name: MIT
+    url: https://github.com/Financial-Times/polyfill-service/blob/master/LICENSE.md
+  js:
+    https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Promise,WeakSet,Element.prototype.matches,CustomEvent:
+      type: external
+      minified: true
+      weight: -100
+
+row:
+  css:
+    layout:
+      dist/css/layout/row.css: {}
+
+tabs:
+  css:
+    component:
+      dist/css/components/tabs.css: {}
+
+text-body:
+  css:
+    component:
+      dist/css/components/text-body.css: {}

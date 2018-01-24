@@ -1,0 +1,4 @@
+services:
+  {{ NAME }}_helper.icons:
+    class: Drupal\{{ NAME }}_helper\Icons
+    arguments: ['@cache.discovery', '@cache_tags.invalidator', '@theme_handler']

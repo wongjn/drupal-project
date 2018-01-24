@@ -1,0 +1,45 @@
+name: {{ LABEL }}
+type: theme
+description: Bespoke theme for the {{ LABEL }} website designed and developed by Cosmic.
+core: 8.x
+base theme: stable
+regions:
+  header: Header
+  primary_menu: Primary menu
+  content: Content
+  footer: Footer
+features:
+  - logo
+libraries:
+  - {{ NAME }}/global
+libraries-override:
+  system/base:
+    css:
+      component:
+        /core/themes/stable/css/system/components/autocomplete-loading.module.css: false
+        /core/themes/stable/css/system/components/fieldgroup.module.css: false
+        /core/themes/stable/css/system/components/details.module.css: false
+        /core/themes/stable/css/system/components/item-list.module.css: false
+        /core/themes/stable/css/system/components/js.module.css: false
+        /core/themes/stable/css/system/components/nowrap.module.css: false
+        /core/themes/stable/css/system/components/progress.module.css: false
+        /core/themes/stable/css/system/components/reset-appearance.module.css: false
+        /core/themes/stable/css/system/components/resize.module.css: false
+        /core/themes/stable/css/system/components/sticky-header.module.css: false
+        /core/themes/stable/css/system/components/system-status-counter.css: false
+        /core/themes/stable/css/system/components/system-status-report-counters.css: false
+        /core/themes/stable/css/system/components/system-status-report-general-info.css: false
+        /core/themes/stable/css/system/components/tabledrag.module.css: false
+        /core/themes/stable/css/system/components/tablesort.module.css: false
+        /core/themes/stable/css/system/components/tree-child.module.css: false
+  views/views.module:
+    css:
+      component:
+        /core/themes/stable/css/views/views.module.css: false
+ckeditor_stylesheets:
+  - dist/css/base/variables.editor.css
+  - dist/css/base/form.css
+  - dist/css/base/media.css
+  - dist/css/base/miscellaneous.css
+  - dist/css/base/typography.css
+  - dist/css/components/text-body.css

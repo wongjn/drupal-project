@@ -1,0 +1,110 @@
+/**
+ * @file
+ * Layout items in a grid.
+ */
+
+@import '../system';
+
+// Spacing between items
+$gutter: 40px;
+$half-gutter: $gutter / 2;
+
+// Supported grid widths, key as BEM variant name
+$columns: (
+  thirds: 3,
+  quarters: 4,
+  sixths: 6,
+);
+
+/**
+ * Calculates the column width for a number of columns.
+ *
+ * @param {number} $columns
+ *   The number of columns.
+ * @param {pxlength} $gutter
+ *   The gutter size between columns.
+ */
+@function column-width($columns, $gutter) {
+  @return ($SITE-WIDTH-PX - ($gutter * ($columns - 1))) / $columns;
+}
+
+@mixin variants($gutter: $gutter) {
+  @each $name, $column in $columns {
+    &--#{$name} {
+      // Exact width
+      $width: column-width($column, $gutter);
+      // Min-width for grid to be at the desired column count at full site width
+      $min-width: (column-width($column + 1, $gutter) + 1px);
+
+      --column-min-width: $min-width;
+      --column-width: $width;
+
+      > .l-grid__item {
+        flex-basis: $min-width;
+      }
+    }
+  }
+}
+
+.l-grid {
+  @include viewport-scale(--gutter-x, $half-gutter, 0, $SITE-WIDTH * 1vw);
+  @include viewport-scale(--gutter-y, $half-gutter, 0, $SITE-WIDTH * 1vw);
+  @include variants;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: ($half-gutter * -1);
+  margin: calc(var(--gutter-y) * -1) calc(var(--gutter-x) * -1);
+
+  &__item {
+    flex-grow: 1;
+    flex-shrink: 0;
+    margin: $half-gutter;
+    margin: var(--gutter-y) var(--gutter-x);
+    max-width: 100%;
+
+    // Override CSS variable fallback hard-coded values
+    &[class] {
+      flex-basis: var(--column-min-width);
+    }
+  }
+
+  // Adds as many columns as possible that fit with variant width
+  // 1. Compensate when gutters are not default so that variant column
+  //    calculations remain accurate.
+  &--flexy,
+  &--rigid {
+    @supports (display: grid) {
+      display: grid;
+      margin: 0;
+      padding: 0 calc(var(--gutter-x) - #{$half-gutter});
+      grid-template-columns: repeat(auto-fill, minmax(0, var(--column-width)));
+      grid-gap: calc(var(--gutter-y) * 2) calc(var(--gutter-x) * 2);
+    }
+
+    // Prevent growing for flexbox fallback
+    > .l-grid__item {
+      flex-grow: 0; // 1
+
+      @supports (display: grid) {
+        margin: 0;
+      }
+    }
+  }
+
+  // Stretches grids to fill container width instead of static widths.
+  &--flexy {
+    grid-template-columns: repeat(auto-fill, minmax(var(--column-min-width), 1fr));
+
+    // 1. Due to the way that this uses CSS grid, this will only shink
+    //    reliably for full-site-width grids, uses container parent.
+    @supports (display: grid) {
+      justify-items: center; // 1
+
+      .l-grid__item {
+        width: 100%;
+        max-width: calc(100vw - var(--container-space-x)); // 1
+      }
+    }
+  }
+}

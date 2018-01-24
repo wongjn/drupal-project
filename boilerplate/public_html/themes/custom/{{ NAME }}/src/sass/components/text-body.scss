@@ -1,0 +1,88 @@
+/**
+ * @file
+ * CMS WYSIWYG-entered text.
+ */
+
+@import '../system';
+
+.c-text-body {
+  $block-spacing: $FONT-SIZE * $LINE-HEIGHT * 1px;
+  $negative-header-spacing: (16em / 48);
+
+  // Clearfix
+  &::after {
+    display: table;
+    clear: both;
+    content: '';
+  }
+
+  * + :not(li) {
+    margin-top: $block-spacing;
+  }
+
+  ul,
+  ol {
+    padding-left: 3ch;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+      list-style-type: decimal;
+  }
+
+
+  // Sizes for each header tags, 2–6
+  $heading-sizes: (
+    2: 30,
+    3: 24,
+    4: 18,
+    5: 16,
+    6: 16
+  );
+  @each $level, $size in $heading-sizes {
+    h#{$level} {
+      @include font-size($size);
+      margin-top: ($negative-header-spacing * -1);
+    }
+
+    * + h#{$level} {
+      margin-top: calc(#{$block-spacing} - #{$negative-header-spacing});
+    }
+  }
+
+  img {
+    display: block;
+  }
+
+  a {
+    border-bottom: 2px solid transparent;
+    transition-property: color, border-bottom-color;
+    color: blue;
+
+    &:hover {
+      color: blue;
+      border-bottom-color: currentColor;
+    }
+
+    &:active {
+      color: red;
+    }
+  }
+
+
+  // WYSIWYG alignment classes
+  .align-left,
+  .align-right,
+  .align-center {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .align-left,
+  .align-right {
+    @include viewport-scale(margin-right, 20px, 5px);
+    @include viewport-scale(margin-left, 20px, 5px);
+  }
+}

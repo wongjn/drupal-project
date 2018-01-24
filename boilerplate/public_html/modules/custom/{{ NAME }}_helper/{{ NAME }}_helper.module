@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * {{ LABEL }} helper module.
+ */
+
+/**
+ * Implements hook_editor_js_settings_alter().
+ */
+function {{ NAME }}_helper_editor_js_settings_alter(array &$settings) {
+  if (isset($settings['editor']['formats']['full_html']) && $settings['editor']['formats']['full_html']['editor'] == 'ckeditor') {
+    $settings['editor']['formats']['full_html']['editorSettings']['bodyClass'] = 'c-text-body';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views-view.html.twig.
+ */
+function {{ NAME }}_helper_preprocess_views_view(&$variables) {
+  $extenders = $variables['view']->display_handler->getExtenders();
+
+  if (isset($extenders['inview'])) {
+    $extenders['inview']->preprocessViewsView($variables);
+  }
+}

@@ -1,0 +1,87 @@
+/**
+ * @file
+ * Drupal status messages.
+ */
+
+.c-messages {
+  $colours: (
+    default: #333,
+    light: #ccc,
+  );
+  $icons: (
+    width: 3em,
+    font-scale: 2,
+  );
+  $padding: 1em;
+
+  position: relative;
+  padding: $padding $padding $padding ($padding + map-get($icons, width));
+  background-color: map-get($colours, light);
+  background-color: var(--messages-colour-light);
+
+  --messages-colour: map-get($colours, default);
+  --messages-colour-light: map-get($colours, light);
+
+  // Pseudo-element icon.
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    padding: ($padding / map-get($icons, font-scale)) 0 0;
+    width: (map-get($icons, width) / map-get($icons, font-scale));
+    height: 100%;
+    background-color: map-get($colours, default);
+    background-color: var(--messages-colour);
+    color: #fff;
+    font-size: (1em * map-get($icons, font-scale));
+    line-height: 1;
+    text-align: center;
+    content: '';
+    content: var(--messages-icon, '');
+  }
+
+  a {
+    color: var(--messages-colour);
+
+    &:hover,
+    &:focus {
+      color: #333;
+    }
+
+    &:active {
+      color: #000;
+    }
+  }
+
+
+  $variants: (
+    status: (
+      colour-default: #2ecc71,
+      colour-light: #abebc6,
+      icon: '\2713',
+    ),
+    warning: (
+      colour-default: #f1c40f,
+      colour-light: #f9e79f,
+      icon: '!',
+    ),
+    error: (
+      colour-default: #e74c3c,
+      colour-light: #f5b7b1,
+      icon: '\2717',
+    ),
+  );
+  @each $name, $data in $variants {
+    &--#{$name} {
+      --messages-colour: map-get($data, colour-default);
+      --messages-colour-light: map-get($data, colour-light);
+      --messages-icon: map-get($data, icon);
+    }
+  }
+
+
+  &__list {
+    padding-left: 2ch;
+  }
+}

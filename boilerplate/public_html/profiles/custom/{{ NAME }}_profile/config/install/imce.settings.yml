@@ -1,0 +1,7 @@
+abs_urls: false
+roles_profiles:
+  editor:
+    public: editor
+  administrator:
+    public: admin
+    private: admin

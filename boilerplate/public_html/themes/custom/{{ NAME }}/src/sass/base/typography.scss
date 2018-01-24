@@ -1,0 +1,150 @@
+/**
+ * @file
+ * Base typography.
+ */
+
+@import '../system';
+
+html {
+  // Prevent adjustments of font size after orientation changes in IE and iOS
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @include font-size($FONT-SIZE);
+  letter-spacing: 0.025em;
+  line-height: $LINE-HEIGHT;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #333;
+  quotes: '“' '”' '‘' '’';
+}
+
+::selection {
+  background-color: #999;
+  color: #fff;
+}
+
+a {
+  transition: color 250ms;
+  text-decoration: none;
+  color: dodgerblue;
+
+  &:hover,
+  &:active {
+    color: inherit;
+    // Remove focus outline on hover and active mouse states
+    outline: 0;
+  }
+  &:active {
+    color: darkslategray;
+    transition-duration: 50ms;
+  }
+}
+
+p,
+ul,
+ol,
+table,
+hr,
+blockquote,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #e1e1e1;
+}
+
+q,
+blockquote {
+  &::before {
+    content: open-quote;
+  }
+  &::after {
+    content: close-quote;
+  }
+}
+
+blockquote {
+  position: relative;
+  padding-right: 1ch;
+  padding-left: 1ch;
+
+  &::before,
+  &::after {
+    position: absolute;
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+    bottom: 0;
+  }
+}
+
+// Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari
+abbr[title] {
+  text-decoration: underline dotted;
+}
+
+// Set font weight for emboldening tags
+b,
+strong {
+  font-weight: bolder;
+}
+
+// Prevent `sub` and `sup` elements from affecting line height
+sub,
+sup {
+  position: relative;
+  vertical-align: baseline;
+  line-height: 0;
+  font-size: 75%;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+
+code,
+kbd,
+pre,
+samp {
+  // Correct the inheritance and scaling of font size via duplication monospace
+  // hack
+  font-family: monospace, monospace;
+  // Correct `em` font sizing
+  font-size: 1em;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+}

@@ -1,0 +1,22 @@
+/**
+ * @file
+ * Tab links for Drupal local tasks.
+ */
+
+.c-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ccc;
+  list-style: none;
+
+
+  a {
+    display: block;
+    margin-right: 20px;
+    padding-bottom: 5px;
+  }
+
+  .is-active {
+    border-bottom: 3px solid;
+  }
+}

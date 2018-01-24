@@ -1,0 +1,10 @@
+/**
+ * @file
+ * Global CSS variables.
+ */
+
+@import '../system';
+
+:root {
+  @include font-size-custom-properties;
+}

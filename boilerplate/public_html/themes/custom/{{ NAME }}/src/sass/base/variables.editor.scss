@@ -1,0 +1,10 @@
+/**
+ * @file
+ * Global CSS variables for WYSIWYG editors.
+ */
+
+@import '../system';
+
+:root {
+  @include font-size-custom-properties(true);
+}

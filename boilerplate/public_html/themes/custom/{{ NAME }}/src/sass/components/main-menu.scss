@@ -1,0 +1,117 @@
+/**
+ * @file
+ * Main site menu.
+ */
+
+@import '../system';
+
+$font-size: 16;
+$y-padding: 10px;
+$x-padding: 10px;
+
+.c-main-menu {
+  @include font-size($font-size);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  line-height: 1.2;
+  text-transform: uppercase;
+
+
+  &__link {
+    display: block;
+    padding: $y-padding $x-padding;
+  }
+
+
+  // 1. Sub-menu position context
+  &__top-menu,
+  &__sub-menu {
+    > li {
+      position: relative; // 1
+      z-index: 1;
+    }
+  }
+
+
+  // 1. Layout box is still here when collapsed. This prevents unclickable
+  //     elements underneath.
+  &__top-menu {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    flex: 0 1 auto;
+    pointer-events: none; // 1
+
+
+    > li {
+      pointer-events: auto; // 1
+    }
+  }
+
+  &__sub-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: -1;
+    margin-right: -9999px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+    background-color: pink;
+    min-width: 100%;
+    max-width: 250px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 250ms, transform 250ms;
+
+    // Hover helper when the menu is transitioning in
+    &::before {
+      position: absolute;
+      left: 0;
+      bottom: 100%;
+      width: 100%;
+      height: 10px;
+      content: '';
+    }
+
+    // Open child menu animations
+    li.is-open > &,
+    li:hover > & {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+    li:focus-within > & {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+
+    > li:not(:last-child) {
+      border-bottom: 1px solid blue;
+    }
+
+
+
+    &--deep {
+      top: 0;
+      left: 100%;
+      transform: translateX(10px);
+
+      // Hover helper when the menu is transitioning in.
+      &::before {
+        top: 0;
+        right: 100%;
+        width: 10px;
+        height: 100%;
+      }
+    }
+  }
+
+
+  &__drawer {
+    flex: 0 0 auto;
+  }
+}

@@ -1,0 +1,288 @@
+<?php
+
+/**
+ * @file
+ * Supporting theme hooks and functions.
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
+use Drupal\file\FileInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function {{ NAME }}_theme($existing, $type, $theme, $path) {
+  return [
+    'favicons' => [
+      'variables' => [
+        'path' => Url::fromUri("base:$path/favicons"),
+        'colour' => '#123456',
+      ],
+    ],
+    'icon' => [
+      'variables' => [
+        'id' => NULL,
+        'attributes' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_css_alter().
+ */
+function {{ NAME }}_css_alter(&$css) {
+  if (\Drupal::service('settings')->get('browsersync')) {
+    $theme_path = drupal_get_path('theme', '{{ NAME }}');
+    foreach ($css as $location => $file) {
+      // Force theme CSS to use <link> tags (for BrowserSync development)
+      if (strpos($location, $theme_path) !== FALSE) {
+        $css[$location]['preprocess'] = FALSE;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function {{ NAME }}_js_alter(&$javascript) {
+  $preprocess = \Drupal::config('system.performance')->get('js.preprocess');
+  $theme_path = drupal_get_path('theme', '{{ NAME }}');
+
+  foreach ($javascript as $file_path => $options) {
+    if (strpos($file_path, $theme_path) !== 0 || $options['type'] != 'file') {
+      continue;
+    }
+
+    if ($preprocess) {
+      // Enable long-term caching.
+      $javascript[$file_path]['version'] = md5_file(DRUPAL_ROOT . "/$file_path");
+    }
+    else {
+      $javascript[$file_path]['cache'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function {{ NAME }}_page_attachments_alter(array &$attachments) {
+  // Add favicon markup. Requires #type to prevent defaulting to html_tag.
+  $favicons = [
+    '#type'  => FALSE,
+    '#theme' => 'favicons',
+  ];
+  $attachments['#attached']['html_head'][] = [$favicons, 'favicons'];
+
+  // Add theme path to settings.
+  $theme_path = base_path() . \Drupal::theme()
+    ->getActiveTheme()
+    ->getPath();
+  $attachments['#attached']['drupalSettings']['{{ CAMEL }}']['path'] = $theme_path;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block.html.twig.
+ */
+function {{ NAME }}_preprocess_block(&$variables) {
+  $variables['attributes']['class'][] = 'l-container__module';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block--system-branding-block.html.twig.
+ */
+function {{ NAME }}_preprocess_block__system_branding_block(&$variables) {
+  // Proxy default theme logo configuration value.
+  $variables['default_logo'] = $variables['configuration']['use_site_logo'];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field.html.twig.
+ */
+function {{ NAME }}_preprocess_field(&$variables) {
+  // @todo: remove when Stable base theme bug is resolved (not adding
+  // 'visually-hidden' class per label setting
+  // https://www.drupal.org/node/2779919)
+  if ($variables['label_display'] == 'visually_hidden') {
+    $variables['title_attributes']['class'][] = 'visually-hidden';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for file-link.html.twig.
+ */
+function {{ NAME }}_preprocess_file_link(&$variables) {
+  $file = $variables['file'];
+  $file_entity = ($file instanceof FileInterface) ? $file : \Drupal::entityTypeManager()->getStorage('file')->load($file->fid);
+
+  // Add href attribute.
+  $variables['attributes']->setAttribute('href', file_create_url($file_entity->getFileUri()));
+
+  // Set mime type info into attribute.
+  $mime_type = $file->getMimeType();
+  $variables['attributes']->setAttribute('type', "$mime_type; length=" . $file->getSize());
+
+  if (empty($variables['description'])) {
+    $variables['description'] = $file_entity->getFilename();
+  }
+  else {
+    $variables['attributes']->setAttribute('title', $file_entity->getFilename());
+  }
+
+  $variables['attributes']->setAttribute('download', TRUE);
+  $variables['attributes']->setAttribute('target', '_blank');
+}
+
+/**
+ * Prepares variables for svg icon templates.
+ *
+ * Default template: icon.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - id: The XML id value of the symbol element in the SVG sprite sheet.
+ *   - attributes: The HTML attributes to apply to the SVG element.
+ */
+function {{ NAME }}_preprocess_icon(array &$variables) {
+  $icon_service = \Drupal::service('{{ NAME }}_helper.icons');
+
+  $variables['sheet_url'] = $icon_service->getSheetPath('frontend');
+
+  // Default role to be img.
+  if (!isset($variables['attributes']['role'])) {
+    $variables['attributes']['role'] = 'img';
+  }
+
+  $dimension_keys = &drupal_static(__FUNCTION__, array_flip(['width', 'height']));
+  $dimension_attributes = array_intersect_key($variables['attributes'], $dimension_keys);
+
+  // Calculate other dimension if only one has been specified:
+  if (count($dimension_attributes) == 1) {
+    $aspect_ratio = $icon_service->getAspectRatio($variables['id']);
+    $existing_length = reset($dimension_attributes);
+    $missing_length_key = key(array_diff_key($dimension_keys, $dimension_attributes));
+
+    // Flip aspect ratio value for calculating width.
+    if ($missing_length_key == 'width') {
+      $aspect_ratio = 1 / $aspect_ratio;
+    }
+
+    $variables['attributes'][$missing_length_key] = round($existing_length * $aspect_ratio, 2);
+  }
+
+  \Drupal::service('renderer')->addCacheableDependency($variables, $icon_service);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for region.html.twig.
+ */
+function {{ NAME }}_preprocess_region(&$variables) {
+  $variables['attributes']['class'][] = 'c-' . Html::getClass($variables['region']);
+  $variables['content_attributes']['class'][] = 'l-container';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views-view-list.html.twig.
+ */
+function {{ NAME }}_preprocess_views_view_list(&$variables) {
+  $has_list_attributes = isset($variables['list']['attributes']);
+  $style_handler = $variables['view']->style_plugin;
+
+  if ($has_list_attributes && $variables['list']['attributes']->offsetExists('class')) {
+    foreach ($variables['list']['attributes']->offsetGet('class') as $class) {
+      $matches = [];
+      if (preg_match_all('/[locut]-((?:(?!--|__).)+)$/', $class, $matches)) {
+        $variables['#attached']['library'][] = '{{ NAME }}/' . current($matches[1]);
+      }
+    }
+  }
+
+  if ($style_handler->getPluginId() == 'inview_list') {
+    // Create list attributes object if none created yet.
+    if (!$has_list_attributes) {
+      $variables['list']['attributes'] = new Attribute();
+    }
+
+    // Add attributes for inview JS.
+    $variables['list']['attributes']
+      ->addClass('js-inview-list')
+      ->setAttribute('data-selector', $style_handler->options['inview_selector']);
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for contact_message_form.
+ */
+function {{ NAME }}_form_contact_message_form_alter(&$form) {
+  $form['name']['#title'] = t('Name');
+  $form['mail']['#title'] = t('Email');
+  $form['message']['widget'][0]['value']['#title'] = t('Query');
+
+  if (isset($form['actions']['preview'])) {
+    unset($form['actions']['preview']);
+  }
+
+  $form['actions']['submit']['#value'] = t('Submit');
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function {{ NAME }}_element_info_alter(array &$info) {
+  $info['view']['#pre_render'][] = '{{ NAME }}_view_pre_render';
+  $info['processed_text']['#pre_render'][] = '{{ NAME }}_processed_text_pre_render';
+}
+
+/**
+ * Pre-render callback to wrap processed text.
+ *
+ * Adds '#variants' as a key to specify a BEM variant name to wrapper text body
+ * class component.
+ */
+function {{ NAME }}_processed_text_pre_render($element) {
+  if ($element['#format'] == 'full_html') {
+    $classes = ['c-text-body'];
+
+    if (isset($element['#variants'])) {
+      foreach ($element['#variants'] as $variant) {
+        $classes[] = 'c-text-body--' . Html::cleanCssIdentifier($variant);
+      }
+    }
+
+    $element['#prefix'] = '<div class="' . implode(' ', $classes) . '">';
+    $element['#suffix'] = '</div>';
+    $element['#attached']['library'][] = '{{ NAME }}/text-body';
+  }
+
+  return $element;
+}
+
+/**
+ * Pre-render callback to remove wrapper elements around views.
+ */
+function {{ NAME }}_view_pre_render($element) {
+  if (isset($element['#theme_wrappers'])) {
+    $key = array_search('container', $element['#theme_wrappers']);
+
+    if (is_int($key)) {
+      unset($element['#theme_wrappers'][$key]);
+    }
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for block.
+ */
+function {{ NAME }}_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  $element = $variables['elements'];
+  if ($element['#base_plugin_id'] == 'block_content') {
+    // Add suggestion for block_content block type.
+    $suggestions[] = 'block__block_content__' . $element['content']['#block_content']->bundle();
+  }
+}
