@@ -70,6 +70,9 @@
         ],
         "post-update-cmd": [
             "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "post-create-project-cmd": [
+            "@php scripts/boilerplate.php"
         ]
     },
     "extra": {
@@ -80,7 +83,6 @@
             "public_html/profiles/contrib/{$name}": ["type:drupal-profile"],
             "public_html/themes/contrib/{$name}": ["type:drupal-theme"],
             "drush/contrib/{$name}": ["type:drupal-drush"]
-        },
-        "enable-patching": true
+        }
     }
 }

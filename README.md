@@ -20,14 +20,14 @@ for your setup.
 After that you can create the project:
 
 ```
-composer create-project wongjn/drupal-project:8.x-dev --no-interaction --repository-url="https://wongjn.github.io/composer-repo/repo/" some-dir
+composer create-project wongjn/drupal-project:8.x-dev --no-interaction --repository-url="https://wongjn.github.io/composer-repo/repo/" some_dir -- 'New site'
 ```
 
 Install Drupal with drush:
 
 ```
 cd some-dir/public_html
-../vendor/bin/drush" site-install wongjn_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="Site Install"
+../vendor/bin/drush" site-install some_dir_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="Site Install"
 ```
 
 With `composer require ...` you can download new dependencies to your
@@ -40,7 +40,9 @@ composer require drupal/devel:~1.0
 
 The `composer create-project` command passes ownership of all files to the
 project that is created. You should create a new git repository, and commit
-all files not excluded by the .gitignore file.
+all files not excluded by the .gitignore file. There is also a post 
+create-project script that will create boilerplate code from the `boilderplate`
+directory; see `boilerplate.php` for implementation details.
 
 ## What does the template do?
 
