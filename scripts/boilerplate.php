@@ -5,9 +5,6 @@
  * Boilerplate copying.
  */
 
-echo var_dump($argv);
-die();
-
 if ($argc < 2) {
   throw new Exception('Need Human name argument');
 }
@@ -16,6 +13,7 @@ const BOILERPLATE_ROOT = 'boilerplate';
 
 $machine_name = basename(realpath('.'));
 $human_name   = $argv[1];
+$vendor       = isset($argv[2]) ? $argv[2] : 'vendor';
 $upper_camel  = upper_camel($machine_name);
 
 // Token replacements in filenames or file content.
@@ -24,25 +22,21 @@ $replacements = [
   '{{ LABEL }}'  => $human_name,
   '{{ CAMEL }}'  => lcfirst($upper_camel),
   '{{ UCAMEL }}' => $upper_camel,
-  BOILERPLATE_ROOT . DIRECTORY_SEPARATOR => '',
 ];
 
 $finfo = new finfo(FILEINFO_MIME_TYPE);
 
 echo "Copying boilerplate files...\n";
-foreach (scan_directory_recursive(BOILERPLATE_ROOT) as $file_path) {
-  $destination = strtr($file_path, $replacements);
-  rename($file_path, $destination);
-
-  if (strpos($finfo->file($destination), 'text/') === 0) {
-    $content = strtr(file_get_contents($destination), $replacements);
-    file_put_contents($destination, $content);
-  }
-}
+boilerplate_generate(BOILERPLATE_ROOT, '.');
 
 echo "Rewriting composer.json\n";
+
 $config = json_decode(file_get_contents('composer.json'), TRUE);
-unset($config['post-create-project-cmd']);
+unset($config['scripts']['boilerplate']);
+$config['name']        = "$vendor/$machine_name";
+$config['description'] = "$human_name Drupal 8 project managed with composer";
+$config['authors']     = [];
+
 file_put_contents('composer.json', json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
 echo "Removing boilerplate files...\n";
@@ -76,32 +70,50 @@ function upper_camel($string, array $mask = []) {
 }
 
 /**
- * Scans a directory for files recursively.
+ * Generate the boilerplate files with replacemenets.
  *
- * @param string $directory
- *   The directory to search in.
- * @param string[] $results
- *   Internal variable to track results for the recursion aspect.
- *
- * @return string[]
- *   List of all files within the given directory.
+ * @param string $source
+ *   Source path.
+ * @param string $dest
+ *   Destination path.
+ * @return bool
+ *   Returns true on success, false on failure.
  */
-function scan_directory_recursive($directory, array &$results = []) {
-  $files = scandir($directory);
+function boilerplate_generate($source, $dest) {
+  global $replacements, $finfo;
+  $dest = strtr($dest, $replacements);
 
-  foreach ($files as $value) {
-    $path = realpath($directory . DIRECTORY_SEPARATOR . $value);
+  // Move a file
+  if (is_file($source)) {
+    $result = rename($source, $dest);
 
-    if (!is_dir($path)) {
-      $results[] = $path;
+    if ($result && strpos($finfo->file($dest), 'text/') === 0) {
+      $replaced_content = strtr(file_get_contents($dest), $replacements);
+      return !!file_put_contents($dest, $replaced_content);
     }
-    elseif ($value != '.' && $value != '..') {
-      scan_directory_recursive($path, $results);
-      $results[] = $path;
-    }
+
+    return $result;
   }
 
-  return $results;
+  // Make destination directory
+  if (!is_dir($dest)) {
+    mkdir($dest, '0755');
+  }
+
+  // Loop through the folder
+  $dir = dir($source);
+  while (false !== $entry = $dir->read()) {
+    // Skip pointers
+    if ($entry == '.' || $entry == '..') {
+      continue;
+    }
+
+    // Deep copy directories
+    boilerplate_generate("$source/$entry", "$dest/$entry");
+  }
+
+  // Clean up
+  $dir->close();
 }
 
 /**
@@ -118,7 +130,7 @@ function remove_directory_recursive($directory) {
       unlink($entry->getRealPath());
     }
     elseif (!$entry->isDot() && $entry->isDir()) {
-      rrmdir($entry->getRealPath());
+      remove_directory_recursive($entry->getRealPath());
     }
   }
 

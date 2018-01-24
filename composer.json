@@ -73,7 +73,7 @@
         "post-update-cmd": [
             "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
         ],
-        "post-create-project-cmd": [
+        "boilerplate": [
             "@php scripts/boilerplate.php"
         ]
     },

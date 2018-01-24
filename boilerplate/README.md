@@ -1,4 +1,4 @@
-# {{ HUMAN }} Drupal 8 project managed with [Composer](https://getcomposer.org/)
+# {{ LABEL }} Drupal 8 project managed with [Composer](https://getcomposer.org/)
 
 ## Usage
 
@@ -17,7 +17,7 @@ composer install
 Install Drupal with drush:
 
 ```
-vendor/bin/drush site-install {{ NAME }}_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="{{ HUMAN }}"
+vendor/bin/drush site-install {{ NAME }}_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="{{ LABEL }}"
 ```
 
 With `composer require ...` you can download new dependencies to your
