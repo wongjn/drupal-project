@@ -2,7 +2,7 @@
     "name": "wongjn/drupal-project",
     "description": "Drupal 8 project managed with composer",
     "type": "project",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "wongjn",
