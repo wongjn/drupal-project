@@ -304,7 +304,7 @@ export default init;
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.<% camel %>Inview = {
+  Drupal.behaviors.{{ CAMEL }}Inview = {
     attach(context) {
       const elements = Array.from(context.querySelectorAll(SELECTOR))
         .concat((typeof context.matches === 'function' && context.matches(SELECTOR)) ? [context] : []);
