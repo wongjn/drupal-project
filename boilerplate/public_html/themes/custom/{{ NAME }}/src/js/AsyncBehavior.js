@@ -3,8 +3,6 @@
  * Drupal behavior extension class to load extra JS asynchronously.
  */
 
-import partition from 'lodash/partition';
-
 /**
  * Manages an async Drupal behavior.
  *

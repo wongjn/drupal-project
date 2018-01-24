@@ -10,7 +10,6 @@ import MainMenuMenu from './MainMenuMenu';
  * Main menu drawer menu preact component.
  */
 export default class MainMenuDrawer extends Component {
-
   /**
    * @inheritDoc
    */

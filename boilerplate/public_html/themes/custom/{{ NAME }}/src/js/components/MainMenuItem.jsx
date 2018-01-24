@@ -12,7 +12,6 @@ import Menu from './MainMenuMenu';
  * Main menu item preact component.
  */
 export default class MainMenuItem extends Component {
-
   /**
    * @inheritDoc
    */
