@@ -55,6 +55,16 @@ class Icons implements CacheableDependencyInterface {
   protected $iconData;
 
   /**
+   * Markup for inline def element markup.
+   *
+   * This is url hash references in symbols that don't resolve to the file in
+   * some browsers.
+   *
+   * @var string
+   */
+  protected $inlineDefs;
+
+  /**
    * The path to the icon sheet relative to Drupal root.
    *
    * @var string
@@ -144,10 +154,24 @@ class Icons implements CacheableDependencyInterface {
    */
   protected function getIconData() {
     if (!isset($this->iconData)) {
-      $this->iconData = $this->discoverIconData();
+      $this->discoverIconData();
     }
 
     return $this->iconData;
+  }
+
+  /**
+   * Returns the inline defs markup.
+   *
+   * @return string
+   *   The inline defs markup.
+   */
+  public function getInlineDefs() {
+    if (!isset($this->inlineDefs)) {
+      $this->discoverIconData();
+    }
+
+    return $this->inlineDefs;
   }
 
   /**
@@ -188,8 +212,16 @@ class Icons implements CacheableDependencyInterface {
         ];
       }
 
+      $data['inline_defs'] = '';
+      foreach ($xml->getElementsByTagName('defs') as $def) {
+        $data['inline_defs'] .= $xml->saveXML($def);
+      }
+
       $this->cache->set(self::ICON_DATA_CID, $data, $this->getCacheMaxAge(), $this->getCacheTags());
     }
+
+    $this->iconData = $data['icons'];
+    $this->inlineDefs = $data['inline_defs'];
 
     return $data;
   }
