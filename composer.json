@@ -31,20 +31,14 @@
         "drupal/menu_trail_by_path": "^1.1",
         "drupal/menu_admin_per_menu": "^1.0",
         "drupal/pathauto": "^1.0@RC",
-        "drush/drush": "~8.0|^9.0.0-beta8",
+        "drush/drush": "^9.0.0",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
         "wongjn/lazy_image": "^0.2.0"
     },
     "require-dev": {
-        "behat/mink": "~1.7",
-        "behat/mink-goutte-driver": "~1.2",
         "drupal/devel": "^1.0@RC",
-        "jcalderonzumba/gastonjs": "~1.0.2",
-        "jcalderonzumba/mink-phantomjs-driver": "~0.3.1",
-        "mikey179/vfsstream": "~1.2",
-        "phpunit/phpunit": ">=4.8.28 <5",
-        "symfony/css-selector": "~2.8|~3.0"
+        "webflo/drupal-core-require-dev": "~8.4"
     },
     "conflict": {
         "drupal/drupal": "*"
