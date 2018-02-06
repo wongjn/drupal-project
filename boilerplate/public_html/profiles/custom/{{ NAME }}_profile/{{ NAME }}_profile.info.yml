@@ -48,6 +48,7 @@ dependencies:
   - pathauto
   - views
   - {{ NAME }}_helper
+  - {{ NAME }}_frontend_router
 themes:
   - seven
   - {{ NAME }}

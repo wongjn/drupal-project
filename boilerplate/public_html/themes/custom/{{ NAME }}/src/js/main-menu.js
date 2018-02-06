@@ -44,4 +44,5 @@ const menuDOM = parser
 new Promise(resolve => resolve(parseMenu(menuDOM)))
   .then((menuTree) => {
     render(h(MainMenu, { menuTree }), root, menuMarkup);
+    Drupal.attachBehaviors(root);
   });

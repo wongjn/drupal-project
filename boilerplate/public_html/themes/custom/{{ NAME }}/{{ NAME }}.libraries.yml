@@ -11,6 +11,7 @@ global:
     component:
       dist/css/components/drawer-menu.css: {}
       dist/css/components/main-menu.css: {}
+      dist/css/components/router.css: {}
     theme:
       dist/css/theme.css: {}
       dist/css/utilities.css:
@@ -19,6 +20,11 @@ global:
     dist/js/main.js:
       preprocess: false
       minified: true
+  drupalSettings:
+    # These placeholder values will be set by system_js_settings_alter().
+    ajaxPageState:
+      libraries: null
+      theme: null
   dependencies:
     - {{ NAME }}/webpack.vendor
     - {{ NAME }}/polyfill
@@ -47,7 +53,7 @@ polyfill:
     name: MIT
     url: https://github.com/Financial-Times/polyfill-service/blob/master/LICENSE.md
   js:
-    https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Promise,WeakSet,Element.prototype.matches,CustomEvent:
+    https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Array.prototype.includes,CustomEvent,Element.prototype.matches,Promise,URL,WeakSet:
       type: external
       minified: true
       weight: -100

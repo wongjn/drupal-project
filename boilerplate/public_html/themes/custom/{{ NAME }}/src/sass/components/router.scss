@@ -1,0 +1,56 @@
+/**
+ * @file
+ * Frontend router.
+ */
+
+// 1. Position parent for before pseudo-element overlay.
+// 2. Trasnform transitions when inserting new content. Actual transform
+//    property is calculated and applied by JS.
+router-content {
+  display: block;
+  position: relative; // 1
+  background-color: #fff;
+  transform-origin: center top;
+  transition: transform 150ms; // 2
+
+  // Color overlay as illusion for faded out content
+  // 1. z-index - 1 of .c-main-menu so that the drawer fade is above this.
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 399; // 1
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+    content: '';
+
+    .is-leaving-page & {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+  }
+}
+
+// Progress bar
+router-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 600;
+  width: 100%;
+  height: 5px;
+  background-color: green;
+  transition: opacity 200ms, transform 100ms;
+  opacity: 0;
+  transform-origin: left;
+  pointer-events: none;
+
+  &.is-visible {
+    opacity: 1;
+  }
+}
