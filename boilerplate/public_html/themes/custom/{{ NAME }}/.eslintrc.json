@@ -48,6 +48,13 @@
         "optionalDependencies": false
       }
     ],
+    "import/no-unresolved": [
+      2,
+      {
+        "commonjs": true,
+        "caseSensitive": false
+      }
+    ],
     "react/no-unknown-property": [
       2,
       {
