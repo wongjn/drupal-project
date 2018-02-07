@@ -95,7 +95,7 @@ export default class MainMenu extends Component {
     };
 
     return (
-      <div className="c-main-menu">
+      <div class="c-main-menu">
         <MainMenuMenu menuTree={topMenuTree} style={style} />
         <MainMenuDrawer
           classes="c-main-menu__drawer"

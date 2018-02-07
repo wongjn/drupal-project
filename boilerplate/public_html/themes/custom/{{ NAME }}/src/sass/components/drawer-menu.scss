@@ -44,7 +44,7 @@ $bg-accent: purple;
       pointer-events: none;
     }
 
-    &[aria-expanded="true"] {
+    &.is-open {
       transform: none;
       visibility: visible;
       transition-delay: 0s;

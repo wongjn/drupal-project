@@ -7,6 +7,7 @@
 
 import { h, Component } from 'preact';
 import Menu from './MainMenuMenu';
+import ROUTED_EVENT from '../router-events';
 
 /**
  * Main menu item preact component.
@@ -20,9 +21,11 @@ export default class MainMenuItem extends Component {
 
     this.state = {
       open: false,
+      touch: false,
     };
 
     this.indirectClose = this.indirectClose.bind(this);
+    this.onRouted = this.onRouted.bind(this);
     this.onTouch = this.onTouch.bind(this);
     this.onRef = this.onRef.bind(this);
   }
@@ -33,7 +36,24 @@ export default class MainMenuItem extends Component {
   componentDidMount() {
     if (this.props.children.length > 0) {
       document.addEventListener('touchstart', this.indirectClose);
+      document.addEventListener(ROUTED_EVENT, this.onRouted);
     }
+  }
+
+  /**
+   * @inheritDoc
+   */
+  shouldComponentUpdate({ nextActiveTrail, nextHidden }) {
+    if (this.props.type === 'drawer') {
+      return this.props.activeTrail !== nextActiveTrail;
+    }
+
+    if (this.props.children.length === 0) {
+      return this.props.activeTrail !== nextActiveTrail ||
+        this.props.hidden !== nextHidden;
+    }
+
+    return true;
   }
 
   /**
@@ -41,6 +61,7 @@ export default class MainMenuItem extends Component {
    */
   componentWillUnmount() {
     document.removeEventListener('touchstart', this.indirectClose);
+    document.removeEventListener(ROUTED_EVENT, this.onRouted);
   }
 
   /**
@@ -58,6 +79,13 @@ export default class MainMenuItem extends Component {
   }
 
   /**
+   * On routing change.
+   */
+  onRouted() {
+    this.setState({ open: false });
+  }
+
+  /**
    * Opens the submenu (if any) on touch.
    *
    * @param {TouchEvent} event
@@ -69,6 +97,7 @@ export default class MainMenuItem extends Component {
 
       this.setState({
         open: true,
+        touch: true,
       });
     }
   }
@@ -140,11 +169,11 @@ export default class MainMenuItem extends Component {
     return (
       <li
         onTouchEnd={this.onTouch}
-        className={open ? 'is-open' : ''}
+        class={open ? 'is-open' : ''}
         style={hidden ? 'visibility: hidden' : ''}
         ref={this.onRef}
       >
-        <a href={url} className={this.linkClasses()}>{title}</a>
+        <a href={url} class={this.linkClasses()}>{title}</a>
         {subMenu}
       </li>
     );

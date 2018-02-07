@@ -5,26 +5,31 @@
 
 @import '../system';
 
+$line-height: 1.2;
 $font-size: 16;
 $y-padding: 10px;
 $x-padding: 10px;
 
+// 1. Set best-guessed height untill JS loaded to avoid content jump.
 .c-main-menu {
   @include font-size($font-size);
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
   z-index: 400;
-  line-height: 1.2;
+  height: (($line-height * $font-size * 1px) + ($y-padding * 2)); // 1
+  line-height: $line-height;
   text-transform: uppercase;
-
 
   &__link {
     display: block;
     padding: $y-padding $x-padding;
-  }
 
+    &.is-active-trail {
+      color: #000;
+    }
+  }
 
   // 1. Sub-menu position context
   &__top-menu,
@@ -35,9 +40,8 @@ $x-padding: 10px;
     }
   }
 
-
   // 1. Layout box is still here when collapsed. This prevents unclickable
-  //     elements underneath.
+  //    elements underneath.
   &__top-menu {
     display: flex;
     justify-content: flex-end;
@@ -52,6 +56,18 @@ $x-padding: 10px;
   }
 
   &__sub-menu {
+    @mixin state($open: false) {
+      @if $open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+      } @else {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    };
+
+    @include state;
     position: absolute;
     top: 100%;
     left: 0;
@@ -61,9 +77,7 @@ $x-padding: 10px;
     background-color: pink;
     min-width: 100%;
     max-width: 250px;
-    opacity: 0;
     pointer-events: none;
-    transform: translateY(10px);
     transition: opacity 250ms, transform 250ms;
 
     // Hover helper when the menu is transitioning in
@@ -79,21 +93,21 @@ $x-padding: 10px;
     // Open child menu animations
     li.is-open > &,
     li:hover > & {
-      opacity: 1;
-      pointer-events: auto;
-      transform: none;
+      @include state(true);
     }
     li:focus-within > & {
-      opacity: 1;
-      pointer-events: auto;
-      transform: none;
+      @include state(true);
+    }
+
+    @media (hover: none) {
+      li:hover:not(.is-open) > & {
+        @include state;
+      }
     }
 
     > li:not(:last-child) {
       border-bottom: 1px solid blue;
     }
-
-
 
     &--deep {
       top: 0;
@@ -110,8 +124,8 @@ $x-padding: 10px;
     }
   }
 
-
   &__drawer {
     flex: 0 0 auto;
+    align-self: center;
   }
 }

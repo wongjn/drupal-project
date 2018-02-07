@@ -24,9 +24,11 @@ export default class MainMenuDrawer extends Component {
     this.focusTargets = {};
     this.docBody = document.body;
 
+    this.scrollbarWidth = 0;
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.escClose = this.escClose.bind(this);
+    this.navigateClose = this.navigateClose.bind(this);
     this.setFocusTargetButton = this.setFocusTarget.bind(this, 'openButton');
     this.setFocusTargetButton = this.setFocusTarget.bind(this, 'drawerTitle');
   }
@@ -121,9 +123,24 @@ export default class MainMenuDrawer extends Component {
     // Remove scrolling from body
     this.docBody.style.overflow = open ? 'hidden' : '';
 
+    // Update scrollbar width
+    this.scrollbarWidth = Math.abs(this.docBody.offsetWidth - beforeWidth);
+
     // Compensate for possible scrollbar layout jump
-    const widthDiff = this.docBody.offsetWidth - beforeWidth;
-    this.docBody.style.paddingRight = open ? `${widthDiff}px` : '';
+    this.docBody.style.paddingRight = open ? `${this.scrollbarWidth}px` : '';
+  }
+
+  /**
+   * Closes the drawer if an element clicked was a link.
+   *
+   * @param {Event} event
+   *   The object that represents a click or keyboard event within the drawer
+   *   element.
+   */
+  navigateClose(event) {
+    if (event.target.tagName === 'A') {
+      this.close(event);
+    }
   }
 
   /**
@@ -133,10 +150,10 @@ export default class MainMenuDrawer extends Component {
     this.modifyBodyScroll(open);
 
     return (
-      <div className={`${classes} c-drawer-menu`} style={hide && 'display:none'}>
+      <div class={`${classes} c-drawer-menu`} style={hide && 'display:none'}>
         <button
           ref={this.setFocusTargetButton}
-          className="c-drawer-menu__open-btn"
+          class="c-drawer-menu__open-btn"
           aria-controls="drawer-menu"
           aria-hidden={String(open)}
           tabIndex={open ? -1 : 0}
@@ -146,7 +163,7 @@ export default class MainMenuDrawer extends Component {
         </button>
 
         <button
-          className="c-drawer-menu__close-btn"
+          class="c-drawer-menu__close-btn"
           aria-controls="drawer-menu"
           aria-hidden={String(!open)}
           tabIndex={open ? 0 : -1}
@@ -155,9 +172,16 @@ export default class MainMenuDrawer extends Component {
           {Drupal.t('Close full menu')}
         </button>
 
-        <div id="drawer-menu" className="c-drawer-menu__drawer" aria-expanded={String(open)}>
+        <div
+          id="drawer-menu"
+          class={`c-drawer-menu__drawer ${open ? 'is-open' : ''}`}
+          style={!open && { marginRight: this.scrollbarWidth * -1 }}
+          onClick={this.navigateClose}
+          onKeyPress={this.navigateClose}
+          role="presentation"
+        >
           <h2
-            className="c-drawer-menu__title"
+            class="c-drawer-menu__title"
             ref={this.setFocusTargetTitle}
             tabIndex="-1"
           >

@@ -5,6 +5,64 @@
 
 import { h, render } from 'preact';
 import MainMenu from './components/MainMenu';
+import ROUTED_EVENT from './router-events';
+
+const menu = document.querySelector('.js-main-menu');
+
+/**
+ * Checks in a menu item is in the active trail.
+ *
+ * @param {object} menuItem
+ *   The menu item props data for preact components.
+ * @param {string|null} menuItem.systemPath
+ *   The internal, unaliased path of the link, or null if not related to a
+ *   known Drupal route.
+ * @param {string|null} menuItem.linkQuery
+ *   The query this link has as stringified JSON, or null if no query.
+ * @param {object[]} menuItem.children
+ *   Children menu items to check if any children are active children.
+ * @param {object} [pathSettings=drupalSettings.path]
+ *   Path settings from drupalSettings.
+ * @return {bool}
+ *   Returns true if the given menu item matches the current (internal) path or
+ *   a child item does, otherwise false.
+ */
+function isActiveTrail(
+  { systemPath, linkQuery, children = [] },
+  pathSettings = drupalSettings.path,
+) {
+  // Check if any children are marked as active
+  if (children.length > 0 && children.some(({ activeTrail }) => activeTrail)) {
+    return true;
+  }
+
+  if (typeof pathSettings.currentQuery === 'object') {
+    // Remove queries for AJAX/router
+    delete pathSettings.currentQuery._drupal_ajax;
+    delete pathSettings.currentQuery._frontend_router;
+    delete pathSettings.currentQuery.ajax_page_state;
+
+    if (Object.keys(pathSettings.currentQuery).length === 0) {
+      delete pathSettings.currentQuery;
+    }
+  }
+
+  if (systemPath === '<front>') {
+    return pathSettings.isFront;
+  }
+
+  // Matches main path component
+  if (pathSettings.currentPath === systemPath) {
+    // If there is a query, ensure query matches too
+    if (pathSettings.currentQuery) {
+      return linkQuery === JSON.stringify(pathSettings.currentQuery);
+    }
+
+    return true;
+  }
+
+  return false;
+}
 
 /**
  * Parses HTML structure into a menu tree structure.
@@ -21,28 +79,74 @@ function parseMenu(listElement) {
       const link = listItem.querySelector('a');
       const subMenu = listItem.querySelector('ul');
 
-      return {
+      const systemPath = link.getAttribute('data-drupal-link-system-path');
+      const linkQuery = link.getAttribute('data-drupal-link-query');
+
+      const menuItem = {
         title: link.textContent,
         url: link.href,
         children: subMenu ? parseMenu(subMenu) : [],
-        activeTrail: link.classList.contains('is-active-trail'),
+        systemPath,
+        linkQuery,
         index,
       };
+      menuItem.activeTrail = isActiveTrail(menuItem);
+
+      return menuItem;
     });
 }
 
-const root = document.querySelector('.js-main-menu');
-const menuMarkup = root.querySelector('.c-main-menu');
+/**
+ * Renders the main menu via Preact.
+ *
+ * @param {object} menuTree
+ *   The menu tree to pass to MainMenu preact component.
+ */
+function renderMenu(menuTree) {
+  render(h(MainMenu, { menuTree }), menu.parentElement, menu);
+}
 
-// Parse noscript content to HTML to parse structure
-const parser = new DOMParser();
-const menuDOM = parser
-  .parseFromString(menuMarkup.textContent, 'text/html')
-  .body
-  .children[0];
+/**
+ * Updates active trail designation on links.
+ *
+ * @param {object} menuTree
+ *   The menu tree.
+ * @param {object} pathSettings
+ *   Path settings from drupalSettings.
+ * @return {object}
+ *   Updated menu tree.
+ */
+function updateMenuTreeActiveTrail(menuTree, pathSettings) {
+  return menuTree
+    .map((menuItem) => {
+      if (menuItem.children.length > 0) {
+        menuItem.children = updateMenuTreeActiveTrail(menuItem.children, pathSettings);
+      }
 
-new Promise(resolve => resolve(parseMenu(menuDOM)))
+      menuItem.activeTrail = isActiveTrail(menuItem, pathSettings);
+
+      return menuItem;
+    });
+}
+
+/**
+ * Reacts on routing change from the frontend router.
+ *
+ * @param {object} menuTree
+ *   The current menu tree.
+ * @param {CustomEvent} event
+ *   The event object representing the routing event.
+ * @param {object} event.detail
+ *   Path settings from drupalSettings.
+ */
+function onRouteChange(menuTree, { detail: pathSettings }) {
+  const updatedMenuTree = updateMenuTreeActiveTrail(menuTree, pathSettings);
+  renderMenu(updatedMenuTree);
+}
+
+new Promise(resolve => resolve(parseMenu(menu.children[0])))
   .then((menuTree) => {
-    render(h(MainMenu, { menuTree }), root, menuMarkup);
-    Drupal.attachBehaviors(root);
+    renderMenu(menuTree);
+    Drupal.attachBehaviors(menu);
+    document.addEventListener(ROUTED_EVENT, onRouteChange.bind(null, menuTree));
   });

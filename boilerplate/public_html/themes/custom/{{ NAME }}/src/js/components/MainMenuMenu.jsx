@@ -63,6 +63,6 @@ export default class MainMenuMenu extends Component {
       />
     ));
 
-    return <ul className={this.menuClasses()} style={style}>{items}</ul>;
+    return <ul class={this.menuClasses()} style={style}>{items}</ul>;
   }
 }

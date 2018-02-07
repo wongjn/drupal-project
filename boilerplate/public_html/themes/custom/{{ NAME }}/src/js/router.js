@@ -3,6 +3,11 @@
  * Frontend router.
  */
 
+import ROUTED_EVENT from './router-events';
+
+// Make body tag focusable for route navigation aftermath.
+document.body.tabIndex = '-1';
+
 /**
  * Regex to match common administritive paths.
  */
@@ -522,8 +527,9 @@ const Router = {
     document.body.classList.remove('is-leaving-page');
 
     Loader.setProgress(1);
+    document.body.focus();
 
-
+    document.dispatchEvent(new CustomEvent(ROUTED_EVENT, { detail: this.drupalSettings.path }));
     this._navigatingTo = null;
   },
 
@@ -574,6 +580,7 @@ const Router = {
       // Show instant 100% progress for feedback
       Loader.setProgress(1);
       scroll();
+      document.body.focus();
       // Do nothing further
       return;
     }
