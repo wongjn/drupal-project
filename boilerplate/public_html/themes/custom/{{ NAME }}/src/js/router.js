@@ -4,9 +4,9 @@
  */
 
 /**
- * Regex to match common administritive paths that doe not start with /admin.
+ * Regex to match common administritive paths.
  */
-const ADMIN_PATH = /^\/((node|taxonomy\/term|user)\/[0-9]+\/(edit|revisions)$|admin\/)/;
+const ADMIN_PATH = /^\/((node|taxonomy\/term|user)\/[0-9]+\/(edit|revisions|delete)$|admin\/|node\/add)/;
 
 /**
  * Flag whether the browser supports 'transitionend' event.
