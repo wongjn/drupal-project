@@ -181,7 +181,10 @@ class Icons implements CacheableDependencyInterface {
    *   The set of icon data.
    */
   protected function discoverIconData() {
-    $data = [];
+    $data = [
+      'icons' => [],
+      'inline_defs' => '',
+    ];
 
     if ($cache = $this->cache->get(self::ICON_DATA_CID)) {
       $data = $cache->data;
@@ -205,14 +208,13 @@ class Icons implements CacheableDependencyInterface {
           $title = $title_elements->item(0)->nodeValue;
         }
 
-        $data[$symbol->getAttribute('id')] = [
+        $data['icons'][$symbol->getAttribute('id')] = [
           'width'  => $viewbox[2],
           'height' => $viewbox[3],
           'title'  => $title,
         ];
       }
 
-      $data['inline_defs'] = '';
       foreach ($xml->getElementsByTagName('defs') as $def) {
         $data['inline_defs'] .= $xml->saveXML($def);
       }
