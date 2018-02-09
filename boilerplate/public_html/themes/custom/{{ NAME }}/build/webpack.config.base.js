@@ -31,17 +31,22 @@ module.exports = {
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
+    // Common async chunks
+    new webpack.optimize.CommonsChunkPlugin({
+      async: 'lazyChunk',
+      deepChildren: true,
+      minChunks: 2,
+    }),
     // Vendor chunks
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       deepChildren: true,
       minChunks: module => module.context && module.context.indexOf('node_modules') > -1,
     }),
-    // Common async chunks
+    // Manifest/runtime
     new webpack.optimize.CommonsChunkPlugin({
-      async: 'lazyChunk',
-      deepChildren: true,
-      minChunks: 2,
+      name: 'runtime',
+      minChunks: Infinity,
     }),
   ],
 };

@@ -26,17 +26,19 @@ global:
       libraries: null
       theme: null
   dependencies:
-    - {{ NAME }}/webpack.vendor
     - {{ NAME }}/polyfill
+    - {{ NAME }}/js-bundles
     - core/drupal
     - core/drupalSettings
 
-webpack.vendor:
+js-bundles:
   js:
+    dist/js/runtime.js:
+      preprocess: false
+      minified: true
     dist/js/vendor.js:
       preprocess: false
       minified: true
-
 grid:
   css:
     layout:
