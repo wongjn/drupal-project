@@ -4,9 +4,20 @@
  */
 
 import { h, Component } from 'preact';
-import throttle from 'lodash/throttle';
-import MainMenuMenu from './MainMenuMenu';
+import MainMenuNormalTopMenu from './MainMenuNormalTopMenu';
 import MainMenuDrawer from './MainMenuDrawer';
+
+/**
+ * Converts the first character of s string to uppercase.
+ *
+ * @param {string} string
+ *   The string to modify.
+ * @return {string}
+ *   The modified string.
+ */
+function ucFirst(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 /**
  * Main menu preact component.
@@ -18,89 +29,37 @@ export default class MainMenu extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      shownCount: 0,
-    };
-
-    this.itemElements = [];
-    this.setItemRef = this.setItemRef.bind(this);
+    this.state = { hideDrawer: true };
+    this.onHideChange = this.onHideChange.bind(this);
   }
 
   /**
-   * @inheritDoc
-   */
-  componentDidMount() {
-    this.resizeWatch();
-    this.resizeWatch = throttle(this.resizeWatch.bind(this), 200);
-    window.addEventListener('resize', this.resizeWatch);
-  }
-
-  /**
-   * @inheritDoc
-   */
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.resizeWatch);
-  }
-
-  /**
-   * Sets DOM element reference for a menu item element.
+   * Reacts on custom event for hidden element count change on top-level menu.
    *
-   * @param {HTMLElement} element
-   *   The element to reference to.
-   * @param {number} index
-   *   The index number of the navigation item within this list.
+   * @param {CustomEvent} event
+   *   An object representing a change in the hidden number count of items.
+   * @param {bool} event.detail.showDrawer
+   *   True if the drawer should be shown.
    */
-  setItemRef(element, index) {
-    this.itemElements[index] = element;
-  }
-
-  /**
-   * Maintains single line top-level layout of the menu items.
-   */
-  resizeWatch() {
-    const first = this.itemElements[0];
-
-    let shownCount = this.itemElements
-      .slice(1)
-      .reduce((count, element) => {
-        if (element.offsetTop > first.offsetTop) {
-          return count;
-        }
-
-        return count + 1;
-      }, 1);
-
-    if (shownCount === this.itemElements.length) {
-      shownCount = 999;
-    }
-
-    this.setState({
-      shownCount,
-    });
+  onHideChange({ detail }) {
+    this.setState({ hideDrawer: !detail.showDrawer });
   }
 
   /**
    * @inheritDoc
    */
-  render({ menuTree }, { shownCount }) {
-    const topMenuTree = menuTree.map((item, i) => Object.assign({}, item, {
-      itemRef: this.setItemRef,
-      hidden: i >= shownCount,
-    }));
-
-    const style = this.itemElements.length > 0 && {
-      height: `${this.itemElements[0].offsetHeight}px`,
-      visibility: shownCount < 2 ? 'hidden' : '',
-      overflow: shownCount < 2 ? 'hidden' : '',
+  render({ menuTree }, { hideDrawer }) {
+    const eventListen = {
+      [`on${ucFirst(MainMenuNormalTopMenu.HIDE_CUT_INDEX_CHANGE)}`]: this.onHideChange,
     };
 
     return (
-      <div class="c-main-menu">
-        <MainMenuMenu menuTree={topMenuTree} style={style} />
+      <div class="c-main-menu" {...eventListen}>
+        <MainMenuNormalTopMenu menuTree={menuTree} />
         <MainMenuDrawer
           classes="c-main-menu__drawer"
           menuTree={menuTree}
-          hide={shownCount > this.itemElements.length}
+          hide={hideDrawer}
         />
       </div>
     );

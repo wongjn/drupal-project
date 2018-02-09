@@ -4,7 +4,7 @@
  */
 
 import { h, Component } from 'preact';
-import MainMenuMenu from './MainMenuMenu';
+import MainMenuDrawerMenu from './MainMenuDrawerMenu';
 
 /**
  * Main menu drawer menu preact component.
@@ -126,8 +126,10 @@ export default class MainMenuDrawer extends Component {
     // Update scrollbar width
     this.scrollbarWidth = Math.abs(this.docBody.offsetWidth - beforeWidth);
 
-    // Compensate for possible scrollbar layout jump
-    this.docBody.style.paddingRight = open ? `${this.scrollbarWidth}px` : '';
+    if (this.scrollbarWidth !== 0) {
+      // Compensate for possible scrollbar layout jump
+      this.docBody.style.paddingRight = open ? `${this.scrollbarWidth}px` : '';
+    }
   }
 
   /**
@@ -147,6 +149,9 @@ export default class MainMenuDrawer extends Component {
    * @inheritDoc
    */
   render({ menuTree, classes, hide }, { open }) {
+    const oldOpen = this._open;
+    this._open = open;
+
     this.modifyBodyScroll(open);
 
     return (
@@ -159,7 +164,7 @@ export default class MainMenuDrawer extends Component {
           tabIndex={open ? -1 : 0}
           onClick={this.open}
         >
-          {Drupal.t('Open full menu')}
+          {this.constructor.l18n.open}
         </button>
 
         <button
@@ -169,7 +174,7 @@ export default class MainMenuDrawer extends Component {
           tabIndex={open ? 0 : -1}
           onClick={this.close}
         >
-          {Drupal.t('Close full menu')}
+          {this.constructor.l18n.close}
         </button>
 
         <div
@@ -177,7 +182,6 @@ export default class MainMenuDrawer extends Component {
           class={`c-drawer-menu__drawer ${open ? 'is-open' : ''}`}
           style={!open && { marginRight: this.scrollbarWidth * -1 }}
           onClick={this.navigateClose}
-          onKeyPress={this.navigateClose}
           role="presentation"
         >
           <h2
@@ -185,11 +189,22 @@ export default class MainMenuDrawer extends Component {
             ref={this.setFocusTargetTitle}
             tabIndex="-1"
           >
-            {Drupal.t('Main menu')}
+            {this.constructor.l18n.title}
           </h2>
-          <MainMenuMenu menuTree={menuTree} type="drawer" />
+          {
+            // Only rerender menus if open state was the same - this means the
+            // current rendering is NOT to open the drawer, and means that the
+            // menu has changed.
+          }
+          <MainMenuDrawerMenu menuTree={menuTree} rerender={this._open === oldOpen} />
         </div>
       </div>
     );
   }
 }
+
+MainMenuDrawer.l18n = {
+  open: Drupal.t('Open full menu'),
+  close: Drupal.t('Close full menu'),
+  title: Drupal.t('Main menu'),
+};

@@ -4,7 +4,7 @@
 
 @import '../system';
 
-$accent: slateblue;
+$accent: palegreen;
 $bg-accent: purple;
 
 .c-drawer-menu {
@@ -121,6 +121,43 @@ $bg-accent: purple;
 
   &__link {
     @include viewport-scale(padding, 30px, 10px);
+    position: relative;
     display: block;
+
+    &[class] {
+      color: darkblue;
+    }
+
+    &::after {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: currentColor;
+      transform: scaleX(0);
+      transform-origin: 0%;
+      transition: transform 300ms get-easing('out-quad');
+      content: '';
+    }
+
+    &:hover,
+    &:focus {
+      &::after {
+        transform: scaleX(1);
+        transition-duration: 1s;
+        transition-timing-function: get-easing('in-out-cubic');
+      }
+    }
+
+    &:active {
+      background-color: rgba(#000, 0.2);
+    }
+
+    &--sub {
+      @include viewport-scale(margin-left, 30px, 10px);
+      padding-left: 0;
+    }
   }
 }
