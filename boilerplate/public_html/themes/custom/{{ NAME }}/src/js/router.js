@@ -3,6 +3,7 @@
  * Frontend router.
  */
 
+import partition from 'lodash/partition';
 import ROUTED_EVENT from './router-events';
 
 // Make body tag focusable for route navigation aftermath.
@@ -125,17 +126,8 @@ class Route {
   static fromElements(dom) {
     // Get elements
     const bins = Array.from(dom.getElementsByTagName('router-content'));
-    const assets = [dom.head, dom.querySelector('router-assets')]
-      .map((collection) => {
-        if (collection && collection.children) {
-          return collection;
-        }
-
-        return false;
-      });
 
     let settings;
-
     // If new drupalSettings in data:
     const settingsElement = dom.querySelector('[data-drupal-selector="drupal-settings-json"]');
     if (settingsElement) {
@@ -144,6 +136,28 @@ class Route {
       // Remove self
       settingsElement.parentElement.removeChild(settingsElement);
     }
+
+    const assets = [dom.head, dom.querySelector('router-assets')]
+      .map((collection) => {
+        if (collection && collection.children) {
+          const items = Array.from(collection.children);
+
+          // Split assets list into scripts and everything else
+          const [scripts, others] = partition(items, ({ tagName, src }) => (
+            tagName === 'SCRIPT' && src.length > 0
+          ));
+
+          // Remove title tag from loading assets
+          others.filter(({ tagName }) => tagName !== 'TITLE');
+
+          return {
+            scripts: scripts.map(({ src }) => src),
+            others: others.reduce((output, asset) => `${output}${asset.outerHTML}`, ''),
+          };
+        }
+
+        return false;
+      });
 
     bins.forEach((bin) => {
       writeActiveLinks(bin, settings.path || drupalSettings.path);
@@ -178,16 +192,49 @@ class Route {
   /**
    * Loads assets to the top and bottom of the current DOM.
    */
-  loadAssets() {
+  async loadAssets() {
+    const loadingPromises = [];
+
     if (this.assets.top) {
-      document.head.insertAdjacentHTML('beforeend', this.assets.top.innerHTML);
+      loadingPromises.push(...this.constructor.insertAssets(this.assets.top, document.head));
+    }
+    if (this.assets.bottom) {
+      loadingPromises.push(...this.constructor.insertAssets(this.assets.bottom, document.body));
     }
 
-    if (this.assets.bottom) {
-      document.body.insertAdjacentHTML('beforeend', this.assets.bottom.innerHTML);
-    }
+    // Wait for loading to be done
+    await Promise.all(loadingPromises);
 
     this.assets.loaded = true;
+  }
+
+  /**
+   * Injects assets and scripts into the DOM.
+   *
+   * @param {object} assets
+   *   The collection of assets to load. There is a split between scripts and
+   *   "other" assets since scripts need to be loaded in a specfic way for them
+   *   to execute.
+   * @param {string[]} assets.scripts
+   *   URLs of scripts to load.
+   * @param {string} assets.others
+   *   Other assets to load, such as styles, link tags.
+   * @param {Element} location
+   *   The DOM element to load the assets into.
+   * @return {Promise[]}
+   *   A promise for each script included that resolves once it has loaded or
+   *   rejects if there was some kind of error.
+   */
+  static insertAssets({ scripts = [], others = '' }, location) {
+    location.insertAdjacentHTML('beforeend', others);
+
+    return scripts.map(src => new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.addEventListener('error', reject);
+      script.addEventListener('load', resolve);
+      location.appendChild(script);
+      script.src = src;
+    }));
   }
 }
 Route.DOMParser = new DOMParser();
@@ -367,7 +414,7 @@ const Router = {
 
     // Load assets (JS and CSS) if not loaded before for the route.
     if (!route.assets.loaded) {
-      route.loadAssets();
+      await route.loadAssets();
     }
 
     Loader.setProgress(0.75);
