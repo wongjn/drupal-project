@@ -1,8 +1,6 @@
 /**
  * @file
  * Provides element 'loading' when it is within the viewport.
- *
- * Also lazy-loads a child images with `lazy-src` attribute.
  */
 
 import last from 'lodash/last';
@@ -48,8 +46,6 @@ const observedElements = new WeakSet();
  *
  * @prop {HTMLElement} element
  *   The DOM element the Loadable is associated with.
- * @prop {HTMLImageElement|null} image
- *   An image within the main element thatis to be lazy-loaded with the element.
  */
 class Loadable {
   /**
@@ -90,18 +86,6 @@ class Loadable {
   }
 
   /**
-   * The CSS class for a element's image that has not been loaded yet.
-   *
-   * This a pseudo class constant.
-   *
-   * @return {string}
-   *   The CSS class name.
-   */
-  static get IMAGE_UNLOADED_CLASSNAME() {
-    return 'is-unloaded';
-  }
-
-  /**
    * Creates an instance of Loadable.
    *
    * @param {HTMLElement} element
@@ -110,11 +94,6 @@ class Loadable {
   constructor(element) {
     this.element = element;
     this.element.classList.add(this.constructor.OUTSIDE_VIEWPORT_CLASSNAME);
-
-    this.image = element.querySelector('img[lazy-src], img[lazy-srcset]');
-    if (this.image) {
-      this.image.classList.add(this.constructor.IMAGE_UNLOADED_CLASSNAME);
-    }
   }
 
   /**
@@ -131,10 +110,6 @@ class Loadable {
     this.element.style.setProperty(this.constructor.CSS_PROPERTY_NAME, `${index * 100}ms`);
     this.element.classList.remove(this.constructor.OUTSIDE_VIEWPORT_CLASSNAME);
     this.element.classList.add(this.constructor.LOADED_CLASSNAME);
-
-    if (this.image) {
-      this._loadImage();
-    }
 
     return new Promise((resolve) => {
       this._end = this._end.bind(this, resolve);
@@ -154,31 +129,6 @@ class Loadable {
     this.element.style.removeProperty(this.constructor.CSS_PROPERTY_NAME);
     this.element.removeEventListener('transitionend', this._end);
     resolve();
-  }
-
-  /**
-   * Loads element's image.
-   *
-   * Prefix `src` and `srcset` attributes of the image with `lazy-` to have
-   * the image available to be be lazy loaded.
-   *
-   * @param {HTMLElement} element
-   *   The element.
-   * @param {HTMLImageElement} element._image
-   *   The element's associated image.
-   */
-  _loadImage() {
-    // Remove image unloaded class when image is loaded
-    this.image.addEventListener('load', () => {
-      this.image.classList.remove(this.constructor.IMAGE_UNLOADED_CLASSNAME);
-    });
-
-    // Copy `lazy-` prefixed attributes without the suffix to load the image.
-    Array.from(this.image.attributes)
-      .filter(attribute => attribute.name.indexOf('lazy-') === 0)
-      .forEach((attribute) => {
-        this.image.setAttribute(attribute.name.replace(/^lazy-/, ''), attribute.value);
-      });
   }
 }
 
@@ -246,7 +196,7 @@ class Collection {
    */
   onIntersect(entries, observer) {
     const loadingPromises = entries
-      .filter(entry => entry.isIntersecting || entry.intersectionRatio > observer.thresholds[0])
+      .filter(entry => entry.isIntersecting || entry.intersectionRatio > 0)
       .filter(entry => this.loaders.has(entry.target))
       .map((entry, index) => {
         observer.unobserve(entry.target);
@@ -304,7 +254,7 @@ export default init;
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.{{ CAMEL }}Inview = {
+  Drupal.behaviors.atarashiiInview = {
     attach(context) {
       const elements = Array.from(context.querySelectorAll(SELECTOR))
         .concat((typeof context.matches === 'function' && context.matches(SELECTOR)) ? [context] : []);

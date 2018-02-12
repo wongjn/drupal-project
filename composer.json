@@ -34,7 +34,7 @@
         "drush/drush": "^9.0.0",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
-        "wongjn/lazy_image": "^0.2.0"
+        "wongjn/lazy_image": "^1.0.0"
     },
     "require-dev": {
         "drupal/devel": "^1.0@RC",
