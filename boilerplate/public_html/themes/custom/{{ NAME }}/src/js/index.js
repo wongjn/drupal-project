@@ -5,6 +5,7 @@
 
 import './webpack-path';
 import './in-view';
+import AsyncBehavior from './AsyncBehavior';
 
 /**
  * Loads the main menu.
@@ -33,3 +34,10 @@ Drupal.behaviors.{{ CAMEL }}SVGPolyfill = {
 if ('fetch' in window && 'frontendRouter' in drupalSettings) {
   import(/* webpackChunkName: "lazyChunk" */ './router');
 }
+
+/**
+ * Async behavior loading example.
+ *
+ * @type {AsyncBehavior}
+ */
+// Drupal.behaviors.example = new AsyncBehavior('fileName', '.selector');
