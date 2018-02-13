@@ -56,7 +56,7 @@ export default class MainMenuNormalTopMenu extends Component {
    * Updates the point at which the children list items break to a new line.
    */
   updateHideCutIndex() {
-    if (!this.items) {
+    if (this.items.length < 2) {
       return;
     }
 
