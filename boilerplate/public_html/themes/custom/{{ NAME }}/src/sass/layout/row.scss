@@ -11,13 +11,11 @@
   flex-wrap: wrap;
 
   &--no-wrap {
-    @media (min-width: 800px) {
-      flex-wrap: nowrap;
+    flex-wrap: nowrap;
 
-      > .l-row__item {
-        flex-shrink: 1;
+    > .l-row__item {
+      flex-shrink: 1;
       }
-    }
   }
 
   &__item {
