@@ -13,7 +13,7 @@ document.body.tabIndex = '-1';
 /**
  * Regex to match common administritive paths.
  */
-const ADMIN_PATH = /^\/((node|taxonomy\/term|user)\/[0-9]+\/(edit|revisions|delete)$|admin\/|node\/add)/;
+const ADMIN_PATH = /^\/(((node|taxonomy\/term|user)\/[0-9]+\/(edit|revisions|delete)|user\/logout)$|admin\/|node\/add)/;
 
 /**
  * Flag whether the browser supports 'transitionend' event.
