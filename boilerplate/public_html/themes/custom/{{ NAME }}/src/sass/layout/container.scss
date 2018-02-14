@@ -12,7 +12,6 @@ $fallback-gutter: 20px;
 .l-container {
 	@include viewport-scale(--container-space-x, 40px, 10px, $SITE-WIDTH * 1vw);
 	@include viewport-scale(--container-space-y, 40px, 10px, $SITE-WIDTH * 1vw);
-	display: block;
 	margin-right: auto;
 	margin-left: auto;
 	max-width: ($SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
@@ -23,7 +22,6 @@ $fallback-gutter: 20px;
 		padding: ($fallback-gutter / 2);
 		padding: calc(var(--container-space-y) / 2) calc(var(--container-space-x) / 2);
 	}
-
 
 	// Merges padding and module into the top level element, such that no __module
 	// sub-components are required.
@@ -36,24 +34,10 @@ $fallback-gutter: 20px;
 		}
 	}
 
-	&--wide {
-		max-width: (1608px + ($fallback-gutter * 2));
-		max-width: calc(1608px + (var(--container-space-x) * 2));
-	}
-
-	&--compact {
-		@include viewport-scale(--container-space-x, 30px, 0, 1400vw);
-		@include viewport-scale(--container-space-y, 30px, 0, 1400vw);
-	}
-
-	&__module {
-		&--flush-y {
-			margin-top: ($fallback-gutter * -0.5);
-			margin-top: calc(var(--container-space-y) * -0.5);
-			margin-bottom: ($fallback-gutter * -0.5);
-			margin-bottom: calc(var(--container-space-y) * -0.5);
-			padding-top: 0;
-			padding-bottom: 0;
-		}
-	}
+  &--flush-y {
+    margin-top: ($fallback-gutter * -1);
+    margin-bottom: ($fallback-gutter * -1);
+    margin-top: calc(var(--container-space-y) * -1);
+    margin-bottom: calc(var(--container-space-y) * -1);
+  }
 }
