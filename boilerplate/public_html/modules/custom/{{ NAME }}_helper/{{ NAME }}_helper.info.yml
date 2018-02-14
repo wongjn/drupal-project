@@ -3,3 +3,4 @@ description: Tweaks for the {{ LABEL }} theme to work properly and for the site 
 package: {{ LABEL }}
 type: module
 core: 8.x
+project: {{ NAME }}
