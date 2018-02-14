@@ -18,27 +18,30 @@ export default class MainMenuNormalTopMenu extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { hideCutIndex: -1 };
+    this.state = {
+      hideCutIndex: -1,
+      height: 'auto',
+    };
 
     this.items = [];
     this.setLiRef = this.setLiRef.bind(this);
-    this.updateHideCutIndex = this.updateHideCutIndex.bind(this);
+    this.layoutUpdate = this.layoutUpdate.bind(this);
   }
 
   /**
    * @inheritDoc
    */
   componentDidMount() {
-    this.updateHideCutIndex();
-    this.debouncedUpdateHideCutIndex = debounce(this.updateHideCutIndex, 200);
-    window.addEventListener('resize', this.debouncedUpdateHideCutIndex);
+    this.layoutUpdate();
+    this.debouncedlayoutUpdate = debounce(this.layoutUpdate, 200);
+    window.addEventListener('resize', this.debouncedlayoutUpdate);
   }
 
   /**
    * @inheritDoc
    */
   componentWillUnmount() {
-    window.removeEventListener('resize', this.debouncedUpdateHideCutIndex);
+    window.removeEventListener('resize', this.debouncedlayoutUpdate);
   }
 
   /**
@@ -54,14 +57,31 @@ export default class MainMenuNormalTopMenu extends Component {
   }
 
   /**
-   * Updates the point at which the children list items break to a new line.
+   * Updates layout state.
    */
-  async updateHideCutIndex() {
+  layoutUpdate() {
+    if (this.items.length > 0) {
+      const { offsetTop } = this.items[0];
+      const { height } = this.items[0].getBoundingClientRect();
+      this.setState({ height: `${height}px` });
+
+      if (this.items.length > 1) {
+        this.updateHideCutIndex(offsetTop);
+      }
+    }
+  }
+
+  /**
+   * Updates the point at which the children list items break to a new line.
+   *
+   * @param {number} offsetTop
+   *   The first row's offset top.
+   */
+  async updateHideCutIndex(offsetTop) {
     if (this.items.length < 2) {
       return;
     }
 
-    const first = this.items[0].offsetTop;
     const hideCutIndex = this.items
       .slice(1)
       .reduce((foundIndex, item, index) => {
@@ -70,7 +90,7 @@ export default class MainMenuNormalTopMenu extends Component {
           return foundIndex;
         }
 
-        return item.offsetTop === first ? foundIndex : index;
+        return item.offsetTop === offsetTop ? foundIndex : index;
       }, -1);
 
     // If index has changed:
@@ -93,7 +113,7 @@ export default class MainMenuNormalTopMenu extends Component {
 
         await requestAnimationFramePromise();
         await requestAnimationFramePromise();
-        this.updateHideCutIndex();
+        this.updateHideCutIndex(offsetTop);
       }
     }
   }
@@ -101,7 +121,7 @@ export default class MainMenuNormalTopMenu extends Component {
   /**
    * @inheritDoc
    */
-  render({ menuTree }, { hideCutIndex }) {
+  render({ menuTree }, { hideCutIndex, height }) {
     const items = menuTree.map((item, index) => (
       <MainMenuNormalTopItem
         {...item}
@@ -112,7 +132,10 @@ export default class MainMenuNormalTopMenu extends Component {
       />
     ));
 
-    const style = hideCutIndex >= 1 || hideCutIndex === -1 ? '' : { visibility: 'hidden' };
+    const style = {
+      height,
+      visibility: hideCutIndex >= 1 || hideCutIndex === -1 ? '' : 'hidden',
+    };
     return <ul class="c-main-menu__top-menu" style={style}>{items}</ul>;
   }
 }
