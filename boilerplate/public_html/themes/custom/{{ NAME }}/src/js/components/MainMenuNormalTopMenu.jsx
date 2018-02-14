@@ -6,6 +6,7 @@
 import { h, Component } from 'preact';
 import debounce from 'lodash/debounce';
 import MainMenuNormalTopItem from './MainMenuNormalTopItem';
+import requestAnimationFramePromise from '../request-animation-frame-promise';
 
 /**
  * Main menu “normal” top-level menu list preact component.
@@ -55,7 +56,7 @@ export default class MainMenuNormalTopMenu extends Component {
   /**
    * Updates the point at which the children list items break to a new line.
    */
-  updateHideCutIndex() {
+  async updateHideCutIndex() {
     if (this.items.length < 2) {
       return;
     }
@@ -89,7 +90,10 @@ export default class MainMenuNormalTopMenu extends Component {
       // pushed an item to a new line
       if (showDrawer && this._showDrawer !== showDrawer) {
         this._showDrawer = showDrawer;
-        requestAnimationFrame(this.updateHideCutIndex);
+
+        await requestAnimationFramePromise();
+        await requestAnimationFramePromise();
+        this.updateHideCutIndex();
       }
     }
   }

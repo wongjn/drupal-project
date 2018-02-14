@@ -5,6 +5,7 @@
 
 import partition from 'lodash/partition';
 import ROUTED_EVENT from './router-events';
+import requestAnimationFramePromise from './request-animation-frame-promise';
 
 // Make body tag focusable for route navigation aftermath.
 document.body.tabIndex = '-1';
@@ -24,16 +25,6 @@ const SUPPORTS_TRANSITION_END = 'ontransitionend' in window;
  */
 function scroll() {
   window.scroll({ top: 0, behavior: 'smooth' });
-}
-
-/**
- * Returns a promise that resolves on next animation frame.
- *
- * @return {Promise}
- *   A promise that resolves on next animation frame.
- */
-function requestAnimationFramePromise() {
-  return new Promise(resolve => requestAnimationFrame(resolve));
 }
 
 /**
