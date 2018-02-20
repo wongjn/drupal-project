@@ -132,9 +132,10 @@ export default class MainMenuNormalTopMenu extends Component {
       />
     ));
 
+    const hideAll = hideCutIndex >= 1 || hideCutIndex === -1;
     const style = {
-      height,
-      visibility: hideCutIndex >= 1 || hideCutIndex === -1 ? '' : 'hidden',
+      visibility: hideAll ? '' : 'hidden',
+      overflow: hideAll ? '' : 'hidden',
     };
     return <ul class="c-main-menu__top-menu" style={style}>{items}</ul>;
   }
