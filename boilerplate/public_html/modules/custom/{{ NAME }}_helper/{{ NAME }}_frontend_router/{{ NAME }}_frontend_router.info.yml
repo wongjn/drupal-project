@@ -1,6 +1,0 @@
-name: {{ LABEL }} Frontend Router
-description: Adds frontend routing support.
-package: {{ LABEL }}
-type: module
-core: 8.x
-project: {{ NAME }}

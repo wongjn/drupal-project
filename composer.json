@@ -12,6 +12,10 @@
     "repositories": [
         {
             "type": "vcs",
+            "url": "https://github.com/wongjn/frontend_router"
+        },
+        {
+            "type": "vcs",
             "url": "https://github.com/wongjn/lazy_image"
         },
         {
@@ -34,6 +38,7 @@
         "drush/drush": "^9.0.0",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
+        "wongjn/frontend_router": "^1.0",
         "wongjn/lazy_image": "^1.0"
     },
     "require-dev": {
