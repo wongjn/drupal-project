@@ -109,12 +109,13 @@ export default class MainMenuNormalTopMenu extends Component {
       // Double check for update cut again, in case showing the drawer has now
       // pushed an item to a new line
       if (showDrawer && this._showDrawer !== showDrawer) {
-        this._showDrawer = showDrawer;
-
         await requestAnimationFramePromise();
         await requestAnimationFramePromise();
-        this.updateHideCutIndex(offsetTop);
+        await this.updateHideCutIndex(offsetTop);
+        this.forceUpdate();
       }
+
+      this._showDrawer = showDrawer;
     }
   }
 
