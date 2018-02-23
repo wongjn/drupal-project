@@ -596,12 +596,14 @@ const Router = {
    *   An object representing a click event.
    */
   onLinkClick(event) {
-    if (event.target.tagName !== 'A') {
+    const link = event.target.closest('a');
+
+    if (!link) {
       return;
     }
 
     // Return early if external or known admin URL
-    const { host, pathname } = event.target;
+    const { host, pathname } = link;
     if (host !== window.location.host || ADMIN_PATH.test(pathname)) {
       return;
     }
@@ -614,7 +616,7 @@ const Router = {
     }
 
     // Already on clicked location:
-    if (event.target.href === window.location.href) {
+    if (link.href === window.location.href) {
       // Show instant 100% progress for feedback
       Loader.setProgress(1);
       scroll();
@@ -623,7 +625,7 @@ const Router = {
       return;
     }
 
-    this.navigate(event.target.href);
+    this.navigate(link.href);
   },
 
   /**
