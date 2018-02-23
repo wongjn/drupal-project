@@ -354,6 +354,10 @@ const Router = {
     // Create promise so that we can time when the new content can be loaded in.
     const leavingPromise = this.setLeaving();
 
+    if (historyPushState) {
+      scroll();
+    }
+
     // Attempt to get from cache:
     let route = this.cache.get(path);
     if (!route) {
@@ -413,7 +417,6 @@ const Router = {
 
     if (historyPushState) {
       window.history.pushState({ routeURL: path, title: route.title }, route.title, path);
-      scroll();
     }
   },
 
