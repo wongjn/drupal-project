@@ -41,7 +41,7 @@ function writeActiveLinks(context, pathSettings) {
   if (typeof pathSettings.currentQuery === 'object') {
     // Remove queries for AJAX/router
     delete pathSettings.currentQuery._drupal_ajax;
-    delete pathSettings.currentQuery._frontend_router;
+    delete pathSettings.currentQuery._wrapper_format;
     delete pathSettings.currentQuery.ajax_page_state;
 
     if (Object.keys(pathSettings.currentQuery).length === 0) {
@@ -364,7 +364,7 @@ const Router = {
       // Build fetch URL
       const url = new URL(path);
       url.searchParams.set('_drupal_ajax', '1');
-      url.searchParams.set('_frontend_router', '1');
+      url.searchParams.set('_wrapper_format', 'frontend_router');
 
       const { ajaxPageState } = this.drupalSettings;
       url.searchParams.set('ajax_page_state[theme]', ajaxPageState.theme);
