@@ -103,13 +103,11 @@ class Loadable {
    *   The index of the element in the loading sequence for staggering effects.
    *
    * @return {Promise}
-   *   A promise that resolves once the element has finished transitoning in or
-   *   straight-away if no transition.
+   *   A promise that resolves once the element has finished transitoning in.
    */
   load(index = 0) {
     this.element.style.setProperty(this.constructor.CSS_PROPERTY_NAME, `${index * 100}ms`);
     this.element.classList.remove(this.constructor.OUTSIDE_VIEWPORT_CLASSNAME);
-    this.element.classList.add(this.constructor.LOADED_CLASSNAME);
 
     return new Promise((resolve) => {
       this._end = this._end.bind(this, resolve);
@@ -128,6 +126,7 @@ class Loadable {
   _end(resolve) {
     this.element.style.removeProperty(this.constructor.CSS_PROPERTY_NAME);
     this.element.removeEventListener('transitionend', this._end);
+    this.element.classList.add(this.constructor.LOADED_CLASSNAME);
     resolve();
   }
 }
