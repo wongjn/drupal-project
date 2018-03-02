@@ -20,6 +20,12 @@ Install Drupal with drush:
 vendor/bin/drush site-install {{ NAME }}_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="{{ LABEL }}"
 ```
 
+Serve the site, logging in as user 1:
+
+```
+vendor/bin/drush runserver /
+```
+
 With `composer require ...` you can download new dependencies to your
 installation.
 

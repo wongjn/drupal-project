@@ -90,7 +90,7 @@ gulp.task('js', (cb) => {
 gulp.task('watch', ['sass', 'icons', 'images'], () => {
   browserSync.init({
     ghostMode: false,
-    proxy: '{{ NAME }}.local',
+    proxy: '127.0.0.1:8888',
     open: false,
   });
 
