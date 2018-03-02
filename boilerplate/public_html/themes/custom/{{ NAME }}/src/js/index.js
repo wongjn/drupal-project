@@ -3,21 +3,11 @@
  * Main JS entry point.
  */
 
+import SVG4Everybody from 'svg4everybody';
 import './webpack-path';
 import './in-view';
+import './main-menu';
 import AsyncBehavior from './AsyncBehavior';
-
-/**
- * Loads the main menu.
- *
- * @type {Drupal~behavior}
- */
-Drupal.behaviors.{{ CAMEL }}MainMenu = {
-  async attach() {
-    import(/* webpackChunkName: "lazyChunk" */ './main-menu');
-    delete this.attach;
-  },
-};
 
 /**
  * Polyfills external-use SVG elements.
@@ -25,14 +15,14 @@ Drupal.behaviors.{{ CAMEL }}MainMenu = {
  * @type {Drupal~behavior}
  */
 Drupal.behaviors.{{ CAMEL }}SVGPolyfill = {
-  async attach() {
-    (await import(/* webpackChunkName: "lazyChunk" */ 'svg4everybody'))();
+  attach() {
+    SVG4Everybody();
     delete this.attach;
   },
 };
 
 if ('fetch' in window && 'frontendRouter' in drupalSettings) {
-  import(/* webpackChunkName: "lazyChunk" */ './router');
+  import(/* webpackChunkName: "router" */ './router');
 }
 
 /**

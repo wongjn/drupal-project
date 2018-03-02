@@ -7,7 +7,12 @@ import { h, render } from 'preact';
 import MainMenu from './components/MainMenu';
 import ROUTED_EVENT from './router-events';
 
-const menu = document.querySelector('.js-main-menu');
+/**
+ * The menu container.
+ *
+ * @var {HTMLElement}
+ */
+let menu;
 
 /**
  * Checks in a menu item is in the active trail.
@@ -39,7 +44,7 @@ function isActiveTrail(
   if (typeof pathSettings.currentQuery === 'object') {
     // Remove queries for AJAX/router
     delete pathSettings.currentQuery._drupal_ajax;
-    delete pathSettings.currentQuery._frontend_router;
+    delete pathSettings.currentQuery._wrapper_format;
     delete pathSettings.currentQuery.ajax_page_state;
 
     if (Object.keys(pathSettings.currentQuery).length === 0) {
@@ -144,9 +149,20 @@ function onRouteChange(menuTree, { detail: pathSettings }) {
   renderMenu(updatedMenuTree);
 }
 
-new Promise(resolve => resolve(parseMenu(menu.children[0])))
-  .then((menuTree) => {
-    renderMenu(menuTree);
+/**
+ * Loads the main menu.
+ *
+ * @type {Drupal~behavior}
+ */
+Drupal.behaviors.elfMenu = {
+  attach() {
+    menu = document.querySelector('.js-main-menu');
+    const menuTree = parseMenu(menu.children[0]);
+
+    renderMenu(menuTree, menu);
     Drupal.attachBehaviors(menu);
     document.addEventListener(ROUTED_EVENT, onRouteChange.bind(null, menuTree));
-  });
+
+    delete this.attach;
+  },
+};
