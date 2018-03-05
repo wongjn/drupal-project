@@ -4,10 +4,9 @@
  */
 
 const path = require('path');
-const webpack = require('webpack');
 
 module.exports = {
-  entry: [path.resolve(__dirname, '../src/js')],
+  entry: ['regenerator-runtime/runtime', path.resolve(__dirname, '../src/js')],
   output: {
     filename: '[name].js',
     chunkFilename: '[chunkhash].js',
@@ -29,24 +28,4 @@ module.exports = {
       '.jsx',
     ],
   },
-  plugins: [
-    new webpack.HashedModuleIdsPlugin(),
-    // Common async chunks
-    new webpack.optimize.CommonsChunkPlugin({
-      async: 'lazyChunk',
-      deepChildren: true,
-      minChunks: 2,
-    }),
-    // Vendor chunks
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      deepChildren: true,
-      minChunks: module => module.context && module.context.indexOf('node_modules') > -1,
-    }),
-    // Manifest/runtime
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'runtime',
-      minChunks: Infinity,
-    }),
-  ],
 };

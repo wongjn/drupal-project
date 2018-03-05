@@ -27,18 +27,9 @@ global:
       theme: null
   dependencies:
     - {{ NAME }}/polyfill
-    - {{ NAME }}/js-bundles
     - core/drupal
     - core/drupalSettings
 
-js-bundles:
-  js:
-    dist/js/runtime.js:
-      preprocess: false
-      minified: true
-    dist/js/vendor.js:
-      preprocess: false
-      minified: true
 grid:
   css:
     layout:
@@ -55,7 +46,7 @@ polyfill:
     name: MIT
     url: https://github.com/Financial-Times/polyfill-service/blob/master/LICENSE.md
   js:
-    https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Array.prototype.includes,CustomEvent,Element.prototype.closest,Element.prototype.matches,Node.prototype.contains,Promise,URL,WeakSet:
+    https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Array.prototype.includes,CustomEvent,Element.prototype.closest,Element.prototype.matches,fetch,Node.prototype.contains,Promise,URL,WeakSet:
       type: external
       minified: true
       weight: -100
