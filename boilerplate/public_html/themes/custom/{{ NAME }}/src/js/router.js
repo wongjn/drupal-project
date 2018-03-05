@@ -671,5 +671,10 @@ Router.unroutableRoutesCache = JSON.parse(localStorageUnroutables) || [];
 // Add popstate listener, for example when the browser back button is pressed
 window.addEventListener('popstate', Router.onPopState.bind(Router));
 
-// Add link click listener
-document.addEventListener('click', Router.onLinkClick.bind(Router));
+// Check that Maps can be made into Arrays.
+// @todo: Remove if condition when
+// https://github.com/Financial-Times/polyfill-service/issues/1209 is fixed.
+if (Array.from(new Map([['a', 'b']])).length > 0) {
+  // Add link click listener
+  document.addEventListener('click', Router.onLinkClick.bind(Router));
+}

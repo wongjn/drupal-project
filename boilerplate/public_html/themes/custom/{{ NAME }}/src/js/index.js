@@ -7,6 +7,7 @@ import SVG4Everybody from 'svg4everybody';
 import './webpack-path';
 import './in-view';
 import './main-menu';
+import './router';
 import AsyncBehavior from './AsyncBehavior';
 
 /**
@@ -20,10 +21,6 @@ Drupal.behaviors.{{ CAMEL }}SVGPolyfill = {
     delete this.attach;
   },
 };
-
-if ('fetch' in window && 'frontendRouter' in drupalSettings) {
-  import(/* webpackChunkName: "router" */ './router');
-}
 
 /**
  * Async behavior loading example.
