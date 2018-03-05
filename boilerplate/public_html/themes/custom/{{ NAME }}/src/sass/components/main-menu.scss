@@ -90,6 +90,10 @@ $x-padding: 10px;
       content: '';
     }
 
+    li[aria-hidden="true"] & {
+      display: none;
+    }
+
     // Open child menu animations
     li.is-open > &,
     li:hover > & {

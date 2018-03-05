@@ -18,6 +18,7 @@ export default function MainMenuNormalTopItem(props) {
   const liProps = {
     ref: props.setLiRef.bind(null, props.index),
     style: props.hidden ? { visibility: 'hidden' } : null,
+    'aria-hidden': props.hidden ? 'true' : 'false',
   };
 
   return <MainMenuNormalItem {...props} liProps={liProps} />;
