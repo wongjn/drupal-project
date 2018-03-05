@@ -155,14 +155,16 @@ function onRouteChange(menuTree, { detail: pathSettings }) {
  * @type {Drupal~behavior}
  */
 Drupal.behaviors.elfMenu = {
-  attach() {
-    menu = document.querySelector('.js-main-menu');
-    const menuTree = parseMenu(menu.children[0]);
+  attach(context) {
+    const foundMenu = context.querySelector('.js-main-menu');
 
-    renderMenu(menuTree, menu);
-    Drupal.attachBehaviors(menu);
-    document.addEventListener(ROUTED_EVENT, onRouteChange.bind(null, menuTree));
+    if (foundMenu && !menu) {
+      menu = foundMenu;
+      const menuTree = parseMenu(menu.children[0]);
 
-    delete this.attach;
+      renderMenu(menuTree, menu);
+      Drupal.attachBehaviors(menu);
+      document.addEventListener(ROUTED_EVENT, onRouteChange.bind(null, menuTree));
+    }
   },
 };
