@@ -42,6 +42,13 @@ $columns: (
       > .l-grid__item {
         flex-basis: $min-width;
       }
+
+      // Fix overflowing grid areas
+      &.l-grid--flexy {
+        @media (max-width: #{$min-width + $half-gutter}) {
+          grid-template-columns: repeat(auto-fill, minmax(0, var(--column-width)));
+        }
+      }
     }
   }
 }
