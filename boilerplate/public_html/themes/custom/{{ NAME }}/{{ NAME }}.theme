@@ -178,6 +178,14 @@ function {{ NAME }}_preprocess_icon(array &$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for image.html.twig.
+ */
+function {{ NAME }}_preprocess_image(&$variables) {
+  // Default typeof foaf:image from rdf module is unrecognized.
+  unset($variables['attributes']['typeof']);
+}
+
+/**
  * Implements hook_preprocess_HOOK() for region.html.twig.
  */
 function {{ NAME }}_preprocess_region(&$variables) {
