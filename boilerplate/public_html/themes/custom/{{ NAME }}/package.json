@@ -6,7 +6,7 @@
     "start": "gulp watch",
     "postinstall": "npm run build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.jsx .",
-    "analyze": "webpack --config build/webpack.config.analyze.js --profile --json > dist/js/stats.json&webpack-bundle-analyzer dist/js/stats.json --port 9000"
+    "analyze": "webpack --config build/webpack.config.analyze.js --profile --json > dist/js/stats.json&webpack-bundle-analyzer dist/js/stats.json"
   },
   "repository": {
     "type": "git",

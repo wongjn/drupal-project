@@ -1,3 +1,0 @@
-options:
-  # For drush to recognize its own server from runserver command
-  uri: 'http://127.0.0.1:8888'
