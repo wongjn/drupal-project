@@ -187,10 +187,18 @@ class Route {
     const loadingPromises = [];
 
     if (this.assets.top) {
-      loadingPromises.push(...this.constructor.insertAssets(this.assets.top, document.head));
+      loadingPromises.push(...this.constructor.insertAssets(
+        this.assets.top,
+        document.head,
+        this.settings,
+      ));
     }
     if (this.assets.bottom) {
-      loadingPromises.push(...this.constructor.insertAssets(this.assets.bottom, document.body));
+      loadingPromises.push(...this.constructor.insertAssets(
+        this.assets.bottom,
+        document.body,
+        this.settings,
+      ));
     }
 
     // Wait for loading to be done
@@ -212,17 +220,23 @@ class Route {
    *   Other assets to load, such as styles, link tags.
    * @param {Element} location
    *   The DOM element to load the assets into.
+   * @param {object} [settings={}]
+   *   (optional) New drupalSettings object from the loading route.
    * @return {Promise[]}
    *   A promise for each script included that resolves once it has loaded or
    *   rejects if there was some kind of error.
    */
-  static insertAssets({ scripts = [], others = '' }, location) {
+  static insertAssets({ scripts = [], others = '' }, location, settings = {}) {
     location.insertAdjacentHTML('beforeend', others);
+
+    // Merge drupalSettings for scripts to read.
+    window.drupalSettings = Object.assign(drupalSettings, settings);
 
     return scripts.map(src => new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.addEventListener('error', reject);
       script.addEventListener('load', resolve);
+      script.async = false;
       location.appendChild(script);
       script.src = src;
     }));
@@ -320,13 +334,6 @@ const Router = {
   cache: new Map(),
 
   /**
-   * Most up-to-date drupalSettings object.
-   *
-   * @var {object}
-   */
-  drupalSettings,
-
-  /**
    * The dynamic content areas.
    *
    * @var {HTMLElement[]}
@@ -366,7 +373,7 @@ const Router = {
       url.searchParams.set('_drupal_ajax', '1');
       url.searchParams.set('_wrapper_format', 'frontend_router');
 
-      const { ajaxPageState } = this.drupalSettings;
+      const { ajaxPageState } = drupalSettings;
       url.searchParams.set('ajax_page_state[theme]', ajaxPageState.theme);
       url.searchParams.set('ajax_page_state[theme_token]', ajaxPageState.theme_token);
       url.searchParams.set('ajax_page_state[libraries]', ajaxPageState.libraries);
@@ -436,7 +443,7 @@ const Router = {
     document.body.classList.add('is-leaving-page');
     return new Promise((resolve) => {
       this.bins.forEach((bin) => {
-        Drupal.detachBehaviors(bin, this.drupalSettings);
+        Drupal.detachBehaviors(bin, drupalSettings);
       });
 
       const resolver = (event) => {
@@ -466,16 +473,16 @@ const Router = {
 
     if (route) {
       document.title = route.title;
+      window.drupalSettings = Object.assign(drupalSettings, route.settings);
     }
 
-    this.drupalSettings = route ? route.settings : this.drupalSettings;
 
     // List of promises for animated scale changes.
     const stretchChangePromises = Array.from(this.bins)
       // Filer to only changed content areas
       .filter(([key, bin]) => {
         if (route && bin.innerHTML === route.content.get(key)) {
-          Drupal.attachBehaviors(bin, this.drupalSettings);
+          Drupal.attachBehaviors(bin, drupalSettings);
           return false;
         }
 
@@ -488,7 +495,7 @@ const Router = {
 
         // Replace with new content
         bin.innerHTML = route.content.get(key);
-        Drupal.attachBehaviors(bin, this.drupalSettings);
+        Drupal.attachBehaviors(bin, drupalSettings);
 
         return binEntry;
       })
@@ -570,7 +577,7 @@ const Router = {
     Loader.setProgress(1);
     document.body.focus();
 
-    document.dispatchEvent(new CustomEvent(ROUTED_EVENT, { detail: this.drupalSettings.path }));
+    document.dispatchEvent(new CustomEvent(ROUTED_EVENT, { detail: drupalSettings.path }));
     this._navigatingTo = null;
   },
 
