@@ -386,6 +386,11 @@ const Router = {
           throw new Error('Network error.');
         }
 
+        if (!response.headers.get('Content-Type').includes('text/html')) {
+          this.addUnroutableRoute(path);
+          throw new Error('Path is a file.');
+        }
+
         const responseText = await response.text();
         Loader.setProgress(0.2);
 
@@ -612,9 +617,17 @@ const Router = {
       return;
     }
 
-    // Return early if external or known admin URL
     const { host, pathname } = link;
-    if (host !== window.location.host || ADMIN_PATH.test(pathname)) {
+
+    // Return early if:
+    if (
+      // External
+      host !== window.location.host ||
+      // Admin
+      ADMIN_PATH.test(pathname) ||
+      // File
+      pathname.includes('.')
+    ) {
       return;
     }
 
