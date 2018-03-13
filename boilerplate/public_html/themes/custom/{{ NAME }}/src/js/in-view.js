@@ -18,7 +18,7 @@ const LIST_SELECTOR = '.js-inview-list[data-selector]';
  *
  * @type {string}
  */
-const SINGLES_SELECTOR = '';
+const SINGLES_SELECTOR = '.js-inview';
 
 /**
  * CSS selector in-view elements.
@@ -253,7 +253,7 @@ export default init;
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.atarashiiInview = {
+  Drupal.behaviors.{{ CAMEL }}Inview = {
     attach(context) {
       const elements = Array.from(context.querySelectorAll(SELECTOR))
         .concat((typeof context.matches === 'function' && context.matches(SELECTOR)) ? [context] : []);
