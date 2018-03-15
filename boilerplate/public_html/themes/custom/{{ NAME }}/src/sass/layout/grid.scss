@@ -23,18 +23,20 @@ $columns: (
  *   The number of columns.
  * @param {pxlength} $gutter
  *   The gutter size between columns.
+ * @param {pxlength} $container-width
+ *   The container width.
  */
-@function column-width($columns, $gutter) {
-  @return ($SITE-WIDTH-PX - ($gutter * ($columns - 1))) / $columns;
+@function column-width($columns, $gutter, $container-width: $SITE-WIDTH-PX) {
+  @return ($container-width - ($gutter * ($columns - 1))) / $columns;
 }
 
-@mixin variants($gutter: $gutter) {
+@mixin variants($gutter: $gutter, $container-width: $SITE-WIDTH-PX) {
   @each $name, $column in $columns {
     &--#{$name} {
       // Exact width
-      $width: column-width($column, $gutter);
+      $width: column-width($column, $gutter, $container-width);
       // Min-width for grid to be at the desired column count at full site width
-      $min-width: (column-width($column + 1, $gutter) + 1px);
+      $min-width: (column-width($column + 1, $gutter, $container-width) + 1px);
 
       --column-min-width: $min-width;
       --column-width: $width;
