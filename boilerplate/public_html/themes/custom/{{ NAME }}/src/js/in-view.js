@@ -49,13 +49,9 @@ const observedElements = new WeakSet();
  */
 class Loadable {
   /**
-   * Return the name of CSS Custom property for the delay value.
+   * CSS custom property delay value name including the “--” prefix.
    *
-   * This a pseudo class constant.
-   *
-   * @return {string}
-   *   The name of CSS Custom property for the delay value, including the --
-   *   prefix.
+   * @var {string}
    */
   static get CSS_PROPERTY_NAME() {
     return '--inview-delay';
@@ -64,22 +60,25 @@ class Loadable {
   /**
    * The CSS class for a element that is not in-view.
    *
-   * This a pseudo class constant.
-   *
-   * @return {string}
-   *   The CSS class name.
+   * @var {string}
    */
   static get OUTSIDE_VIEWPORT_CLASSNAME() {
     return 'is-outside-viewport';
   }
 
   /**
+   * The CSS class for a element that is loading.
+   *
+   * @var {string}
+   */
+  static get LOADING_CLASSNAME() {
+    return 'is-loading';
+  }
+
+  /**
    * The CSS class for a element that is has loaded.
    *
-   * This a pseudo class constant.
-   *
-   * @return {string}
-   *   The CSS class name.
+   * @var {string}
    */
   static get LOADED_CLASSNAME() {
     return 'is-loaded';
@@ -108,6 +107,7 @@ class Loadable {
   load(index = 0) {
     this.element.style.setProperty(this.constructor.CSS_PROPERTY_NAME, `${index * 100}ms`);
     this.element.classList.remove(this.constructor.OUTSIDE_VIEWPORT_CLASSNAME);
+    this.element.classList.add(this.constructor.LOADING_CLASSNAME);
 
     return new Promise((resolve) => {
       this._end = this._end.bind(this, resolve);
@@ -126,6 +126,7 @@ class Loadable {
   _end(resolve) {
     this.element.style.removeProperty(this.constructor.CSS_PROPERTY_NAME);
     this.element.removeEventListener('transitionend', this._end);
+    this.element.classList.remove(this.constructor.LOADING_CLASSNAME);
     this.element.classList.add(this.constructor.LOADED_CLASSNAME);
     resolve();
   }
