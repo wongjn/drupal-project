@@ -43,3 +43,10 @@ function {{ NAME }}_helper_page_bottom(array &$page_bottom) {
     ];
   }
 }
+
+/**
+ * Implements callback_allowed_values_function().
+ */
+function {{ NAME }}_helper_allowed_icon_values() {
+  return \Drupal::service('{{ NAME }}_helper.icons')->getSelectOptions();
+}
