@@ -6,6 +6,7 @@
 import partition from 'lodash/partition';
 import ROUTED_EVENT from './router-events';
 import requestAnimationFramePromise from './request-animation-frame-promise';
+import { TRANSITIONEND } from './supports';
 
 // Make body tag focusable for route navigation aftermath.
 document.body.tabIndex = '-1';
@@ -14,11 +15,6 @@ document.body.tabIndex = '-1';
  * Regex to match common administritive paths.
  */
 const ADMIN_PATH = /^\/(((node|taxonomy\/term|user)\/[0-9]+\/(edit|revisions|delete)|user\/logout)$|admin\/|node\/add)/;
-
-/**
- * Flag whether the browser supports 'transitionend' event.
- */
-const SUPPORTS_TRANSITION_END = 'ontransitionend' in window;
 
 /**
  * Scrolls to the top of the page.
@@ -441,7 +437,7 @@ const Router = {
    */
   setLeaving() {
     // Skip transitioning if no transitionend event can be listened to.
-    if (!SUPPORTS_TRANSITION_END) {
+    if (!TRANSITIONEND) {
       return Promise.resolve();
     }
 
@@ -512,7 +508,7 @@ const Router = {
 
         // Does not support transitionend event or same vertical position
         // do nothing further.
-        if (!SUPPORTS_TRANSITION_END ||
+        if (!TRANSITIONEND ||
           (oldRect.bottom === newRect.bottom && oldRect.top === newRect.top)) {
           return Promise.resolve();
         }
