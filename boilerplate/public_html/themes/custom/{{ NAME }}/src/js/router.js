@@ -339,20 +339,22 @@ const Router = {
   /**
    * Routes the client to a new page.
    *
-   * @param {string} path
-   *   The path to navigate to.
+   * @param {string} href
+   *   The href to navigate to.
    */
-  async navigate(path, { historyPushState = true } = {}) {
+  async navigate(href, { historyPushState = true } = {}) {
+    const url = new URL(href);
+
     // Route directly to unroutable path from cache:
-    if (this.unroutableRoutesCache.includes(path)) {
-      window.location.href = path;
+    if (this.unroutableRoutesCache.includes(url.pathname)) {
+      window.location.href = href;
       return;
     }
 
     Loader.setProgress(0.1);
 
     // Set as active navigation path
-    this._navigatingTo = path;
+    this._navigatingTo = href;
 
     // Create promise so that we can time when the new content can be loaded in.
     const leavingPromise = this.setLeaving();
@@ -362,20 +364,21 @@ const Router = {
     }
 
     // Attempt to get from cache:
-    let route = this.cache.get(path);
+    let route = this.cache.get(url.pathname);
+
     if (!route) {
       // Build fetch URL
-      const url = new URL(path);
-      url.searchParams.set('_drupal_ajax', '1');
-      url.searchParams.set('_wrapper_format', 'frontend_router');
+      const fetchURL = new URL(url);
+      fetchURL.searchParams.set('_drupal_ajax', '1');
+      fetchURL.searchParams.set('_wrapper_format', 'frontend_router');
 
       const { ajaxPageState } = drupalSettings;
-      url.searchParams.set('ajax_page_state[theme]', ajaxPageState.theme);
-      url.searchParams.set('ajax_page_state[theme_token]', ajaxPageState.theme_token);
-      url.searchParams.set('ajax_page_state[libraries]', ajaxPageState.libraries);
+      fetchURL.searchParams.set('ajax_page_state[theme]', ajaxPageState.theme);
+      fetchURL.searchParams.set('ajax_page_state[theme_token]', ajaxPageState.theme_token);
+      fetchURL.searchParams.set('ajax_page_state[libraries]', ajaxPageState.libraries);
 
       try {
-        const response = await fetch(url, { credentials: 'same-origin' });
+        const response = await fetch(fetchURL, { credentials: 'same-origin' });
         Loader.setProgress(0.15);
 
         if (!response.ok) {
@@ -383,7 +386,7 @@ const Router = {
         }
 
         if (!response.headers.get('Content-Type').includes('text/html')) {
-          this.addUnroutableRoute(path);
+          this.addUnroutableRoute(url.pathname);
           throw new Error('Path is a file.');
         }
 
@@ -392,26 +395,26 @@ const Router = {
 
         // Is a page not using the current Drupal theme:
         if (responseText === '__INVALID_THEME__') {
-          this.addUnroutableRoute(path);
+          this.addUnroutableRoute(url.pathname);
           throw new Error('Redirecting to an unroutable page.');
         }
 
         route = Route.fromDrupal(responseText);
       }
       catch (error) {
-        // Routing was not possible - send client to the path
-        window.location.href = path;
+        // Routing was not possible - send client to the href
+        window.location.href = href;
         return;
       }
 
-      this.cache.set(path, route);
+      this.cache.set(url.pathname, route);
     }
 
     await leavingPromise;
     Loader.setProgress(0.5);
 
     // Aborted this navigation, do nothing further
-    if (this._navigatingTo !== path) {
+    if (this._navigatingTo !== href) {
       return;
     }
 
@@ -421,10 +424,10 @@ const Router = {
     }
 
     Loader.setProgress(0.75);
-    this.contentEnter(route, { scroll: historyPushState });
+    this.contentEnter(route, { scrollTo: url.hash || false });
 
     if (historyPushState) {
-      window.history.pushState({ routeURL: path, title: route.title }, route.title, path);
+      window.history.pushState({ routeURL: href, title: route.title }, route.title, href);
     }
   },
 
@@ -466,8 +469,13 @@ const Router = {
    * @param {Route|bool} [route=false]
    *   The route containing data to replace content, or pass false to re-display
    *   the current DOM content (useful for cancelled navigation situations).
+   * @param {object} [options={}]
+   *   Additional options when entering new content.
+   * @param {string|bool} [options.scrollTo=false]
+   *   Pass a CSS selector to scroll to the element on load (such as for anchor
+   *   tags with a hash).
    */
-  async contentEnter(route = false) {
+  async contentEnter(route = false, { scrollTo = false } = {}) {
     if (this._navigatingTo === null) {
       route = false;
     }
@@ -576,7 +584,18 @@ const Router = {
     document.body.classList.remove('is-leaving-page');
 
     Loader.setProgress(1);
-    document.body.focus();
+
+    // Resolve scroll position for hash links
+    const scrollToElement = document.querySelector(scrollTo);
+    if (scrollToElement) {
+      if ('scrollIntoView' in Element) {
+        scrollToElement.scrollIntoView({ behavior: 'smooth' });
+      }
+      scrollToElement.focus();
+    }
+    else {
+      document.body.focus();
+    }
 
     document.dispatchEvent(new CustomEvent(ROUTED_EVENT, { detail: drupalSettings.path }));
     this._navigatingTo = null;
@@ -613,7 +632,7 @@ const Router = {
       return;
     }
 
-    const { host, pathname } = link;
+    const { host, pathname, hash } = link;
 
     // Return early if:
     if (
@@ -622,7 +641,9 @@ const Router = {
       // Admin
       ADMIN_PATH.test(pathname) ||
       // File
-      pathname.includes('.')
+      pathname.includes('.') ||
+      // Hash on this page
+      (pathname === window.location.pathname && hash)
     ) {
       return;
     }
