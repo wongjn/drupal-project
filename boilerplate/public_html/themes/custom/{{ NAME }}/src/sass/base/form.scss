@@ -24,6 +24,7 @@ $form: map-merge($form, (
 label,
 legend {
   font-weight: 700;
+  cursor: pointer;
 }
 
 input,
