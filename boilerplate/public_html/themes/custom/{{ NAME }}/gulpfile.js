@@ -21,15 +21,6 @@ const config = {
   icons: {
     src: './src/icons/*.svg',
   },
-  images: {
-    src: [
-      './src/images/*.png',
-      './src/images/*.gif',
-      './src/images/*.jpg',
-      './src/images/*.jpeg',
-      './src/images/*.svg',
-    ],
-  },
   webpackStats: {
     modules: false,
     colors: true,
@@ -71,13 +62,6 @@ gulp.task('icons:watch', ['icons'], (done) => {
 });
 
 
-gulp.task('images', () => gulp.src(config.images.src)
-  .pipe(plugins.plumber())
-  .pipe(plugins.cached('images'))
-  .pipe(plugins.imagemin())
-  .pipe(gulp.dest('dist/images')));
-
-
 gulp.task('js', (cb) => {
   webpack(webpackProdConfig, (err, stats) => {
     if (err) return cb(err);
@@ -87,7 +71,7 @@ gulp.task('js', (cb) => {
 });
 
 
-gulp.task('watch', ['sass', 'icons', 'images'], () => {
+gulp.task('watch', ['sass', 'icons', ], () => {
   browserSync.init({
     ghostMode: false,
     proxy: '{{ NAME }}.local',
@@ -102,9 +86,8 @@ gulp.task('watch', ['sass', 'icons', 'images'], () => {
 
   plugins.watch(config.sass.src, () => gulp.start('sass'));
   plugins.watch(config.icons.src, () => gulp.start('icons:watch'));
-  plugins.watch(config.images.src, () => gulp.start('images'));
 });
 
-gulp.task('build', ['sass', 'icons', 'images', 'js']);
+gulp.task('build', ['sass', 'icons', 'js']);
 
 gulp.task('clean', () => del(['dist']));
