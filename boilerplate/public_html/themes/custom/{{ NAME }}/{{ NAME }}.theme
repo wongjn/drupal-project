@@ -228,11 +228,10 @@ function {{ NAME }}_preprocess_views_view_list(&$variables) {
 function {{ NAME }}_form_contact_message_form_alter(&$form) {
   $form['name']['#title'] = t('Name');
   $form['mail']['#title'] = t('Email');
-  $form['message']['widget'][0]['value']['#title'] = t('Query');
+  // $form['message']['widget'][0]['value']['#title'] = t('Query');
 
-  if (isset($form['actions']['preview'])) {
-    unset($form['actions']['preview']);
-  }
+  unset($form['actions']['preview']);
+  unset($form['langcode']);
 
   $form['actions']['submit']['#value'] = t('Submit');
 }
