@@ -345,8 +345,10 @@ const Router = {
   async navigate(href, { historyPushState = true } = {}) {
     const url = new URL(href);
 
+    const cacheKey = `${url.pathname}:${url.searchParams}`;
+
     // Route directly to unroutable path from cache:
-    if (this.unroutableRoutesCache.includes(url.pathname)) {
+    if (this.unroutableRoutesCache.includes(cacheKey)) {
       window.location.href = href;
       return;
     }
@@ -364,7 +366,7 @@ const Router = {
     }
 
     // Attempt to get from cache:
-    let route = this.cache.get(url.pathname);
+    let route = this.cache.get(cacheKey);
 
     if (!route) {
       // Build fetch URL
@@ -386,7 +388,7 @@ const Router = {
         }
 
         if (!response.headers.get('Content-Type').includes('text/html')) {
-          this.addUnroutableRoute(url.pathname);
+          this.addUnroutableRoute(cacheKey);
           throw new Error('Path is a file.');
         }
 
@@ -395,7 +397,7 @@ const Router = {
 
         // Is a page not using the current Drupal theme:
         if (responseText === '__INVALID_THEME__') {
-          this.addUnroutableRoute(url.pathname);
+          this.addUnroutableRoute(cacheKey);
           throw new Error('Redirecting to an unroutable page.');
         }
 
@@ -407,7 +409,7 @@ const Router = {
         return;
       }
 
-      this.cache.set(url.pathname, route);
+      this.cache.set(cacheKey, route);
     }
 
     await leavingPromise;
