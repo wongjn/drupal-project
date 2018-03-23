@@ -122,7 +122,7 @@ export default class MainMenuNormalTopMenu extends Component {
   /**
    * @inheritDoc
    */
-  render({ menuTree }, { hideCutIndex, height }) {
+  render({ menuTree }, { hideCutIndex }) {
     const items = menuTree.map((item, index) => (
       <MainMenuNormalTopItem
         {...item}

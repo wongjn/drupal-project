@@ -8,14 +8,14 @@ import './webpack-path';
 import './in-view';
 import './main-menu';
 import './router';
-import AsyncBehavior from './AsyncBehavior';
+// import AsyncBehavior from './AsyncBehavior';
 
 /**
  * Polyfills external-use SVG elements.
  *
  * @type {Drupal~behavior}
  */
-Drupal.behaviors.{{ CAMEL }}SVGPolyfill = {
+Drupal.behaviors.freewheelersSVGPolyfill = {
   attach() {
     SVG4Everybody();
     delete this.attach;

@@ -71,7 +71,7 @@ gulp.task('js', (cb) => {
 });
 
 
-gulp.task('watch', ['sass', 'icons', ], () => {
+gulp.task('watch', ['sass', 'icons'], () => {
   browserSync.init({
     ghostMode: false,
     proxy: '{{ NAME }}.local',
