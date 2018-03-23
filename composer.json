@@ -29,12 +29,13 @@
         "drupal-composer/drupal-scaffold": "^2.2",
         "drupal/admin_toolbar": "^1.21",
         "drupal/config_split": "^1.0",
-        "drupal/core": "~8.4",
+        "drupal/core": "~8.5",
         "drupal/imce": "^1.5",
         "drupal/menu_admin_per_menu": "^1.0",
         "drupal/menu_trail_by_path": "^1.1",
         "drupal/pathauto": "^1.0@RC",
         "drush/drush": "^9.0.0",
+        "vlucas/phpdotenv": "^2.4",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
         "wongjn/frontend_router": "^1.0",
@@ -43,7 +44,7 @@
     "require-dev": {
         "drupal/console": "^1.0.2",
         "drupal/devel": "^1.0@RC",
-        "webflo/drupal-core-require-dev": "~8.4"
+        "webflo/drupal-core-require-dev": "~8.5"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -56,7 +57,8 @@
     "autoload": {
         "classmap": [
             "scripts/composer/ScriptHandler.php"
-        ]
+        ],
+        "files": ["load.environment.php"]
     },
     "scripts": {
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
