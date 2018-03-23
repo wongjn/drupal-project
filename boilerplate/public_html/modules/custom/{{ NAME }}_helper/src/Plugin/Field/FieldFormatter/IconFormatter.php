@@ -15,7 +15,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   field_types = {
  *     "list_string",
  *     "string",
- *   }s
+ *   }
  * )
  */
 class IconFormatter extends FormatterBase {
