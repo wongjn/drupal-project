@@ -85,6 +85,15 @@ class Loadable {
   }
 
   /**
+   * The name of the 'loaded' event.
+   *
+   * @var {string}
+   */
+  static get LOAD_EVENT_NAME() {
+    return 'inview-element-loaded';
+  }
+
+  /**
    * Creates an instance of Loadable.
    *
    * @param {HTMLElement} element
@@ -128,9 +137,14 @@ class Loadable {
     this.element.removeEventListener('transitionend', this._end);
     this.element.classList.remove(this.constructor.LOADING_CLASSNAME);
     this.element.classList.add(this.constructor.LOADED_CLASSNAME);
+
+    const event = new CustomEvent(this.constructor.LOAD_EVENT_NAME);
+    this.element.dispatchEvent(event);
+
     resolve();
   }
 }
+export const { LOAD_EVENT_NAME: ELEMENT_LOAD_EVENT_NAME } = Loadable;
 
 /**
  * A collection of loadable elements.
