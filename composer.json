@@ -29,7 +29,6 @@
         "drupal-composer/drupal-scaffold": "^2.2",
         "drupal/admin_toolbar": "^1.21",
         "drupal/config_split": "^1.0",
-        "drupal/console": "^1.0.2",
         "drupal/core": "~8.4",
         "drupal/imce": "^1.5",
         "drupal/menu_admin_per_menu": "^1.0",
@@ -42,6 +41,7 @@
         "wongjn/lazy_image": "^1.0"
     },
     "require-dev": {
+        "drupal/console": "^1.0.2",
         "drupal/devel": "^1.0@RC",
         "webflo/drupal-core-require-dev": "~8.4"
     },
