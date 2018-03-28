@@ -7,6 +7,7 @@ import { h, Component } from 'preact';
 import debounce from 'lodash/debounce';
 import MainMenuNormalTopItem from './MainMenuNormalTopItem';
 import requestAnimationFramePromise from '../request-animation-frame-promise';
+import ResizeObserverLoader from '../resize-observer-load';
 
 /**
  * Main menu “normal” top-level menu list preact component.
@@ -25,23 +26,24 @@ export default class MainMenuNormalTopMenu extends Component {
 
     this.items = [];
     this.setLiRef = this.setLiRef.bind(this);
-    this.layoutUpdate = this.layoutUpdate.bind(this);
   }
 
   /**
    * @inheritDoc
    */
   componentDidMount() {
-    this.layoutUpdate();
-    this.debouncedlayoutUpdate = debounce(this.layoutUpdate, 200);
-    window.addEventListener('resize', this.debouncedlayoutUpdate);
+    const debouncedlayoutUpdate = debounce(this.layoutUpdate.bind(this), 200);
+    ResizeObserverLoader.then((Observer) => {
+      this.observer = new Observer(debouncedlayoutUpdate);
+      this.observer.observe(this.base);
+    });
   }
 
   /**
    * @inheritDoc
    */
   componentWillUnmount() {
-    window.removeEventListener('resize', this.debouncedlayoutUpdate);
+    this.observer.disconnect();
   }
 
   /**

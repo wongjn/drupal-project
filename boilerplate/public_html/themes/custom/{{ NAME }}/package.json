@@ -26,6 +26,7 @@
     "lodash": "^4.17.4",
     "preact": "^8.2.6",
     "regenerator-runtime": "^0.11.1",
+    "resize-observer-polyfill": "^1.5.0",
     "svg4everybody": "^2.1.8"
   },
   "devDependencies": {
