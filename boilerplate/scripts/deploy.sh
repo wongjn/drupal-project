@@ -4,8 +4,8 @@
 git push live master
 
 # Copy compiled files to server
-dist="public_html/themes/custom/{{ NAME }}/dist"
-scp -r $dist "%remote_user%@server_.projectcosmic.co.uk:/home/%remote_user%/$dist"
+theme="public_html/themes/custom/{{ NAME }}"
+scp -r "$theme/dist" "REMOTE_USER@server_.projectcosmic.co.uk:/home/REMOTE_USER/$theme"
 
 # Clear cache (choose)
 drush cc
