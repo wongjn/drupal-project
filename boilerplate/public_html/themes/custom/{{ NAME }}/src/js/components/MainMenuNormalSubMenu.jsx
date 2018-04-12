@@ -3,34 +3,101 @@
  * Contains the main menu “normal” submenu list List preact component.
  */
 
-import { h } from 'preact';
+import { h, Component } from 'preact';
+import debounce from 'lodash/debounce';
 import MainMenuNormalItem from './MainMenuNormalItem';
 
 /**
- * Base CSS class name for menu lists.
- *
- * @var {string}
+ * A “normal” sub-menu list preact component.
  */
-const BASE_NAME = 'c-main-menu__sub-menu';
+export default class MainMenuNormalSubMenu extends Component {
+  /**
+   * @inheritDoc
+   */
+  constructor(props) {
+    super(props);
 
-/**
- * Returns a “normal” menu list preact component.
- *
- * @param {object} props
- *   The props passed to this component.
- * @return {JSX}
- *   The menu component.
- */
-export default function MainMenuNormalSubMenu({ menuTree, depth = 1 }) {
-  const items = menuTree.map(item => (
-    <MainMenuNormalItem
-      {...item}
-      key={`${depth}:${item.index}`}
-      depth={depth}
-    />
-  ));
+    this.state = { overlaps: false };
+  }
 
-  const classes = `${BASE_NAME}${depth > 1 ? ` ${BASE_NAME}--deep` : ''}`;
+  /**
+   * @inheritDoc
+   */
+  componentDidMount() {
+    this.resizeUpdater();
 
-  return <ul class={classes}>{items}</ul>;
+    this.resizeUpdater = debounce(this.resizeUpdater.bind(this), 500);
+    window.addEventListener('resize', this.resizeUpdater);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resizeUpdater);
+  }
+
+  /**
+   * Returns class HTML attribute for this menu.
+   *
+   * @return {string}
+   *   The class attribute value.
+   */
+  getClasses() {
+    const BASE_NAME = 'c-main-menu__sub-menu';
+    const classesArray = [BASE_NAME];
+
+    if (this.props.depth > 1) {
+      classesArray.push(`${BASE_NAME}--deep`);
+    }
+
+    if (this.state.overlaps) {
+      classesArray.push('is-moved');
+    }
+
+    return classesArray.join(' ');
+  }
+
+  /**
+   * Updates whether this menu is overlapping the browser on the right side.
+   */
+  resizeUpdater() {
+    // Remove position class temporarily
+    this.base.classList.remove('is-moved');
+
+    // Add timeout so that deeper menus get queried much later than parents.
+    setTimeout(() => {
+      const winWidth = window.innerWidth;
+      const position = this.base.getBoundingClientRect();
+
+      // Restore CSS class if neccesary
+      if (this.state.overlaps) {
+        this.base.classList.add('is-moved');
+      }
+
+      this.setState({ overlaps: winWidth < (position.right - 10) });
+    }, this.props.depth);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  renderItems() {
+    const { menuTree, depth = 1 } = this.props;
+
+    return menuTree.map(item => (
+      <MainMenuNormalItem
+        {...item}
+        key={`${depth}:${item.index}`}
+        depth={depth}
+      />
+    ));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  render() {
+    return <ul class={this.getClasses()}>{this.renderItems()}</ul>;
+  }
 }
