@@ -49,6 +49,7 @@ dependencies:
   - pathauto
   - views
   - {{ NAME }}_helper
+  - {{ NAME }}_icons
 themes:
   - seven
   - {{ NAME }}

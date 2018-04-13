@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\{{ NAME }}_helper;
+namespace Drupal\{{ NAME }}_icons;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
@@ -10,7 +10,7 @@ use Drupal\Core\Extension\ThemeHandlerInterface;
 /**
  * Service helping with querying icon data from the theme's sprite sheet.
  */
-class Icons implements CacheableDependencyInterface {
+class Manager implements CacheableDependencyInterface {
 
   /**
    * Cache ID for the icon data (width, height, titles).

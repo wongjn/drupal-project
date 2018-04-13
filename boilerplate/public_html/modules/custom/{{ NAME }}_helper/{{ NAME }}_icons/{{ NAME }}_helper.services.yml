@@ -1,0 +1,4 @@
+services:
+  {{ NAME }}_icons.manager:
+    class: Drupal\{{ NAME }}_icons\Manager
+    arguments: ['@cache.discovery', '@cache_tags.invalidator', '@theme_handler']

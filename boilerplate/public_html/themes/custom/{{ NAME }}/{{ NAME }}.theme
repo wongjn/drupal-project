@@ -148,7 +148,7 @@ function {{ NAME }}_preprocess_file_link(&$variables) {
  *   - attributes: The HTML attributes to apply to the SVG element.
  */
 function {{ NAME }}_preprocess_icon(array &$variables) {
-  $icon_service = \Drupal::service('{{ NAME }}_helper.icons');
+  $icon_service = \Drupal::service('{{ NAME }}_icons.manager');
 
   $variables['sheet_url'] = $icon_service->getSheetPath('frontend');
 

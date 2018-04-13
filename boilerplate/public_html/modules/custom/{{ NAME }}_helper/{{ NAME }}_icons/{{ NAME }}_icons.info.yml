@@ -1,0 +1,6 @@
+name: {{ LABEL }} Icons
+description: Manages icons for the {{ LABEL }} site.
+package: {{ LABEL }}
+type: module
+core: 8.x
+project: {{ NAME }}

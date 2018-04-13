@@ -1,8 +1,4 @@
 services:
-  {{ NAME }}_helper.icons:
-    class: Drupal\{{ NAME }}_helper\Icons
-    arguments: ['@cache.discovery', '@cache_tags.invalidator', '@theme_handler']
-
   {{ NAME }}_helper.link_tree:
     class: Drupal\{{ NAME }}_helper\Menu\{{ UCAMEL }}MenuLinkTree
     decorates: menu.link_tree
