@@ -75,7 +75,7 @@ export default class MainMenuNormalSubMenu extends Component {
         this.base.classList.add('is-moved');
       }
 
-      this.setState({ overlaps: winWidth < (position.right - 10) });
+      this.setState({ overlaps: winWidth < position.right });
     }, this.props.depth);
   }
 
