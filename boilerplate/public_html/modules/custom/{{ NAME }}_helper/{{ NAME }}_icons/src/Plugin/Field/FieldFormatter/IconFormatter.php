@@ -71,9 +71,23 @@ class IconFormatter extends FormatterBase {
       ],
     ];
 
-    $elements['#element_validate'][] = [get_class($this), 'validateDimensions'];
+    $elements['#element_validate'][] = [get_class($this), 'validateSettings'];
 
     return $elements;
+  }
+
+  /**
+   * Form validation handler for settings form element.
+   *
+   * @param array $element
+   *   The form element.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  public static function validateSettings(array $element, FormStateInterface $form_state) {
+    if (!$element['width']['#value'] && !$element['height']['#value']) {
+      $form_state->setError($element, t('At least one of Width or Height must be set.'));
+    }
   }
 
   /**
