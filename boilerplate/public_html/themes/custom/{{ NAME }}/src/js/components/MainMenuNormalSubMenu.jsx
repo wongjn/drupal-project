@@ -67,15 +67,15 @@ export default class MainMenuNormalSubMenu extends Component {
 
     // Add timeout so that deeper menus get queried much later than parents.
     setTimeout(() => {
-      const winWidth = window.innerWidth;
-      const position = this.base.getBoundingClientRect();
+      const { clientWidth } = document.documentElement;
+      const { right } = this.base.getBoundingClientRect();
 
       // Restore CSS class if neccesary
       if (this.state.overlaps) {
         this.base.classList.add('is-moved');
       }
 
-      this.setState({ overlaps: winWidth < position.right });
+      this.setState({ overlaps: clientWidth < right });
     }, this.props.depth);
   }
 
