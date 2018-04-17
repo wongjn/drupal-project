@@ -3,6 +3,12 @@
 # Update server files
 git push live master
 
-# Copy compiled files to server
+remote_user="USER"
+remote="$remote_user@server.projectcosmic.co.uk"
 theme="public_html/themes/custom/{{ NAME }}"
-scp -r "$theme/dist" "REMOTE_USER@server_.projectcosmic.co.uk:/home/REMOTE_USER/$theme"
+
+# Delete old files
+ssh $remote "rm -rf /home/$remote_user/$theme/dist"
+
+# Copy compiled files to server
+scp -r "$theme/dist" "$remote:/home/$remote_user/$theme"
