@@ -8,7 +8,7 @@ import MainMenuNormalTopMenu from './MainMenuNormalTopMenu';
 import MainMenuDrawer from './MainMenuDrawer';
 
 /**
- * Converts the first character of s string to uppercase.
+ * Converts the first character of a string to uppercase.
  *
  * @param {string} string
  *   The string to modify.
