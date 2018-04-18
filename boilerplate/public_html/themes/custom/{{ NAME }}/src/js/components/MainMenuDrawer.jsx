@@ -30,7 +30,7 @@ export default class MainMenuDrawer extends Component {
     this.escClose = this.escClose.bind(this);
     this.navigateClose = this.navigateClose.bind(this);
     this.setFocusTargetButton = this.setFocusTarget.bind(this, 'openButton');
-    this.setFocusTargetButton = this.setFocusTarget.bind(this, 'drawerTitle');
+    this.setFocusTargetTitle = this.setFocusTarget.bind(this, 'drawerTitle');
   }
 
   /**
@@ -72,16 +72,13 @@ export default class MainMenuDrawer extends Component {
   }
 
   /**
-   * Opens the drawer from a click event.
-   *
-   * @param {Event} event
-   *   The event from which the open command comes from.
+   * Opens the drawer.
    */
-  open(event) {
+  open() {
     this.setState({
       open: true,
-      // Focus to drawer title if keyboard synthetic click (e.g. enter key)
-      focus: event.x + event.y === 0 && 'drawerTitle',
+      // Focus to drawer title
+      focus: 'drawerTitle',
     });
   }
 
@@ -90,24 +87,23 @@ export default class MainMenuDrawer extends Component {
    *
    * @param {Event} event
    *   The keyboard event.
+   * @param {string} event.key
+   *   The name of the key that was pressed.
    */
-  escClose(event) {
-    if (event.key === 'Escape') {
-      this.close(event);
+  escClose({ key }) {
+    if (key === 'Escape') {
+      this.close();
     }
   }
 
   /**
-   * Closes the drawer from a click event.
-   *
-   * @param {Event} event
-   *   The event from which the close command comes from.
+   * Closes the drawer.
    */
-  close(event) {
+  close() {
     this.setState({
       open: false,
-      // Focus to open button if keyboard synthetic click (e.g. enter key)
-      focus: event.x + event.y === 0 && 'openButton',
+      // Focus to open button
+      focus: 'openButton',
     });
   }
 
@@ -138,10 +134,12 @@ export default class MainMenuDrawer extends Component {
    * @param {Event} event
    *   The object that represents a click or keyboard event within the drawer
    *   element.
+   * @param {HTMLElement} event.target
+   *   The element that was clicked.
    */
-  navigateClose(event) {
-    if (event.target.tagName === 'A') {
-      this.close(event);
+  navigateClose({ target }) {
+    if (target.tagName === 'A') {
+      this.close();
     }
   }
 
