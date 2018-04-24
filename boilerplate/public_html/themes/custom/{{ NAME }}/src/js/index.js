@@ -15,7 +15,7 @@ import './router';
  *
  * @type {Drupal~behavior}
  */
-Drupal.behaviors.freewheelersSVGPolyfill = {
+Drupal.behaviors.{{ CAMEL }}SVGPolyfill = {
   attach() {
     SVG4Everybody();
     delete this.attach;
