@@ -84,8 +84,7 @@ $x-padding: 10px;
     // viewport.
     &.is-moved {
       left: auto;
-      right: $top-level-spacing-x;
-      right: var(--top-level-spacing-x);
+      right: 0;
       margin-right: 0;
       margin-left: -9999px;
     }
