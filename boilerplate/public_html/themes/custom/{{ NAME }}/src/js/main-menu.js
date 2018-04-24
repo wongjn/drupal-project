@@ -33,7 +33,7 @@ let menu;
  *   a child item does, otherwise false.
  */
 function isActiveTrail(
-  { systemPath, linkQuery, children = [] },
+  { systemPath, linkQuery, children = [], pathname },
   pathSettings = drupalSettings.path,
 ) {
   // Check if any children are marked as active
@@ -66,7 +66,7 @@ function isActiveTrail(
     return true;
   }
 
-  return false;
+  return window.location.pathname.indexOf(`${pathname}/`) === 0;
 }
 
 /**
@@ -90,6 +90,7 @@ function parseMenu(listElement) {
       const menuItem = {
         title: link.textContent,
         url: link.href,
+        pathname: link.pathname,
         children: subMenu ? parseMenu(subMenu) : [],
         systemPath,
         linkQuery,
