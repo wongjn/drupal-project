@@ -26,17 +26,19 @@ export default class MainMenuNormalTopMenu extends Component {
 
     this.items = [];
     this.setLiRef = this.setLiRef.bind(this);
+    this.hideAllPoint = 0;
   }
 
   /**
    * @inheritDoc
    */
   componentDidMount() {
-    const debouncedlayoutUpdate = debounce(this.layoutUpdate.bind(this), 200);
+    this.debouncedlayoutUpdate = debounce(this.layoutUpdate.bind(this), 200);
     ResizeObserverLoader.then((Observer) => {
-      this.observer = new Observer(debouncedlayoutUpdate);
+      this.observer = new Observer(this.debouncedlayoutUpdate);
       this.observer.observe(this.base);
     });
+    window.addEventListener('resize', this.debouncedlayoutUpdate);
   }
 
   /**
@@ -44,6 +46,7 @@ export default class MainMenuNormalTopMenu extends Component {
    */
   componentWillUnmount() {
     this.observer.disconnect();
+    window.removeEventListener('resize', this.debouncedlayoutUpdate);
   }
 
   /**
@@ -62,6 +65,10 @@ export default class MainMenuNormalTopMenu extends Component {
    * Updates layout state.
    */
   layoutUpdate() {
+    if (this.hideAll && this.hideAllPoint < document.documentElement.clientWidth) {
+      this.base.style.width = '';
+    }
+
     if (this.items.length > 0) {
       const { offsetTop } = this.items[0];
       const { height } = this.items[0].getBoundingClientRect();
@@ -124,7 +131,7 @@ export default class MainMenuNormalTopMenu extends Component {
   /**
    * @inheritDoc
    */
-  render({ menuTree }, { hideCutIndex }) {
+  render({ menuTree }, { hideCutIndex, height }) {
     const items = menuTree.map((item, index) => (
       <MainMenuNormalTopItem
         {...item}
@@ -135,11 +142,17 @@ export default class MainMenuNormalTopMenu extends Component {
       />
     ));
 
-    const hideAll = hideCutIndex < 2 && hideCutIndex !== -1;
-    const style = {
-      visibility: hideAll ? 'hidden' : '',
-      overflow: hideAll ? 'hidden' : '',
-    };
+    const style = { height };
+
+    this.hideAll = hideCutIndex < 2 && hideCutIndex !== -1;
+    if (this.hideAll) {
+      this.hideAllPoint = Math.max(this.hideAllPoint, document.documentElement.clientWidth);
+      style.visibility = 'hidden';
+      style.overflow = 'hidden';
+      style.height = 0;
+      style.width = 0;
+    }
+
     return <ul class="c-main-menu__top-menu" style={style}>{items}</ul>;
   }
 }
