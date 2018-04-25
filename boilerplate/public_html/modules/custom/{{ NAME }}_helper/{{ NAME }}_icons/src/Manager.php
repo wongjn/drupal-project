@@ -175,21 +175,18 @@ class Manager implements CacheableDependencyInterface {
   }
 
   /**
-   * Discovers the icon data from the sprite sheet file.
+   * Rebuilds icon data cache.
    *
    * @return array
-   *   The set of icon data.
+   *   The rebuilt icon data.
    */
-  protected function discoverIconData() {
+  public function rebuildCache() {
     $data = [
       'icons' => [],
       'inline_defs' => '',
     ];
 
-    if ($cache = $this->cache->get(self::ICON_DATA_CID)) {
-      $data = $cache->data;
-    }
-    elseif ($path = $this->getSheetPath()) {
+    if ($path = $this->getSheetPath()) {
       $xml = new \DOMDocument();
       $xml->load(drupal_realpath($path));
 
@@ -220,6 +217,28 @@ class Manager implements CacheableDependencyInterface {
       }
 
       $this->cache->set(self::ICON_DATA_CID, $data, $this->getCacheMaxAge(), $this->getCacheTags());
+    }
+
+    return $data;
+  }
+
+  /**
+   * Discovers the icon data from the sprite sheet file.
+   *
+   * @return array
+   *   The set of icon data.
+   */
+  protected function discoverIconData() {
+    $data = [
+      'icons' => [],
+      'inline_defs' => '',
+    ];
+
+    if ($cache = $this->cache->get(self::ICON_DATA_CID)) {
+      $data = $cache->data;
+    }
+    else {
+      $data = $this->rebuildCache();
     }
 
     $this->iconData = $data['icons'];
