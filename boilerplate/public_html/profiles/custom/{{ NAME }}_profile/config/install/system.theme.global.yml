@@ -5,3 +5,8 @@ favicon:
 logo:
   path: themes/custom/{{ NAME }}/logo.svg
   use_default: false
+features:
+  node_user_picture: false
+  comment_user_picture: false
+  comment_user_verification: false
+  favicon: true
