@@ -19,8 +19,8 @@
   background-color: map-get($colours, light);
   background-color: var(--messages-colour-light);
 
-  --messages-colour: map-get($colours, default);
-  --messages-colour-light: map-get($colours, light);
+  --messages-colour: #{map-get($colours, default)};
+  --messages-colour-light: #{map-get($colours, light)};
 
   // Pseudo-element icon.
   &::before {
@@ -74,9 +74,9 @@
   );
   @each $name, $data in $variants {
     &--#{$name} {
-      --messages-colour: map-get($data, colour-default);
-      --messages-colour-light: map-get($data, colour-light);
-      --messages-icon: map-get($data, icon);
+      --messages-colour: #{map-get($data, colour-default)};
+      --messages-colour-light: #{map-get($data, colour-light)};
+      --messages-icon: '#{map-get($data, icon)}';
     }
   }
 
