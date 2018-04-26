@@ -37,7 +37,13 @@
  * @see html.html.twig
  */
 #}
-{{- page.header -}}
+<header role="banner">
+  {{- page.header -}}
+</header>
+
 {{- page.primary_menu -}}
 {{- page.content -}}
-{{- page.footer -}}
+
+<footer role="contentinfo">
+  {{- page.footer -}}
+</footer>
