@@ -33,13 +33,13 @@ export default class MainMenuItem extends Component {
   /**
    * @inheritDoc
    */
-  render({ url, title, depth, children = [], MenuComponent, liProps = {} }) {
+  render({ url, title, depth, children = [], MenuComponent, liProps = {}, target }) {
     const subMenu = children.length > 0 &&
       <MenuComponent menuTree={children} depth={depth + 1} />;
 
     return (
       <li {...liProps}>
-        <a href={url} class={this.linkClasses()}>{title}</a>
+        <a href={url} class={this.linkClasses()} target={target}>{title}</a>
         {subMenu}
       </li>
     );

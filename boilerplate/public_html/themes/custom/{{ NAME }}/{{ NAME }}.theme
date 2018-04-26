@@ -192,9 +192,7 @@ function {{ NAME }}_preprocess_menu(&$variables) {
   foreach ($variables['items'] as $id => $item) {
     // Add target _blank for external links.
     if ($item['url']->isExternal()) {
-      $attributes = $item['url']->getOption('attributes') ?: [];
-      $attributes['target'] = '_blank';
-      $variables['items'][$id]['url']->setOption('attributes', $attributes);
+      $variables['items'][$id]['url']->mergeOptions(['attributes' => ['target' => '_blank']]);
     }
   }
 }

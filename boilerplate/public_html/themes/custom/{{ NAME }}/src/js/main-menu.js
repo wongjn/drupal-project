@@ -95,6 +95,7 @@ function parseMenu(listElement) {
         systemPath,
         linkQuery,
         index,
+        target: link.target,
       };
       menuItem.activeTrail = isActiveTrail(menuItem);
 
