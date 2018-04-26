@@ -65,7 +65,7 @@ $LINE-HEIGHT: (24 / $FONT-SIZE);
     @if $size > $FONT-SIZE-SCALE-MINIMUM {
       @if ($editor-stylesheet) {
         // No scaling for WYSIWYG editors
-        --font-size-#{$size}: $rem-size;
+        --font-size-#{$size}: #{$rem-size};
       } @else {
         @include viewport-scale(--font-size-#{$size}, $rem-size, font-scale-minimum($size));
       }

@@ -17,8 +17,8 @@ $form: map-merge($form, (
 );
 
 :root {
-  --form-inactive-colour: map-get($form, color-default);
-  --form-active-colour: map-get($form, color-active);
+  --form-inactive-colour: #{map-get($form, color-default)};
+  --form-active-colour: #{map-get($form, color-active)};
 }
 
 label,
