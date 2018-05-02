@@ -81,11 +81,15 @@ select {
 }
 
 button {
+  margin: 0;
   border: 0;
   padding: 0;
   background-color: transparent;
   color: inherit;
   cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 input:disabled,
