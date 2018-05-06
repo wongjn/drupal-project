@@ -8,6 +8,11 @@ import ROUTED_EVENT from './router-events';
 import requestAnimationFramePromise from './request-animation-frame-promise';
 import { TRANSITIONEND } from './supports';
 
+// Disable browser's scrolling
+if ('scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual';
+}
+
 // Make body tag focusable for route navigation aftermath.
 document.body.tabIndex = '-1';
 
@@ -18,9 +23,21 @@ const ADMIN_PATH = /^\/(((node|taxonomy\/term|user)\/[0-9]+\/(edit|revisions|del
 
 /**
  * Scrolls to the top of the page.
+ *
+ * @param {object} options
+ *   List of options.
+ * @param {bool} [options.smooth=true]
+ *   Whether the scroll should be smooth.
+ * @param {number} [options.scrollTo=0]
+ *   The Y-coordinate to scroll to.
  */
-function scroll() {
-  window.scroll({ top: 0, behavior: 'smooth' });
+function scroll({ smooth = true, scrollTo = 0 } = {}) {
+  if (smooth) {
+    window.scroll({ top: scrollTo, behavior: 'smooth' });
+    return;
+  }
+
+  window.scroll(window.screenX, scrollTo);
 }
 
 /**
@@ -249,66 +266,69 @@ const Loader = {
    *
    * @var {HTMLElement}
    */
-  element: document.createElement('router-progress'),
+  element: document.createElement('div'),
 
   /**
-   * The CSS classname when the element is visible.
+   * Dictionary of CSS classnames for states for the loader.
    *
-   * @var {string}
+   * @var {object}
    */
-  VISIBLE_CLASS: 'is-visible',
-
-  /**
-   * Sets the indicated progress amount.
-   *
-   * @param {number} progress
-   *   The progress to set the bar to, between 0 and 1.
-   */
-  setProgress(progress) {
-    // Validate given parameter to be between 0 and 1
-    progress = Math.max(Math.min(progress, 1), 0);
-
-    this.element.classList.add(this.VISIBLE_CLASS);
-    this.element.style.transform = `scaleX(${progress})`;
+  CLASSES: {
+    in: 'is-entering',
+    out: 'is-leaving',
   },
 
   /**
-   * Acts on transitionend event for the progress bar.
+   * Sets the progress state.
    *
-   * @param {TransitionEvent} event
-   *   An object representing a transitionend event.
+   * @param {'in'|'out'|'inactive'} stateName
+   *   The progress state to set.
+   *
+   * @return {Promise}
+   *   A promise that resolves when the first transition has finished on the
+   *   loader root element, or straight away if the user agent does not support
+   *   the transitionend event.
    */
-  async onTransitionEnd(event) {
-    if (event.target !== this.element) {
-      return;
+  setProgress(stateName) {
+    Object.entries(this.CLASSES).forEach(([state, className]) => {
+      const op = state === stateName ? 'add' : 'remove';
+      this.element.classList[op](className);
+    });
+
+    if (!TRANSITIONEND) {
+      if (stateName === 'out') {
+        return this.setProgress('inactive');
+      }
+
+      return Promise.resolve();
     }
 
-    // Not at max, do nothing
-    if (this.element.style.transform !== 'scaleX(1)') {
-      return;
-    }
+    return new Promise((resolve) => {
+      const transitionEnder = ({ srcElement }) => {
+        if (srcElement !== Loader.element) {
+          return;
+        }
 
-    // Remove the visible class
-    if (this.element.classList.contains(this.VISIBLE_CLASS)) {
-      this.element.classList.remove(this.VISIBLE_CLASS);
+        resolve();
+        this.element.removeEventListener('transitionend', transitionEnder);
 
-      // Return early to wait for the opacity to transition out, whereby this
-      // function will fire again
-      return;
-    }
-
-    // Reset back to 0
-    this.element.style.transitionDuration = '0s';
-    this.element.style.transform = 'scaleX(0)';
-
-    // Wait a frame so that the element can actually scale back without
-    // transitioning
-    await requestAnimationFramePromise();
-    this.element.style.transitionDuration = '';
+        if (stateName === 'out') {
+          this.setProgress('inactive');
+        }
+      };
+      this.element.addEventListener('transitionend', transitionEnder);
+    });
   },
 };
-Loader.element.style.transform = 'scaleX(0)';
-Loader.element.addEventListener('transitionend', Loader.onTransitionEnd.bind(Loader));
+Loader.element.classList.add('c-router-loader');
+if (!TRANSITIONEND) {
+  Loader.element.classList.add('has-no-transitionend');
+}
+Loader.element.innerHTML = `
+<div class="c-router-loader__inner"></div>
+<div class="c-router-loader__logo">
+  <img src="${drupalSettings.{{ CAMEL }}.path}/logo.svg" class="c-router-loader__logo-glyph"/>
+</div>`;
 document.body.appendChild(Loader.element);
 
 const Router = {
@@ -342,7 +362,18 @@ const Router = {
    * @param {string} href
    *   The href to navigate to.
    */
-  async navigate(href, { historyPushState = true } = {}) {
+  async navigate(href, { historyPushState = true, scrollPosition = 0 } = {}) {
+    // Rewrite current state if replacing to add scroll position information
+    if (historyPushState) {
+      const { routeURL, title } = window.history.state;
+      const overwrittenState = {
+        routeURL,
+        title,
+        scrollPosition: window.scrollY,
+      };
+      window.history.replaceState(overwrittenState, title, routeURL);
+    }
+
     const url = new URL(href);
 
     const cacheKey = `${url.pathname}:${url.searchParams}`;
@@ -353,17 +384,14 @@ const Router = {
       return;
     }
 
-    Loader.setProgress(0.1);
+    const enteringLoaderPromise = Loader.setProgress('in');
 
     // Set as active navigation path
     this._navigatingTo = href;
 
-    // Create promise so that we can time when the new content can be loaded in.
-    const leavingPromise = this.setLeaving();
-
-    if (historyPushState) {
-      scroll();
-    }
+    this.bins.forEach((bin) => {
+      Drupal.detachBehaviors(bin, drupalSettings);
+    });
 
     // Attempt to get from cache:
     let route = this.cache.get(cacheKey);
@@ -381,7 +409,6 @@ const Router = {
 
       try {
         const response = await fetch(fetchURL, { credentials: 'same-origin' });
-        Loader.setProgress(0.15);
 
         if (!response.ok) {
           throw new Error('Network error.');
@@ -393,7 +420,6 @@ const Router = {
         }
 
         const responseText = await response.text();
-        Loader.setProgress(0.2);
 
         // Is a page not using the current Drupal theme:
         if (responseText === '__INVALID_THEME__') {
@@ -412,11 +438,11 @@ const Router = {
       this.cache.set(cacheKey, route);
     }
 
-    await leavingPromise;
-    Loader.setProgress(0.5);
+    await enteringLoaderPromise;
 
     // Aborted this navigation, do nothing further
     if (this._navigatingTo !== href) {
+      Loader.setProgress('inactive');
       return;
     }
 
@@ -425,44 +451,16 @@ const Router = {
       await route.loadAssets();
     }
 
-    Loader.setProgress(0.75);
-    this.contentEnter(route, { scrollTo: url.hash || false });
+    const scrollTo = url.hash && historyPushState ? url.hash : scrollPosition;
+    this.contentEnter(route, { scrollTo });
 
     if (historyPushState) {
-      window.history.pushState({ routeURL: href, title: route.title }, route.title, href);
+      window.history.pushState({
+        routeURL: href,
+        title: route.title,
+        scrollPosition: 0,
+      }, route.title, href);
     }
-  },
-
-  /**
-   * Initiate page leaving animations and runtimes.
-   *
-   * @return {Promise}
-   *   A promise that resolves once leaving animations for the page have been
-   *   completed.
-   */
-  setLeaving() {
-    // Skip transitioning if no transitionend event can be listened to.
-    if (!TRANSITIONEND) {
-      return Promise.resolve();
-    }
-
-    document.body.classList.add('is-leaving-page');
-    return new Promise((resolve) => {
-      this.bins.forEach((bin) => {
-        Drupal.detachBehaviors(bin, drupalSettings);
-      });
-
-      const resolver = (event) => {
-        if (event.target.tagName !== 'ROUTER-CONTENT') {
-          return;
-        }
-
-        resolve();
-        document.body.removeEventListener('transitionend', resolver);
-      };
-
-      document.body.addEventListener('transitionend', resolver);
-    });
   },
 
   /**
@@ -473,11 +471,11 @@ const Router = {
    *   the current DOM content (useful for cancelled navigation situations).
    * @param {object} [options={}]
    *   Additional options when entering new content.
-   * @param {string|bool} [options.scrollTo=false]
+   * @param {string|number} [options.scrollTo=0]
    *   Pass a CSS selector to scroll to the element on load (such as for anchor
-   *   tags with a hash).
+   *   tags with a hash) or a number as the Y-coordinate.
    */
-  async contentEnter(route = false, { scrollTo = false } = {}) {
+  async contentEnter(route = false, { scrollTo = 0 } = {}) {
     if (this._navigatingTo === null) {
       route = false;
     }
@@ -487,117 +485,38 @@ const Router = {
       window.drupalSettings = Object.assign(drupalSettings, route.settings);
     }
 
-
-    // List of promises for animated scale changes.
-    const stretchChangePromises = Array.from(this.bins)
-      // Filer to only changed content areas
-      .filter(([key, bin]) => {
-        if (route && bin.innerHTML === route.content.get(key)) {
-          Drupal.attachBehaviors(bin, drupalSettings);
-          return false;
+    // Swap dynamic content areas.
+    Array.from(this.bins)
+      .forEach(([key, bin]) => {
+        if (route && bin.innerHTML !== route.content.get(key)) {
+          bin.innerHTML = route.content.get(key);
         }
-
-        return true;
-      })
-      // Get the layout positions before content changes
-      .map(([key, bin]) => ({ key, bin, oldRect: bin.getBoundingClientRect() }))
-      .map((binEntry) => {
-        const { key, bin } = binEntry;
-
-        // Replace with new content
-        bin.innerHTML = route.content.get(key);
-        Drupal.attachBehaviors(bin, drupalSettings);
-
-        return binEntry;
-      })
-      .map((binEntry) => {
-        const { bin, oldRect } = binEntry;
-
-        // Get new content layout data
-        const newRect = bin.getBoundingClientRect();
-
-        // Does not support transitionend event or same vertical position
-        // do nothing further.
-        if (!TRANSITIONEND ||
-          (oldRect.bottom === newRect.bottom && oldRect.top === newRect.top)) {
-          return Promise.resolve();
-        }
-
-        // Translation amount
-        const translate = oldRect.top - newRect.top;
-
-        // Avoid zero-height infinity cases
-        let scale;
-        if (newRect.height === 0) {
-          scale = oldRect.height;
-        }
-        else if (oldRect.height === 0) {
-          scale = 1 / newRect.height;
-        }
-        else {
-          scale = oldRect.height / newRect.height;
-        }
-
-        // Temporarily remove duration to set 'from' translation state
-        bin.style.transitionDuration = '0s';
-
-        // Set translation state
-        bin.style.transform = `translateY(${translate}px) scaleY(${scale})`;
-        // Set a 1px height if new height would be 0, since scaling 0 height
-        // would still be 0.
-        bin.style.height = newRect.height === 0 ? '1px' : '';
-        bin.style.marginTop = newRect.height === 0 ? '-1px' : '';
-
-        // Push promise of finished transition to collection so it is known
-        // when all are done.
-        return new Promise(async (resolve) => {
-          // Request two animation frames since first frame can be the current
-          // frame instead of the next one.
-          await requestAnimationFramePromise();
-          await requestAnimationFramePromise();
-
-          // Listen for transition ending
-          const resolver = (event) => {
-            if (event.target !== bin) {
-              return;
-            }
-
-            resolve();
-            bin.removeEventListener('transitionend', resolver);
-
-            // Remove styles for zero-height container
-            if (newRect.height === 0) {
-              bin.style.height = '';
-              bin.style.marginTop = '';
-            }
-          };
-          bin.addEventListener('transitionend', resolver);
-
-          // Remove some inline styles to start start transitions
-          bin.style.transitionDuration = '';
-          bin.style.transform = '';
-        });
       });
+    // Attach behaviors after all content is in in-case of cross-content
+    // modifications.
+    this.bins.forEach((bin) => {
+      Drupal.attachBehaviors(bin, drupalSettings);
+    });
 
-    // Wait for transitions to be done
-    await Promise.all(stretchChangePromises);
 
-    // Remove leaving page class
-    document.body.classList.remove('is-leaving-page');
-
-    Loader.setProgress(1);
-
-    // Resolve scroll position for hash links
-    const scrollToElement = document.querySelector(scrollTo);
-    if (scrollToElement) {
-      if ('scrollIntoView' in Element) {
-        scrollToElement.scrollIntoView({ behavior: 'smooth' });
+    if (typeof scrollTo === 'string') {
+      // Resolve scroll position for hash links
+      const scrollToElement = document.querySelector(scrollTo);
+      if (scrollToElement) {
+        if ('scrollIntoView' in Element) {
+          scrollToElement.scrollIntoView();
+        }
+        scrollToElement.focus();
       }
-      scrollToElement.focus();
     }
-    else {
+    else if (typeof scrollTo === 'number') {
+      scroll({ smooth: false, scrollTo });
       document.body.focus();
     }
+
+    await requestAnimationFramePromise();
+    await requestAnimationFramePromise();
+    Loader.setProgress('out');
 
     document.dispatchEvent(new CustomEvent(ROUTED_EVENT, { detail: drupalSettings.path }));
     this._navigatingTo = null;
@@ -614,10 +533,10 @@ const Router = {
       return;
     }
 
-    const { routeURL, title } = event.state;
+    const { routeURL, title, scrollPosition = 0 } = event.state;
     if (routeURL) {
       document.title = title;
-      this.navigate(routeURL, { historyPushState: false });
+      this.navigate(routeURL, { historyPushState: false, scrollPosition });
     }
   },
 
@@ -659,10 +578,8 @@ const Router = {
 
     // Already on clicked location:
     if (link.href === window.location.href) {
-      // Show instant 100% progress for feedback
-      Loader.setProgress(1);
-      scroll();
       document.body.focus();
+      scroll();
       // Do nothing further
       return;
     }
@@ -696,7 +613,11 @@ const Router = {
 
     // Set up landing state (would be null otherwise)
     window.history.replaceState(
-      { routeURL: url, title: this.intialRoute.title },
+      {
+        routeURL: url,
+        title: this.intialRoute.title,
+        scrollPosition: window.scrollY,
+      },
       this.intialRoute.title,
       url,
     );
