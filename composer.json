@@ -86,6 +86,11 @@
             "public_html/profiles/contrib/{$name}": ["type:drupal-profile"],
             "public_html/themes/contrib/{$name}": ["type:drupal-theme"],
             "drush/contrib/{$name}": ["type:drupal-drush"]
+        },
+        "patches": {
+            "drupal/pathauto": {
+                "Fix alias is not generated when Pathauto widget is hidden": "https://www.drupal.org/files/issues/2018-04-09/pathauto_2946273-25.patch"
+            }
         }
     }
 }
