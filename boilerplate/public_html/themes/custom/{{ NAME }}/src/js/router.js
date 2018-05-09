@@ -622,7 +622,8 @@ const Router = {
       url,
     );
 
-    this.cache.set(url, this.intialRoute);
+    const urlObject = new URL(url);
+    this.cache.set(`${urlObject.pathname}:${urlObject.searchParams}`, this.intialRoute);
   },
 };
 const localStorageUnroutables = localStorage.getItem(Router.unroutableRoutesStorageKey);
