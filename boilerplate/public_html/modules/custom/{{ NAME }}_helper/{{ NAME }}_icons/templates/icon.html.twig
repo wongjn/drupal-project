@@ -11,11 +11,13 @@
  * - attributes: Attributes string to set on the <svg> element.
  * - sheet_url: The path to the SVG sprite sheet.
  *
- * @see {{ NAME }}_preprocess_icon();
+ * @see template_preprocess_icon();
  *
  * @ingroup themable
  */
 #}
+{% spaceless %}
 <svg{{ attributes }}>
   <use xlink:href="{{ sheet_url }}#{{ id }}"/>
 </svg>
+{% endspaceless %}

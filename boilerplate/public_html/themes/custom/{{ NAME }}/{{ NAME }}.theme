@@ -21,12 +21,6 @@ function {{ NAME }}_theme($existing, $type, $theme, $path) {
         'colour' => '#123456',
       ],
     ],
-    'icon' => [
-      'variables' => [
-        'id' => NULL,
-        'attributes' => [],
-      ],
-    ],
   ];
 }
 
@@ -135,46 +129,6 @@ function {{ NAME }}_preprocess_file_link(&$variables) {
 
   $variables['attributes']->setAttribute('download', TRUE);
   $variables['attributes']->setAttribute('target', '_blank');
-}
-
-/**
- * Prepares variables for svg icon templates.
- *
- * Default template: icon.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - id: The XML id value of the symbol element in the SVG sprite sheet.
- *   - attributes: The HTML attributes to apply to the SVG element.
- */
-function {{ NAME }}_preprocess_icon(array &$variables) {
-  $icon_service = \Drupal::service('{{ NAME }}_icons.manager');
-
-  $variables['sheet_url'] = $icon_service->getSheetPath('frontend');
-
-  // Default role to be img.
-  if (!isset($variables['attributes']['role'])) {
-    $variables['attributes']['role'] = 'img';
-  }
-
-  $dimension_keys = &drupal_static(__FUNCTION__, array_flip(['width', 'height']));
-  $dimension_attributes = array_intersect_key($variables['attributes'], $dimension_keys);
-
-  // Calculate other dimension if only one has been specified:
-  if (count($dimension_attributes) == 1) {
-    $aspect_ratio = $icon_service->getAspectRatio($variables['id']);
-    $existing_length = reset($dimension_attributes);
-    $missing_length_key = key(array_diff_key($dimension_keys, $dimension_attributes));
-
-    // Flip aspect ratio value for calculating width.
-    if ($missing_length_key == 'width') {
-      $aspect_ratio = 1 / $aspect_ratio;
-    }
-
-    $variables['attributes'][$missing_length_key] = round($existing_length * $aspect_ratio, 2);
-  }
-
-  \Drupal::service('renderer')->addCacheableDependency($variables, $icon_service);
 }
 
 /**
