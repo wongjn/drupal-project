@@ -363,7 +363,10 @@ const Router = {
    *   The href to navigate to.
    */
   async navigate(href, { historyPushState = true, scrollPosition = 0 } = {}) {
-    // Rewrite current state if replacing to add scroll position information
+    // Disable any browser auto scrolling (for forward/back history traversal)
+    window.history.scrollRestoration = 'manual';
+
+    // If pushing, rewrite current state to add scroll position information
     if (historyPushState) {
       const { routeURL, title } = window.history.state;
       const overwrittenState = {
@@ -461,6 +464,9 @@ const Router = {
         scrollPosition: 0,
       }, route.title, href);
     }
+
+    // Restore auto window scrolling (for refreshing the page for example)
+    window.history.scrollRestoration = 'auto';
   },
 
   /**
