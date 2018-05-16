@@ -7,7 +7,7 @@ import SVG4Everybody from 'svg4everybody';
 import './webpack-path';
 import './in-view';
 import './main-menu';
-import './router';
+import './router/router';
 // import AsyncBehavior from './AsyncBehavior';
 
 /**

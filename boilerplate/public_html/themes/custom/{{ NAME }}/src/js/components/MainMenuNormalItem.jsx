@@ -6,7 +6,7 @@
 import { h, Component } from 'preact';
 import MainMenuNormalSubMenu from './MainMenuNormalSubMenu';
 import MainMenuItem from './MainMenuItem';
-import ROUTED_EVENT from '../router-events';
+import ROUTED_EVENT from '../router/router';
 
 /**
  * Main menu “normal” menu item preact component.
