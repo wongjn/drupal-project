@@ -217,19 +217,18 @@ function {{ NAME }}_element_info_alter(array &$info) {
  * class component.
  */
 function {{ NAME }}_processed_text_pre_render($element) {
-  if ($element['#format'] == 'full_html') {
-    $classes = ['c-text-body'];
+  $classes = ['c-text-body'];
 
-    if (isset($element['#variants'])) {
-      foreach ($element['#variants'] as $variant) {
-        $classes[] = 'c-text-body--' . Html::cleanCssIdentifier($variant);
-      }
+  if (isset($element['#variants'])) {
+    foreach ($element['#variants'] as $variant) {
+      $classes[] = 'c-text-body--' . Html::cleanCssIdentifier($variant);
     }
-
-    $element['#prefix'] = '<div class="' . implode(' ', $classes) . '">';
-    $element['#suffix'] = '</div>';
-    $element['#attached']['library'][] = '{{ NAME }}/text-body';
   }
+
+  $element['#theme_wrappers']['container'] = [
+    '#attributes' => ['class' => $classes],
+  ];
+  $element['#attached']['library'][] = 'dctogether/text-body';
 
   return $element;
 }
