@@ -288,11 +288,6 @@ const Router = {
 
     event.preventDefault();
 
-    // Set initial route if not already set.
-    if (!this.intialRoute) {
-      this.setIntialRoute();
-    }
-
     // Already on clicked location:
     if (link.href === window.location.href) {
       document.body.focus();
@@ -318,13 +313,11 @@ const Router = {
   },
 
   /**
-   * Sets initial route data and history state.
-   *
-   * Call this as late as possible for bigPipe to replace placeholders.
+   * Sets initial route data and history state for the first page a user visits.
    */
   setIntialRoute() {
-    this.intialRoute = Route.fromElements(document);
-    this.intialRoute.assets.loaded = true;
+    const initialRoute = Route.fromElements(document);
+    initialRoute.assets.loaded = true;
 
     const url = window.location.href;
 
@@ -332,19 +325,26 @@ const Router = {
     window.history.replaceState(
       {
         routeURL: url,
-        title: this.intialRoute.title,
+        title: initialRoute.title,
         scrollPosition: window.scrollY,
       },
-      this.intialRoute.title,
+      initialRoute.title,
       url,
     );
 
-    const urlObject = new URL(url);
-    this.cache.set(`${urlObject.pathname}:${urlObject.searchParams}`, this.intialRoute);
+    // Do not set a cache entry if bigPipe exists. This is because we would save
+    // bigPipe placeholders in the route data meaning that these placeholder
+    // would not get rendered again by bigPipe if the user ever navigated back
+    // to this page via the history API.
+    if (!('bigPipePlaceholderIds' in drupalSettings)) {
+      const urlObject = new URL(url);
+      this.cache.set(`${urlObject.pathname}:${urlObject.searchParams}`, initialRoute);
+    }
   },
 };
 const localStorageUnroutables = localStorage.getItem(Router.unroutableRoutesStorageKey);
 Router.unroutableRoutesCache = JSON.parse(localStorageUnroutables) || [];
+Router.setIntialRoute();
 
 // Add popstate listener, for example when the browser back button is pressed
 window.addEventListener('popstate', Router.onPopState.bind(Router));
