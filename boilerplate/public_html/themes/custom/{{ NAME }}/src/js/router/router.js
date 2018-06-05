@@ -42,9 +42,38 @@ function scroll({ smooth = true, scrollTo = 0 } = {}) {
   window.scroll(window.screenX, scrollTo);
 }
 
+/**
+ * Determines whether a URL is routable.
+ *
+ * @param {URL|object} urlData
+ *   The URL as an object of its properties.
+ * @param {string} urlData.host
+ *   The URL's host.
+ * @param {string} urlData.pathname
+ *   The URL portion after the host (starts with a slash) but with no query
+ *   parameters or hash.
+ * @param {string} urlData.hash
+ *   The string after any hash (#) in the URL.
+ *
+ * @return {bool}
+ *   Returns true if unroutable URL.
+ */
+function isUnroutableURL({ host, pathname, hash } = {}) {
+  return (
+    // External
+    host !== window.location.host ||
+    // Admin
+    ADMIN_PATH.test(pathname) ||
+    // File
+    pathname.includes('.') ||
+    // Hash on this page
+    (pathname === window.location.pathname && hash)
+  );
+}
+
 const Router = {
   /**
-   * Returnshe localStorage key for unroutable routes cache.
+   * Returns the localStorage key for unroutable routes cache.
    *
    * @return {string}
    *   The localStorage key for unroutable routes cache.
@@ -66,6 +95,17 @@ const Router = {
    * @var {HTMLElement[]}
    */
   bins: new Map(Array.from(document.getElementsByTagName('router-content')).map(bin => [bin.getAttribute('area'), bin])),
+
+  /**
+   * List of forms not in dynamic router content areas.
+   *
+   * @var {HTMLFormElement[]}
+   */
+  staticForms: Array.from(document.getElementsByTagName('form'))
+    .filter(formElement => (
+      !formElement.closest('router-content') &&
+      !isUnroutableURL(new URL(formElement.action))
+    )),
 
   /**
    * Routes the client to a new page.
@@ -167,6 +207,11 @@ const Router = {
 
     const scrollTo = url.hash && historyPushState ? url.hash : scrollPosition;
     this.contentEnter(route, { scrollTo });
+
+    // Update action URLs of static forms to the new page.
+    this.staticForms.forEach((formElement) => {
+      formElement.action = url.pathname;
+    });
 
     if (historyPushState) {
       window.history.pushState({
@@ -270,21 +315,8 @@ const Router = {
       return;
     }
 
-    const { host, pathname, hash } = link;
-
-    // Return early if:
-    if (
-      // External
-      host !== window.location.host ||
-      // Admin
-      ADMIN_PATH.test(pathname) ||
-      // File
-      pathname.includes('.') ||
-      // Hash on this page
-      (pathname === window.location.pathname && hash)
-    ) {
-      return;
-    }
+    // Return early if unroutable
+    if (isUnroutableURL(link)) return;
 
     event.preventDefault();
 
