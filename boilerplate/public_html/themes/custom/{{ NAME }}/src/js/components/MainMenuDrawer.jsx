@@ -91,7 +91,7 @@ export default class MainMenuDrawer extends Component {
    *   The name of the key that was pressed.
    */
   escClose({ key }) {
-    if (key === 'Escape') {
+    if (key === 'Escape' && this.state.open) {
       this.close();
     }
   }
