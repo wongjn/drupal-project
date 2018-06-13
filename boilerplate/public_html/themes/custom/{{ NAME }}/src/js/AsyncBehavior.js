@@ -93,3 +93,27 @@ export default class AsyncBehavior {
     }
   }
 }
+
+/**
+ * Factory function to create an AsyncBehavior object.
+ *
+ * @param {string} fileName
+ *   The file to load in the behaviors subdirectory.
+ * @param {string} selector
+ *   Optional. CSS Selector to match relevent elements of this behaviour. If not
+ *   supplied, will default to `.js-${filename}` by AsyncBehavior.constructor().
+ */
+export const asyncAttach = (fileName, selector) => {
+  Drupal.behaviors[`{{ CAMEL }}_${fileName}`] = new AsyncBehavior(fileName, selector);
+};
+
+/**
+ * Factory function to create multiple AsyncBehavior objects.
+ *
+ * @param {array[]} attachments
+ *   Sets of attachments to create async behaviors from. The elements in each of
+ *   the elements correspond to the arguments for asyncAttach().
+ */
+export const asyncAttachArray = (attachments) => {
+  attachments.forEach(args => asyncAttach(...args));
+};

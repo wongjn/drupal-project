@@ -8,7 +8,7 @@ import './webpack-path';
 import './in-view';
 import './main-menu';
 import './router/router';
-// import AsyncBehavior from './AsyncBehavior';
+// import { asyncAttachArray } from './AsyncBehavior';
 
 /**
  * Polyfills external-use SVG elements.
@@ -21,10 +21,3 @@ Drupal.behaviors.{{ CAMEL }}SVGPolyfill = {
     delete this.attach;
   },
 };
-
-/**
- * Async behavior loading example.
- *
- * @type {AsyncBehavior}
- */
-// Drupal.behaviors.example = new AsyncBehavior('fileName', '.selector');
