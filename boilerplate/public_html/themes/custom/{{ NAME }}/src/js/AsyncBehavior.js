@@ -106,14 +106,3 @@ export default class AsyncBehavior {
 export const asyncAttach = (fileName, selector) => {
   Drupal.behaviors[`{{ CAMEL }}_${fileName}`] = new AsyncBehavior(fileName, selector);
 };
-
-/**
- * Factory function to create multiple AsyncBehavior objects.
- *
- * @param {array[]} attachments
- *   Sets of attachments to create async behaviors from. The elements in each of
- *   the elements correspond to the arguments for asyncAttach().
- */
-export const asyncAttachArray = (attachments) => {
-  attachments.forEach(args => asyncAttach(...args));
-};

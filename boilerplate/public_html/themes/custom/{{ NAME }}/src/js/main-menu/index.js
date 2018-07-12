@@ -4,8 +4,8 @@
  */
 
 import { h, render } from 'preact';
-import MainMenu from './components/MainMenu';
-import ROUTED_EVENT from './router/router';
+import MainMenu from './MainMenu';
+import ROUTED_EVENT from '../router/';
 
 /**
  * The menu container.

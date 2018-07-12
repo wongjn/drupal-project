@@ -1,5 +1,12 @@
 {
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "react/no-unused-state": 0,
+    "react/prop-types": 0
   }
 }
