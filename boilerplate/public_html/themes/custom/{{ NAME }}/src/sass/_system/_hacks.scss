@@ -1,0 +1,10 @@
+/**
+ * @file
+ * CSS Hacks and work-arounds.
+ */
+
+@mixin edge {
+  @supports (-ms-ime-align: auto) {
+    @content;
+  }
+}

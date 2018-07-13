@@ -89,6 +89,10 @@ $columns: (
       padding: 0 calc(var(--gutter-x) - #{$half-gutter});
       grid-template-columns: repeat(auto-fill, minmax(0, var(--column-width)));
       grid-gap: calc(var(--gutter-y) * 2) calc(var(--gutter-x) * 2);
+
+      @include edge {
+        grid-gap: $half-gutter;
+      }
     }
 
     // Prevent growing for flexbox fallback

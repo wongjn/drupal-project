@@ -1,5 +1,9 @@
 /**
+ * @file
  * Site width container.
+ *
+ * Lots of Edge-only hacks due to it not being able to properly parse CSS
+ * variables with nested calc()s.
  */
 
 @import '../system';
@@ -17,10 +21,18 @@ $fallback-gutter: 20px;
 	max-width: ($SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
 	max-width: calc(#{$SITE-WIDTH-PX} + (var(--container-space-x) * 2)); // 1
 
+	@include edge {
+		max-width: ($SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
+	}
+
 	&,
 	&__module {
 		padding: ($fallback-gutter / 2);
 		padding: calc(var(--container-space-y) / 2) calc(var(--container-space-x) / 2);
+
+		@include edge {
+			padding: ($fallback-gutter / 2);
+		}
 	}
 
 	// Merges padding and module into the top level element, such that no __module
@@ -29,15 +41,12 @@ $fallback-gutter: 20px;
 		padding: $fallback-gutter;
 		padding: var(--container-space-y) var(--container-space-x);
 
+		@include edge {
+			padding: $fallback-gutter;
+		}
+
 		.l-container__module {
 			padding: 0;
 		}
 	}
-
-  &--flush-y {
-    margin-top: ($fallback-gutter * -1);
-    margin-bottom: ($fallback-gutter * -1);
-    margin-top: calc(var(--container-space-y) * -1);
-    margin-bottom: calc(var(--container-space-y) * -1);
-  }
 }
