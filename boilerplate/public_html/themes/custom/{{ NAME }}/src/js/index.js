@@ -7,7 +7,7 @@ import SVG4Everybody from 'svg4everybody';
 import './webpack-path';
 import './in-view';
 import './main-menu/';
-import './router/';
+import ROUTED_EVENT from './router/';
 // import { asyncAttach } from './AsyncBehavior';
 
 /**
@@ -21,3 +21,15 @@ Drupal.behaviors.{{ CAMEL }}SVGPolyfill = {
     delete this.attach;
   },
 };
+
+/**
+ * Loads toast message manager.
+ */
+function loadMessages() {
+  if (drupalSettings.{{ CAMEL }}.messages) {
+    import(/* webpackChunkName: "messages" */ './messages');
+    document.removeEventListener(ROUTED_EVENT, loadMessages);
+  }
+}
+document.addEventListener(ROUTED_EVENT, loadMessages);
+loadMessages();

@@ -3,85 +3,84 @@
  * Drupal status messages.
  */
 
+@import '../../../node_modules/izitoast/dist/css/iziToast.min';
+
+.iziToast {
+  border-radius: 0;
+
+  // Remove drop-shadow.
+  &::after {
+    content: none;
+  }
+}
+
+// Message body text.
+.iziToast-texts {
+  max-height: 20vh;
+  max-width: 60vw;
+  overflow: auto;
+}
+
+.iziToast-message[class][class] {
+  color: #000;
+}
+
+// Position message-type icon to top corner instead of middle.
+.iziToast-icon[class][class] {
+  top: 18px;
+}
+
+// Position close icon to top corner instead of middle.
+.iziToast-close[class] {
+  top: 18px;
+  height: 20px;
+}
+
+// No-js fallback styling
 .c-messages {
-  $colours: (
-    default: #333,
-    light: #ccc,
-  );
-  $icons: (
-    width: 3em,
-    font-scale: 2,
-  );
-  $padding: 1em;
-
   position: relative;
-  padding: $padding $padding $padding ($padding + map-get($icons, width));
-  background-color: map-get($colours, light);
-  background-color: var(--messages-colour-light);
+  border: 2px solid;
 
-  --messages-colour: #{map-get($colours, default)};
-  --messages-colour-light: #{map-get($colours, light)};
-
-  // Pseudo-element icon.
+  // Icon.
   &::before {
+    $size: 1.5em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    padding: ($padding / map-get($icons, font-scale)) 0 0;
-    width: (map-get($icons, width) / map-get($icons, font-scale));
-    height: 100%;
-    background-color: map-get($colours, default);
-    background-color: var(--messages-colour);
-    color: #fff;
-    font-size: (1em * map-get($icons, font-scale));
-    line-height: 1;
+    top: ($size * -0.5);
+    left: ($size * -0.5);
+    width: $size;
+    height: $size;
+    font-weight: 700;
     text-align: center;
-    content: '';
-    content: var(--messages-icon, '');
   }
-
-  a {
-    color: var(--messages-colour);
-
-    &:hover,
-    &:focus {
-      color: #333;
-    }
-
-    &:active {
-      color: #000;
-    }
-  }
-
 
   $variants: (
     status: (
-      colour-default: #2ecc71,
-      colour-light: #abebc6,
+      color: #2ecc71,
       icon: '\2713',
     ),
     warning: (
-      colour-default: #f1c40f,
-      colour-light: #f9e79f,
+      color: #f1c40f,
       icon: '!',
     ),
     error: (
-      colour-default: #e74c3c,
-      colour-light: #f5b7b1,
+      color: #e74c3c,
       icon: '\2717',
     ),
   );
   @each $name, $data in $variants {
     &--#{$name} {
-      --messages-colour: #{map-get($data, colour-default)};
-      --messages-colour-light: #{map-get($data, colour-light)};
-      --messages-icon: '#{map-get($data, icon)}';
+      border-color: map-get($data, color);
+      padding: 1em;
+
+      &::before {
+        background-color: map-get($data, color);
+        content: map-get($data, icon);
+        color: if($name == warning, #333, #fff);
+      }
     }
-  }
-
-
-  &__list {
-    padding-left: 2ch;
   }
 }

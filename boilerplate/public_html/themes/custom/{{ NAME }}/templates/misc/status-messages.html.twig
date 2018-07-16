@@ -22,6 +22,7 @@
  */
 #}
 {{ attach_library('{{ NAME }}/messages') }}
+<noscript>
 {% for type, messages in message_list %}
   {%
     set classes = [
@@ -38,15 +39,11 @@
         {% if status_headings[type] %}
           <h2 class="visually-hidden">{{ status_headings[type] }}</h2>
         {% endif %}
-        {% if messages|length > 1 %}
-          <ul class="c-messages__list">
-            {% for message in messages %}
-              <li class="c-messages__item">{{ message }}</li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          {{ messages|first }}
-        {% endif %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
       {% if type == 'error' %}
         </div>
       {% endif %}
@@ -56,3 +53,4 @@
   {# Remove type specific classes. #}
   {% set attributes = attributes.removeClass(classes) %}
 {% endfor %}
+</noscript>

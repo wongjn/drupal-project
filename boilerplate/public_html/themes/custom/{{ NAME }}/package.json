@@ -23,6 +23,7 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
+    "izitoast": "^1.3.0",
     "lodash": "^4.17.4",
     "preact": "^8.2.6",
     "regenerator-runtime": "^0.11.1",
