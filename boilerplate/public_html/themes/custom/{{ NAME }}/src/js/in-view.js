@@ -120,7 +120,13 @@ class Loadable {
 
     return new Promise((resolve) => {
       this._end = this._end.bind(this, resolve);
-      this.element.addEventListener('transitionend', this._end);
+      
+      if ('ontransitionend' in window) {
+        this.element.addEventListener('transitionend', this._end);
+      }
+      else {
+        this._end();
+      }
     });
   }
 
