@@ -8,10 +8,13 @@ global:
       dist/css/base/typography.css: {}
     layout:
       dist/css/layout/container.css: {}
+      dist/css/layout/grid.css: {}
+      dist/css/layout/row.css: {}
     component:
       dist/css/components/drawer-menu.css: {}
       dist/css/components/main-menu.css: {}
       dist/css/components/router.css: {}
+      dist/css/components/text-body.css: {}
     theme:
       dist/css/theme.css: {}
       dist/css/utilities.css:
@@ -30,11 +33,6 @@ global:
     - core/drupal
     - core/drupalSettings
 
-grid:
-  css:
-    layout:
-      dist/css/layout/grid.css: {}
-
 messages:
   css:
     component:
@@ -51,17 +49,7 @@ polyfill:
       minified: true
       weight: -100
 
-row:
-  css:
-    layout:
-      dist/css/layout/row.css: {}
-
 tabs:
   css:
     component:
       dist/css/components/tabs.css: {}
-
-text-body:
-  css:
-    component:
-      dist/css/components/text-body.css: {}

@@ -29,12 +29,32 @@ function {{ NAME }}_theme($existing, $type, $theme, $path) {
  */
 function {{ NAME }}_css_alter(&$css) {
   if (\Drupal::service('settings')->get('browsersync')) {
-    $theme_path = drupal_get_path('theme', '{{ NAME }}');
+    $theme_path = drupal_get_path('theme', {{ NAME }});
     foreach ($css as $location => $file) {
       // Force theme CSS to use <link> tags (for BrowserSync development)
       if (strpos($location, $theme_path) !== FALSE) {
         $css[$location]['preprocess'] = FALSE;
       }
+    }
+  }
+  else {
+    /** @var \Drupal\Core\Asset\LibraryDiscovery $library_manager */
+    $library_manager = \Drupal::service('library.discovery');
+
+    $extract_files = function ($css) {
+      return $css['data'];
+    };
+    $global_stylesheets = array_merge(
+      array_map($extract_files, $library_manager->getLibraryByName('system', 'base')['css']),
+      array_map($extract_files, $library_manager->getLibraryByName({{ NAME }}, 'global')['css'])
+    );
+
+    foreach (array_keys($css) as $location) {
+      if (!in_array($location, $global_stylesheets)) {
+        continue;
+      }
+
+      $css[$location]['group'] = -2;
     }
   }
 }
@@ -235,7 +255,6 @@ function {{ NAME }}_processed_text_pre_render($element) {
   $element['#theme_wrappers']['container'] = [
     '#attributes' => ['class' => $classes],
   ];
-  $element['#attached']['library'][] = 'dctogether/text-body';
 
   return $element;
 }
