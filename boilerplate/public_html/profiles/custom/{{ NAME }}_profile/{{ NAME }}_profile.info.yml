@@ -37,6 +37,7 @@ dependencies:
   - page_cache
   - path
   - rdf
+  - remove_asset_hash
   - responsive_image
   - system
   - text

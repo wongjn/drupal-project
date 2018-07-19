@@ -19,6 +19,10 @@
             "url": "https://github.com/wongjn/lazy_image"
         },
         {
+            "type": "vcs",
+            "url": "https://bitbucket.org/projectcosmic/remove_asset_hash"
+        },
+        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         }
@@ -35,6 +39,7 @@
         "drupal/menu_trail_by_path": "^1.1",
         "drupal/pathauto": "^1.0@RC",
         "drush/drush": "^9.0.0",
+        "projectcosmic/remove_asset_hash": "^0.1.0",
         "vlucas/phpdotenv": "^2.4",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
