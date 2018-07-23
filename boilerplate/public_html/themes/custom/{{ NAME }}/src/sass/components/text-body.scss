@@ -16,7 +16,7 @@
     content: '';
   }
 
-  * + :not(li) {
+  * + * {
     margin-top: $block-spacing;
   }
 
@@ -33,6 +33,9 @@
       list-style-type: decimal;
   }
 
+  li {
+    margin-top: 0;
+  }
 
   // Sizes for each header tags, 2–6
   $heading-sizes: (
@@ -54,7 +57,8 @@
   }
 
   img {
-    display: block;
+    display: inline-block;
+    margin-top: 0;
   }
 
   a {
