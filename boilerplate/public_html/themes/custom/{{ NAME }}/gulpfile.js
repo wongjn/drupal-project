@@ -40,21 +40,16 @@ gulp.task('sass', () => gulp.src(config.sass.src, { base: config.sass.base })
   .pipe(browserSync.stream()));
 
 
-gulp.task('icons', () => {
-  del('dist/icons-*.svg');
-
-  return gulp.src(config.icons.src)
-    .pipe(plugins.plumber())
-    .pipe(plugins.svgstore())
-    .pipe(plugins.svgmin({
-      plugins: [
-        { cleanupIDs: false },
-        { removeUnknownsAndDefaults: { defaultAttrs: false } },
-      ],
-    }))
-    .pipe(plugins.rev())
-    .pipe(gulp.dest('dist'));
-});
+gulp.task('icons', () => gulp.src(config.icons.src)
+  .pipe(plugins.plumber())
+  .pipe(plugins.svgstore())
+  .pipe(plugins.svgmin({
+    plugins: [
+      { cleanupIDs: false },
+      { removeUnknownsAndDefaults: { defaultAttrs: false } },
+    ],
+  }))
+  .pipe(gulp.dest('dist'));
 
 gulp.task('icons:watch', ['icons'], (done) => {
   browserSync.reload();

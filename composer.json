@@ -23,6 +23,10 @@
             "url": "https://bitbucket.org/projectcosmic/remove_asset_hash"
         },
         {
+            "type": "vcs",
+            "url": "https://bitbucket.org/projectcosmic/ex_icons"
+        },
+        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         }
@@ -40,6 +44,7 @@
         "drupal/pathauto": "^1.0@RC",
         "drush/drush": "^9.0.0",
         "projectcosmic/remove_asset_hash": "^0.1.0",
+        "projectcosmic/ex_icons": "^1.0.0-beta2",
         "vlucas/phpdotenv": "^2.4",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",

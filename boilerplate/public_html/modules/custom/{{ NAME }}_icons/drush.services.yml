@@ -1,6 +1,0 @@
-services:
-  {{ NAME }}_icons.commands:
-    class: \Drupal\{{ NAME }}_icons\Commands\{{ UCAMEL }}IconsCommands
-    arguments: ['@{{ NAME }}_icons.manager']
-    tags:
-      - { name: drush.command }
