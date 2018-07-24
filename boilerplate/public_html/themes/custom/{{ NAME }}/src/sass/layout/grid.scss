@@ -86,7 +86,6 @@ $columns: (
     @supports (display: grid) {
       display: grid;
       margin: 0;
-      padding: 0 calc(var(--gutter-x) - #{$half-gutter});
       grid-template-columns: repeat(auto-fill, minmax(0, var(--column-width)));
       grid-gap: calc(var(--gutter-y) * 2) calc(var(--gutter-x) * 2);
 
