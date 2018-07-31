@@ -98,6 +98,9 @@
             "drush/contrib/{$name}": ["type:drupal-drush"]
         },
         "patches": {
+            "drupal/admin_toolbar": {
+                "Remove drupal.org links in admin_toolbar_tools": "patches/remove-links-to-drupal-org.patch"
+            },
             "drupal/pathauto": {
                 "Fix alias is not generated when Pathauto widget is hidden": "https://www.drupal.org/files/issues/2018-04-09/pathauto_2946273-25.patch"
             }
