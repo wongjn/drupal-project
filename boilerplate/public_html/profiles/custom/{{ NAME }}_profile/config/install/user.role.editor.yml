@@ -11,7 +11,6 @@ permissions:
   - 'access content overview'
   - 'access contextual links'
   - 'access in-place editing'
-  - 'access toolbar'
   - 'administer footer menu items'
   - 'administer main menu items'
   - 'administer nodes'

@@ -9,6 +9,6 @@ permissions:
   - 'access comments'
   - 'access content'
   - 'access site-wide contact form'
-  - 'post comments'
+  - 'access toolbar'
+  - 'change own username'
   - 'search content'
-  - 'use text format restricted_html'
