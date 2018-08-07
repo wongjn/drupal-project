@@ -223,6 +223,8 @@ const Router = {
 
     // Restore auto window scrolling (for refreshing the page for example)
     window.history.scrollRestoration = 'auto';
+    
+    document.body.focus();
   },
 
   /**
