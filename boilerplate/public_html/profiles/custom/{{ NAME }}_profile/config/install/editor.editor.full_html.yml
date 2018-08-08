@@ -55,7 +55,7 @@ settings:
     language:
       language_list: un
     stylescombo:
-      styles: 'p.c-text-body__emphasize|Emphasize first paragraph'
+      styles: 'p.c-text-body__emphasize|Emphasize paragraph'
 image_upload:
   status: true
   scheme: public
