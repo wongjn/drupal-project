@@ -18,4 +18,8 @@ function {{ NAME }}_profile_install() {
   $config->getEditable('views.view.glossary')->delete();
   $config->getEditable('views.view.who_s_new')->delete();
   $config->getEditable('views.view.who_s_online')->delete();
+  
+  $config->getEditable('views.settings')
+    ->set('display_extenders.inview', 'inview')
+    ->save(TRUE);
 }
