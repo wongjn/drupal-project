@@ -26,7 +26,7 @@ class {{ UCAMEL }}MenuLinkTree implements MenuLinkTreeInterface {
   protected $themeManager;
 
   /**
-   * Constructs a \Drupal\{{ NAME }}_helper\Menu\{{ UCAMEL }}MenuLinkTree object.
+   * Constructs a {{ UCAMEL }}MenuLinkTree object.
    *
    * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree
    *   The menu link tree service.
@@ -44,7 +44,7 @@ class {{ UCAMEL }}MenuLinkTree implements MenuLinkTreeInterface {
   public function getCurrentRouteMenuTreeParameters($menu_name) {
     $parameters = $this->menuLinkTree->getCurrentRouteMenuTreeParameters($menu_name);
 
-    // If viewing the ELF theme, make all menu items expanded.
+    // If viewing the {{ LABEL }} theme, make all menu items expanded.
     $active_theme = $this->themeManager
       ->getActiveTheme()
       ->getName();
