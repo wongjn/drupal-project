@@ -20,11 +20,16 @@
 #}
 {% import _self as menus %}
 
-{#
-  We call a macro which calls itself to render the full tree.
-  @see http://twig.sensiolabs.org/doc/tags/macro.html
-#}
-{{ menus.menu_links(items, attributes, 0) }}
+{% spaceless %}
+<div class="js-main-menu c-main-menu">
+  {#
+    We call a macro which calls itself to render the full tree.
+    @see http://twig.sensiolabs.org/doc/tags/macro.html
+  #}
+  {{ menus.menu_links(items, attributes, 0) }}
+</div>
+<noscript><style>.c-main-menu{height:auto}</style></noscript>
+{% endspaceless %}
 
 {% macro menu_links(items, attributes, menu_level) %}
   {{- attributes.removeAttribute('class') -}}
