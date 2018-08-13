@@ -6,6 +6,7 @@
 
 $accent: palegreen;
 $bg-accent: purple;
+$link-color: #fff;
 
 .c-drawer-menu {
   display: flex;
@@ -109,7 +110,7 @@ $bg-accent: purple;
       overflow-y: auto;
 
       > li {
-        border-top: 1px solid rgba(#000, 0.2);
+        border-top: 1px solid rgba(#fff, 0.2);
       }
     }
 
@@ -123,41 +124,48 @@ $bg-accent: purple;
     @include viewport-scale(padding, 30px, 10px);
     position: relative;
     display: block;
+    background-color: transparent;
+    transition: background-color 300ms;
 
     &[class] {
-      color: darkblue;
+      color: $link-color;
+    }
+
+    &:hover {
+      background-color: rgba(invert($link-color), 0.2);
     }
 
     &::after {
       display: block;
       position: absolute;
-      bottom: 0;
+      top: 0;
       left: 0;
-      width: 100%;
-      height: 5px;
+      width: 5px;
+      height: 100%;
       background-color: currentColor;
-      transform: scaleX(0);
-      transform-origin: 0%;
-      transition: transform 300ms get-easing('out-quad');
+      transform: scaleY(0.5);
+      opacity: 0;
+      transition: transform 300ms get-easing('out-quad'), opacity 300ms;
       content: '';
     }
 
     &:hover,
     &:focus {
       &::after {
-        transform: scaleX(1);
-        transition-duration: 1s;
+        transform: scaleY(1);
+        opacity: 1;
         transition-timing-function: get-easing('in-out-cubic');
       }
     }
 
     &:active {
-      background-color: rgba(#000, 0.2);
+      background-color: rgba(#fff, 0.2);
     }
 
     &--sub {
-      @include viewport-scale(margin-left, 30px, 10px);
-      padding-left: 0;
+      @include viewport-scale(padding-left, 20px, 10px);
+      @include viewport-scale(margin-left, 10px, 10px);
+      // padding-left: 0;
     }
   }
 }
