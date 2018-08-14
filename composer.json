@@ -104,6 +104,19 @@
             "drupal/pathauto": {
                 "Fix alias is not generated when Pathauto widget is hidden": "https://www.drupal.org/files/issues/2018-04-09/pathauto_2946273-25.patch"
             }
+        },
+        "drupal-scaffold": {
+            "excludes": [
+                ".csslintrc",
+                ".ht.router.php",
+                "sites/development.services.yml",
+                "sites/example.settings.local.php",
+                "sites/example.sites.php",
+                "web.config"
+            ],
+            "initial": {
+                "sites/example.settings.local.php": "sites/default/settings.local.php"
+            }
         }
     }
 }
