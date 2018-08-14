@@ -113,10 +113,7 @@
                 "sites/example.settings.local.php",
                 "sites/example.sites.php",
                 "web.config"
-            ],
-            "initial": {
-                "sites/example.settings.local.php": "sites/default/settings.local.php"
-            }
+            ]
         }
     }
 }

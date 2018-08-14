@@ -28,6 +28,7 @@ $finfo = new finfo(FILEINFO_MIME_TYPE);
 
 echo "Copying boilerplate files...\n";
 boilerplate_generate(BOILERPLATE_ROOT, '.');
+copy('public_html/sites/example.settings.local.php', 'public_html/sites/default/settings.local.php');
 
 echo "Rewriting composer.json\n";
 
