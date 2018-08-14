@@ -5,8 +5,10 @@
     "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "wongjn",
-            "role": "Developer"
+            "name": "Justin Wong",
+            "role": "Developer",
+            "email": "justin@cosmic.org.uk",
+            "homepage": "https://cosmic.org.uk"
         }
     ],
     "repositories": [
@@ -45,7 +47,6 @@
         "drush/drush": "^9.0.0",
         "projectcosmic/remove_asset_hash": "^0.1.0",
         "projectcosmic/ex_icons": "^1.0.0-beta2",
-        "vlucas/phpdotenv": "^2.4",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
         "wongjn/frontend_router": "^1.0",
@@ -67,8 +68,7 @@
     "autoload": {
         "classmap": [
             "scripts/composer/ScriptHandler.php"
-        ],
-        "files": ["load.environment.php"]
+        ]
     },
     "scripts": {
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",

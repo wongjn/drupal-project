@@ -59,7 +59,6 @@ When installing the given `composer.json` some tasks are taken care of:
 * Creates `public_html/sites/default/files`-directory.
 * Latest version of drush is installed locally for use at `vendor/bin/drush`.
 * Latest version of DrupalConsole is installed locally for use at `vendor/bin/drupal`.
-* Creates environment variables based on your .env file. See [.env.example](.env.example).
 
 ## Updating Drupal Core
 

@@ -42,30 +42,6 @@ When installing the given `composer.json` some tasks are taken care of:
 * Latest version of drush is installed locally for use at `vendor/bin/drush`.
 * Latest version of DrupalConsole is installed locally for use at `vendor/bin/drupal`.
 
-## Suggested Drupal local settings
-
-Here is a suggested `settings.local.php` file for local development:
-
-```php
-<?php
-$settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';
-
-$config['config_split.config_split.dev']['status'] = TRUE;
-$config['system.logging']['error_level'] = ERROR_REPORTING_DISPLAY_VERBOSE;
-$config['system.mail']['interface']['default'] = 'devel_mail_log';
-$config['system.performance']['css']['preprocess'] = FALSE;
-$config['system.performance']['js']['preprocess'] = FALSE;
-$config['system.site']['page']['front'] = '/user/login';
-$config['views.settings']['skip_cache'] = TRUE;
-$config['views.settings']['ui']['show']['advanced_column'] = TRUE;
-
-$settings['browsersync'] = TRUE;
-$settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
-$settings['cache']['bins']['page'] = 'cache.backend.null';
-$settings['cache']['bins']['render'] = 'cache.backend.null';
-$settings['rebuild_access'] = TRUE;
-$settings['skip_permissions_hardening'] = TRUE;
-```
 ## Updating Drupal Core
 
 This project will attempt to keep all of your Drupal Core files up-to-date; the

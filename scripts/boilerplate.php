@@ -35,7 +35,6 @@ $config = json_decode(file_get_contents('composer.json'), TRUE);
 unset($config['scripts']['boilerplate']);
 $config['name']        = "$vendor/$machine_name";
 $config['description'] = "$human_name Drupal 8 project managed with composer";
-$config['authors']     = [];
 
 file_put_contents('composer.json', json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
