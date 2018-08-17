@@ -1,11 +1,12 @@
 {
-  "parser": "babel-eslint",
+  "extends": [
+    "plugin:vue/recommended",
+    "../../../.eslintrc.json"
+  ],
   "parserOptions": {
+    "parser": "babel-eslint",
     "ecmaVersion": 2017
   },
-  "plugins": [
-    "react"
-  ],
   "rules": {
     "object-curly-newline": [
       2,
@@ -21,28 +22,20 @@
       }
     ],
     "no-mutable-exports": 0,
+    "import/extensions": [
+      2,
+      {
+        "vue": "never"
+      }
+    ],
     "import/no-mutable-exports": 1,
     "import/no-extraneous-dependencies": [
       2,
       {
         "devDependencies": [
-          "test/**",
-          "tests/**",
-          "spec/**",
-          "**/__tests__/**",
-          "test.{js,jsx}",
-          "test-*.{js,jsx}",
-          "**/*.{test,spec}.{js,jsx}",
-          "**/jest.config.js",
           "**/webpack.config.js",
           "**/webpack.config.*.js",
-          "**/rollup.config.js",
-          "**/rollup.config.*.js",
           "**/gulpfile.js",
-          "**/gulpfile.*.js",
-          "**/Gruntfile{,.js}",
-          "**/protractor.conf.js",
-          "**/protractor.conf.*.js",
           "**/postcss.config.js"
         ],
         "optionalDependencies": false
@@ -54,25 +47,13 @@
         "commonjs": true,
         "caseSensitive": false
       }
-    ],
-    "react/no-unknown-property": [
-      2,
-      {
-        "ignore": [
-          "class"
-        ]
-      }
-    ],
-    "react/react-in-jsx-scope": 0
+    ]
   },
   "settings": {
     "import/resolver": {
       "webpack": {
         "config": "./build/webpack.config.dev.js"
       }
-    },
-    "react": {
-      "pragma": "h"
     }
   }
 }

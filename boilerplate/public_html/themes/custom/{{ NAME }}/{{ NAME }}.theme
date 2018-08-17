@@ -9,6 +9,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
+use Drupal\{{ NAME }}\MenuData;
 
 /**
  * Implements hook_theme().
@@ -163,12 +164,7 @@ function {{ NAME }}_preprocess_image(&$variables) {
  * Implements hook_preprocess_HOOK() for menu.html.twig.
  */
 function {{ NAME }}_preprocess_menu(&$variables) {
-  foreach ($variables['items'] as $id => $item) {
-    // Add target _blank for external links.
-    if ($item['url']->isExternal()) {
-      $variables['items'][$id]['url']->mergeOptions(['attributes' => ['target' => '_blank']]);
-    }
-  }
+  $variables['menu_data'] = json_encode(MenuData::process($variables['items']));
 }
 
 /**
