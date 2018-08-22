@@ -1,0 +1,6 @@
+#
+# Drush configuration
+#
+
+options:
+  uri: 'http://{{ NAME }}.local'
