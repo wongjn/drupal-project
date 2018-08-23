@@ -21,7 +21,7 @@ document.body.tabIndex = '-1';
 /**
  * Regex to match common administritive paths.
  */
-const ADMIN_PATH = /^\/(((node|taxonomy\/term|user)\/[0-9]+\/(edit|revisions|delete)|user\/logout)$|admin\/|node\/add)/;
+const ADMIN_PATH = new RegExp(`^${drupalSettings.path.baseUrl}(((node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)|user/logout)$|admin/|node/add)`);
 
 /**
  * Scrolls to the top of the page.
