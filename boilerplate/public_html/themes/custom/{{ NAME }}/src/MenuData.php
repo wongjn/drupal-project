@@ -69,7 +69,7 @@ class MenuData {
       // Add easy access query parameter information.
       if (!empty($query)) {
         ksort($query);
-        $info['query'] = Json::encode($query);
+        $info['query'] = json_encode($query);
       }
 
       // Add internal system path information where available.
