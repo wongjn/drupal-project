@@ -8,8 +8,8 @@
 $form: (
   color-default: #999,
   color-active: salmon,
-	font-size: 18,
-	height: 45,
+  font-size: 18,
+  height: 45,
   line-height: 1.2,
 );
 $form: map-merge($form, (
@@ -52,13 +52,13 @@ select {
 
 input,
 textarea {
-	padding: map-get($form, padding);
+  padding: map-get($form, padding);
 }
 
 input,
 select,
 [type="submit"] {
-	height: (map-get($form, height) * 1em / map-get($form, font-size));
+  height: (map-get($form, height) * 1em / map-get($form, font-size));
 }
 
 textarea {
@@ -105,10 +105,10 @@ button:disabled {
 [type="button"] {
   border: 1px solid map-get($form, color-active);
   border-color: var(--form-active-colour);
-	padding:
-		(map-get($form, padding) * 0.9)
-		map-get($form, padding)
-		(map-get($form, padding) * 1.1);
+  padding:
+    (map-get($form, padding) * 0.9)
+    map-get($form, padding)
+    (map-get($form, padding) * 1.1);
   background-color: map-get($form, color-active);
   background-color: var(--form-active-colour);
   color: #fff;

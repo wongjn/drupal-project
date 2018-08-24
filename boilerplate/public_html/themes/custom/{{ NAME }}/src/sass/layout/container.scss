@@ -14,39 +14,39 @@ $fallback-gutter: 20px;
 //
 // 1. Add additional gutter width either side to compensate for padding.
 .l-container {
-	@include viewport-scale(--container-space-x, 40px, 10px, $SITE-WIDTH * 1vw);
-	@include viewport-scale(--container-space-y, 40px, 10px, $SITE-WIDTH * 1vw);
-	margin-right: auto;
-	margin-left: auto;
-	max-width: ($SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
-	max-width: calc(#{$SITE-WIDTH-PX} + (var(--container-space-x) * 2)); // 1
+  @include viewport-scale(--container-space-x, 40px, 10px, $SITE-WIDTH * 1vw);
+  @include viewport-scale(--container-space-y, 40px, 10px, $SITE-WIDTH * 1vw);
+  margin-right: auto;
+  margin-left: auto;
+  max-width: ($SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
+  max-width: calc(#{$SITE-WIDTH-PX} + (var(--container-space-x) * 2)); // 1
 
-	@include edge {
-		max-width: ($SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
-	}
+  @include edge {
+    max-width: ($SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
+  }
 
-	&,
-	&__module {
-		padding: ($fallback-gutter / 2);
-		padding: calc(var(--container-space-y) / 2) calc(var(--container-space-x) / 2);
+  &,
+  &__module {
+    padding: ($fallback-gutter / 2);
+    padding: calc(var(--container-space-y) / 2) calc(var(--container-space-x) / 2);
 
-		@include edge {
-			padding: ($fallback-gutter / 2);
-		}
-	}
+    @include edge {
+      padding: ($fallback-gutter / 2);
+    }
+  }
 
-	// Merges padding and module into the top level element, such that no __module
-	// sub-components are required.
-	&--module {
-		padding: $fallback-gutter;
-		padding: var(--container-space-y) var(--container-space-x);
+  // Merges padding and module into the top level element, such that no __module
+  // sub-components are required.
+  &--module {
+    padding: $fallback-gutter;
+    padding: var(--container-space-y) var(--container-space-x);
 
-		@include edge {
-			padding: $fallback-gutter;
-		}
+    @include edge {
+      padding: $fallback-gutter;
+    }
 
-		.l-container__module {
-			padding: 0;
-		}
-	}
+    .l-container__module {
+      padding: 0;
+    }
+  }
 }
