@@ -48,8 +48,3 @@ polyfill:
       type: external
       minified: true
       weight: -100
-
-tabs:
-  css:
-    component:
-      dist/css/components/tabs.css: {}
