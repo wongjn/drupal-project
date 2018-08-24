@@ -35,11 +35,11 @@
     ],
     "require": {
         "composer/installers": "^1.2",
-        "cweagans/composer-patches": "^1.6",
-        "drupal-composer/drupal-scaffold": "^2.2",
+        "cweagans/composer-patches": "^1.6.5",
+        "drupal-composer/drupal-scaffold": "^2.5",
         "drupal/admin_toolbar": "^1.21",
         "drupal/config_split": "^1.0",
-        "drupal/core": "~8.5.1",
+        "drupal/core": "~8.5.3",
         "drupal/imce": "^1.5",
         "drupal/menu_admin_per_menu": "^1.0",
         "drupal/menu_trail_by_path": "^1.1",
@@ -55,7 +55,7 @@
     "require-dev": {
         "drupal/console": "^1.0.2",
         "drupal/devel": "^1.0@RC",
-        "webflo/drupal-core-require-dev": "~8.5.1"
+        "webflo/drupal-core-require-dev": "~8.5.3"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -71,7 +71,6 @@
         ]
     },
     "scripts": {
-        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "pre-install-cmd": [
             "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
         ],
@@ -89,13 +88,16 @@
         ]
     },
     "extra": {
+        "patchLevel": {
+            "drupal/core": "-p2"
+        },
         "installer-paths": {
             "public_html/core": ["type:drupal-core"],
             "public_html/libraries/{$name}": ["type:drupal-library"],
             "public_html/modules/contrib/{$name}": ["type:drupal-module"],
             "public_html/profiles/contrib/{$name}": ["type:drupal-profile"],
             "public_html/themes/contrib/{$name}": ["type:drupal-theme"],
-            "drush/contrib/{$name}": ["type:drupal-drush"]
+            "drush/Commands/{$name}": ["type:drupal-drush"]
         },
         "patches": {
             "drupal/admin_toolbar": {
@@ -113,7 +115,11 @@
                 "sites/example.settings.local.php",
                 "sites/example.sites.php",
                 "web.config"
-            ]
+            ],
+            "initial": {
+                ".editorconfig": "../.editorconfig",
+                ".gitattributes": "../.gitattributes"
+            }
         }
     }
 }
