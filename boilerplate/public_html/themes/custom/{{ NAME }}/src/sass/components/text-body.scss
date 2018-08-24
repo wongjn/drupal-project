@@ -7,7 +7,6 @@
 
 .c-text-body {
   $block-spacing: $FONT-SIZE * $LINE-HEIGHT * 1px;
-  $negative-header-spacing: (16em / 48);
 
   // Clearfix
   &::after {
@@ -49,11 +48,6 @@
   @each $level, $size in $heading-sizes {
     h#{$level} {
       @include font-size($size);
-      margin-top: ($negative-header-spacing * -1);
-    }
-
-    * + h#{$level} {
-      margin-top: calc(#{$block-spacing} - #{$negative-header-spacing});
     }
   }
 
