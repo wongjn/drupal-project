@@ -41,13 +41,7 @@
         "optionalDependencies": false
       }
     ],
-    "import/no-unresolved": [
-      2,
-      {
-        "commonjs": true,
-        "caseSensitive": false
-      }
-    ]
+    "import/no-unresolved": 0
   },
   "settings": {
     "import/resolver": {
