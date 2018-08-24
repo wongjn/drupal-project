@@ -169,7 +169,7 @@ export default {
       // Matches main path component
       if (this.path.currentPath === this.url.systemPath) {
         // If there is a query, ensure query matches too
-        if (this.path.currentQuery) {
+        if (this.path.currentQuery || this.url.query) {
           return this.url.query === JSON.stringify(this.path.currentQuery);
         }
 
