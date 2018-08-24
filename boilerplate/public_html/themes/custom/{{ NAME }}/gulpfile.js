@@ -49,7 +49,7 @@ gulp.task('icons', () => gulp.src(config.icons.src)
       { removeUnknownsAndDefaults: { defaultAttrs: false } },
     ],
   }))
-  .pipe(gulp.dest('dist'));
+  .pipe(gulp.dest('dist')));
 
 gulp.task('icons:watch', ['icons'], (done) => {
   browserSync.reload();
