@@ -7,8 +7,6 @@ const CSSNano = require('cssnano');
 
 module.exports = {
   plugins: [
-    CSSNano({
-      zindex: false,
-    }),
+    CSSNano(),
   ],
 };
