@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import ROUTED_EVENT from '../router/';
+import { ROUTED_EVENT } from '../router/events';
 import rafPromise from '../request-animation-frame-promise';
 
 /**
