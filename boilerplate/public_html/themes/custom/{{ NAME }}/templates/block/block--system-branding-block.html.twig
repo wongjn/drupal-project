@@ -10,20 +10,18 @@
  * - site_logo: Logo for site as defined in Appearance or theme settings.
  * - site_name: Name for site as defined in Site information settings.
  * - site_slogan: Slogan for site as defined in Site information settings.
- * - default_logo: Whether theme settings are to use this theme's site logo.
  *
- * @see {{ NAME }}_preprocess_block__system_branding_block();
+ * @see template_preprocess_block();
+ * @see {{ NAME }}_preprocess_block();
  */
 #}
 {% extends "block.html.twig" %}
 {% block content %}
   {% if site_logo %}
+    {% spaceless %}
     <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">
-      {% if default_logo %}
-        LOGO HERE
-      {% else %}
-        <img src="{{ site_logo }}" alt="{{ 'Home'|t }}" />
-      {% endif %}
+      LOGO HERE
     </a>
+    {% endspaceless %}
   {% endif %}
 {% endblock %}
