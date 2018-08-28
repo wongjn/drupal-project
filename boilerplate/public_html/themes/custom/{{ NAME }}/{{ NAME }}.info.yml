@@ -8,8 +8,7 @@ regions:
   primary_menu: Primary menu
   content: Content
   footer: Footer
-features:
-  - logo
+features: {}
 libraries:
   - {{ NAME }}/global
 libraries-override:
