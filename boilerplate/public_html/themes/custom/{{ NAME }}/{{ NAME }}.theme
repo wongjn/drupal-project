@@ -186,6 +186,7 @@ function {{ NAME }}_form_contact_message_form_alter(&$form) {
 function {{ NAME }}_element_info_alter(array &$info) {
   $info['view']['#pre_render'][] = '{{ NAME }}_view_pre_render';
   $info['processed_text']['#pre_render'][] = '{{ NAME }}_processed_text_pre_render';
+  unset($info['page']['#theme_wrappers']['off_canvas_page_wrapper']);
 }
 
 /**
