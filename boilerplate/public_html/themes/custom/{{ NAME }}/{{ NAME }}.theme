@@ -167,35 +167,6 @@ function {{ NAME }}_preprocess_region(&$variables) {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for views-view-list.html.twig.
- */
-function {{ NAME }}_preprocess_views_view_list(&$variables) {
-  $has_list_attributes = isset($variables['list']['attributes']);
-  $style_handler = $variables['view']->style_plugin;
-
-  if ($has_list_attributes && $variables['list']['attributes']->offsetExists('class')) {
-    foreach ($variables['list']['attributes']->offsetGet('class') as $class) {
-      $matches = [];
-      if (preg_match_all('/[locut]-((?:(?!--|__).)+)$/', $class, $matches)) {
-        $variables['#attached']['library'][] = '{{ NAME }}/' . current($matches[1]);
-      }
-    }
-  }
-
-  if ($style_handler->getPluginId() == 'inview_list') {
-    // Create list attributes object if none created yet.
-    if (!$has_list_attributes) {
-      $variables['list']['attributes'] = new Attribute();
-    }
-
-    // Add attributes for inview JS.
-    $variables['list']['attributes']
-      ->addClass('js-inview-list')
-      ->setAttribute('data-selector', $style_handler->options['inview_selector']);
-  }
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter() for contact_message_form.
  */
 function {{ NAME }}_form_contact_message_form_alter(&$form) {
