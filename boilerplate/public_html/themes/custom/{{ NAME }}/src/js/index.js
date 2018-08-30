@@ -4,7 +4,10 @@
  */
 
 import SVG4Everybody from 'svg4everybody';
-import './webpack-path';
+
+// TODO: Revert to dynamically setting publicPath once
+// https://github.com/webpack/webpack/issues/7744 is resolved.
+// import './webpack-path';
 import './in-view';
 import './main-menu/';
 import { asyncAttach } from './AsyncBehavior';

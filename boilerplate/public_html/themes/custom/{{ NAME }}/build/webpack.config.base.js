@@ -13,6 +13,9 @@ module.exports = {
     filename: '[name].js',
     chunkFilename: '[chunkhash].js',
     path: path.resolve(__dirname, '../dist/js'),
+    // TODO: Revert to dynamically setting publicPath once
+    // https://github.com/webpack/webpack/issues/7744 is resolved.
+    publicPath: '/themes/custom/{{ NAME }}/dist/js/',
   },
   module: {
     rules: [
