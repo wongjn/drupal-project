@@ -6,14 +6,7 @@
 import requestAnimationFramePromise from '../request-animation-frame-promise';
 import setProgress from './loader';
 import Route from './route';
-
-/**
- * Event fired when the router has routed successfully to a new page.
- *
- * @var {string}
- */
-const ROUTED_EVENT = 'frontend_routed';
-export default ROUTED_EVENT;
+import { ROUTED_EVENT } from './events';
 
 // Make body tag focusable for route navigation aftermath.
 document.body.tabIndex = '-1';
