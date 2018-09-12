@@ -39,7 +39,7 @@
         "drupal-composer/drupal-scaffold": "^2.5",
         "drupal/admin_toolbar": "^1.21",
         "drupal/config_split": "^1.0",
-        "drupal/core": "~8.5.3",
+        "drupal/core": "~8.6.0",
         "drupal/imce": "^1.5",
         "drupal/menu_admin_per_menu": "^1.0",
         "drupal/menu_trail_by_path": "^1.1",
@@ -55,7 +55,7 @@
     "require-dev": {
         "drupal/console": "^1.0.2",
         "drupal/devel": "^1.0@RC",
-        "webflo/drupal-core-require-dev": "~8.5.3"
+        "webflo/drupal-core-require-dev": "~8.6.0"
     },
     "conflict": {
         "drupal/drupal": "*"
