@@ -14,7 +14,11 @@ document.body.tabIndex = '-1';
 /**
  * Regex to match common administritive paths.
  */
-const ADMIN_PATH = new RegExp(`^${drupalSettings.path.baseUrl}(((node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)|user/logout)$|admin/|node/add)`);
+const ADMIN_PATH = new RegExp(
+  `^${
+    drupalSettings.path.baseUrl
+  }(((node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)|user/logout)$|admin/|node/add)`,
+);
 
 /**
  * Scrolls to the top of the page.
@@ -87,18 +91,23 @@ const Router = {
    *
    * @var {HTMLElement[]}
    */
-  bins: new Map(Array.from(document.getElementsByTagName('router-content')).map(bin => [bin.getAttribute('area'), bin])),
+  bins: new Map(
+    Array.from(document.getElementsByTagName('router-content')).map(bin => [
+      bin.getAttribute('area'),
+      bin,
+    ]),
+  ),
 
   /**
    * List of forms not in dynamic router content areas.
    *
    * @var {HTMLFormElement[]}
    */
-  staticForms: Array.from(document.getElementsByTagName('form'))
-    .filter(formElement => (
+  staticForms: Array.from(document.getElementsByTagName('form')).filter(
+    formElement =>
       !formElement.closest('router-content') &&
-      !isUnroutableURL(new URL(formElement.action))
-    )),
+      !isUnroutableURL(new URL(formElement.action)),
+  ),
 
   /**
    * Routes the client to a new page.
@@ -136,7 +145,7 @@ const Router = {
     // Set as active navigation path
     this._navigatingTo = href;
 
-    this.bins.forEach((bin) => {
+    this.bins.forEach(bin => {
       Drupal.detachBehaviors(bin, drupalSettings);
     });
 
@@ -151,8 +160,14 @@ const Router = {
 
       const { ajaxPageState } = drupalSettings;
       fetchURL.searchParams.set('ajax_page_state[theme]', ajaxPageState.theme);
-      fetchURL.searchParams.set('ajax_page_state[theme_token]', ajaxPageState.theme_token);
-      fetchURL.searchParams.set('ajax_page_state[libraries]', ajaxPageState.libraries);
+      fetchURL.searchParams.set(
+        'ajax_page_state[theme_token]',
+        ajaxPageState.theme_token,
+      );
+      fetchURL.searchParams.set(
+        'ajax_page_state[libraries]',
+        ajaxPageState.libraries,
+      );
 
       try {
         const response = await fetch(fetchURL, { credentials: 'same-origin' });
@@ -175,8 +190,7 @@ const Router = {
         }
 
         route = Route.fromDrupal(responseText);
-      }
-      catch (error) {
+      } catch (error) {
         // Routing was not possible - send client to the href
         window.location.href = href;
         return;
@@ -202,16 +216,20 @@ const Router = {
     this.contentEnter(route, { scrollTo });
 
     // Update action URLs of static forms to the new page.
-    this.staticForms.forEach((formElement) => {
+    this.staticForms.forEach(formElement => {
       formElement.action = url.pathname;
     });
 
     if (historyPushState) {
-      window.history.pushState({
-        routeURL: href,
-        title: route.title,
-        scrollPosition: 0,
-      }, route.title, href);
+      window.history.pushState(
+        {
+          routeURL: href,
+          title: route.title,
+          scrollPosition: 0,
+        },
+        route.title,
+        href,
+      );
     }
 
     // Restore auto window scrolling (for refreshing the page for example)
@@ -243,18 +261,16 @@ const Router = {
     }
 
     // Swap dynamic content areas.
-    Array.from(this.bins)
-      .forEach(([key, bin]) => {
-        if (route && bin.innerHTML !== route.content.get(key)) {
-          bin.innerHTML = route.content.get(key);
-        }
-      });
+    Array.from(this.bins).forEach(([key, bin]) => {
+      if (route && bin.innerHTML !== route.content.get(key)) {
+        bin.innerHTML = route.content.get(key);
+      }
+    });
     // Attach behaviors after all content is in in-case of cross-content
     // modifications.
-    this.bins.forEach((bin) => {
+    this.bins.forEach(bin => {
       Drupal.attachBehaviors(bin, drupalSettings);
     });
-
 
     if (typeof scrollTo === 'string') {
       // Resolve scroll position for hash links
@@ -265,8 +281,7 @@ const Router = {
         }
         scrollToElement.focus();
       }
-    }
-    else if (typeof scrollTo === 'number') {
+    } else if (typeof scrollTo === 'number') {
       scroll({ smooth: false, scrollTo });
       document.body.focus();
     }
@@ -275,7 +290,9 @@ const Router = {
     await requestAnimationFramePromise();
     setProgress('out');
 
-    document.dispatchEvent(new CustomEvent(ROUTED_EVENT, { detail: drupalSettings.path }));
+    document.dispatchEvent(
+      new CustomEvent(ROUTED_EVENT, { detail: drupalSettings.path }),
+    );
     this._navigatingTo = null;
   },
 
@@ -365,11 +382,16 @@ const Router = {
     // to this page via the history API.
     if (!('bigPipePlaceholderIds' in drupalSettings)) {
       const urlObject = new URL(url);
-      this.cache.set(`${urlObject.pathname}:${urlObject.searchParams}`, initialRoute);
+      this.cache.set(
+        `${urlObject.pathname}:${urlObject.searchParams}`,
+        initialRoute,
+      );
     }
   },
 };
-const localStorageUnroutables = localStorage.getItem(Router.unroutableRoutesStorageKey);
+const localStorageUnroutables = localStorage.getItem(
+  Router.unroutableRoutesStorageKey,
+);
 Router.unroutableRoutesCache = JSON.parse(localStorageUnroutables) || [];
 Router.setIntialRoute();
 

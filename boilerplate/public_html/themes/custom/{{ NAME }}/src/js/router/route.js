@@ -28,10 +28,12 @@ function writeActiveLinks(context, pathSettings) {
   }
 
   const queryString = JSON.stringify(pathSettings.currentQuery);
-  const querySelector = pathSettings.currentQuery ?
-    `[data-drupal-link-query='${queryString}']` :
-    ':not([data-drupal-link-query])';
-  const originalSelectors = [`[data-drupal-link-system-path="${pathSettings.currentPath}"]`];
+  const querySelector = pathSettings.currentQuery
+    ? `[data-drupal-link-query='${queryString}']`
+    : ':not([data-drupal-link-query])';
+  const originalSelectors = [
+    `[data-drupal-link-system-path="${pathSettings.currentPath}"]`,
+  ];
   let selectors;
 
   // If this is the front page, we have to check for the <front> path as
@@ -45,17 +47,18 @@ function writeActiveLinks(context, pathSettings) {
     // Links without any hreflang attributes (most of them).
     ...originalSelectors.map(selector => `${selector}:not([hreflang])`),
     // Links with hreflang equals to the current language.
-    ...originalSelectors.map(selector => `${selector}[hreflang="${pathSettings.currentLanguage}"]`),
+    ...originalSelectors.map(
+      selector => `${selector}[hreflang="${pathSettings.currentLanguage}"]`,
+    ),
   ];
 
   // Add query string selector for pagers, exposed filters.
   selectors = selectors.map(current => current + querySelector);
 
   // Add classes to the DOM elements.
-  Array.from(context.querySelectorAll(selectors.join(',')))
-    .forEach((element) => {
-      element.classList.add('is-active');
-    });
+  Array.from(context.querySelectorAll(selectors.join(','))).forEach(element => {
+    element.classList.add('is-active');
+  });
 }
 
 /**
@@ -98,7 +101,9 @@ export default class Route {
 
     let settings;
     // If new drupalSettings in data:
-    const settingsElement = dom.querySelector('[data-drupal-selector="drupal-settings-json"]');
+    const settingsElement = dom.querySelector(
+      '[data-drupal-selector="drupal-settings-json"]',
+    );
     if (settingsElement) {
       // Parse the JSON
       settings = JSON.parse(settingsElement.textContent);
@@ -106,35 +111,42 @@ export default class Route {
       settingsElement.parentElement.removeChild(settingsElement);
     }
 
-    const assets = [dom.head, dom.querySelector('router-assets')]
-      .map((collection) => {
+    const assets = [dom.head, dom.querySelector('router-assets')].map(
+      collection => {
         if (collection && collection.children) {
           const items = Array.from(collection.children);
 
           // Split assets list into scripts and everything else
-          const [scripts, others] = partition(items, ({ tagName, src }) => (
-            tagName === 'SCRIPT' && src.length > 0
-          ));
+          const [scripts, others] = partition(
+            items,
+            ({ tagName, src }) => tagName === 'SCRIPT' && src.length > 0,
+          );
 
           // Remove title tag from loading assets
           others.filter(({ tagName }) => tagName !== 'TITLE');
 
           return {
             scripts: scripts.map(({ src }) => src),
-            others: others.reduce((output, asset) => `${output}${asset.outerHTML}`, ''),
+            others: others.reduce(
+              (output, asset) => `${output}${asset.outerHTML}`,
+              '',
+            ),
           };
         }
 
         return false;
-      });
+      },
+    );
 
-    bins.forEach((bin) => {
+    bins.forEach(bin => {
       writeActiveLinks(bin, settings.path || drupalSettings.path);
     });
 
     return new Route({
       title: dom.title || '',
-      content: new Map(bins.map(bin => [bin.getAttribute('area'), bin.innerHTML])),
+      content: new Map(
+        bins.map(bin => [bin.getAttribute('area'), bin.innerHTML]),
+      ),
       settings: settings || drupalSettings,
       assets,
     });
@@ -165,18 +177,22 @@ export default class Route {
     const loadingPromises = [];
 
     if (this.assets.top) {
-      loadingPromises.push(...this.constructor.insertAssets(
-        this.assets.top,
-        document.head,
-        this.settings,
-      ));
+      loadingPromises.push(
+        ...this.constructor.insertAssets(
+          this.assets.top,
+          document.head,
+          this.settings,
+        ),
+      );
     }
     if (this.assets.bottom) {
-      loadingPromises.push(...this.constructor.insertAssets(
-        this.assets.bottom,
-        document.body,
-        this.settings,
-      ));
+      loadingPromises.push(
+        ...this.constructor.insertAssets(
+          this.assets.bottom,
+          document.body,
+          this.settings,
+        ),
+      );
     }
 
     // Wait for loading to be done
@@ -210,14 +226,17 @@ export default class Route {
     // Merge drupalSettings for scripts to read.
     window.drupalSettings = Object.assign(drupalSettings, settings);
 
-    return scripts.map(src => new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.addEventListener('error', reject);
-      script.addEventListener('load', resolve);
-      script.async = false;
-      location.appendChild(script);
-      script.src = src;
-    }));
+    return scripts.map(
+      src =>
+        new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.addEventListener('error', reject);
+          script.addEventListener('load', resolve);
+          script.async = false;
+          location.appendChild(script);
+          script.src = src;
+        }),
+    );
   }
 }
 Route.DOMParser = new DOMParser();

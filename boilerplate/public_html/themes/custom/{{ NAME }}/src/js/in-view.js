@@ -25,7 +25,9 @@ const SINGLES_SELECTOR = '.js-inview';
  *
  * @type {string}
  */
-const SELECTOR = `${LIST_SELECTOR}${SINGLES_SELECTOR ? `, ${SINGLES_SELECTOR}` : ''}`;
+const SELECTOR = `${LIST_SELECTOR}${
+  SINGLES_SELECTOR ? `, ${SINGLES_SELECTOR}` : ''
+}`;
 
 /**
  * A list of active behaviors keyed by associative element it is attached to.
@@ -114,17 +116,19 @@ class Loadable {
    *   A promise that resolves once the element has finished transitoning in.
    */
   load(index = 0) {
-    this.element.style.setProperty(this.constructor.CSS_PROPERTY_NAME, `${index * 100}ms`);
+    this.element.style.setProperty(
+      this.constructor.CSS_PROPERTY_NAME,
+      `${index * 100}ms`,
+    );
     this.element.classList.remove(this.constructor.OUTSIDE_VIEWPORT_CLASSNAME);
     this.element.classList.add(this.constructor.LOADING_CLASSNAME);
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this._end = this._end.bind(this, resolve);
 
       if ('ontransitionend' in window) {
         this.element.addEventListener('transitionend', this._end);
-      }
-      else {
+      } else {
         this._end();
       }
     });
@@ -181,12 +185,14 @@ class Collection {
    *   should be visible before it is considered in the viewport.
    */
   constructor(elements, threshold = 0.2) {
-    this.observer = new IntersectionObserver(this.onIntersect.bind(this), { threshold });
+    this.observer = new IntersectionObserver(this.onIntersect.bind(this), {
+      threshold,
+    });
 
     this.loaders = new WeakMap();
     this.elements = elements
       .filter(element => !observedElements.has(element))
-      .map((element) => {
+      .map(element => {
         observedElements.add(element);
         this.observer.observe(element);
         this.loaders.set(element, new Loadable(element));
@@ -202,7 +208,7 @@ class Collection {
    */
   static load(elements) {
     elements.forEach((element, index) => {
-      (new Loadable(element)).load(index);
+      new Loadable(element).load(index);
     });
   }
 
@@ -223,8 +229,9 @@ class Collection {
         return this.loaders.get(entry.target).load(index);
       });
 
-    Promise.all(loadingPromises)
-      .then(this.loadedEventFire.bind(this, last(entries).target));
+    Promise.all(loadingPromises).then(
+      this.loadedEventFire.bind(this, last(entries).target),
+    );
   }
 
   /**
@@ -234,7 +241,9 @@ class Collection {
    *   The element to fire the event from.
    */
   loadedEventFire(element = document.body) {
-    const event = new CustomEvent(this.constructor.LOAD_EVENT_NAME, { bubbles: true });
+    const event = new CustomEvent(this.constructor.LOAD_EVENT_NAME, {
+      bubbles: true,
+    });
     element.dispatchEvent(event);
   }
 
@@ -268,40 +277,43 @@ function init(elements, threshold = 0.2) {
 }
 export default init;
 
-((Drupal) => {
-  /**
-   * Adds lazy-loading and in-viewport animations.
-   *
-   * @type {Drupal~behavior}
-   */
-  Drupal.behaviors.{{ CAMEL }}Inview = {
-    attach(context) {
-      const elements = Array.from(context.querySelectorAll(SELECTOR))
-        .concat((typeof context.matches === 'function' && context.matches(SELECTOR)) ? [context] : []);
+/**
+ * Adds lazy-loading and in-viewport animations.
+ *
+ * @type {Drupal~behavior}
+ */
+Drupal.behaviors.{{ CAMEL }}Inview = {
+  attach(context) {
+    const elements = Array.from(context.querySelectorAll(SELECTOR)).concat(
+      typeof context.matches === 'function' && context.matches(SELECTOR)
+        ? [context]
+        : [],
+    );
 
-      if (elements.length > 0) {
-        const [lists, singular] = partition(elements, element => element.matches(LIST_SELECTOR));
+    if (elements.length > 0) {
+      const [lists, singular] = partition(elements, element =>
+        element.matches(LIST_SELECTOR),
+      );
 
-        lists.forEach((list) => {
-          const { selector, ratio } = list.dataset;
-          const items = Array.from(list.querySelectorAll(selector));
+      lists.forEach(list => {
+        const { selector, ratio } = list.dataset;
+        const items = Array.from(list.querySelectorAll(selector));
 
-          activeElements.set(list, init(items, ratio));
-        });
+        activeElements.set(list, init(items, ratio));
+      });
 
-        singular.forEach(ele => activeElements.set(ele, init([ele], 0)));
-      }
-    },
-    detach(context, settings, trigger) {
-      if (trigger === 'unload') {
-        Array.from(context.querySelectorAll(SELECTOR))
-          .concat((context.matches(SELECTOR)) ? [context] : [])
-          .filter((element) => {
-            const handler = activeElements.get(element);
-            return handler && typeof handler.detach === 'function';
-          })
-          .forEach(element => activeElements.get(element).detach());
-      }
-    },
-  };
-})(Drupal);
+      singular.forEach(ele => activeElements.set(ele, init([ele], 0)));
+    }
+  },
+  detach(context, settings, trigger) {
+    if (trigger === 'unload') {
+      Array.from(context.querySelectorAll(SELECTOR))
+        .concat(context.matches(SELECTOR) ? [context] : [])
+        .filter(element => {
+          const handler = activeElements.get(element);
+          return handler && typeof handler.detach === 'function';
+        })
+        .forEach(element => activeElements.get(element).detach());
+    }
+  },
+};

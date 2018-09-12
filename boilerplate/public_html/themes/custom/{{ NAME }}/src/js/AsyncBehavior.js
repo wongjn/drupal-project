@@ -46,8 +46,8 @@ export default class AsyncBehavior {
    * @type {Drupal~behaviorAttach}
    */
   attach(context, drupalSettings) {
-    Array.from(context.querySelectorAll(this.selector))
-      .forEach(async (element) => {
+    Array.from(context.querySelectorAll(this.selector)).forEach(
+      async element => {
         const behavior = this.activeElements.get(element);
 
         // Element has a behavior already, run update function if any then
@@ -61,11 +61,18 @@ export default class AsyncBehavior {
 
         // Load behavior class if not loaded already
         if (!this.Behavior) {
-          this.Behavior = (await import(/* webpackChunkName: "behavior-[request]" */`./behaviors/${this.fileName}`)).default;
+          this.Behavior = (await import(/* webpackChunkName: "behavior-[request]" */ `./behaviors/${
+            this.fileName
+          }`)).default;
         }
 
-        this.activeElements.set(element, new this.Behavior(element, drupalSettings));
-      }, this);
+        this.activeElements.set(
+          element,
+          new this.Behavior(element, drupalSettings),
+        );
+      },
+      this,
+    );
   }
 
   /**
@@ -83,8 +90,8 @@ export default class AsyncBehavior {
   detach(context, settings, trigger) {
     if (trigger === 'unload') {
       Array.from(context.querySelectorAll(this.selector))
-        .concat((context.matches(this.selector)) ? [context] : [])
-        .forEach((element) => {
+        .concat(context.matches(this.selector) ? [context] : [])
+        .forEach(element => {
           const behavior = this.activeElements.get(element);
           if (behavior && typeof behavior.detach === 'function') {
             behavior.detach();

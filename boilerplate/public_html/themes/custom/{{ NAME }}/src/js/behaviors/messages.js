@@ -13,16 +13,19 @@ IziToast.settings({
 
 export default class Messages {
   constructor(element) {
-    const json = 'content' in element ? element.content.textContent : element.textContent;
+    const json =
+      'content' in element ? element.content.textContent : element.textContent;
 
     let i = 0;
-    Object.entries(JSON.parse(json.trim()))
-      .forEach(([type, messages]) => {
-        messages.forEach((message) => {
-          setTimeout(() => IziToast[this.constructor.TYPE_DICTIONARY[type]]({ message }), i * 200);
-          i += 1;
-        });
+    Object.entries(JSON.parse(json.trim())).forEach(([type, messages]) => {
+      messages.forEach(message => {
+        setTimeout(
+          () => IziToast[this.constructor.TYPE_DICTIONARY[type]]({ message }),
+          i * 200,
+        );
+        i += 1;
       });
+    });
 
     element.parentElement.removeChild(element);
   }

@@ -5,9 +5,9 @@
 
 import { RESIZE_OBSERVER } from './supports';
 
-const resizeObserverLoad = RESIZE_OBSERVER ?
-  Promise.resolve({ default: ResizeObserver }) :
-  import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill');
+const resizeObserverLoad = RESIZE_OBSERVER
+  ? Promise.resolve({ default: ResizeObserver })
+  : import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill');
 
 /**
  * The ResizeObserver constructor as a promise.

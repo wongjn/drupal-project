@@ -4,8 +4,8 @@
     "prebuild": "npm run lint",
     "build": "gulp clean&gulp build",
     "start": "gulp watch",
-    "postinstall": "npm run build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.vue .",
+    "format": "prettier --write \"./**/*.js\" --ignore-path .gitignore&&eslint --fix --ignore-path .gitignore --ext .js,.vue .",
     "analyze": "webpack --config build/webpack.config.analyze.js --profile --json > dist/js/stats.json&webpack-bundle-analyzer dist/js/stats.json"
   },
   "repository": {

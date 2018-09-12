@@ -55,7 +55,7 @@ export default function setProgress(stateName) {
     return Promise.resolve();
   }
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const transitionEnder = ({ target }) => {
       if (target !== loaderElement) {
         return;

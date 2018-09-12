@@ -40,8 +40,5 @@ module.exports = {
       '.vue',
     ],
   },
-  plugins: [
-    new LodashModuleReplacementPlugin(),
-    new VueLoaderPlugin(),
-  ],
+  plugins: [new LodashModuleReplacementPlugin(), new VueLoaderPlugin()],
 };
