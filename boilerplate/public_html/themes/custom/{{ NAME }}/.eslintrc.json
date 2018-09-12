@@ -8,39 +8,27 @@
     "ecmaVersion": 2017
   },
   "rules": {
-    "object-curly-newline": [
-      2,
-      {
-        "ObjectExpression": {
-          "minProperties": 4,
-          "multiline": true,
-          "consistent": true
-        },
-        "ObjectPattern": {
-          "consistent": false
-        }
-      }
-    ],
-    "no-mutable-exports": 0,
     "import/extensions": [
       2,
+      "ignorePackages",
       {
         "vue": "never"
       }
     ],
-    "import/no-mutable-exports": 1,
     "import/no-extraneous-dependencies": [
       2,
       {
         "devDependencies": [
-          "**/webpack.config.js",
-          "**/webpack.config.*.js",
+          "./build/*.js",
           "**/gulpfile.js",
           "**/postcss.config.js"
         ],
         "optionalDependencies": false
       }
     ],
+    "//": "Throws false errors on variables named 'context'",
+    "react/destructuring-assignment": 0,
+    "//": "Cannot resolve Webpack aliases. Webpack will complain at compile time anyway.",
     "import/no-unresolved": 0
   },
   "settings": {
