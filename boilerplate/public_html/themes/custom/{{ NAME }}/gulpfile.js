@@ -5,18 +5,28 @@
 
 /* eslint no-console: "off" */
 
-const browserSync = require('browser-sync').create();
+const browserSync = require('browser-sync');
 const del = require('del');
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
 const webpack = require('webpack');
 const webpackDevConfig = require('./build/webpack.config.dev');
 const webpackProdConfig = require('./build/webpack.config.prod');
+const kss = require('./build/kss');
+
+const browserSyncDrupal = browserSync.create('drupal');
+const browserSyncStyleguide = browserSync.create('styleguide');
 
 const config = {
   sass: {
     src: './src/sass/**/*.scss',
     base: 'src/sass',
+    nodeSass: {},
+  },
+  styleguide: {
+    destination: './styleguide',
+    homepage: './README.md',
+    title: '{{ NAME }} Styleguide',
   },
   icons: {
     src: './src/icons/*.svg',
@@ -27,6 +37,7 @@ const config = {
     excludeAssets: /\.map$/,
   },
 };
+config.styleguide.source = config.sass.base;
 
 gulp.task('sass', () =>
   gulp
@@ -35,12 +46,17 @@ gulp.task('sass', () =>
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.cached('sass'))
     .pipe(plugins.sassInheritance({ dir: config.sass.base }))
-    .pipe(plugins.sass().on('error', plugins.sass.logError))
+    .pipe(plugins.sass(config.sass.nodeSass).on('error', plugins.sass.logError))
     .pipe(plugins.postcss())
     .pipe(plugins.sourcemaps.write('../sourcemaps'))
     .pipe(gulp.dest('dist/css'))
-    .pipe(browserSync.stream()),
+    .pipe(browserSyncDrupal.stream()),
 );
+
+gulp.task('styleguide', ['sass'], async () => {
+  await kss(config.styleguide);
+  browserSyncStyleguide.reload();
+});
 
 gulp.task('icons', () =>
   gulp
@@ -58,8 +74,8 @@ gulp.task('icons', () =>
     .pipe(gulp.dest('dist')),
 );
 
-gulp.task('icons:watch', ['icons'], (done) => {
-  browserSync.reload();
+gulp.task('icons:watch', ['icons'], done => {
+  browserSyncDrupal.reload();
   done();
 });
 
@@ -71,23 +87,36 @@ gulp.task('js', cb => {
   });
 });
 
-gulp.task('watch', ['sass', 'icons'], () => {
-  browserSync.init({
+gulp.task('watch', ['sass', 'icons', 'styleguide'], () => {
+  browserSyncDrupal.init({
     ghostMode: false,
     proxy: '{{ NAME }}.local',
+    open: false,
+  });
+
+  browserSyncStyleguide.init({
+    ui: false,
+    server: {
+      baseDir: config.styleguide.destination,
+    },
+    port: 5000,
+    ghostMode: false,
     open: false,
   });
 
   webpack(webpackDevConfig).watch({}, (err, stats) => {
     if (err) return console.error(err);
     console.log(stats.toString(config.webpackStats));
-    browserSync.reload();
+    browserSyncDrupal.reload();
   });
 
-  plugins.watch(config.sass.src, () => gulp.start('sass'));
+  plugins.watch(
+    config.sass.src,
+    () => gulp.start('sass') && gulp.start('styleguide'),
+  );
   plugins.watch(config.icons.src, () => gulp.start('icons:watch'));
 });
 
-gulp.task('build', ['sass', 'icons', 'js']);
+gulp.task('build', ['sass', 'icons', 'js', 'styleguide']);
 
 gulp.task('clean', () => del(['dist']));
