@@ -11,13 +11,6 @@
 export const ANIMATIONEND = 'onanimationend' in window;
 
 /**
- * Whether transitionend event is supported.
- *
- * @var {bool}
- */
-export const TRANSITIONEND = 'ontransitionend' in window;
-
-/**
  * Whether ResizeObserver API is supported.
  *
  * @var {bool}

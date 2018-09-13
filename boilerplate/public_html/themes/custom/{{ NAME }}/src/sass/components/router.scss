@@ -28,10 +28,6 @@
     transition-duration: 0s;
     transition-delay: $transition-duration;
     visibility: hidden;
-
-    &.has-no-transitionend {
-      transition-delay: 0s;
-    }
   }
 
   &__inner {
