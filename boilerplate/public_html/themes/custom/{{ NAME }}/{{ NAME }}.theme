@@ -5,8 +5,6 @@
  * Supporting theme hooks and functions.
  */
 
-use Drupal\Component\Utility\Html;
-use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\{{ NAME }}\Hash;
@@ -222,16 +220,8 @@ function {{ NAME }}_element_info_alter(array &$info) {
  * class component.
  */
 function {{ NAME }}_processed_text_pre_render($element) {
-  $classes = ['c-text-body'];
-
-  if (isset($element['#variants'])) {
-    foreach ($element['#variants'] as $variant) {
-      $classes[] = 'c-text-body--' . Html::cleanCssIdentifier($variant);
-    }
-  }
-
   $element['#theme_wrappers']['container'] = [
-    '#attributes' => ['class' => $classes],
+    '#attributes' => ['class' => ['c-text-body']],
   ];
 
   return $element;
