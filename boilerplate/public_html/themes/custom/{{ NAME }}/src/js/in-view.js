@@ -25,9 +25,7 @@ const SINGLES_SELECTOR = '.js-inview';
  *
  * @type {string}
  */
-const SELECTOR = `${LIST_SELECTOR}${
-  SINGLES_SELECTOR ? `, ${SINGLES_SELECTOR}` : ''
-}`;
+const SELECTOR = `${LIST_SELECTOR},${SINGLES_SELECTOR}`;
 
 /**
  * A list of active behaviors keyed by associative element it is attached to.
