@@ -1,0 +1,10 @@
+views.display_extender.inview:
+  type: mapping
+  mapping:
+    selector:
+      type: string
+      label: Selector
+      nullable: true
+    ratio:
+      type: float
+      label: Ratio
