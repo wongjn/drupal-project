@@ -1,7 +1,7 @@
 # Schema for configuration files of the {{ LABEL }} Helper module.
 
 views.display_extender.inview:
-  type: mapping
+  type: views_display_extender
   label: 'In-view views display extender settings'
   mapping:
     selector:
