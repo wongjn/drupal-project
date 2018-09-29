@@ -169,14 +169,6 @@ function {{ NAME }}_preprocess_file_link(&$variables) {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for image.html.twig.
- */
-function {{ NAME }}_preprocess_image(&$variables) {
-  // Default typeof foaf:image from rdf module is unrecognized.
-  unset($variables['attributes']['typeof']);
-}
-
-/**
  * Implements hook_preprocess_HOOK() for menu.html.twig.
  */
 function {{ NAME }}_preprocess_menu(&$variables) {
