@@ -24,7 +24,12 @@ function {{ NAME }}_profile_install() {
     'who_s_online',
   ]);
   $view_storage->delete($views);
-  
+
+  \Drupal::entityTypeManager()
+    ->getStorage('imce_profile')
+    ->load('member')
+    ->delete();
+
   $config->getEditable('views.settings')
     ->set('display_extenders.inview', 'inview')
     ->save(TRUE);

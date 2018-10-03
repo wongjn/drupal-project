@@ -3,7 +3,7 @@ status: true
 dependencies: {  }
 id: editor
 label: Editor
-description: ''
+description: 'Configuration for editors'
 conf:
   extensions: 'jpg png gif doc docx pdf xls xlsx ppt pptx txt csv'
   maxsize: !!float 4
@@ -13,11 +13,6 @@ conf:
   replace: 0
   folders:
     -
-      path: 'users/[user:name]'
+      path: content
       permissions:
         all: true
-    -
-      path: users
-      permissions:
-        browse_files: true
-        browse_subfolders: true

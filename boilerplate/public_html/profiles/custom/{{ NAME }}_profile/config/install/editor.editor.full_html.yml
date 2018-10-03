@@ -55,7 +55,7 @@ settings:
     stylescombo:
       styles: 'p.c-text-body__emphasize|Emphasize paragraph'
 image_upload:
-  status: true
+  status: false
   scheme: public
   directory: inline-images
   max_size: ''

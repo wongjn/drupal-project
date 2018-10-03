@@ -104,6 +104,10 @@
             "drupal/admin_toolbar": {
                 "Remove drupal.org links in admin_toolbar_tools": "patches/remove-links-to-drupal-org.patch"
             },
+            "drupal/core": {
+                "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch",
+                "Fix drupalimage CKEditor plugin requiring data-entity-uuid and data-entity-type when image upload is disabled": "https://www.drupal.org/files/issues/2018-09-13/drupalimage_ckeditor-2771837-34.patch"
+            },
             "drupal/pathauto": {
                 "Fix alias is not generated when Pathauto widget is hidden": "https://www.drupal.org/files/issues/2018-04-09/pathauto_2946273-25.patch"
             }
