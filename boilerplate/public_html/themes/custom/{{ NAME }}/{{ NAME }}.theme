@@ -100,14 +100,14 @@ function {{ NAME }}_page_attachments_alter(array &$attachments) {
 
   // Preload main script.
   if (\Drupal::config('system.performance')->get('js.preprocess')) {
-    $main_js = drupal_get_path('theme', '{{ NAME }}') . '/dist/js/main.js';
+    $main_js = "$theme_path/dist/js/main.js";
     $attachments['#attached']['html_head'][] = [
       [
         '#tag' => 'link',
         '#attributes' => [
           'as' => 'script',
           'rel' => 'preload',
-          'href' => base_path() . "$main_js?" . Hash::getHash($main_js),
+          'href' => base_path() . "$main_js?v=" . Hash::getHash($main_js),
         ],
       ],
       '{{ NAME }}:preload:main.js',
