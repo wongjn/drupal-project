@@ -1,0 +1,362 @@
+/**
+ * @file
+ * IMCE file browser theme.
+ */
+
+@import '../system';
+
+$accent: hsl(210, 100%, 60%);
+$border-color: #ccc;
+$border-radius: 4px;
+
+// Wrapper.
+//
+// 1. Reset
+#imce-fm {
+  border: 0; // 1
+  padding: 0; // 1
+}
+
+// Toolbar.
+//
+// 1. Reset
+#imce-toolbar {
+  box-shadow: none; // 1
+  margin: 0; // 1
+  border: 0; // 1
+  border-bottom: 1px solid $border-color;
+  background-color: transparent; // 1
+}
+
+// Text for a toolbar button.
+//
+// 1. Reset
+.imce-tbb-title {
+  text-shadow: none; // 1
+}
+
+// Clickable wrapper for toolbar button.
+.imce-tbb {
+  margin: 0.4rem 0 0.4rem 0.4rem;
+  border: 1px solid $border-color;
+  border-radius: 999px;
+  padding: 0.4rem 1.5rem;
+  cursor: pointer;
+
+  &:hover,
+  &.active {
+    border-color: $accent;
+    background-color: transparent;
+    color: darken($accent, 20%);
+  }
+
+  &.active {
+    box-shadow: 0 0 2px darken($accent, 20%);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+}
+
+// Folder navigation wrapper.
+#imce-tree {
+  border: 0;
+  padding: 0.4rem;
+}
+
+// Folder layer.
+//
+// 1. Reset
+.imce-branch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0; // 1
+}
+
+// Folder name.
+.imce-branch-name {
+  flex: 1 0 0px;
+  margin: 0 0 0 0.2rem;
+  border-radius: $border-radius;
+  padding: 0.4rem;
+
+  &:hover {
+    background-color: transparent;
+    box-shadow: 0 0 0 1px $accent inset;
+  }
+
+  .active > & {
+    background: $accent;
+
+    &,
+    &::before {
+      color: #fff;
+    }
+  }
+
+  // Icon.
+  &::before {
+    margin-right: 0.4rem;
+  }
+}
+
+// Folder content.
+.imce-subtree {
+  flex: 0 1 100%;
+}
+
+// Folder button.
+.imce-branch-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $border-radius;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+
+  // Plus or minus sign.
+  //
+  // 1. Reset
+  &:before {
+    margin: 0; // 1
+    border: 0; // 1
+    vertical-align: middle;
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 1px;
+    color: $accent;
+  }
+
+  // Branches with no folders should not be interactable.
+  .leaf > & {
+    pointer-events: none;
+  }
+}
+
+// Resizing draggable handles.
+#imce-body-resizer,
+#imce-tree-resizer {
+  background-color: $border-color;
+}
+
+// Horizontal resizer icon.
+//
+// 1. Center vertically.
+#imce-body-resizer:before {
+  line-height: 5px; // 1
+}
+
+// Main window pane.
+//
+// 1. Reset
+#imce-content {
+  border: 0; // 1.
+}
+
+.imce-content-header,
+.imce-folder-content {
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+// Wrapper for the main folder contents.
+.imce-folder-content {
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+
+// Headings wrapper
+.imce-content-header {
+  padding-top: 0.8rem;
+  background-color: #fff;
+  font-weight: 700;
+
+  // 1. Drop shadow to look sticky.
+  &[style^="top:"] {
+    box-shadow: 0 2px 10px rgba(#000, 0.2); // 1
+  }
+
+  // When top is 0px, then remove drop shadow.
+  &,
+  &[style*=" 0px"] {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  }
+
+  // Column clickable element.
+  [data-sort] {
+    padding-bottom: 0.8rem;
+    height: auto;
+    cursor: pointer;
+
+    &:hover,
+    &.sorted {
+      color: $accent;
+    }
+
+    &.sorted {
+      box-shadow: 0 -3px 0 0 $accent inset;
+    }
+
+    // Sort direction arrow indicator.
+    &::after {
+      margin-left: 0.3rem;
+    }
+  }
+}
+
+// Item row.
+//
+// 1. Reset
+.imce-item {
+  display: flex;
+  flex-direction: row-reverse;
+  border-bottom: 0; // 1
+  padding: 0.4rem;
+
+  .imce-folder-content & {
+    border-radius: $border-radius;
+
+    &:hover {
+      box-shadow: 0 0 0 1px $accent inset;
+      background-color: transparent;
+      cursor: pointer;
+    }
+
+    &.selected {
+      background: $accent;
+      color: #fff;
+    }
+  }
+
+  // 1. Remove bottom padding in header so that sorted item column's bottom
+  //    border line indicator sits snug to the bottom.
+  .imce-content-header & {
+    background-color: transparent;
+    padding-bottom: 0;
+  }
+
+  > * {
+    flex: 0 0 auto;
+    padding-right: 0.4rem;
+    padding-left: 0.4rem;
+  }
+}
+
+.imce-item-icon {
+  order: 99;
+}
+
+.imce-item-name {
+  flex-shrink: 999;
+  flex-grow: 999;
+  text-overflow: ellipsis;
+}
+
+.imce-item-width,
+.imce-item-height {
+  max-width: 100%;
+  width: 4rem;
+}
+
+// Content folder window pane footer.
+.imce-content-status {
+  border-top: 1px solid $border-color;
+  background-color: #fff;
+  width: 100%;
+
+  // 1. Reset
+  > * {
+    background: transparent; // 1
+    border: 0; // 1
+    border-right: 1px solid $border-color;
+  }
+}
+
+// Preview pane info header.
+.imce-preview-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-bottom: 1px solid $border-color;
+
+  // 1. Reset
+  > * {
+    margin: 0 0 0 -1px;
+    border-color: $border-color;
+    border-top: 0; // 1
+    border-bottom: 0; // 1
+    padding: 0.8rem;
+    background: transparent; // 1
+    line-height: 1; // 1
+  }
+}
+
+// Pop up.
+.imce-tbb-popup {
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 1px 4px rgba(#000, 0.4);
+}
+
+// Overlay.
+.imce-layer {
+  .imce-resize-copy,
+  input,
+  textarea,
+  select,
+  button {
+    margin-right: 0.4em;
+    margin-left: 0.4em;
+  }
+
+  // 1. Fix for Add file text not showing on upload button.
+  .imce-uq-input {
+    margin: 0; // 1
+    cursor: pointer;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    padding: 0.4em 1em;
+
+    &:focus {
+      outline: 0;
+      border-color: $accent;
+    }
+  }
+
+  [type="radio"],
+  [type="checkbox"] {
+    &:focus {
+      outline: 1px solid $accent;
+      outline-offset: 2px;
+    }
+  }
+
+  input,
+  select {
+    border-width: 0 0 2px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .imce-uq-button,
+  [type="submit"][type] {
+    border-radius: 999px;
+    border: 0;
+    background-color: $accent;
+    color: #fff;
+    cursor: pointer;
+
+    &:focus {
+      box-shadow: 0 0 1px 1px darken($accent, 30%);
+      outline: 0;
+    }
+  }
+}

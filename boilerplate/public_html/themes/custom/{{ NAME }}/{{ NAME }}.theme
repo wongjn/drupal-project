@@ -169,6 +169,26 @@ function {{ NAME }}_preprocess_file_link(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for html--imce.html.twig.
+ *
+ * Alters libraries attached to IMCE file manager dialog.
+ */
+function {{ NAME }}_preprocess_html__imce(&$variables) {
+  if (!isset($variables['page']['#attached']['library'])) {
+    return;
+  }
+
+  $variables['page']['#attached']['library'] = array_filter(
+    $variables['page']['#attached']['library'],
+    function ($library_name) {
+      return strpos($library_name, '{{ NAME }}/') === FALSE;
+    }
+  );
+  $variables['page']['#attached']['library'][] = '{{ NAME }}/imce-file-manager';
+}
+
+
+/**
  * Implements hook_preprocess_HOOK() for menu.html.twig.
  */
 function {{ NAME }}_preprocess_menu(&$variables) {

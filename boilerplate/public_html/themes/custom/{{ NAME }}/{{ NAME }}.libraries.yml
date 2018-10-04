@@ -33,6 +33,11 @@ global:
     - core/drupal
     - core/drupalSettings
 
+imce-file-manager:
+  css:
+    component:
+      dist/css/components/imce-file-manager.css: {}
+
 messages:
   css:
     component:
