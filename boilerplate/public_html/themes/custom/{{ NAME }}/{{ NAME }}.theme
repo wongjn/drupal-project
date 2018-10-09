@@ -183,7 +183,6 @@ function {{ NAME }}_preprocess_html__imce(&$variables) {
   $variables['page']['#attached']['library'][] = '{{ NAME }}/imce-file-manager';
 }
 
-
 /**
  * Implements hook_preprocess_HOOK() for menu.html.twig.
  */
