@@ -60,6 +60,7 @@
     "gulp-svgmin": "^1.2.3",
     "gulp-svgstore": "^6.1.0",
     "gulp-watch": "^5.0.0",
+    "kss": "^3.0.0-beta.23",
     "lodash-webpack-plugin": "^0.11.5",
     "vue-loader": "^15.2.6",
     "vue-template-compiler": "^2.5.17",
