@@ -26,7 +26,7 @@ const config = {
   styleguide: {
     destination: './styleguide',
     homepage: './README.md',
-    title: '{{ NAME }} Styleguide',
+    title: '{{ LABEL }} Styleguide',
   },
   icons: {
     src: './src/icons/*.svg',
