@@ -12,7 +12,7 @@ import './in-view';
 import './main-menu/';
 import { asyncAttach } from './AsyncBehavior';
 
-import(/* webpackPrefetch: true, webpackChunkName: 'router' */ './router/');
+import(/* webpackPrefetch: true, webpackChunkName: 'entry-async' */ './router/');
 
 /**
  * Polyfills external-use SVG elements.
