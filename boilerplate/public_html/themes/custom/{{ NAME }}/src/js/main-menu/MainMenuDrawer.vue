@@ -113,7 +113,9 @@ export default {
 
       if (this.scrollbarWidth !== 0) {
         // Compensate for possible scrollbar layout jump
-        document.body.style.paddingRight = isOpen ? `${this.scrollbarWidth}px` : '';
+        document.body.style.paddingRight = isOpen
+          ? `${this.scrollbarWidth}px`
+          : '';
       }
     },
   },

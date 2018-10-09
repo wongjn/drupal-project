@@ -6,7 +6,5 @@
 const CSSNano = require('cssnano');
 
 module.exports = {
-  plugins: [
-    CSSNano(),
-  ],
+  plugins: [CSSNano()],
 };

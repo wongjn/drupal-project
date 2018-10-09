@@ -10,9 +10,7 @@ import MenuMixin from './menu-mixin';
  */
 const MainMenuDrawerMenu = {
   name: 'MainMenuDrawerMenu',
-  mixins: [
-    MenuMixin,
-  ],
+  mixins: [MenuMixin],
   computed: {
     ulProps() {
       return {
@@ -34,5 +32,4 @@ const MainMenuDrawerMenu = {
   },
 };
 export default MainMenuDrawerMenu;
-
 </script>

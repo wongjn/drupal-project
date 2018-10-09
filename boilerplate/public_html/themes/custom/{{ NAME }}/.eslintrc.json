@@ -26,11 +26,18 @@
         "optionalDependencies": false
       }
     ],
-    "//": "Throws false errors on variables named 'context'",
-    "react/destructuring-assignment": 0,
     "//": "Cannot resolve Webpack aliases. Webpack will complain at compile time anyway.",
     "import/no-unresolved": 0
   },
+  "overrides": [
+    {
+      "files": ["**/*.js"],
+      "rules": {
+        "//": "False error reporting for Drupal.behavior context parameter.",
+        "react/destructuring-assignment": 0
+      }
+    }
+  ],
   "settings": {
     "import/resolver": {
       "webpack": {

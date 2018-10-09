@@ -58,12 +58,11 @@ export default {
     url: {
       type: Object,
       required: true,
-      validator: object => (
+      validator: object =>
         'url' in object &&
         'external' in object &&
         'query' in object &&
-        'systemPath' in object
-      ),
+        'systemPath' in object,
     },
     /**
      * Tree of submenu items (if any).
@@ -145,10 +144,7 @@ export default {
    */
   computed: {
     classes() {
-      return [
-        { 'is-active-trail': this.isActiveTrail },
-        ...this.linkClasses,
-      ];
+      return [{ 'is-active-trail': this.isActiveTrail }, ...this.linkClasses];
     },
     isActivePath() {
       if (this.url.systemPath === '<front>') {
@@ -192,10 +188,12 @@ export default {
         }
 
         // Use native event system for bubbling.
-        this.$el.dispatchEvent(new CustomEvent('active-trail', {
-          detail: newValue,
-          bubbles: true,
-        }));
+        this.$el.dispatchEvent(
+          new CustomEvent('active-trail', {
+            detail: newValue,
+            bubbles: true,
+          }),
+        );
       }
     },
   },
@@ -204,10 +202,12 @@ export default {
     document.addEventListener(ROUTED_EVENT, this.onRouted);
 
     if (this.isActivePath) {
-      this.$el.dispatchEvent(new CustomEvent('active-trail', {
-        detail: this.isActivePath,
-        bubbles: true,
-      }));
+      this.$el.dispatchEvent(
+        new CustomEvent('active-trail', {
+          detail: this.isActivePath,
+          bubbles: true,
+        }),
+      );
     }
   },
   destroyed() {

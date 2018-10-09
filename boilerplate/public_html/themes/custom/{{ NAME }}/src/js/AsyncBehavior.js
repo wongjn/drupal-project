@@ -63,7 +63,7 @@ export default class AsyncBehavior {
         if (!this.Behavior) {
           this.Behavior = (await import(/* webpackChunkName: "behavior-[request]" */ `./behaviors/${
             this.fileName
-          }`)).default;
+            }`)).default;
         }
 
         this.activeElements.set(
@@ -111,5 +111,8 @@ export default class AsyncBehavior {
  *   supplied, will default to `.js-${filename}` by AsyncBehavior.constructor().
  */
 export const asyncAttach = (fileName, selector) => {
-  Drupal.behaviors[`{{ CAMEL }}_${fileName}`] = new AsyncBehavior(fileName, selector);
+  Drupal.behaviors[`{{ CAMEL }}_${fileName}`] = new AsyncBehavior(
+    fileName,
+    selector,
+  );
 };

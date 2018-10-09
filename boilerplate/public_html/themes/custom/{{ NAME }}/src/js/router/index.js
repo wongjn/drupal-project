@@ -16,7 +16,7 @@ document.body.tabIndex = '-1';
  */
 const ADMIN_PATH = new RegExp(
   `^${
-    drupalSettings.path.baseUrl
+  drupalSettings.path.baseUrl
   }(((node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)|user/logout)$|admin/|node/add)`,
 );
 

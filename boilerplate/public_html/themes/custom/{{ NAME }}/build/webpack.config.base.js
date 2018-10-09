@@ -34,11 +34,7 @@ module.exports = {
     alias: {
       vue$: 'vue/dist/vue.esm.js',
     },
-    extensions: [
-      '.js',
-      '.json',
-      '.vue',
-    ],
+    extensions: ['.js', '.json', '.vue'],
   },
   plugins: [new LodashModuleReplacementPlugin(), new VueLoaderPlugin()],
 };

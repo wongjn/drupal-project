@@ -16,25 +16,25 @@ const FILTERED_CLASSES = ['js-main-menu', 'c-main-menu'];
  *
  * @type {Drupal~behavior}
  */
-Drupal.behaviors.freewheelersMenu = {
+Drupal.behaviors.{{ CAMEL }}Menu = {
   attach(context) {
-    Array.from(context.querySelectorAll('.js-main-menu'))
-      .forEach((el) => {
-        const props = {
-          menuTree: JSON.parse(el.dataset.menu),
-        };
-        const classes = Array.from(el.classList.values())
-          .filter(name => !FILTERED_CLASSES.includes(name));
+    Array.from(context.querySelectorAll('.js-main-menu')).forEach(el => {
+      const props = {
+        menuTree: JSON.parse(el.dataset.menu),
+      };
+      const classes = Array.from(el.classList.values()).filter(
+        name => !FILTERED_CLASSES.includes(name),
+      );
 
-        /* eslint-disable no-new */
-        new Vue({
-          el,
-          components: {
-            MainMenu,
-          },
-          template: '<MainMenu :menu-tree="menuTree" />',
-          render: h => h(MainMenu, { props, class: classes }),
-        });
+      /* eslint-disable no-new */
+      new Vue({
+        el,
+        components: {
+          MainMenu,
+        },
+        template: '<MainMenu :menu-tree="menuTree" />',
+        render: h => h(MainMenu, { props, class: classes }),
       });
+    });
   },
 };

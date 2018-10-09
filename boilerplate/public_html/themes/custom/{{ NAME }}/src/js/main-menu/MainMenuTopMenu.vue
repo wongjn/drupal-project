@@ -11,9 +11,7 @@ import MenuMixin from './menu-mixin';
  */
 export default {
   name: 'MainMenuTopMenu',
-  mixins: [
-    MenuMixin,
-  ],
+  mixins: [MenuMixin],
   data() {
     return {
       /**
@@ -44,10 +42,7 @@ export default {
       };
     },
     linkClasses() {
-      return [
-        'c-main-menu__link',
-        'c-main-menu__link--top',
-      ];
+      return ['c-main-menu__link', 'c-main-menu__link--top'];
     },
     subMenuComponent() {
       return MainMenuSubMenu;
@@ -66,7 +61,7 @@ export default {
     },
   },
   mounted() {
-    ResizeObserverLoader.then((Observer) => {
+    ResizeObserverLoader.then(Observer => {
       this._observer = new Observer(this.layoutUpdate);
       this._observer.observe(this.$el);
     });

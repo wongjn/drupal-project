@@ -19,9 +19,7 @@ import MenuMixin from './menu-mixin';
  */
 const MainMenuSubMenu = {
   name: 'MainMenuSubMenu',
-  mixins: [
-    MenuMixin,
-  ],
+  mixins: [MenuMixin],
   data() {
     return {
       /**
@@ -37,16 +35,13 @@ const MainMenuSubMenu = {
       return {
         class: [
           'c-main-menu__sub-menu',
-          (this.depth > 1 && 'c-main-menu__sub-menu--deep'),
-          (this.overflows && 'is-moved'),
+          this.depth > 1 && 'c-main-menu__sub-menu--deep',
+          this.overflows && 'is-moved',
         ],
       };
     },
     linkClasses() {
-      return [
-        'c-main-menu__link',
-        'c-main-menu__link--sub',
-      ];
+      return ['c-main-menu__link', 'c-main-menu__link--sub'];
     },
     subMenuComponent() {
       return MainMenuSubMenu;
@@ -56,7 +51,7 @@ const MainMenuSubMenu = {
    * @inheritDoc
    */
   mounted() {
-    ResizeObserverLoader.then((Observer) => {
+    ResizeObserverLoader.then(Observer => {
       this._observer = new Observer(debounce(this.layoutUpdate, 300));
       this._observer.observe(document.body);
     });
