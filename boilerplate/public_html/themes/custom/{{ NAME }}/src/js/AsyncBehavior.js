@@ -63,31 +63,33 @@ export default class AsyncBehavior {
    */
   attach(context, drupalSettings) {
     domGet(context, this.selector).forEach(async element => {
-        const behavior = this.activeElements.get(element);
+      const behavior = this.activeElements.get(element);
 
-        // Element has a behavior already, run update function if any then
-        // short-circuit.
-        if (behavior) {
-          if (typeof behavior.attachUpdate === 'function') {
-            behavior.attachUpdate();
-          }
-          return;
+      // Element has a behavior already, run update function if any then
+      // short-circuit.
+      if (behavior) {
+        if (typeof behavior.attachUpdate === 'function') {
+          behavior.attachUpdate();
         }
+        return;
+      }
 
-        // Load behavior class if not loaded already
-        if (!this.Behavior) {
-          this.Behavior = (await import(/* webpackChunkName: "behavior-[request]" */ `./behaviors/${
-            this.fileName
-            }`)).default;
-        }
+      // Load behavior class if not loaded already
+      if (!this.Behavior) {
+        this.Behavior = (await import(/* webpackChunkName: "behavior-[request]" */ `./behaviors/${
+          this.fileName
+          }`)).default;
+      }
 
-        this.activeElements.set(
-          element,
-          new this.Behavior(element, drupalSettings),
-        );
-      },
-      this,
-    );
+      this.activeElements.set(
+        element,
+        // Test if the module is a constructor; a behavior may only want to be
+        // loaded for its side effects.
+        typeof this.Behavior === 'function'
+          ? new this.Behavior(element, drupalSettings)
+          : {},
+      );
+    }, this);
   }
 
   /**
@@ -105,11 +107,11 @@ export default class AsyncBehavior {
   detach(context, settings, trigger) {
     if (trigger === 'unload') {
       domGet(context, this.selector).forEach(element => {
-          const behavior = this.activeElements.get(element);
-          if (behavior && typeof behavior.detach === 'function') {
-            behavior.detach();
-          }
-        });
+        const behavior = this.activeElements.get(element);
+        if (behavior && typeof behavior.detach === 'function') {
+          behavior.detach();
+        }
+      });
     }
   }
 }
