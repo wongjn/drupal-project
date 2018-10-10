@@ -4,6 +4,22 @@
  */
 
 /**
+ * Gets matching elements in the DOM for a behavior.
+ *
+ * @param {HTMLDocument|HTMLElement} context
+ *   The DOM element to get matching elements from.
+ * @param {string} selector
+ *   The CSS selector to match.
+ * @return {HTMLElement[]}
+ *   The matching elements.
+ */
+export function domGet(context, selector) {
+  return Array.from(context.querySelectorAll(selector)).concat(
+    'matches' in context && context.matches(selector) ? [context] : [],
+  );
+}
+
+/**
  * Manages an async Drupal behavior.
  *
  * The behavior will only be loaded if there are elements on the page that
@@ -46,8 +62,7 @@ export default class AsyncBehavior {
    * @type {Drupal~behaviorAttach}
    */
   attach(context, drupalSettings) {
-    Array.from(context.querySelectorAll(this.selector)).forEach(
-      async element => {
+    domGet(context, this.selector).forEach(async element => {
         const behavior = this.activeElements.get(element);
 
         // Element has a behavior already, run update function if any then
@@ -89,9 +104,7 @@ export default class AsyncBehavior {
    */
   detach(context, settings, trigger) {
     if (trigger === 'unload') {
-      Array.from(context.querySelectorAll(this.selector))
-        .concat(context.matches(this.selector) ? [context] : [])
-        .forEach(element => {
+      domGet(context, this.selector).forEach(element => {
           const behavior = this.activeElements.get(element);
           if (behavior && typeof behavior.detach === 'function') {
             behavior.detach();
