@@ -9,7 +9,7 @@ use Drupal\Core\Url;
  * Menu data processor.
  */
 class MenuData {
-  
+
   /**
    * Translates menu tree into JSON-encodable data.
    *
@@ -52,17 +52,17 @@ class MenuData {
     $info = [
       'url' => $url->toString(),
       'external' => $url->isExternal(),
-      'query' => [],
+      'query' => '',
       'systemPath' => '',
     ];
 
     if (!$info['external']) {
-      $query = $url->getOption('query') ?: [];
+      $query = $url->getOption('query') ? : [];
 
       // Ensure that query values are strings.
       array_walk($query, function (&$value) {
         if ($value instanceof MarkupInterface) {
-          $value = (string) $value;
+          $value = (string)$value;
         }
       });
 
