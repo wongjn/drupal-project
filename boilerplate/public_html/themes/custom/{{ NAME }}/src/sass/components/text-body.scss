@@ -6,7 +6,7 @@
 @import '../system';
 
 .c-text-body {
-  $block-spacing: $LINE-HEIGHT * 1em;
+  $block-spacing: $LINE-HEIGHT * 1rem;
 
   // Clearfix
   &::after {
@@ -49,10 +49,6 @@
   @each $level, $size in $heading-sizes {
     h#{$level} {
       @include font-size($size);
-    }
-
-    * + h#{$level} {
-      margin-top: $LINE-HEIGHT * ($FONT-SIZE / $size) * 1em;
     }
   }
 
