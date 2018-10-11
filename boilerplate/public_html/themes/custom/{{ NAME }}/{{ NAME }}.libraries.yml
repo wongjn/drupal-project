@@ -11,6 +11,7 @@ global:
       dist/css/layout/grid.css: {}
       dist/css/layout/row.css: {}
     component:
+      dist/css/objects/title.css: {}
       dist/css/components/drawer-menu.css: {}
       dist/css/components/main-menu.css: {}
       dist/css/components/router.css: {}
