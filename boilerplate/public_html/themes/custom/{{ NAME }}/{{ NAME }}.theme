@@ -188,6 +188,7 @@ function {{ NAME }}_preprocess_html__imce(&$variables) {
  */
 function {{ NAME }}_preprocess_menu(&$variables) {
   $variables['menu_data'] = json_encode(MenuData::process($variables['items']));
+  MenuData::addExternalOptions($variables['items']);
 }
 
 /**
