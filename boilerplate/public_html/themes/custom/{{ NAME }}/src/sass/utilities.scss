@@ -2,3 +2,25 @@
  * @file
  * One-off (mostly) single-property classes.
  */
+
+@import 'system';
+
+@each $measure in () {
+  .u-margin-bottom-#{$measure} {
+    @include viewport-scale(margin-bottom, $measure, 10px);
+  }
+}
+
+@each $measure in () {
+  .u-margin-top-#{$measure} {
+    @include viewport-scale(margin-top, $measure, 10px);
+  }
+}
+
+@each $measure in () {
+  .u-margin-neighbor-vertical-#{$measure} {
+    & + & {
+      @include viewport-scale(margin-top, $measure, 10px);
+    }
+  }
+}
