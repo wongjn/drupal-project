@@ -88,4 +88,6 @@
     @include viewport-scale(margin-right, 20px, 5px);
     @include viewport-scale(margin-left, 20px, 5px);
   }
+
+  &__emphasize {}
 }
