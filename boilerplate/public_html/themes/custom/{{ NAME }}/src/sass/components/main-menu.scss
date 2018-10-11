@@ -5,21 +5,22 @@
 
 @import '../system';
 
-$line-height: 1.2;
-$font-size: 16;
-$y-padding: 10px;
-$x-padding: 10px;
-
-// 1. Set best-guessed height untill JS loaded to avoid content jump.
+// 1. Set height to ensure wrapped elements (that are hidden) do not affect
+//    layout flow.
 .c-main-menu {
+  $font-size: 16;
+  $y-padding: 10px;
+  $x-padding: 10px;
+
   @include font-size($font-size);
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
   position: relative;
   z-index: 400;
-  height: (($line-height * $font-size * 1px) + ($y-padding * 2)); // 1
-  line-height: $line-height;
+  height: (($font-size * 1px) + ($y-padding * 2)); // 1
+  height: calc(var(--font-size-#{$font-size}) + #{$y-padding * 2}); // 1
+  line-height: 1;
   text-transform: uppercase;
 
   &__link {
