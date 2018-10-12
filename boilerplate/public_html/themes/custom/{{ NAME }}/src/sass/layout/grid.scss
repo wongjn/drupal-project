@@ -90,7 +90,7 @@ $columns: (
       grid-gap: calc(var(--gutter-y) * 2) calc(var(--gutter-x) * 2);
 
       @include edge {
-        grid-gap: $half-gutter;
+        grid-gap: $gutter;
       }
     }
 
