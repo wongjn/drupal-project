@@ -3,10 +3,12 @@
  * Drupal status messages.
  */
 
+@import '../system';
 @import '../../../node_modules/izitoast/dist/css/iziToast.min';
 
 .iziToast {
   border-radius: 0;
+  font: inherit;
 
   // Remove drop-shadow.
   &::after {
@@ -22,7 +24,17 @@
 }
 
 .iziToast-message[class][class] {
+  @include font-size(16);
   color: #000;
+
+  a {
+    color: inherit;
+    box-shadow: 0 2px darkblue;
+
+    &:focus {
+      box-shadow: 0 4px darkblue;
+    }
+  }
 }
 
 // Position message-type icon to top corner instead of middle.
