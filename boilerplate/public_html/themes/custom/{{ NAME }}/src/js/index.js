@@ -26,7 +26,16 @@ Drupal.behaviors.{{ CAMEL }}SVGPolyfill = {
   },
 };
 
-[
+const asyncBehaviors = [
   // Drupal status messages.
   ['messages'],
-].forEach(args => asyncAttach(...args));
+];
+
+asyncBehaviors.forEach(args => asyncAttach(...args));
+
+if (module.hot) {
+  module.hot.accept('./AsyncBehavior', () => {
+    asyncBehaviors.forEach(args => asyncAttach(...args));
+    Drupal.attachBehaviors(document.body, drupalSettings);
+  });
+}

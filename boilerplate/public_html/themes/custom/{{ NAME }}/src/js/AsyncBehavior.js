@@ -76,9 +76,8 @@ export default class AsyncBehavior {
 
       // Load behavior class if not loaded already
       if (!this.Behavior) {
-        this.Behavior = (await import(/* webpackChunkName: "behavior-[request]" */ `./behaviors/${
-          this.fileName
-          }`)).default;
+        this.Behavior = (await import(/* webpackChunkName: "behavior-[request]" */
+        `./behaviors/${this.fileName}`)).default;
       }
 
       this.activeElements.set(
@@ -131,3 +130,14 @@ export const asyncAttach = (fileName, selector) => {
     selector,
   );
 };
+
+if (module.hot) {
+  module.hot.dispose(() => {
+    Array.from(Object.entries(Drupal.behaviors))
+      .filter(([, behavior]) => behavior instanceof AsyncBehavior)
+      .forEach(([name, behavior]) => {
+        behavior.detach(document.body, drupalSettings, 'unload');
+        delete Drupal.behaviors[name];
+      });
+  });
+}

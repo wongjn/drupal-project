@@ -10,6 +10,8 @@ const del = require('del');
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
 const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackDevConfig = require('./build/webpack.config.dev');
 const webpackProdConfig = require('./build/webpack.config.prod');
 const kss = require('./build/kss');
@@ -32,9 +34,11 @@ const config = {
     src: './src/icons/*.svg',
   },
   webpackStats: {
+    cachedAssets: false,
     modules: false,
     colors: true,
     excludeAssets: /\.map$/,
+    hash: false,
   },
 };
 config.styleguide.source = config.sass.base;
@@ -92,22 +96,23 @@ gulp.task('watch', ['sass', 'icons', 'styleguide'], () => {
     ghostMode: false,
     proxy: '{{ NAME }}.local',
     open: false,
+    middleware: [
+      webpackDevMiddleware(webpackCompiler, {
+        stats: config.webpackStats,
+        publicPath: webpackDevConfig.output.publicPath,
+      }),
+      webpackHotMiddleware(webpackCompiler),
+    ],
   });
 
   browserSyncStyleguide.init({
     ui: false,
     server: {
-      baseDir: config.styleguide.destination,
+      server: [config.styleguide.destination, './'],
     },
     port: 5000,
     ghostMode: false,
     open: false,
-  });
-
-  webpack(webpackDevConfig).watch({}, (err, stats) => {
-    if (err) return console.error(err);
-    console.log(stats.toString(config.webpackStats));
-    browserSyncDrupal.reload();
   });
 
   plugins.watch(
