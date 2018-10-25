@@ -12,3 +12,4 @@ permissions:
   - 'access toolbar'
   - 'change own username'
   - 'search content'
+  - 'view the administration theme'
