@@ -105,6 +105,7 @@
                 "Remove drupal.org links in admin_toolbar_tools": "patches/remove-links-to-drupal-org.patch"
             },
             "drupal/core": {
+                "Fix Drupal breaking page url()'s in processed CSS": "https://www.drupal.org/files/issues/2362643-47-fix-svg.patch",
                 "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch",
                 "Fix drupalimage CKEditor plugin requiring data-entity-uuid and data-entity-type when image upload is disabled": "https://www.drupal.org/files/issues/2018-09-13/drupalimage_ckeditor-2771837-34.patch"
             },
