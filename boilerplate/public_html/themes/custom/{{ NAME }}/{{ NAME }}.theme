@@ -91,9 +91,6 @@ function {{ NAME }}_page_attachments_alter(array &$attachments) {
   $theme_path = drupal_get_path('theme', '{{ NAME }}');
   $theme_path_url = base_path() . $theme_path;
 
-  // Add theme path to settings.
-  $attachments['#attached']['drupalSettings']['{{ CAMEL }}']['path'] = $theme_path_url;
-
   // Preload main script.
   if (\Drupal::config('system.performance')->get('js.preprocess')) {
     $main_js = "$theme_path/dist/js/main.js";
