@@ -92,6 +92,8 @@ gulp.task('js', cb => {
 });
 
 gulp.task('watch', ['sass', 'icons', 'styleguide'], () => {
+  const webpackCompiler = webpack(webpackDevConfig);
+  
   browserSyncDrupal.init({
     ghostMode: false,
     proxy: '{{ NAME }}.local',
