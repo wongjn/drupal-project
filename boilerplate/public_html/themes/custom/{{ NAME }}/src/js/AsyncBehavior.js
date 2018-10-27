@@ -3,21 +3,7 @@
  * Drupal behavior extension class to load extra JS asynchronously.
  */
 
-/**
- * Gets matching elements in the DOM for a behavior.
- *
- * @param {HTMLDocument|HTMLElement} context
- *   The DOM element to get matching elements from.
- * @param {string} selector
- *   The CSS selector to match.
- * @return {HTMLElement[]}
- *   The matching elements.
- */
-export function domGet(context, selector) {
-  return Array.from(context.querySelectorAll(selector)).concat(
-    'matches' in context && context.matches(selector) ? [context] : [],
-  );
-}
+import get from './dom';
 
 /**
  * Manages an async Drupal behavior.
@@ -62,7 +48,7 @@ export default class AsyncBehavior {
    * @type {Drupal~behaviorAttach}
    */
   attach(context, drupalSettings) {
-    domGet(context, this.selector).forEach(async element => {
+    get(context, this.selector).forEach(async element => {
       const behavior = this.activeElements.get(element);
 
       // Element has a behavior already, run update function if any then
@@ -105,7 +91,7 @@ export default class AsyncBehavior {
    */
   detach(context, settings, trigger) {
     if (trigger === 'unload') {
-      domGet(context, this.selector).forEach(element => {
+      get(context, this.selector).forEach(element => {
         const behavior = this.activeElements.get(element);
         if (behavior && typeof behavior.detach === 'function') {
           behavior.detach();

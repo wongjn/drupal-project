@@ -5,6 +5,7 @@
 
 import last from 'lodash/last';
 import partition from 'lodash/partition';
+import get from './dom';
 
 /**
  * CSS selector for lists.
@@ -277,11 +278,7 @@ export default init;
  */
 Drupal.behaviors.{{ CAMEL }}Inview = {
   attach(context) {
-    const elements = Array.from(context.querySelectorAll(SELECTOR)).concat(
-      typeof context.matches === 'function' && context.matches(SELECTOR)
-        ? [context]
-        : [],
-    );
+    const elements = get(context, SELECTOR);
 
     if (elements.length > 0) {
       const [lists, singular] = partition(elements, element =>
@@ -300,8 +297,7 @@ Drupal.behaviors.{{ CAMEL }}Inview = {
   },
   detach(context, settings, trigger) {
     if (trigger === 'unload') {
-      Array.from(context.querySelectorAll(SELECTOR))
-        .concat(context.matches(SELECTOR) ? [context] : [])
+      get(context, SELECTOR)
         .filter(element => {
           const handler = activeElements.get(element);
           return handler && typeof handler.detach === 'function';
