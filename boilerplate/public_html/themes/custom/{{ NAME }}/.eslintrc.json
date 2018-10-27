@@ -20,7 +20,7 @@
       {
         "devDependencies": [
           "./build/*.js",
-          "**/gulpfile.js",
+          "**/gulpfile.js/**/*.js",
           "**/postcss.config.js"
         ],
         "optionalDependencies": false

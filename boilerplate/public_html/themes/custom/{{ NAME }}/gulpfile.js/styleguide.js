@@ -1,6 +1,6 @@
 /**
  * @file
- * Builds KSS styleguide.
+ * Styleguide Gulp tasks.
  */
 
 const kss = require('kss');
@@ -9,6 +9,14 @@ const path = require('path');
 const { promisify } = require('util');
 
 const readDir = promisify(fs.readdir);
+
+// KSS config.
+const kssConfig = {
+  destination: './styleguide',
+  homepage: './README.md',
+  title: '{{ LABEL }} Styleguide',
+  source: './src/sass',
+};
 
 /**
  * The CSS directory that the styleguide generator will pull CSS from.
@@ -40,7 +48,13 @@ async function readDirFull(directory) {
   }
 }
 
-module.exports = async config => {
+/**
+ * Compiles the styleguide.
+ *
+ * @return {Promise}
+ *   A promise that resolves once the styleguide has been built.
+ */
+async function compileStyleguide() {
   // Get list of all files.
   const files = (await Promise.all([
     ...CSS_SUBDIRS.map(subdir => readDirFull(path.join(CSS_DIR, subdir))),
@@ -50,7 +64,11 @@ module.exports = async config => {
     // Reduce list to single level list.
     .reduce((list, fileGroup) => [...list, ...fileGroup], []);
 
-  const styleguideDestination = path.join(__dirname, '..', config.destination);
+  const styleguideDestination = path.join(
+    __dirname,
+    '..',
+    kssConfig.destination,
+  );
 
   if (!fs.existsSync(styleguideDestination)) {
     fs.mkdirSync(styleguideDestination);
@@ -72,6 +90,9 @@ module.exports = async config => {
   });
   stream.end();
 
-  config.css = './styles.css';
-  return kss(config);
-};
+  kssConfig.css = './styles.css';
+  return kss(kssConfig);
+}
+
+exports.kssConfig = kssConfig;
+exports.compileStyleguide = compileStyleguide;
