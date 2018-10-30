@@ -58,7 +58,7 @@ function watcher() {
   const webpackCompiler = webpack(webpackDevConfig);
 
   website.init({
-    proxy: 'hooes.local',
+    proxy: '{{ NAME }}.local',
     middleware: [
       webpackDevMiddleware(webpackCompiler, {
         stats: statsConfig,
