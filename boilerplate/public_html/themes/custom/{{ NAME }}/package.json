@@ -2,8 +2,7 @@
   "name": "{{ NAME }}",
   "scripts": {
     "prebuild": "npm run lint",
-    "build": "gulp clean&gulp build",
-    "build:styleguide": "gulp styleguide",
+    "build": "gulp build",
     "start": "gulp watch",
     "lint": "eslint --ignore-path .gitignore --ext .js,.vue .",
     "format": "prettier --write \"./**/*.js\" --ignore-path .gitignore&&eslint --fix --ignore-path .gitignore --ext .js,.vue .",
