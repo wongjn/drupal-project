@@ -40,7 +40,7 @@ function {{ NAME }}_css_alter(&$css) {
   );
 
   $browser_sync = \Drupal::service('settings')->get('browsersync');
-  $theme_path = drupal_get_path('theme', 'ambitions');
+  $theme_path = drupal_get_path('theme', '{{ NAME }}');
 
   foreach (array_keys($css) as $location) {
     // Group global libraries into their own group.
