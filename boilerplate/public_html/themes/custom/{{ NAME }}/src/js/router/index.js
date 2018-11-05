@@ -355,7 +355,7 @@ const Router = {
     // bigPipe placeholders in the route data meaning that these placeholder
     // would not get rendered again by bigPipe if the user ever navigated back
     // to this page via the history API.
-    if (!('bigPipePlaceholderIds' in drupalSettings)) {
+    if (!document.querySelector('[data-big-pipe-placeholder-id]')) {
       const initialRoute = Route.fromElements(document, { assetsLoaded: true });
       this.cache.set(`${pathname}:${searchParams}`, initialRoute);
     }
