@@ -122,7 +122,9 @@ export default class Route {
         bins.map(bin => [bin.getAttribute('area'), bin.innerHTML]),
       ),
       settings: settings || drupalSettings,
-      assets: Array.from(dom.querySelector('router-assets').children),
+      assets:
+        dom.querySelector('router-assets') &&
+        Array.from(dom.querySelector('router-assets').children),
       assetsLoaded,
     });
   }
@@ -146,14 +148,12 @@ export default class Route {
    * Loads assets to the top and bottom of the current DOM.
    */
   async loadAssets() {
-    if (this._assetsLoaded) {
-      return;
-    }
-
     window.drupalSettings = Object.assign(drupalSettings, this.settings);
 
-    await Promise.all(this.assets.map(this.constructor.injectAsset));
-    this._assetsLoaded = true;
+    if (this._assetsLoaded) {
+      await Promise.all(this.assets.map(this.constructor.injectAsset));
+      this._assetsLoaded = true;
+    }
   }
 
   /**
