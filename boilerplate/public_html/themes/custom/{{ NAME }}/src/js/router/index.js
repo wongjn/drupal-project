@@ -81,16 +81,6 @@ function isUnroutableURL({ host, pathname, hash } = {}) {
 
 const Router = {
   /**
-   * Returns the localStorage key for unroutable routes cache.
-   *
-   * @return {string}
-   *   The localStorage key for unroutable routes cache.
-   */
-  get unroutableRoutesStorageKey() {
-    return 'routerUnroutableRoutes';
-  },
-
-  /**
    * A list of URLs already navigated once.
    *
    * @var {Map}
@@ -143,14 +133,7 @@ const Router = {
     }
 
     const url = new URL(href);
-
     const cacheKey = `${url.pathname}:${url.searchParams}`;
-
-    // Route directly to unroutable path from cache:
-    if (this.unroutableRoutesCache.includes(cacheKey)) {
-      window.location.href = href;
-      return;
-    }
 
     const enteringLoaderPromise = setProgress('in');
 
@@ -352,19 +335,6 @@ const Router = {
   },
 
   /**
-   * Adds an unroutable URL to the cache.
-   *
-   * @param {string} url
-   *   The URL to add to the unroutable routes cache.
-   */
-  addUnroutableRoute(url) {
-    this.unroutableRoutesCache.push(url);
-
-    const data = JSON.stringify(this.unroutableRoutesCache);
-    localStorage.setItem(this.unroutableRoutesStorageKey, data);
-  },
-
-  /**
    * Sets initial route data and history state for the first page a user visits.
    */
   setIntialRoute() {
@@ -391,10 +361,6 @@ const Router = {
     }
   },
 };
-const localStorageUnroutables = localStorage.getItem(
-  Router.unroutableRoutesStorageKey,
-);
-Router.unroutableRoutesCache = JSON.parse(localStorageUnroutables) || [];
 Router.setIntialRoute();
 
 // Add popstate listener, for example when the browser back button is pressed
