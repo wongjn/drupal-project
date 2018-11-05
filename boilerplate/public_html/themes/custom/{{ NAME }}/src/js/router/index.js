@@ -11,14 +11,23 @@ import { ROUTED_EVENT } from './events';
 // Make body tag focusable for route navigation aftermath.
 document.body.tabIndex = '-1';
 
+const adminPaths = [
+  // Entity CRUD paths.
+  '((node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)',
+  // Entity add.
+  '(node|block)/add',
+  // Block editing.
+  'block/([0-9])',
+  // Admin section.
+  'admin/',
+  // User logout and plain 'user' path (cannot handle the redirection).
+  'user/logout|user$',
+];
+
 /**
  * Regex to match common administritive paths.
  */
-const ADMIN_PATH = new RegExp(
-  `^${
-  drupalSettings.path.baseUrl
-  }(((node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)|user/logout)$|admin/|node/add)`,
-);
+const ADMIN_PATH = new RegExp(`^${drupalSettings.path.baseUrl}(${adminPaths.join('|')})`);
 
 /**
  * Scrolls to the top of the page.
@@ -207,10 +216,8 @@ const Router = {
       return;
     }
 
-    // Load assets (JS and CSS) if not loaded before for the route.
-    if (!route.assets.loaded) {
-      await route.loadAssets();
-    }
+    // Load assets (JS and CSS).
+    await route.loadAssets();
 
     const scrollTo = url.hash && historyPushState ? url.hash : scrollPosition;
     this.contentEnter(route, { scrollTo });
@@ -360,20 +367,17 @@ const Router = {
    * Sets initial route data and history state for the first page a user visits.
    */
   setIntialRoute() {
-    const initialRoute = Route.fromElements(document);
-    initialRoute.assets.loaded = true;
-
-    const url = window.location.href;
+    const { href, pathname, searchParams } = window.location;
 
     // Set up landing state (would be null otherwise)
     window.history.replaceState(
       {
-        routeURL: url,
-        title: initialRoute.title,
+        routeURL: href,
+        title: window.title,
         scrollPosition: window.scrollY,
       },
-      initialRoute.title,
-      url,
+      window.title,
+      href,
     );
 
     // Do not set a cache entry if bigPipe exists. This is because we would save
@@ -381,11 +385,8 @@ const Router = {
     // would not get rendered again by bigPipe if the user ever navigated back
     // to this page via the history API.
     if (!('bigPipePlaceholderIds' in drupalSettings)) {
-      const urlObject = new URL(url);
-      this.cache.set(
-        `${urlObject.pathname}:${urlObject.searchParams}`,
-        initialRoute,
-      );
+      const initialRoute = Route.fromElements(document, { assetsLoaded: true });
+      this.cache.set(`${pathname}:${searchParams}`, initialRoute);
     }
   },
 };
