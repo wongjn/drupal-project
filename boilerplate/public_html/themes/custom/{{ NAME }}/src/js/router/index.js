@@ -25,9 +25,11 @@ const adminPaths = [
 ];
 
 /**
- * Regex to match common administritive paths.
+ * Regex to match common administrative paths.
  */
-const ADMIN_PATH = new RegExp(`^${drupalSettings.path.baseUrl}(${adminPaths.join('|')})`);
+const ADMIN_PATH = new RegExp(
+  `^${drupalSettings.path.baseUrl}(${adminPaths.join('|')})`,
+);
 
 /**
  * Scrolls to the top of the page.
