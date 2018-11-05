@@ -13,7 +13,7 @@ document.body.tabIndex = '-1';
 
 const adminPaths = [
   // Entity CRUD paths.
-  '((node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)',
+  '(node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)',
   // Entity add.
   '(node|block)/add',
   // Block editing.
