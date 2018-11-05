@@ -182,7 +182,7 @@ const Router = {
         const response = await fetch(fetchURL, { credentials: 'same-origin' });
 
         if (!response.ok) {
-          throw new Error('Network error.');
+          throw new Error('Network error or unroutable page.');
         }
 
         if (!response.headers.get('Content-Type').includes('text/html')) {
@@ -192,14 +192,12 @@ const Router = {
 
         const responseText = await response.text();
 
-        // Is a page not using the current Drupal theme:
-        if (responseText === '__INVALID_THEME__') {
-          this.addUnroutableRoute(cacheKey);
-          throw new Error('Redirecting to an unroutable page.');
-        }
-
         route = Route.fromDrupal(responseText);
       } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(error); // eslint-disable-line no-console
+        }
+        
         // Routing was not possible - send client to the href
         window.location.href = href;
         return;
