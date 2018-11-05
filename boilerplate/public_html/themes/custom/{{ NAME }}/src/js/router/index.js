@@ -128,7 +128,8 @@ const Router = {
     // Disable any browser auto scrolling (for forward/back history traversal)
     window.history.scrollRestoration = 'manual';
 
-    // If pushing, rewrite current state to add scroll position information
+    // If pushing a new state, rewrite current state to add scroll position
+    // information before new state gets added.
     if (historyPushState) {
       const { routeURL, title } = window.history.state;
       const overwrittenState = {
@@ -197,7 +198,7 @@ const Router = {
         if (process.env.NODE_ENV !== 'production') {
           console.error(error); // eslint-disable-line no-console
         }
-        
+
         // Routing was not possible - send client to the href
         window.location.href = href;
         return;
