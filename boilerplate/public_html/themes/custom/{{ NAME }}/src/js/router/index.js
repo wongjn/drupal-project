@@ -5,9 +5,6 @@
 
 import Router from './Router';
 import assetManager from './plugins/assetManager';
-import loader from './loader';
-
-document.body.insertAdjacentHTML('beforeend', loader);
 
 // Routable links.
 const linkSelectors = [
