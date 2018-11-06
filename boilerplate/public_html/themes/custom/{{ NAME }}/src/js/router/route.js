@@ -3,8 +3,6 @@
  * Contains the class for a Route used by the router.
  */
 
-import partition from 'lodash/partition';
-
 /**
  * Mark links as active.
  *
@@ -75,7 +73,7 @@ function writeActiveLinks(context, pathSettings) {
  */
 export default class Route {
   /**
-   * Creates a Route from a string of reponse HTML markup.
+   * Creates a Route from a string of response HTML markup.
    *
    * @param {string} domString
    *   The DOM string to parse.
@@ -92,10 +90,13 @@ export default class Route {
    *
    * @param {Node} dom
    *   The DOM object to parse a route from.
+   * @param {object} options
+   *   Options when creating the route object.
+   *
    * @return {Route}
    *   The route.
    */
-  static fromElements(dom) {
+  static fromElements(dom, { assetsLoaded = false } = {}) {
     // Get elements
     const bins = Array.from(dom.getElementsByTagName('router-content'));
 
@@ -111,33 +112,6 @@ export default class Route {
       settingsElement.parentElement.removeChild(settingsElement);
     }
 
-    const assets = [dom.head, dom.querySelector('router-assets')].map(
-      collection => {
-        if (collection && collection.children) {
-          const items = Array.from(collection.children);
-
-          // Split assets list into scripts and everything else
-          const [scripts, others] = partition(
-            items,
-            ({ tagName, src }) => tagName === 'SCRIPT' && src.length > 0,
-          );
-
-          // Remove title tag from loading assets
-          others.filter(({ tagName }) => tagName !== 'TITLE');
-
-          return {
-            scripts: scripts.map(({ src }) => src),
-            others: others.reduce(
-              (output, asset) => `${output}${asset.outerHTML}`,
-              '',
-            ),
-          };
-        }
-
-        return false;
-      },
-    );
-
     bins.forEach(bin => {
       writeActiveLinks(bin, settings.path || drupalSettings.path);
     });
@@ -148,7 +122,10 @@ export default class Route {
         bins.map(bin => [bin.getAttribute('area'), bin.innerHTML]),
       ),
       settings: settings || drupalSettings,
-      assets,
+      assets:
+        dom.querySelector('router-assets') &&
+        Array.from(dom.querySelector('router-assets').children),
+      assetsLoaded,
     });
   }
 
@@ -158,85 +135,50 @@ export default class Route {
    * @param {object} data
    *   Raw object data.
    */
-  constructor(data) {
-    this.title = data.title;
-    this.content = data.content;
-    this.settings = data.settings;
+  constructor({ title, content, settings, assets, assetsLoaded = false }) {
+    this.title = title;
+    this.content = content;
+    this.settings = settings;
+    this.assets = assets;
 
-    this.assets = {
-      top: data.assets[0] || false,
-      bottom: data.assets[1] || false,
-      loaded: false,
-    };
+    this._assetsLoaded = assetsLoaded;
   }
 
   /**
    * Loads assets to the top and bottom of the current DOM.
    */
   async loadAssets() {
-    const loadingPromises = [];
+    window.drupalSettings = Object.assign(drupalSettings, this.settings);
 
-    if (this.assets.top) {
-      loadingPromises.push(
-        ...this.constructor.insertAssets(
-          this.assets.top,
-          document.head,
-          this.settings,
-        ),
-      );
+    if (this._assetsLoaded) {
+      await Promise.all(this.assets.map(this.constructor.injectAsset));
+      this._assetsLoaded = true;
     }
-    if (this.assets.bottom) {
-      loadingPromises.push(
-        ...this.constructor.insertAssets(
-          this.assets.bottom,
-          document.body,
-          this.settings,
-        ),
-      );
-    }
-
-    // Wait for loading to be done
-    await Promise.all(loadingPromises);
-
-    this.assets.loaded = true;
   }
 
   /**
-   * Injects assets and scripts into the DOM.
+   * Injects an asset element into the DOM.
    *
-   * @param {object} assets
-   *   The collection of assets to load. There is a split between scripts and
-   *   "other" assets since scripts need to be loaded in a specfic way for them
-   *   to execute.
-   * @param {string[]} assets.scripts
-   *   URLs of scripts to load.
-   * @param {string} assets.others
-   *   Other assets to load, such as styles, link tags.
-   * @param {Element} location
-   *   The DOM element to load the assets into.
-   * @param {object} [settings={}]
-   *   (optional) New drupalSettings object from the loading route.
-   * @return {Promise[]}
-   *   A promise for each script included that resolves once it has loaded or
-   *   rejects if there was some kind of error.
+   * @param {HTMLElement} assetElement
+   *   The asset element node.
+   * @return {Promise}
+   *   A promise that resolves once it has loaded or rejects if there was some
+   *   kind of error.
    */
-  static insertAssets({ scripts = [], others = '' }, location, settings = {}) {
-    location.insertAdjacentHTML('beforeend', others);
+  static injectAsset(assetElement) {
+    if (assetElement.tagName === 'SCRIPT') {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.addEventListener('error', reject);
+        script.addEventListener('load', resolve);
+        script.async = false;
+        document.body.appendChild(script);
+        script.src = assetElement.src;
+      });
+    }
 
-    // Merge drupalSettings for scripts to read.
-    window.drupalSettings = Object.assign(drupalSettings, settings);
-
-    return scripts.map(
-      src =>
-        new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.addEventListener('error', reject);
-          script.addEventListener('load', resolve);
-          script.async = false;
-          location.appendChild(script);
-          script.src = src;
-        }),
-    );
+    document.body.appendChild(assetElement);
+    return Promise.resolve();
   }
 }
 Route.DOMParser = new DOMParser();

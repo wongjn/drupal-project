@@ -11,13 +11,24 @@ import { ROUTED_EVENT } from './events';
 // Make body tag focusable for route navigation aftermath.
 document.body.tabIndex = '-1';
 
+const adminPaths = [
+  // Entity CRUD paths.
+  '(node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)',
+  // Entity add.
+  '(node|block)/add',
+  // Block editing.
+  'block/([0-9])',
+  // Admin section.
+  'admin/',
+  // User logout and plain 'user' path (cannot handle the redirection).
+  'user/logout|user$',
+];
+
 /**
- * Regex to match common administritive paths.
+ * Regex to match common administrative paths.
  */
 const ADMIN_PATH = new RegExp(
-  `^${
-  drupalSettings.path.baseUrl
-  }(((node|taxonomy/term|user)/[0-9]+/(edit|revisions|delete)|user/logout)$|admin/|node/add)`,
+  `^${drupalSettings.path.baseUrl}(${adminPaths.join('|')})`,
 );
 
 /**
@@ -70,16 +81,6 @@ function isUnroutableURL({ host, pathname, hash } = {}) {
 
 const Router = {
   /**
-   * Returns the localStorage key for unroutable routes cache.
-   *
-   * @return {string}
-   *   The localStorage key for unroutable routes cache.
-   */
-  get unroutableRoutesStorageKey() {
-    return 'routerUnroutableRoutes';
-  },
-
-  /**
    * A list of URLs already navigated once.
    *
    * @var {Map}
@@ -119,7 +120,8 @@ const Router = {
     // Disable any browser auto scrolling (for forward/back history traversal)
     window.history.scrollRestoration = 'manual';
 
-    // If pushing, rewrite current state to add scroll position information
+    // If pushing a new state, rewrite current state to add scroll position
+    // information before new state gets added.
     if (historyPushState) {
       const { routeURL, title } = window.history.state;
       const overwrittenState = {
@@ -131,14 +133,7 @@ const Router = {
     }
 
     const url = new URL(href);
-
     const cacheKey = `${url.pathname}:${url.searchParams}`;
-
-    // Route directly to unroutable path from cache:
-    if (this.unroutableRoutesCache.includes(cacheKey)) {
-      window.location.href = href;
-      return;
-    }
 
     const enteringLoaderPromise = setProgress('in');
 
@@ -173,7 +168,7 @@ const Router = {
         const response = await fetch(fetchURL, { credentials: 'same-origin' });
 
         if (!response.ok) {
-          throw new Error('Network error.');
+          throw new Error('Network error or unroutable page.');
         }
 
         if (!response.headers.get('Content-Type').includes('text/html')) {
@@ -183,14 +178,12 @@ const Router = {
 
         const responseText = await response.text();
 
-        // Is a page not using the current Drupal theme:
-        if (responseText === '__INVALID_THEME__') {
-          this.addUnroutableRoute(cacheKey);
-          throw new Error('Redirecting to an unroutable page.');
-        }
-
         route = Route.fromDrupal(responseText);
       } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(error); // eslint-disable-line no-console
+        }
+
         // Routing was not possible - send client to the href
         window.location.href = href;
         return;
@@ -207,10 +200,8 @@ const Router = {
       return;
     }
 
-    // Load assets (JS and CSS) if not loaded before for the route.
-    if (!route.assets.loaded) {
-      await route.loadAssets();
-    }
+    // Load assets (JS and CSS).
+    await route.loadAssets();
 
     const scrollTo = url.hash && historyPushState ? url.hash : scrollPosition;
     this.contentEnter(route, { scrollTo });
@@ -344,55 +335,32 @@ const Router = {
   },
 
   /**
-   * Adds an unroutable URL to the cache.
-   *
-   * @param {string} url
-   *   The URL to add to the unroutable routes cache.
-   */
-  addUnroutableRoute(url) {
-    this.unroutableRoutesCache.push(url);
-
-    const data = JSON.stringify(this.unroutableRoutesCache);
-    localStorage.setItem(this.unroutableRoutesStorageKey, data);
-  },
-
-  /**
    * Sets initial route data and history state for the first page a user visits.
    */
   setIntialRoute() {
-    const initialRoute = Route.fromElements(document);
-    initialRoute.assets.loaded = true;
-
-    const url = window.location.href;
+    const { href, pathname, searchParams } = window.location;
 
     // Set up landing state (would be null otherwise)
     window.history.replaceState(
       {
-        routeURL: url,
-        title: initialRoute.title,
+        routeURL: href,
+        title: window.title,
         scrollPosition: window.scrollY,
       },
-      initialRoute.title,
-      url,
+      window.title,
+      href,
     );
 
     // Do not set a cache entry if bigPipe exists. This is because we would save
     // bigPipe placeholders in the route data meaning that these placeholder
     // would not get rendered again by bigPipe if the user ever navigated back
     // to this page via the history API.
-    if (!('bigPipePlaceholderIds' in drupalSettings)) {
-      const urlObject = new URL(url);
-      this.cache.set(
-        `${urlObject.pathname}:${urlObject.searchParams}`,
-        initialRoute,
-      );
+    if (!document.querySelector('[data-big-pipe-placeholder-id]')) {
+      const initialRoute = Route.fromElements(document, { assetsLoaded: true });
+      this.cache.set(`${pathname}:${searchParams}`, initialRoute);
     }
   },
 };
-const localStorageUnroutables = localStorage.getItem(
-  Router.unroutableRoutesStorageKey,
-);
-Router.unroutableRoutesCache = JSON.parse(localStorageUnroutables) || [];
 Router.setIntialRoute();
 
 // Add popstate listener, for example when the browser back button is pressed
