@@ -34,14 +34,14 @@ const MainMenuSubMenu = {
     ulProps() {
       return {
         class: [
-          'c-main-menu__sub-menu',
-          this.depth > 1 && 'c-main-menu__sub-menu--deep',
+          's-main-menu__sub-menu',
+          this.depth > 1 && 's-main-menu__sub-menu--deep',
           this.overflows && 'is-moved',
         ],
       };
     },
     linkClasses() {
-      return ['c-main-menu__link', 'c-main-menu__link--sub'];
+      return ['s-main-menu__link', 's-main-menu__link--sub'];
     },
     subMenuComponent() {
       return MainMenuSubMenu;

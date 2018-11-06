@@ -1,5 +1,5 @@
 <template>
-  <div class="c-main-menu">
+  <div class="s-main-menu">
     <MainMenuTopMenu
       :menu-tree="menuTree"
       @showdrawer="showDrawer = $event"
@@ -7,7 +7,7 @@
     <MainMenuDrawer
       v-show="showDrawer"
       :menu-tree="menuTree"
-      class="c-main-menu__drawer"
+      class="s-main-menu__drawer"
     />
   </div>
 </template>

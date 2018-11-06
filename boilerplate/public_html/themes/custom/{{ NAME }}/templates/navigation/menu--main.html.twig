@@ -22,14 +22,14 @@
 {% import _self as menus %}
 
 {% spaceless %}
-<div class="js-main-menu c-main-menu" data-menu="{{ menu_data }}">
+<div class="js-main-menu s-main-menu" data-menu="{{ menu_data }}">
   {#
     We call a macro which calls itself to render the full tree.
     @see http://twig.sensiolabs.org/doc/tags/macro.html
   #}
   {{ menus.menu_links(items, attributes, 0) }}
 </div>
-<noscript><style>.c-main-menu{height:auto}</style></noscript>
+<noscript><style>.s-main-menu{height:auto}</style></noscript>
 {% endspaceless %}
 
 {% macro menu_links(items, attributes, menu_level) %}
@@ -37,8 +37,8 @@
 
   {%
     set menu_classes = [
-      menu_level == 0 ? 'c-main-menu__top-menu' : 'c-main-menu__sub-menu',
-      menu_level > 1 ? 'c-main-menu__sub-menu--deep',
+      menu_level == 0 ? 's-main-menu__top-menu' : 's-main-menu__sub-menu',
+      menu_level > 1 ? 's-main-menu__sub-menu--deep',
     ]
   %}
 
@@ -49,8 +49,8 @@
         <li{{ item.attributes }}>
           {%
             set link_classes = [
-              'c-main-menu__link',
-              menu_level == 0 ? 'c-main-menu__link--top' : 'c-main-menu__link--sub',
+              's-main-menu__link',
+              menu_level == 0 ? 's-main-menu__link--top' : 's-main-menu__link--sub',
               item.in_active_trail ? 'is-active-trail',
             ]
           %}

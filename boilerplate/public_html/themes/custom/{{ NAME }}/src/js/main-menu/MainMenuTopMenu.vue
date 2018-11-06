@@ -37,12 +37,12 @@ export default {
       }
 
       return {
-        class: 'c-main-menu__top-menu',
+        class: 's-main-menu__top-menu',
         style,
       };
     },
     linkClasses() {
-      return ['c-main-menu__link', 'c-main-menu__link--top'];
+      return ['s-main-menu__link', 's-main-menu__link--top'];
     },
     subMenuComponent() {
       return MainMenuSubMenu;

@@ -9,7 +9,7 @@ import MainMenu from './MainMenu';
 /**
  * List of classes not needed in menu rendering props.
  */
-const FILTERED_CLASSES = ['js-main-menu', 'c-main-menu'];
+const FILTERED_CLASSES = ['js-main-menu', 's-main-menu'];
 
 /**
  * Loads the menus.
