@@ -123,7 +123,7 @@ async function load() {
   const url = `${pathname}${search}`;
 
   let assetsToLoad = [];
-  let settings = drupalSettings;
+  let settings = url in routeSettings ? routeSettings[url] : drupalSettings;
 
   if (!(url in routeSettings)) {
     ({ settings, assets: assetsToLoad } = getAssets(url));

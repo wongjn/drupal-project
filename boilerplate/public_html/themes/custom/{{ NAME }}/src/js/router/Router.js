@@ -54,7 +54,7 @@ export default class Router extends Swup {
     this.options.writeActiveLinks = drupalSettings.{{ CAMEL }}.writeActiveLinks;
     if (this.options.writeActiveLinks) {
       const elements = Array.from(document.querySelectorAll('[data-swup]'));
-      elements.forEach(writeActiveLinks);
+      elements.forEach(element => writeActiveLinks(element));
     }
   }
 
