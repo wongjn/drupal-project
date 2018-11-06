@@ -14,7 +14,6 @@ global:
       dist/css/objects/title.css: {}
       dist/css/components/drawer-menu.css: {}
       dist/css/components/main-menu.css: {}
-      dist/css/components/router.css: {}
       dist/css/components/text-body.css: {}
     theme:
       dist/css/theme.css: {}
