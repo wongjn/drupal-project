@@ -22,9 +22,9 @@ Drupal.behaviors.{{ CAMEL }}Menu = {
       const props = {
         menuTree: JSON.parse(el.dataset.menu),
       };
-      const classes = Array.from(el.classList.values()).filter(
-        name => !FILTERED_CLASSES.includes(name),
-      );
+      const classes = el.className
+        .split(' ')
+        .filter(name => !FILTERED_CLASSES.includes(name));
 
       /* eslint-disable no-new */
       new Vue({
