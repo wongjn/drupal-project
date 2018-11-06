@@ -16,7 +16,7 @@
   @if type-of($value) != number {
     $given-value: $value;
     $value: to-number($value);
-    @warn '#{$given-value} given as a #{type-of($given-value)}, converted to #{$value}';
+    @debug '#{$given-value} given as a #{type-of($given-value)}, converted to #{$value}';
   }
 
   @return if(unitless($value), $value, ($value / ($value * 0 + 1)));
@@ -75,7 +75,7 @@
   @if type-of($value) == 'number' {
     @return $value;
   } @else if type-of($value) != 'string' {
-    $_: log('Value for `to-number` should be a number or a string.');
+    @debug 'Value for `to-number` should be a number or a string.';
   }
 
   $result: 0;
@@ -120,7 +120,7 @@
   $units: ('px': 1px, 'cm': 1cm, 'mm': 1mm, '%': 1%, 'ch': 1ch, 'pc': 1pc, 'in': 1in, 'em': 1em, 'rem': 1rem, 'pt': 1pt, 'ex': 1ex, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax);
 
   @if not index(map-keys($units), $unit) {
-    $_: log('Invalid unit `#{$unit}`.');
+    @debug 'Invalid unit `#{$unit}`.';
   }
 
   @return $value * map-get($units, $unit);
