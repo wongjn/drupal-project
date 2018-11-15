@@ -20,11 +20,15 @@
  *   - `vmin`: to *gate* when viewport height and width is more than 980px
  *   - `Xvw`: to *gate* when viewport width is more than Xpx
  *   - `Xvh`: to *gate* when viewport height is more than Xpx
+ * @param {number} $from [0]
+ *   The minimum breakpoint at which the value should start scaling. The
+ *   viewport dimension is assumed from $at. This value has no effect if $at is
+ *   'vmin'.
  *
  * @output Property declaration for scaling value and media query for maximum
  *   value.
  */
-@mixin viewport-scale($property, $max-values, $min-value: 0, $at: 'vmin') {
+@mixin viewport-scale($property, $max-values, $min-value: 0, $at: 'vmin', $from: 0) {
   $deprecated: if(
     typeof($max-values) == number,
     if(unit($max-values) == 'vw' or unit($max-values) == 'vh', true, false),
@@ -49,31 +53,38 @@
   $min-value-unitless: strip-unit(if(unit($min-value) == 'rem', rem-to-px($min-value), $min-value));
 
   $scalers: ();
-  $media-query: null;
+  $media-query-max: null;
+  $media-query-scale: null;
 
   // Vmin special case
   @if $at == 'vmin' {
     @each $max-value-unitless in $max-values-unitless {
-      $scalers: append($scalers, (($max-value-unitless - $min-value-unitless) / 9.8 * 1vmin));
+      // $scalers: append($scalers, (($max-value-unitless - $min-value-unitless) / 9.8 * 1vmin));
+      $scalers: append(
+        $scalers,
+        '(#{$max-value-unitless - $min-value-unitless} * (100vmin / 980))'
+      );
     }
 
-    $media-query: '(orientation: portrait) and (min-width: 980px), (orientation: landscape) and (min-height: 980px)';
+    $media-query-max: '(orientation: portrait) and (min-width: 980px), (orientation: landscape) and (min-height: 980px)';
   }
   // Specified dimension
   @else if unit($at) == 'vw' or unit($at) == 'vh' {
-    $viewport-gate-length: strip-unit($at);
+    $viewport-max: strip-unit($at);
+    $divisor: 1 / ($viewport-max - $from);
+
     @each $max-value-unitless in $max-values-unitless {
       $scalers: append(
         $scalers,
-        ((($max-value-unitless - $min-value-unitless) / ($viewport-gate-length / 100))) * 1#{unit($at)}
+        '(#{$max-value-unitless - $min-value-unitless} * (#{100 * $divisor}#{unit($at)} - #{$from * 1px * $divisor}))'
       );
     }
 
     // Determine media query from unit
-    @if unit($at) == 'vw' {
-      $media-query: '(min-width: #{strip-unit($at)}px)';
-    } @else {
-      $media-query: '(min-height: #{strip-unit($at)}px)';
+    $min-dimension: if(unit($at) == 'vw', 'width', 'height');
+    $media-query-max: '(min-#{$min-dimension}: #{strip-unit($at)}px)';
+    @if ($from > 0) {
+      $media-query-scale: '(min-#{$min-dimension}: #{$from}px)';
     }
   }
   // Invalid unit for $at
@@ -84,19 +95,22 @@
   // Scaling output
   $calcs: ();
   @each $scaler in $scalers {
-    $value: if(strip-unit($scaler) == 0,
-      $min-value,
-      if($min-value == 0,
-        $scaler,
-        calc(#{$min-value} + #{$scaler})
-      )
-    );
-    $calcs: append($calcs, $value);
+    $calcs: append($calcs, calc(#{$min-value} + #{$scaler}));
   }
-  #{$property}: $calcs;
+
+  @if ($from > 0) {
+    #{$property}: $min-value;
+
+    @media #{$media-query-scale} {
+      #{$property}: $calcs;
+    }
+  }
+  @else {
+    #{$property}: $calcs;
+  }
 
   // Gated maximum output
-  @media #{$media-query} {
+  @media #{$media-query-max} {
     #{$property}: $max-values;
   }
 }
