@@ -233,14 +233,10 @@ function {{ NAME }}_element_info_alter(array &$info) {
 
 /**
  * Pre-render callback to wrap processed text.
- *
- * Adds '#variants' as a key to specify a BEM variant name to wrapper text body
- * class component.
  */
 function {{ NAME }}_processed_text_pre_render($element) {
-  $element['#theme_wrappers']['container'] = [
-    '#attributes' => ['class' => ['c-text-body']],
-  ];
+  $element['#theme_wrappers'][] = 'container';
+  $element['#attributes']['class'][] = 'c-text-body';
 
   return $element;
 }
