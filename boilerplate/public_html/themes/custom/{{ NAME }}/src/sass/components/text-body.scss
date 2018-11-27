@@ -6,7 +6,15 @@
 @import '../system';
 
 .c-text-body {
+  @include text-crop('FONT-NAME', $LINE-HEIGHT);
   $block-spacing: $LINE-HEIGHT * 1rem;
+
+  &--no-text-crop {
+    &::before,
+    &::after {
+      margin: 0;
+    }
+  }
 
   // Clearfix
   &::after {
