@@ -43,6 +43,13 @@ const activeElements = new WeakMap();
 const observedElements = new WeakSet();
 
 /**
+ * Is initial load (when JS is first run).
+ *
+ * @type {bool}
+ */
+let firstLoad = true;
+
+/**
  * Loadable state manager for InView.
  *
  * @prop {HTMLElement} element
@@ -251,7 +258,7 @@ class Collection {
 export const { LOAD_EVENT_NAME } = Collection;
 
 /**
- * Initialises in-view loading for a set of elements.
+ * Initializes in-view loading for a set of elements.
  *
  * @param {HTMLElement[]} elements
  *   The elements to manage.
@@ -264,6 +271,19 @@ export const { LOAD_EVENT_NAME } = Collection;
  */
 function init(elements, threshold = 0.2) {
   if ('IntersectionObserver' in window) {
+    if (firstLoad) {
+      const { innerHeight: windowHeight } = window;
+
+      // Skip in-view loading of elements already in-view for jank-free
+      // experience due to elements already being visible before JS has been
+      // executed.
+      const invisibles = elements.filter(element => {
+        const { top, height } = element.getBoundingClientRect();
+        return top > windowHeight || top < height * -1;
+      });
+      return new Collection(invisibles, threshold);
+    }
+
     return new Collection(elements, threshold);
   }
 
@@ -294,6 +314,8 @@ Drupal.behaviors.{{ CAMEL }}Inview = {
 
       singular.forEach(ele => activeElements.set(ele, init([ele], 0)));
     }
+
+    firstLoad = false;
   },
   detach(context, settings, trigger) {
     if (trigger === 'unload') {
