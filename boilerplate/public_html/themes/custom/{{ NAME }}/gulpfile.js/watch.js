@@ -71,9 +71,7 @@ function watcher() {
   });
 
   styleguide.init({
-    server: {
-      baseDir: kssConfig.destination,
-    },
+    server: [kssConfig.destination, './'],
     port: 5000,
     ui: false,
     ghostMode: false,
