@@ -11,30 +11,20 @@ import MainMenu from './MainMenu';
  */
 const FILTERED_CLASSES = ['js-main-menu', 's-main-menu'];
 
-/**
- * Loads the menus.
- *
- * @type {Drupal~behavior}
- */
-Drupal.behaviors.{{ CAMEL }}Menu = {
-  attach(context) {
-    Array.from(context.querySelectorAll('.js-main-menu')).forEach(el => {
-      const props = {
-        menuTree: JSON.parse(el.dataset.menu),
-      };
-      const classes = el.className
-        .split(' ')
-        .filter(name => !FILTERED_CLASSES.includes(name));
-
-      /* eslint-disable no-new */
-      new Vue({
-        el,
-        components: {
-          MainMenu,
-        },
-        template: '<MainMenu :menu-tree="menuTree" />',
-        render: h => h(MainMenu, { props, class: classes }),
-      });
-    });
-  },
+const el = context.querySelector('.js-main-menu');
+const props = {
+  menuTree: JSON.parse(el.dataset.menu),
 };
+const classes = el.className
+  .split(' ')
+  .filter(name => !FILTERED_CLASSES.includes(name));
+
+/* eslint-disable no-new */
+new Vue({
+  el,
+  components: {
+    MainMenu,
+  },
+  template: '<MainMenu :menu-tree="menuTree" />',
+  render: h => h(MainMenu, { props, class: classes }),
+});
