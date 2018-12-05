@@ -1,0 +1,21 @@
+/**
+ * @file
+ * File browser UI modifications.
+ */
+
+.entities-list {
+  table-layout: auto;
+  border: 1px solid #e6e4df;
+}
+
+.entities-list thead {
+  border: 1px solid #bfbfba;
+}
+
+.entities-list[class][class] td {
+  padding: 5px;
+}
+
+.entities-list[class] td:empty {
+  padding: 0;
+}
