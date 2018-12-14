@@ -279,7 +279,13 @@ function init(elements, threshold = 0.2) {
       // executed.
       const invisibles = elements.filter(element => {
         const { top, height } = element.getBoundingClientRect();
-        return top > windowHeight || top < height * -1;
+        const outside = top > windowHeight || top < height * -1;
+
+        if (!outside) {
+          element.classList.add(Loadable.LOADED_CLASSNAME);
+        }
+
+        return outside;
       });
       return new Collection(invisibles, threshold);
     }
