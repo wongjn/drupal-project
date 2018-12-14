@@ -73,7 +73,7 @@ export default {
      * @param {CustomEvent} event
      *   The routing event object.
      */
-    onRouted({ details: drupalPath }) {
+    onRouted({ detail: drupalPath }) {
       this.processMenuTree(drupalPath);
     },
     /**

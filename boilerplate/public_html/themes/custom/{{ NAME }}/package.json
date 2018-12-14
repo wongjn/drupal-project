@@ -28,7 +28,6 @@
     "regenerator-runtime": "^0.11.1",
     "resize-observer-polyfill": "^1.5.0",
     "svg4everybody": "^2.1.8",
-    "swup": "^1.7.9",
     "vue": "^2.5.17"
   },
   "devDependencies": {

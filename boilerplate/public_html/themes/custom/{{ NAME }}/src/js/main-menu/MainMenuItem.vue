@@ -149,8 +149,7 @@ export default {
      *
      * @see this.mounted()
      */
-    onRouted({ detail }) {
-      this.path = detail;
+    onRouted() {
       this.submenuOpen = false;
     },
     /**
