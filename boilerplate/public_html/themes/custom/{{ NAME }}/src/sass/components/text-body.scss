@@ -61,7 +61,8 @@
   }
 
   img {
-    display: inline-block;
+    vertical-align: baseline;
+    vertical-align: unset;
   }
 
   a {

@@ -11,8 +11,10 @@ video {
 }
 
 img,
-svg {
-  display: block;
+svg,
+iframe {
+  // Remove bottom whitespace.
+  vertical-align: top;
 }
 
 // Default fill colour of inline SVGs to be same as text colour.
