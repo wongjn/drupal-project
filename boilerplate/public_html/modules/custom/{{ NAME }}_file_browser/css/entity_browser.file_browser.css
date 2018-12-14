@@ -19,3 +19,7 @@
 .entities-list[class] td:empty {
   padding: 0;
 }
+
+.field--widget-entity-browser-file .button[id*="entity-browser-entity-browser-open"] {
+  margin-left: 0;
+}
