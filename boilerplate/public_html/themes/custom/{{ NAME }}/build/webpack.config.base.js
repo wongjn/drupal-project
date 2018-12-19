@@ -5,7 +5,6 @@
 
 const path = require('path');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
   entry: ['regenerator-runtime/runtime', path.resolve(__dirname, '../src/js')],
@@ -18,21 +17,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-      },
-      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: 'babel-loader',
       },
     ],
   },
-  resolve: {
-    alias: {
-      vue$: 'vue/dist/vue.esm.js',
-    },
-    extensions: ['.js', '.json', '.vue'],
-  },
-  plugins: [new LodashModuleReplacementPlugin(), new VueLoaderPlugin()],
+  plugins: [new LodashModuleReplacementPlugin()],
 };

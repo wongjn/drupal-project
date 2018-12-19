@@ -22,7 +22,7 @@
 {% import _self as menus %}
 
 {% spaceless %}
-<div class="js-main-menu s-main-menu" data-menu="{{ menu_data }}">
+<div class="js-main-menu s-main-menu">
   {#
     We call a macro which calls itself to render the full tree.
     @see http://twig.sensiolabs.org/doc/tags/macro.html
@@ -37,6 +37,7 @@
 
   {%
     set menu_classes = [
+      menu_level == 0 ? 'js-main-menu__menu',
       menu_level == 0 ? 's-main-menu__top-menu' : 's-main-menu__sub-menu',
       menu_level > 1 ? 's-main-menu__sub-menu--deep',
     ]

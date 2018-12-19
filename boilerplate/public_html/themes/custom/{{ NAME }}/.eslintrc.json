@@ -1,20 +1,9 @@
 {
-  "extends": [
-    "plugin:vue/recommended",
-    "../../../.eslintrc.json"
-  ],
+  "parser": "babel-eslint",
   "parserOptions": {
-    "parser": "babel-eslint",
     "ecmaVersion": 2017
   },
   "rules": {
-    "import/extensions": [
-      2,
-      "ignorePackages",
-      {
-        "vue": "never"
-      }
-    ],
     "import/no-extraneous-dependencies": [
       2,
       {
@@ -31,7 +20,9 @@
   },
   "overrides": [
     {
-      "files": ["**/*.js"],
+      "files": [
+        "**/*.js"
+      ],
       "rules": {
         "//": "False error reporting for Drupal.behavior context parameter.",
         "react/destructuring-assignment": 0
