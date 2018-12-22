@@ -314,8 +314,13 @@ $border-radius: 4px;
   }
 
   // 1. Fix for Add file text not showing on upload button.
+  // 2. Normalizes layout of text in FF (this element affects block flow even
+  //    though it is positioned absolutely).
   .imce-uq-input {
+    left: 0; // 2
     margin: 0; // 1
+    padding: 0; // 2
+    width: 100%; // 2
     cursor: pointer;
   }
 
