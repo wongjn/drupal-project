@@ -217,6 +217,10 @@ $border-radius: 4px;
   border-bottom: 0; // 1
   padding: 0.4rem;
 
+  &.folder {
+    color: #666;
+  }
+
   .imce-folder-content & {
     border-radius: $border-radius;
 
@@ -248,6 +252,10 @@ $border-radius: 4px;
 
 .imce-item-icon {
   order: 99;
+
+  .folder > &::before {
+    color: currentColor;
+}
 }
 
 .imce-item-name {
