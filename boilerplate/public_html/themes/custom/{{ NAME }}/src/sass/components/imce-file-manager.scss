@@ -255,7 +255,7 @@ $border-radius: 4px;
 
   .folder > &::before {
     color: currentColor;
-}
+  }
 }
 
 .imce-item-name {
@@ -372,4 +372,30 @@ $border-radius: 4px;
       outline: 0;
     }
   }
+}
+
+// Upload queue.
+.imce-uq-items {
+  margin-top: 0;
+}
+
+// Item in the upload queue.
+.imce-uqi {
+  margin: 1em 0 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+// Progress bar.
+.imce-uqi-progress {
+  box-shadow: none;
+  border: 0;
+  margin-top: 3px;
+}
+
+// Progress bar active progress.
+.imce-uqi-bar {
+  box-shadow: none;
+  background: $accent;
 }
