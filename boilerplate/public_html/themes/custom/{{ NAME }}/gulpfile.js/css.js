@@ -4,7 +4,6 @@
  */
 
 const { src, dest } = require('gulp');
-const sourcemaps = require('gulp-sourcemaps');
 const cached = require('gulp-cached');
 const sassInheritance = require('gulp-sass-inheritance');
 const sass = require('gulp-sass');
@@ -22,14 +21,13 @@ const sassSrc = './src/sass/**/*.scss';
 function compileSass() {
   const base = 'src/sass';
 
-  return src(sassSrc, { base })
+  return src(sassSrc, { base, sourcemaps: true })
     .pipe(sourcemaps.init())
     .pipe(cached('sass'))
     .pipe(sassInheritance({ dir: base }))
     .pipe(sass().on('error', sass.logError))
     .pipe(postcss())
-    .pipe(sourcemaps.write('.'))
-    .pipe(dest('dist/css'));
+    .pipe(dest('dist/css', { sourcemaps: '.' }));
 }
 
 exports.sassSrc = sassSrc;
