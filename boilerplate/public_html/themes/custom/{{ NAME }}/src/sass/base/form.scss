@@ -5,20 +5,16 @@
 
 @import '../system';
 
-$form: (
-  color-default: #999,
-  color-active: salmon,
-  font-size: 18,
-  height: 45,
-  line-height: 1.2,
-);
-$form: map-merge($form, (
-  padding: ((map-get($form, height) -  (map-get($form, font-size)) * 1px * map-get($form, line-height)) / 2))
-);
+$form-color-default: #999;
+$form-color-active: salmon;
+$form-font-size: 18;
+$form-height: 45;
+$form-line-height: 1.2;
+$form-padding: ($form-height - ($form-font-size * 1px * $form-line-height)) / 2;
 
 :root {
-  --form-inactive-colour: #{map-get($form, color-default)};
-  --form-active-colour: #{map-get($form, color-active)};
+  --form-inactive-colour: #{$form-color-default};
+  --form-active-colour: #{$form-color-active};
 }
 
 label,
@@ -31,39 +27,38 @@ input,
 textarea,
 select {
   transition: border-color 250ms, box-shadow 250ms;
-  border: 1px solid map-get($form, color-default);
+  border: 1px solid $form-color-default;
   border-color: var(--form-inactive-colour);
   background-color: transparent;
   font: inherit;
-  line-height: map-get($form, line-height);
+  line-height: $form-line-height;
   color: inherit;
-  @include font-size(map-get($form, font-size));
+  @include font-size($form-font-size);
   -webkit-appearance: none;
   appearance: none;
 
   &:focus {
     outline: 0;
-    border-color: map-get($form, color-active);
+    border-color: $form-color-active;
     border-color: var(--form-active-colour);
-    box-shadow: 0 0 0 1px map-get($form, color-active);
+    box-shadow: 0 0 0 1px $form-color-active;
     box-shadow: 0 0 0 1px var(--form-active-colour);
   }
 }
 
 input,
 textarea {
-  padding: map-get($form, padding);
+  padding: $form-padding;
 }
 
 input,
 select,
 [type="submit"] {
-  height: (map-get($form, height) * 1em / map-get($form, font-size));
+  height: ($form-height * 1em / $form-font-size);
 }
 
 textarea {
   resize: vertical;
-  font: inherit;
 }
 
 select {
@@ -86,6 +81,7 @@ button {
   padding: 0;
   background-color: transparent;
   color: inherit;
+  font: inherit;
   cursor: pointer;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -103,13 +99,13 @@ button:disabled {
 // For submit-type `input` form elements
 [type="submit"],
 [type="button"] {
-  border: 1px solid map-get($form, color-active);
+  border: 1px solid $form-color-active;
   border-color: var(--form-active-colour);
   padding:
-    (map-get($form, padding) * 0.9)
-    map-get($form, padding)
-    (map-get($form, padding) * 1.1);
-  background-color: map-get($form, color-active);
+    ($form-padding * 0.9)
+    $form-padding
+    ($form-padding * 1.1);
+  background-color: $form-color-active;
   background-color: var(--form-active-colour);
   color: #fff;
   cursor: pointer;
@@ -118,7 +114,7 @@ button:disabled {
   &:hover,
   &:focus {
     background-color: transparent;
-    color: map-get($form, color-active);
+    color: $form-color-active;
     color: var(--form-active-colour);
   }
 
