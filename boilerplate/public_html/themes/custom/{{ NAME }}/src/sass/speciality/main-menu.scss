@@ -23,6 +23,10 @@
   line-height: 1;
   text-transform: uppercase;
 
+  &.is-menu-loading {
+    overflow: hidden;
+  }
+
   &__link {
     display: block;
     padding: $y-padding $x-padding;
