@@ -1,6 +1,6 @@
 /**
  * @file
- * Styleguide Gulp tasks.
+ * Watching Gulp tasks.
  */
 
 const { series, watch } = require('gulp');

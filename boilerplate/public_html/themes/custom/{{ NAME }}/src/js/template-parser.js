@@ -12,7 +12,7 @@ const domParser = new DOMParser();
  * element in the return array keyed by the attribute value.
  *
  * @example
- * const [root, { title, content }] = this._templateParse(`
+ * const [root, { title, content }] = templateParse(`
  *  <div class="root">
  *    <h1 ref="title">Title</h1>
  *    <p ref="content">…</p>

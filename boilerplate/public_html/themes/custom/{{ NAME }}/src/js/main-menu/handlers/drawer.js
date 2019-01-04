@@ -189,8 +189,8 @@ export default class Drawer {
   /**
    * Creates the drawer element.
    *
-   * @param {string} menu
-   *   The drawer menu HTML markup as a string.
+   * @param {HTMLUListElement} menu
+   *   The top-level main menu element.
    */
   _createDrawer(menu) {
     const [drawer, refs] = templateParse(`
