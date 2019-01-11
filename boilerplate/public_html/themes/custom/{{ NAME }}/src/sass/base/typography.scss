@@ -47,6 +47,12 @@ a {
   }
 }
 
+// Remove focus outline on main content link anchor due to Firefox rendering an
+// outline when focused via the JavaScript router.
+#main-content:focus {
+  outline: 0;
+}
+
 * {
   margin: 0;
 }
