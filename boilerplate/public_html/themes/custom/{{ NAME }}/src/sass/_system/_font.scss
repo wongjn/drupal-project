@@ -91,15 +91,8 @@ $LINE-HEIGHT: (24 / $FONT-SIZE);
 @mixin text-crop($font-family, $line-height: 1.3, $top-adjustment: 0px, $bottom-adjustment: 0px) {
   $top-crop: 0;
   $bottom-crop: 0;
-  $crop-font-size: 0;
-  $crop-line-height: 0;
-
-  @if ($font-family == 'FONT') {
-    $top-crop: 10;
-    $bottom-crop: 9;
-    $crop-font-size: 24;
-    $crop-line-height: 1.5;
-  }
+  $crop-font-size: 24;
+  $crop-line-height: 1.5;
 
   // Apply values to calculate em-based margins that work with any font size
   $dynamic-top-crop: max(($top-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size;
