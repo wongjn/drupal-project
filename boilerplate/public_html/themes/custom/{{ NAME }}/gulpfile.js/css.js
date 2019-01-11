@@ -22,7 +22,6 @@ function compileSass() {
   const base = 'src/sass';
 
   return src(sassSrc, { base, sourcemaps: true })
-    .pipe(sourcemaps.init())
     .pipe(cached('sass'))
     .pipe(sassInheritance({ dir: base }))
     .pipe(sass().on('error', sass.logError))
