@@ -34,11 +34,13 @@ const ADMIN_PATH = new RegExp(
  * @return {bool}
  *   Returns true if not routable.
  */
-function isUnroutable({ href, host, pathname }) {
+function isUnroutable({ href, host, pathname, protocol }) {
   return (
     !href ||
     // Is external.
     (host && host !== window.location.host) ||
+    // Is not a page link.
+    protocol.indexOf('http') !== 0 ||
     // Is known admin page.
     ADMIN_PATH.test(pathname) ||
     // Is probably a file if last component in path has a dot.
