@@ -47,8 +47,15 @@ select {
 }
 
 input,
+select,
 textarea {
-  padding: $form-padding;
+  padding: 0 ($form-height-rem * 0.667);
+}
+
+input,
+select,
+[type="submit"] {
+  height: $form-height-rem;
 }
 
 input,
@@ -58,6 +65,8 @@ select,
 }
 
 textarea {
+  padding-top: $form-padding;
+  padding-bottom: $form-padding;
   resize: vertical;
 }
 
