@@ -28,6 +28,7 @@ export default class ParentTap {
 
   onRouted() {
     if (this._openParent) this._openParent.classList.remove('is-open');
+    this._openParent = null;
   }
 
   onDestroy() {
@@ -57,6 +58,7 @@ export default class ParentTap {
     // Not tap in menu, close any open parent and return.
     if (!this.menu.contains(event.target) || !li) {
       if (this._openParent) this._openParent.classList.remove('is-open');
+      this._openParent = null;
       return;
     }
 
