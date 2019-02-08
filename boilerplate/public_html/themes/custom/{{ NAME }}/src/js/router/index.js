@@ -8,6 +8,6 @@
  */
 const initialPage = document.documentElement.outerHTML;
 
-import(/* webpackPrefetch: true, webpackChunkName: "router-main" */ './init').then(
+import(/* webpackPrefetch: true, webpackChunkName: "entry-async" */ './init').then(
   ({ default: init }) => init(initialPage),
 );

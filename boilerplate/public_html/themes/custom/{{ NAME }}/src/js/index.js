@@ -4,11 +4,10 @@
  */
 
 import SVG4Everybody from 'svg4everybody';
+import './router/';
 import './in-view';
 import './main-menu/';
 import { asyncAttach } from './AsyncBehavior';
-
-import(/* webpackPrefetch: true, webpackChunkName: 'entry-async' */ './router/');
 
 /**
  * Polyfills external-use SVG elements.
