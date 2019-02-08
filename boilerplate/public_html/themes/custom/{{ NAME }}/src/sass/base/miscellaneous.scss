@@ -31,3 +31,9 @@ main,
 summary {
   display: block;
 }
+
+// Fixes bug in Chrome whereby the element can still take up space.
+.visually-hidden {
+  margin-left: -1px;
+  margin-top: -1px;
+}

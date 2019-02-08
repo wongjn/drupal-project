@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 6Dw8OWCJiJtO3QsI1hpo_kONGmLmEZLhNd5CwuP5Nsk
+name: 'Full HTML'
+format: full_html
+weight: -10
+filters:
+  filter_html:
+    id: filter_html
+    provider: filter
+    status: true
+    weight: -10
+    settings:
+      allowed_html: '<a href target rel> <em> <strong> <ul type> <ol start type> <li> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <hr> <br> <p class=" text-align-left text-align-center text-align-right c-text-body__emphasize">'
+      filter_html_help: true
+      filter_html_nofollow: false
+  filter_align:
+    id: filter_align
+    provider: filter
+    status: true
+    weight: 0
+    settings: {  }
+  filter_htmlcorrector:
+    id: filter_htmlcorrector
+    provider: filter
+    status: true
+    weight: 10
+    settings: {  }

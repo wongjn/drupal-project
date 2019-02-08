@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: I0sHX977XURMkI90V_NHXO8QDnAdhWlrpW1eIj7h2Uk
+id: admin
+label: Admin
+description: 'Configuration for site administrators'
+conf:
+  extensions: '*'
+  maxsize: !!float 0
+  quota: !!float 0
+  maxwidth: 0
+  maxheight: 0
+  replace: 0
+  folders:
+    -
+      path: .
+      permissions:
+        all: true

@@ -1,0 +1,6 @@
+user_default_enabled: false
+flood:
+  limit: 5
+  interval: 3600
+_core:
+  default_config_hash: 5TsGmV4eSeR_ToD166CDemY-3FWHWa5w2sTTtX6gfcI

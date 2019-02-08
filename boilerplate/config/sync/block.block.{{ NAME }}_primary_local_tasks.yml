@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  theme:
+    - {{ NAME }}
+_core:
+  default_config_hash: bSM9E_TlnbYstP1A1zsvcjb_7nhNGir0lbnXfz1sbIE
+id: {{ NAME }}_primary_local_tasks
+theme: {{ NAME }}
+region: content
+weight: -8
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Primary tabs'
+  provider: core
+  label_display: '0'
+  primary: true
+  secondary: false
+visibility: {  }

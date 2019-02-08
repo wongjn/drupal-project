@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: EkoKuHnBZ0spwzSR9WmR4XbDp5pGJxZZ2eoLXV4L__4
+id: editor
+label: Editor
+weight: 2
+is_admin: null
+permissions:
+  - 'access administration pages'
+  - 'access browse_files entity browser pages'
+  - 'access browse_files_modal entity browser pages'
+  - 'access content'
+  - 'access content overview'
+  - 'access contextual links'
+  - 'access in-place editing'
+  - 'administer footer menu items'
+  - 'administer main menu items'
+  - 'administer nodes'
+  - 'create page content'
+  - 'create url aliases'
+  - 'delete all revisions'
+  - 'delete any page content'
+  - 'dropzone upload files'
+  - 'edit any page content'
+  - 'revert all revisions'
+  - 'use text format full_html'
+  - 'view all revisions'
+  - 'view own unpublished content'

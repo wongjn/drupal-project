@@ -1,0 +1,14 @@
+favicon:
+  mimetype: image/vnd.microsoft.icon
+  path: themes/custom/{{ NAME }}/favicons/favicon.ico
+  use_default: false
+logo:
+  path: themes/custom/{{ NAME }}/logo.svg
+  use_default: false
+features:
+  node_user_picture: false
+  comment_user_picture: false
+  comment_user_verification: false
+  favicon: true
+_core:
+  default_config_hash: Tp6U8ORURkSawJl_8dTjXc-KOshK8qMpA3WnpqzhoJQ

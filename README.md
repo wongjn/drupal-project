@@ -30,7 +30,7 @@ Install Drupal with drush:
 
 ```
 cd some-dir/public_html
-../vendor/bin/drush" site-install some_dir_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="Site Install"
+../vendor/bin/drush site-install minimal --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --config-dir=../config/dir
 ```
 
 With `composer require ...` you can download new dependencies to your

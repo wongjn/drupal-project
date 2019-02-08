@@ -1,4 +1,0 @@
-user_default_enabled: false
-flood:
-  limit: 5
-  interval: 3600

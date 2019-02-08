@@ -1,0 +1,9 @@
+abs_urls: false
+roles_profiles:
+  editor:
+    public: editor
+  administrator:
+    public: admin
+    private: admin
+_core:
+  default_config_hash: 91NwAdu7Ie5kV4f3TIsGgC9z2eVeWckMTMifnfcJavY

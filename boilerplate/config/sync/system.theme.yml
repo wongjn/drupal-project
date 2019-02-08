@@ -1,0 +1,4 @@
+admin: seven
+default: {{ NAME }}
+_core:
+  default_config_hash: __aG92V6-zqhNV2VB5RLysgbHB9Fu8Rdj1kqUlCl9-I
