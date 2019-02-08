@@ -7,7 +7,7 @@ const path = require('path');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports = {
-  entry: ['regenerator-runtime/runtime', path.resolve(__dirname, '../src/js')],
+  entry: [path.resolve(__dirname, '../src/js')],
   output: {
     filename: '[name].js',
     chunkFilename: '[chunkhash].js',

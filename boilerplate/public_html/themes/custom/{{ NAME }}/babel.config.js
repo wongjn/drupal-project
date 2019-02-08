@@ -3,6 +3,15 @@ module.exports = api => {
 
   return {
     presets: [['@babel/preset-env', { loose: true, modules: false }]],
-    plugins: ['lodash', '@babel/plugin-syntax-dynamic-import'],
+    plugins: [
+      'lodash',
+      '@babel/plugin-syntax-dynamic-import',
+      [
+        '@babel/plugin-transform-runtime',
+        {
+          useESModules: true,
+        },
+      ],
+    ],
   };
 };
