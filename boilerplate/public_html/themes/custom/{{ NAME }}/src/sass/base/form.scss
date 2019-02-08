@@ -9,6 +9,7 @@ $form-color-default: #999;
 $form-color-active: salmon;
 $form-font-size: 18;
 $form-height: 45;
+$form-height-rem: $form-height * 1rem / 16;
 $form-line-height: 1.2;
 $form-padding: ($form-height - ($form-font-size * 1px * $form-line-height)) / 2;
 
