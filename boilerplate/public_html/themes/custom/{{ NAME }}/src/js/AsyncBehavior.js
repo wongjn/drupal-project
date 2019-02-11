@@ -14,7 +14,7 @@ import get from './dom';
  * @prop {string} fileName
  *   The module containing the behavior functionality class.
  * @prop {string} selector
- *   CSS Selector to match relevent elements of this behavior.
+ *   CSS Selector to match relevant elements of this behavior.
  * @prop {WeakMap} activeElements
  *   A list of active behaviors keyed by associative element it is attached to.
  * @prop {function} Behavior
@@ -29,7 +29,7 @@ export default class AsyncBehavior {
    * @param {string} fileName
    *   The file to load in the behaviors subdirectory.
    * @param {string} [selector=`.js-${fileName}`]
-   *   CSS Selector to match relevent elements of this behaviour.
+   *   CSS Selector to match relevant elements of this behavior.
    */
   constructor(fileName, selector = `.js-${fileName}`) {
     this.fileName = fileName;
