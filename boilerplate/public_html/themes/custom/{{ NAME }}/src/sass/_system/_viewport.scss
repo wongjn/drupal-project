@@ -15,12 +15,12 @@
  *   only.
  * @param {number} $min-value [0]
  *   The minimum value when (conceptually) at 0vmin.
- * @param {string|number} $at ['vmin']
+ * @param {string|number} $at
  *   The breakpoint where the scaling should stop at. Possible values are:
  *   - `vmin`: to *gate* when viewport height and width is more than 980px
  *   - `Xvw`: to *gate* when viewport width is more than Xpx
  *   - `Xvh`: to *gate* when viewport height is more than Xpx
- * @param {number} $from [0]
+ * @param {number} $from
  *   The minimum breakpoint at which the value should start scaling. The
  *   viewport dimension is assumed from $at. This value has no effect if $at is
  *   'vmin'.
@@ -28,7 +28,7 @@
  * @output Property declaration for scaling value and media query for maximum
  *   value.
  */
-@mixin viewport-scale($property, $max-values, $min-value: 0, $at: 'vmin', $from: 0) {
+@mixin viewport-scale($property, $max-values, $min-value: 0, $at: $SITE-WIDTH * 1vw, $from: 600) {
   $deprecated: if(
     typeof($max-values) == number,
     if(unit($max-values) == 'vw' or unit($max-values) == 'vh', true, false),

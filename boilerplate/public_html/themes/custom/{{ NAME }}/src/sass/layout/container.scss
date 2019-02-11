@@ -14,8 +14,8 @@ $fallback-gutter: 20px;
 //
 // 1. Add additional gutter width either side to compensate for padding.
 .l-container {
-  @include viewport-scale(--container-space-x, 40px, 10px, $SITE-WIDTH * 1vw);
-  @include viewport-scale(--container-space-y, 40px, 10px, $SITE-WIDTH * 1vw);
+  @include viewport-scale(--container-space-x, 40px, 10px);
+  @include viewport-scale(--container-space-y, 40px, 10px);
   margin-right: auto;
   margin-left: auto;
   max-width: ($SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1

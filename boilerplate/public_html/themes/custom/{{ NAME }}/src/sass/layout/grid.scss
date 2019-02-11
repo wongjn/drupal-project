@@ -56,8 +56,8 @@ $columns: (
 }
 
 .l-grid {
-  @include viewport-scale(--gutter-x, $half-gutter, 5px, $SITE-WIDTH * 1vw);
-  @include viewport-scale(--gutter-y, $half-gutter, 5px, $SITE-WIDTH * 1vw);
+  @include viewport-scale(--gutter-x, $half-gutter, 10px);
+  @include viewport-scale(--gutter-y, $half-gutter, 10px);
   @include variants;
   display: flex;
   flex-wrap: wrap;
