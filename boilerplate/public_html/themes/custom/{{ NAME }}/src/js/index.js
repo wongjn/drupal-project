@@ -3,23 +3,19 @@
  * Main JS entry point.
  */
 
-import SVG4Everybody from 'svg4everybody';
 import './router/';
 import './in-view';
 import './main-menu/';
 import { asyncAttach } from './lib/async-behaviors';
 
-/**
- * Polyfills external-use SVG elements.
- *
- * @type {Drupal~behavior}
- */
-Drupal.behaviors.{{ CAMEL }}SVGPolyfill = {
-  attach() {
-    SVG4Everybody();
-    delete this.attach;
-  },
-};
+import(/* webpackChunkName: "entry-async" */ 'svg4everybody')
+  .then(({ default: svg4everybody }) => {
+    svg4everybody();
+
+    Drupal.behaviors.svg4everybody = {
+      attach: svg4everybody,
+    };
+  });
 
 const asyncBehaviors = [
   // Drupal status messages.
