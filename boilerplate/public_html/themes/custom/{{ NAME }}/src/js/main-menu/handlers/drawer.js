@@ -3,7 +3,7 @@
  * Full menu drawer menu.
  */
 
-import templateParse from '../../template-parser';
+import templateParse from '../../lib/template-parser';
 
 // HTML ID for the drawer menu element.
 const DRAWER_HTML_ID = 'drawer-menu';

@@ -9,7 +9,7 @@ import cache from './cache';
 import { dispatchEvent } from './events';
 import Route from './Route';
 import scrollTo from './scroll-to';
-import requestAnimationFramePromise from '../request-animation-frame-promise';
+import requestAnimationFramePromise from '../lib/request-animation-frame-promise';
 
 /* eslint-disable no-console */
 

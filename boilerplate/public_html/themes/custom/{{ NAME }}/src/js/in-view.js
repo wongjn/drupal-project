@@ -5,7 +5,7 @@
 
 import last from 'lodash/last';
 import partition from 'lodash/partition';
-import get from './dom';
+import get from './lib/dom';
 
 /**
  * CSS selector for lists.

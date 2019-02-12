@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import resizeObserverLoader from '../resize-observer-load';
+import resizeObserverLoader from '../lib/resize-observer-load';
 import { ROUTED_EVENT } from '../router/events';
 import LineBreak from './handlers/line-break';
 import SubmenuEdge from './handlers/submenu-edge';

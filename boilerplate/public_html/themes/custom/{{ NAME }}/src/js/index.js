@@ -7,7 +7,7 @@ import SVG4Everybody from 'svg4everybody';
 import './router/';
 import './in-view';
 import './main-menu/';
-import { asyncAttach } from './AsyncBehavior';
+import { asyncAttach } from './lib/async-behaviors';
 
 /**
  * Polyfills external-use SVG elements.
@@ -29,7 +29,7 @@ const asyncBehaviors = [
 asyncBehaviors.forEach(args => asyncAttach(...args));
 
 if (module.hot) {
-  module.hot.accept('./AsyncBehavior', () => {
+  module.hot.accept('./lib/async-behaviors', () => {
     asyncBehaviors.forEach(args => asyncAttach(...args));
     Drupal.attachBehaviors(document.body, drupalSettings);
   });
