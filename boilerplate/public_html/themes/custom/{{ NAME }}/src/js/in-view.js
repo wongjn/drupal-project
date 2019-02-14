@@ -304,7 +304,7 @@ export default init;
  */
 Drupal.behaviors.{{ CAMEL }}Inview = {
   attach(context) {
-    const elements = get(context, SELECTOR);
+    const elements = get(SELECTOR, context);
 
     if (elements.length > 0) {
       const [lists, singular] = partition(elements, element =>
@@ -325,7 +325,7 @@ Drupal.behaviors.{{ CAMEL }}Inview = {
   },
   detach(context, settings, trigger) {
     if (trigger === 'unload') {
-      get(context, SELECTOR)
+      get(SELECTOR, context)
         .filter(element => {
           const handler = activeElements.get(element);
           return handler && typeof handler.detach === 'function';

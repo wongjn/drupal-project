@@ -48,7 +48,7 @@ export default class AsyncBehavior {
    * @type {Drupal~behaviorAttach}
    */
   attach(context, drupalSettings) {
-    get(context, this.selector).forEach(async element => {
+    get(this.selector, context).forEach(async element => {
       const behavior = this.activeElements.get(element);
 
       // Element has a behavior already, run update function if any then
@@ -91,7 +91,7 @@ export default class AsyncBehavior {
    */
   detach(context, settings, trigger) {
     if (trigger === 'unload') {
-      get(context, this.selector).forEach(element => {
+      get(this.selector, context).forEach(element => {
         const behavior = this.activeElements.get(element);
         if (behavior && typeof behavior.detach === 'function') {
           behavior.detach();
