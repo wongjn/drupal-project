@@ -16,15 +16,11 @@
   }
 }
 
-// Message body text.
-.iziToast-texts {
+.iziToast-message[class][class] {
+  @include font-size(16);
   max-height: 20vh;
   max-width: 60vw;
   overflow: auto;
-}
-
-.iziToast-message[class][class] {
-  @include font-size(16);
   color: #000;
 
   a {
