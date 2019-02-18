@@ -1,336 +1,129 @@
 /**
  * @file
- * Provides element 'loading' when it is within the viewport.
+ * Provides element animation when it is within the viewport.
+ *
+ * @todo Re-implement single selection if ever needed.
  */
 
-import last from 'lodash/last';
-import partition from 'lodash/partition';
-import get from './lib/dom';
+import { curry, forEach, filter, pipe } from 'rambda';
+import { behavior } from './lib/behaviors';
+import dom from './lib/dom';
+
+// CSS variable for animation delay.
+const CSS_PROPERTY_NAME = '--inview-delay';
+// Class for an element currently outside the viewport.
+const OUTSIDE_VIEWPORT_CLASSNAME = 'is-outside-viewport';
+// Class for an element currently animating.
+const LOADING_CLASSNAME = 'is-loading';
+// Class for an element finished animating.
+const LOADED_CLASSNAME = 'is-loaded';
 
 /**
- * CSS selector for lists.
+ * Triggers an element in-view animation.
  *
- * @type {string}
+ * @param {HTMLElement} element
+ *   The element to trigger the animation on.
+ * @param {number} [delay=0]
+ *   The delay before triggering in milliseconds.
  */
-const LIST_SELECTOR = '.js-inview-list[data-selector]';
+const load = (element, delay = 0) => {
+  element.style.setProperty(CSS_PROPERTY_NAME, `${delay}ms`);
+  element.classList.remove(OUTSIDE_VIEWPORT_CLASSNAME);
+  element.classList.add(LOADING_CLASSNAME);
+
+  const transitionEnder = () => {
+    element.removeEventListener('transitionend', transitionEnder);
+    element.style.removeProperty(CSS_PROPERTY_NAME);
+    element.classList.remove(LOADING_CLASSNAME);
+    element.classList.add(LOADED_CLASSNAME);
+  };
+  element.addEventListener('transitionend', transitionEnder);
+};
 
 /**
- * CSS selector for singular in-view elements.
+ * Sets up the loader for elements.
  *
- * @type {string}
+ * @param {function} callback
+ *   The function to run on any intersection.
+ * @param {number} threshold
+ *   The threshold parameter for the IntersectionObserver options.
+ *
+ * @return {function}
+ *   The loader that accepts an array of elements to watch for intersection and
+ *   that returns a function to destroy the loader.
  */
-const SINGLES_SELECTOR = '.js-inview';
+const setUpLoader = (callback, threshold) => {
+  const observer = new IntersectionObserver(callback, { threshold });
+
+  return pipe(
+    forEach(element => {
+      element.classList.add(OUTSIDE_VIEWPORT_CLASSNAME);
+      observer.observe(element);
+    }),
+    // Return a function to disable the observer. Must be bound to avoid
+    // 'Illegal invocation' error.
+    () => observer.disconnect.bind(observer),
+  );
+};
 
 /**
- * CSS selector in-view elements.
+ * Builds an on-intersection IntersectionObserver callback.
  *
- * @type {string}
- */
-const SELECTOR = `${LIST_SELECTOR},${SINGLES_SELECTOR}`;
-
-/**
- * A list of active behaviors keyed by associative element it is attached to.
+ * @param {function} loader
+ *   The loader to run on an IntersectionObserverEntry.target when it is
+ *   intersecting the viewport.
  *
- * @type {WeakMap}
+ * @return {function}
+ *   Callback for IntersectionObserver objects.
  */
-const activeElements = new WeakMap();
-
-/**
- * A list of elements already observed.
- *
- * @type {WeakSet}
- */
-const observedElements = new WeakSet();
-
-/**
- * Is initial load (when JS is first run).
- *
- * @type {bool}
- */
-let firstLoad = true;
-
-/**
- * Loadable state manager for InView.
- *
- * @prop {HTMLElement} element
- *   The DOM element the Loadable is associated with.
- */
-class Loadable {
-  /**
-   * CSS custom property delay value name including the “--” prefix.
-   *
-   * @var {string}
-   */
-  static get CSS_PROPERTY_NAME() {
-    return '--inview-delay';
-  }
-
-  /**
-   * The CSS class for a element that is not in-view.
-   *
-   * @var {string}
-   */
-  static get OUTSIDE_VIEWPORT_CLASSNAME() {
-    return 'is-outside-viewport';
-  }
-
-  /**
-   * The CSS class for a element that is loading.
-   *
-   * @var {string}
-   */
-  static get LOADING_CLASSNAME() {
-    return 'is-loading';
-  }
-
-  /**
-   * The CSS class for a element that is has loaded.
-   *
-   * @var {string}
-   */
-  static get LOADED_CLASSNAME() {
-    return 'is-loaded';
-  }
-
-  /**
-   * The name of the 'loaded' event.
-   *
-   * @var {string}
-   */
-  static get LOAD_EVENT_NAME() {
-    return 'inview-element-loaded';
-  }
-
-  /**
-   * Creates an instance of Loadable.
-   *
-   * @param {HTMLElement} element
-   *   The element to load.
-   */
-  constructor(element) {
-    this.element = element;
-    this.element.classList.add(this.constructor.OUTSIDE_VIEWPORT_CLASSNAME);
-  }
-
-  /**
-   * Loads an element.
-   *
-   * @param {number} [index=0]
-   *   The index of the element in the loading sequence for staggering effects.
-   *
-   * @return {Promise}
-   *   A promise that resolves once the element has finished transitoning in.
-   */
-  load(index = 0) {
-    this.element.style.setProperty(
-      this.constructor.CSS_PROPERTY_NAME,
-      `${index * 100}ms`,
-    );
-    this.element.classList.remove(this.constructor.OUTSIDE_VIEWPORT_CLASSNAME);
-    this.element.classList.add(this.constructor.LOADING_CLASSNAME);
-
-    return new Promise(resolve => {
-      this._end = this._end.bind(this, resolve);
-      this.element.addEventListener('transitionend', this._end);
-    });
-  }
-
-  /**
-   * Marks the end of the element's transition.
-   *
-   * @param {function} resolve
-   *   The callback function to run.
-   *
-   * @see Loadable.load
-   */
-  _end(resolve) {
-    this.element.style.removeProperty(this.constructor.CSS_PROPERTY_NAME);
-    this.element.removeEventListener('transitionend', this._end);
-    this.element.classList.remove(this.constructor.LOADING_CLASSNAME);
-    this.element.classList.add(this.constructor.LOADED_CLASSNAME);
-
-    const event = new CustomEvent(this.constructor.LOAD_EVENT_NAME);
-    this.element.dispatchEvent(event);
-
-    resolve();
-  }
-}
-export const { LOAD_EVENT_NAME: ELEMENT_LOAD_EVENT_NAME } = Loadable;
-
-/**
- * A collection of loadable elements.
- *
- * @prop {IntersectionObserver} observer
- *   The observer that indicates when an element is in view of the browser.
- * @prop {WeakMap} loaders
- *   The loader objects associated with each element.
- */
-class Collection {
-  /**
-   * Gets the name of the 'loaded' event.
-   *
-   * @return {string}
-   *   The name of the 'loaded' event.
-   */
-  static get LOAD_EVENT_NAME() {
-    return 'inview-loaded';
-  }
-
-  /**
-   * Creates an instance of Collection.
-   *
-   * @param {HTMLElement[]} elements
-   *   The elements to manage.
-   * @param {number} [threshold=0.2]
-   *   A number between 0 and 1 as fraction of the element's bounding box that
-   *   should be visible before it is considered in the viewport.
-   */
-  constructor(elements, threshold = 0.2) {
-    this.observer = new IntersectionObserver(this.onIntersect.bind(this), {
-      threshold,
+const onIntersect = loader => (entries, observer) =>
+  entries
+    .filter(({ isIntersecting }) => isIntersecting)
+    .forEach((entry, index) => {
+      observer.unobserve(entry.target);
+      loader(entry.target, index * 100);
     });
 
-    this.loaders = new WeakMap();
-    this.elements = elements
-      .filter(element => !observedElements.has(element))
-      .map(element => {
-        observedElements.add(element);
-        this.observer.observe(element);
-        this.loaders.set(element, new Loadable(element));
-        return element;
-      });
-  }
-
-  /**
-   * Loads a set of elements.
-   *
-   * @param {HTMLElement[]} elements
-   *   The elements to load.
-   */
-  static load(elements) {
-    elements.forEach((element, index) => {
-      new Loadable(element).load(index);
-    });
-  }
-
-  /**
-   * Manages an intersection change.
-   *
-   * @param {IntersectionObserverEntry[]} entries
-   *   List of intersection entries.
-   * @param {IntersectionObserver} observer
-   *   The observer managing the change.
-   */
-  onIntersect(entries, observer) {
-    const loadingPromises = entries
-      .filter(entry => entry.isIntersecting || entry.intersectionRatio > 0)
-      .filter(entry => this.loaders.has(entry.target))
-      .map((entry, index) => {
-        observer.unobserve(entry.target);
-        return this.loaders.get(entry.target).load(index);
-      });
-
-    Promise.all(loadingPromises).then(
-      this.loadedEventFire.bind(this, last(entries).target),
-    );
-  }
-
-  /**
-   * Dispatches a load event to the DOM.
-   *
-   * @param {HTMLElement} [element=document.body]
-   *   The element to fire the event from.
-   */
-  loadedEventFire(element = document.body) {
-    const event = new CustomEvent(this.constructor.LOAD_EVENT_NAME, {
-      bubbles: true,
-    });
-    element.dispatchEvent(event);
-  }
-
-  /**
-   * Detaches this functionality from the DOM.
-   */
-  detach() {
-    this.observer.disconnect();
-  }
-}
-export const { LOAD_EVENT_NAME } = Collection;
+/**
+ * Queries whether an element is currently within the browser window.
+ *
+ * @param {HTMLElement} element
+ *   The element to check.
+ *
+ * @return {bool}
+ *   True if the element is within the browser window.
+ */
+const isInWindow = element => {
+  const { top, height } = element.getBoundingClientRect();
+  return top > window.innerHeight || top < height * -1;
+};
 
 /**
- * Initializes in-view loading for a set of elements.
+ * Returns a function to create a in-view animating list of elements.
  *
- * @param {HTMLElement[]} elements
- *   The elements to manage.
- * @param {number} [threshold=0.2]
- *   A number between 0 and 1 as fraction of the element's bounding box that
- *   should be visible before it is considered in the viewport.
+ * @param {bool} justInvoked
+ *   True if this is the first invocation after script load.
  *
- * @return {Collection}
- *   The collection handler for a set of items.
+ * @return {function}
+ *   The list creator. The creator returns the destroy function.
  */
-function init(elements, threshold = 0.2) {
-  if ('IntersectionObserver' in window) {
-    if (firstLoad) {
-      const { innerHeight: windowHeight } = window;
+const createList = (justInvoked = false) => list => {
+  const createCollection = pipe(
+    curry(dom)(list.dataset.selector),
+    justInvoked ? filter(isInWindow) : args => args,
+    setUpLoader(onIntersect(load), parseFloat(list.dataset.ratio) || 0.2),
+  );
 
-      // Skip in-view loading of elements already in-view for jank-free
-      // experience due to elements already being visible before JS has been
-      // executed.
-      const invisibles = elements.filter(element => {
-        const { top, height } = element.getBoundingClientRect();
-        const outside = top > windowHeight || top < height * -1;
-
-        if (!outside) {
-          element.classList.add(Loadable.LOADED_CLASSNAME);
-        }
-
-        return outside;
-      });
-      return new Collection(invisibles, threshold);
-    }
-
-    return new Collection(elements, threshold);
-  }
-
-  Collection.load(elements);
-}
-export default init;
+  justInvoked = false;
+  return createCollection(list);
+};
 
 /**
  * Adds lazy-loading and in-viewport animations.
  *
  * @type {Drupal~behavior}
  */
-Drupal.behaviors.{{ CAMEL }}Inview = {
-  attach(context) {
-    const elements = get(SELECTOR, context);
-
-    if (elements.length > 0) {
-      const [lists, singular] = partition(elements, element =>
-        element.matches(LIST_SELECTOR),
-      );
-
-      lists.forEach(list => {
-        const { selector, ratio } = list.dataset;
-        const items = Array.from(list.querySelectorAll(selector));
-
-        activeElements.set(list, init(items, ratio));
-      });
-
-      singular.forEach(ele => activeElements.set(ele, init([ele], 0)));
-    }
-
-    firstLoad = false;
-  },
-  detach(context, settings, trigger) {
-    if (trigger === 'unload') {
-      get(SELECTOR, context)
-        .filter(element => {
-          const handler = activeElements.get(element);
-          return handler && typeof handler.detach === 'function';
-        })
-        .forEach(element => activeElements.get(element).detach());
-    }
-  },
-};
+Drupal.behaviors.{{ CAMEL }}InViewList = behavior(
+  '.js-inview-list[data-selector]',
+  createList(true),
+);

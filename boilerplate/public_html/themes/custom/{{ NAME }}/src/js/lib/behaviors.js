@@ -31,7 +31,7 @@ const NullMap = {
  * @return {Drupal~behavior}
  *   The Drupal behavior.
  */
-const behavior = (selector, func) => ({
+export const behavior = (selector, func) => ({
   list: func.sideEffectsOnly ? NullMap : new WeakMap(),
   attach(context, ...args) {
     dom(selector, context)
