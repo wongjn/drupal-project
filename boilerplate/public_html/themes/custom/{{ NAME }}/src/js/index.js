@@ -3,30 +3,32 @@
  * Main JS entry point.
  */
 
-import './router/';
+import './router';
 import './in-view';
-import './main-menu/';
-import { asyncAttach } from './lib/async-behaviors';
+import './main-menu';
+import { lazyBehavior } from './lib/behaviors';
 
-import(/* webpackChunkName: "entry-async" */ 'svg4everybody')
-  .then(({ default: svg4everybody }) => {
+// Polyfills external-use SVG elements.
+import(/* webpackChunkName: "entry-async" */ 'svg4everybody').then(
+  ({ default: svg4everybody }) => {
     svg4everybody();
 
     Drupal.behaviors.svg4everybody = {
       attach: svg4everybody,
     };
-  });
+  },
+);
 
-const asyncBehaviors = [
+const lazyBehaviors = [
   // Drupal status messages.
   ['messages'],
 ];
 
-asyncBehaviors.forEach(args => asyncAttach(...args));
+lazyBehaviors.forEach(args => lazyBehavior(...args));
 
 if (module.hot) {
-  module.hot.accept('./lib/async-behaviors', () => {
-    asyncBehaviors.forEach(args => asyncAttach(...args));
+  module.hot.accept('./lib/behaviors', () => {
+    lazyBehaviors.forEach(args => lazyBehavior(...args));
     Drupal.attachBehaviors(document.body, drupalSettings);
   });
 }

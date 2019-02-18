@@ -4,6 +4,7 @@
  */
 
 import IziToast from 'izitoast';
+import { markSideEffectsOnly } from '../lib/behaviors';
 
 // Set default iziToast settings.
 IziToast.settings({
@@ -11,32 +12,32 @@ IziToast.settings({
   progressBar: false,
 });
 
-export default class Messages {
-  constructor(element) {
-    const json =
-      'content' in element ? element.content.textContent : element.textContent;
-
-    let i = 0;
-    Object.entries(JSON.parse(json.trim())).forEach(([type, messages]) => {
-      messages.forEach(message => {
-        setTimeout(
-          () => IziToast[this.constructor.TYPE_DICTIONARY[type]]({ message }),
-          i * 200,
-        );
-        i += 1;
-      });
-    });
-
-    element.parentElement.removeChild(element);
-  }
-}
-/**
- * Mapping of Drupal message types to iziToast presets.
- *
- * @var {object}
- */
-Messages.TYPE_DICTIONARY = {
+// Mapping of Drupal message types to iziToast presets.
+const messageTypes = {
   status: 'success',
   warning: 'warning',
   error: 'error',
 };
+
+// Get messages JSON data from an element.
+const parseElementJSON = element => JSON.parse(element.dataset.messages || '');
+
+/**
+ * Shows messages in a particular style.
+ *
+ * @param {string} type
+ *   The type of messages to toast.
+ * @param {string[]} messages
+ *   The messages to toast.
+ */
+function showMessages(type, messages) {
+  messages.forEach(message => IziToast[messageTypes[type]]({ message }));
+}
+
+export default markSideEffectsOnly(element => {
+  const list = parseElementJSON(element);
+  Object.entries(list).forEach(([type, messages]) =>
+    showMessages(type, messages),
+  );
+  element.remove();
+});
