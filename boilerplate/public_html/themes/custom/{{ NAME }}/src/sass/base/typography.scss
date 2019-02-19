@@ -6,8 +6,7 @@
 @import '../system';
 
 html {
-  // Prevent adjustments of font size after orientation changes in IE and iOS
-  -ms-text-size-adjust: 100%;
+  // Prevent adjustments of font size after orientation changes in iOS.
   -webkit-text-size-adjust: 100%;
 }
 
@@ -99,11 +98,6 @@ blockquote {
   }
 }
 
-// Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari
-abbr[title] {
-  text-decoration: underline dotted;
-}
-
 // Set font weight for emboldening tags
 b,
 strong {
@@ -126,19 +120,6 @@ sub {
 sup {
   top: -0.5em;
 }
-
-
-code,
-kbd,
-pre,
-samp {
-  // Correct the inheritance and scaling of font size via duplication monospace
-  // hack
-  font-family: monospace, monospace;
-  // Correct `em` font sizing
-  font-size: 1em;
-}
-
 
 h1,
 h2,

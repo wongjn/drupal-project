@@ -69,6 +69,8 @@ textarea {
   padding-top: $form-padding;
   padding-bottom: $form-padding;
   resize: vertical;
+  // Remove the default vertical scrollbar in IE 10+.
+  overflow: auto;
 }
 
 select {
@@ -134,32 +136,6 @@ button:disabled {
   }
 }
 
-// Correct the cursor style of increment and decrement buttons in Chrome
-[type="number"] {
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button {
-    height: auto;
-  }
-}
-
-[type="search"] {
-  // Correct the odd appearance in Chrome and Safari
-  -webkit-appearance: textfield;
-  // Correct the outline style in Safari. */
-  outline-offset: -2px;
-
-  &::-webkit-search-cancel-button,
-  &::-webkit-search-decoration {
-    -webkit-appearance: none;
-  }
-}
-
-::-webkit-file-upload-button {
-  // Correct the inability to style clickable types in iOS and Safari
-  -webkit-appearance: button;
-  // Change font properties to `inherit` in Safari
-  font: inherit;
-}
 
 fieldset {
   margin: 0;

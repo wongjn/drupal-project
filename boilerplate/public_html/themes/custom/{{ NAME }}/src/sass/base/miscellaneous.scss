@@ -15,20 +15,13 @@ body {
   box-sizing: border-box;
 }
 
-// Add the correct vertical alignment in Chrome, Firefox, and Opera
-progress {
-  vertical-align: baseline;
-}
-
 // Add the correct display value in IE11
 template {
   display: none;
 }
 
-// Add the correct display value in Edge, IE11, and Firefox
-details,
-main,
-summary {
+// Render the main element consistently in IE.
+main {
   display: block;
 }
 
