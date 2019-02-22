@@ -71,7 +71,7 @@ export async function onLinkClick(event) {
 
   // Clicked on the link to the exact same page.
   if (link.href === window.location.href) {
-    scrollTo(link.hash || 0);
+    scrollTo(link.hash || 0, true);
     return;
   }
 

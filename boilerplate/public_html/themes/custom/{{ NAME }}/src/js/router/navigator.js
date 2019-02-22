@@ -110,7 +110,7 @@ export default async function navigate(url, options = {}) {
   // saved scrollPosition since popState instances probably will not have the
   // scroll position on the hash.
   const scrollTarget = url.hash && newPage ? url.hash : scrollPosition;
-  scrollTo(scrollTarget);
+  scrollTo(scrollTarget, newPage);
 
   // Restore auto window scrolling for manual page refresh.
   window.history.scrollRestoration = 'auto';
