@@ -28,7 +28,7 @@ const domParser = new DOMParser();
  */
 export default function templateParse(html) {
   const dom = domParser.parseFromString(html, 'text/html');
-  const [main] = dom.body.children;
+  const [main] = Array.from(dom.body.children);
 
   const refElements = Array.from(main.querySelectorAll('[ref]'));
   const refs = refElements.reduce((map, element) => {
