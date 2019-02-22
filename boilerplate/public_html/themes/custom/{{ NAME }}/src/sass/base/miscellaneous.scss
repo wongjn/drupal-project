@@ -25,8 +25,21 @@ main {
   display: block;
 }
 
-// Fixes bug in Chrome whereby the element can still take up space.
+// 1. Fixes bug in Chrome whereby the element can still take up space.
 .visually-hidden {
-  margin-left: -1px;
-  margin-top: -1px;
+  margin-left: -1px; // 1
+  margin-top: -1px; // 1
+
+  // Improve visually hidden focusables.
+  &.focusable {
+    background-color: #000;
+    color: #fff;
+    padding: 0 1ch;
+    z-index: 999;
+
+    &[class]:active,
+    &[class]:focus {
+      position: absolute !important;
+    }
+  }
 }
