@@ -22,8 +22,7 @@
  */
 #}
 {{ attach_library('{{ NAME }}/messages') }}
-<template class="js-messages">{{ message_list|json_encode() }}</template>
-<noscript>
+<noscript{{ create_attribute({ class: 'js-messages', 'data-messages': message_list|json_encode() })}}>
 {% for type, messages in message_list %}
   {%
     set classes = [
