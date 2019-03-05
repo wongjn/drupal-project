@@ -41,6 +41,11 @@ drupal.active-link:
     {{ CAMEL }}:
       writeActiveLinks: true
 
+form:
+  css:
+    component:
+      dist/css/components/form.css: {}
+
 imce-file-manager:
   css:
     component:
