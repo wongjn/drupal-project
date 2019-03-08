@@ -217,6 +217,7 @@ function {{ NAME }}_form_contact_message_form_alter(&$form) {
   // $form['message']['widget'][0]['value']['#title'] = t('Query');
 
   unset($form['actions']['preview']);
+  unset($form['copy']);
   unset($form['langcode']);
 
   $form['actions']['submit']['#value'] = t('Submit');
