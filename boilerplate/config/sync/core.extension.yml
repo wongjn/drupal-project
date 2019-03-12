@@ -35,8 +35,6 @@ module:
   menu_trail_by_path: 0
   menu_ui: 0
   node: 0
-  {{ NAME }}_file_browser: 0
-  {{ NAME }}_helper: 0
   options: 0
   page_cache: 0
   path: 0
@@ -47,6 +45,9 @@ module:
   token: 0
   toolbar: 0
   user: 0
+  view_unpublished: 0
+  {{ NAME }}_file_browser: 0
+  {{ NAME }}_helper: 0
   menu_admin_per_menu: 1
   menu_link_content: 1
   pathauto: 1
