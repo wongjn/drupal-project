@@ -57,7 +57,7 @@
         "npm-asset/masonry-layout": "^4.2",
         "oomphinc/composer-installers-extender": "^1.1",
         "projectcosmic/remove_asset_hash": "^0.1.0",
-        "projectcosmic/ex_icons": "^1.0.0",
+        "projectcosmic/ex_icons": "^2.0.0",
         "webflo/drupal-finder": "^1.0.0",
         "webmozart/path-util": "^2.3",
         "wongjn/frontend_router": "~1.1.0",
