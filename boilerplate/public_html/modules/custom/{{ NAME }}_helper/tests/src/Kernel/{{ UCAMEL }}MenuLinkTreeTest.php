@@ -8,6 +8,8 @@ use Drupal\menu_link_content\Entity\MenuLinkContent;
 
 /**
  * Tests the menu link tree service decorator.
+ * 
+ * @group {{ NAME }}_helper
  */
 class {{ UCAMEL }}MenuLinkTreeTest extends KernelTestBase {
 
