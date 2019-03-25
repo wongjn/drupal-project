@@ -44,15 +44,21 @@ class {{ UCAMEL }}MenuLinkTree implements MenuLinkTreeInterface {
   public function getCurrentRouteMenuTreeParameters($menu_name) {
     $parameters = $this->menuLinkTree->getCurrentRouteMenuTreeParameters($menu_name);
 
-    // If viewing the {{ LABEL }} theme, make all menu items expanded.
-    $active_theme = $this->themeManager
-      ->getActiveTheme()
-      ->getName();
-    if ($active_theme == '{{ NAME }}') {
+    if ($this->shouldExpandAll()) {
       $parameters->expandedParents = [];
     }
 
     return $parameters;
+  }
+
+  /**
+   * Returns whether all menu items should be expanded.
+   *
+   * @return bool
+   *   TRUE if all menu parents should be expanded.
+   */
+  protected function shouldExpandAll() {
+    return $this->themeManager->getActiveTheme()->getName() == '{{ NAME }}';
   }
 
   /**

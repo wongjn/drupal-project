@@ -1,0 +1,6 @@
+name: {{ LABEL }} Helper test
+type: module
+description: Support module for the {{ LABEL }} module tests.
+core: 8.x
+package: Testing
+version: VERSION
