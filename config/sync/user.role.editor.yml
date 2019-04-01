@@ -27,5 +27,5 @@ permissions:
   - 'revert all revisions'
   - 'use text format full_html'
   - 'view all revisions'
-  - 'view any unpublished content'
+  - 'view any unpublished page content'
   - 'view own unpublished content'
