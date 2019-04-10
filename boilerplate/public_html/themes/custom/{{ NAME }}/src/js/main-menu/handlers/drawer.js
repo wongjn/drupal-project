@@ -61,17 +61,12 @@ const windowScrollManager = {
     }
 
     // Get scrollbar width.
-    if (typeof this.barWidth !== 'number') {
-      this.barWidth = window.innerWidth - document.documentElement.offsetWidth;
-    }
-
+    const barWidth = window.innerWidth - document.documentElement.offsetWidth;
+    
     // Remove scrolling from body.
     document.body.style.overflow = disable ? 'hidden' : '';
-
-    if (this.barWidth !== 0) {
-      // Compensate for possible scrollbar layout jump.
-      document.body.style.paddingRight = disable ? `${this.barWidth}px` : '';
-    }
+    // Compensate for possible scrollbar layout jump.
+    document.body.style.paddingRight = disable ? `${barWidth}px` : '';
 
     if (!disable) {
       window.scroll(this.x, this.y);
