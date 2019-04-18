@@ -3,7 +3,6 @@
  * Main JS entry point.
  */
 
-import './router';
 import './in-view';
 import './main-menu';
 import { lazyBehavior } from './lib/behaviors';

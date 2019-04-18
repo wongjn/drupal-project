@@ -1,13 +1,11 @@
 import debounce from 'lodash/debounce';
 import resizeObserverLoader from '../lib/resize-observer-load';
-import { ROUTED_EVENT } from '../router/events';
 import LineBreak from './handlers/line-break';
 import SubmenuEdge from './handlers/submenu-edge';
 import Drawer from './handlers/drawer';
-import ActiveTrail from './handlers/active-trail';
 import ParentTap from './handlers/parent-tap';
 
-const handlers = [LineBreak, SubmenuEdge, Drawer, ActiveTrail, ParentTap];
+const handlers = [LineBreak, SubmenuEdge, Drawer, ParentTap];
 
 // Relevant elements.
 const wrapper = document.querySelector('.js-main-menu');

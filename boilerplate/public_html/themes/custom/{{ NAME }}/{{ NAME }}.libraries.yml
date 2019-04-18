@@ -23,23 +23,9 @@ global:
     dist/js/main.js:
       preprocess: false
       minified: true
-  drupalSettings:
-    {{ CAMEL }}:
-      # Directive for the router whether to write active link classes.
-      writeActiveLinks: false
-    # These placeholder values will be set by system_js_settings_alter().
-    ajaxPageState:
-      libraries: null
-      theme: null
   dependencies:
     - {{ NAME }}/polyfill
     - core/drupal
-    - core/drupalSettings
-
-drupal.active-link:
-  drupalSettings:
-    {{ CAMEL }}:
-      writeActiveLinks: true
 
 form:
   css:

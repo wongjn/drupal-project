@@ -28,7 +28,6 @@ module:
   file: 0
   file_browser: 0
   filter: 0
-  frontend_router: 0
   image: 0
   imce: 0
   lazy_image: 0

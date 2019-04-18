@@ -12,7 +12,6 @@ features: {}
 libraries:
   - {{ NAME }}/global
 libraries-override:
-  core/drupal.active-link: {{ NAME }}/drupal.active-link
   system/base:
     css:
       component:
