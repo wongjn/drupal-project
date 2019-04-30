@@ -41,16 +41,10 @@ resizeObserverLoader.then(Observer => {
   observer.observe(menu);
 });
 
-// Front-end router event.
-const routed = createEventMediator('routed');
-const onRouted = ({ detail: path }) => routed(path);
-document.addEventListener(ROUTED_EVENT, onRouted);
-
 if (module.hot) {
   module.hot.accept();
   module.hot.dispose(() => {
     observer.disconnect();
-    document.removeEventListener(ROUTED_EVENT, onRouted);
     createEventMediator('destroy')();
   });
 }
