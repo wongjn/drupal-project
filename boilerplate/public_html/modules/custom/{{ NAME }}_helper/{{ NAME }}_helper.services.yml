@@ -1,6 +1,0 @@
-services:
-  {{ NAME }}_helper.link_tree:
-    class: Drupal\{{ NAME }}_helper\Menu\{{ UCAMEL }}MenuLinkTree
-    decorates: menu.link_tree
-    arguments: ['@{{ NAME }}_helper.link_tree.inner', '@theme.manager']
-    public: false

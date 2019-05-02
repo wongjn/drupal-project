@@ -41,7 +41,7 @@
         "drupal/block_content_permissions": "^1.6",
         "drupal/admin_toolbar": "^1.25",
         "drupal/config_split": "^1.0",
-        "drupal/core": "~8.6.0",
+        "drupal/core": "~8.7.0",
         "drupal/file_browser": "^1.1",
         "drupal/imce": "^1.5",
         "drupal/menu_admin_per_menu": "^1.0",
@@ -65,7 +65,7 @@
         "drupal/config_inspector": "^1.0@beta",
         "drupal/console": "^1.0.2",
         "drupal/devel": "^1.2",
-        "webflo/drupal-core-require-dev": "~8.6.0"
+        "webflo/drupal-core-require-dev": "~8.7.0"
     },
     "conflict": {
         "drupal/drupal": "*"
