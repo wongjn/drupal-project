@@ -30,7 +30,6 @@ body {
 }
 
 a {
-  transition: color 250ms;
   text-decoration: none;
   color: dodgerblue;
 
@@ -40,13 +39,8 @@ a {
 
   &:hover,
   &:active {
-    color: inherit;
     // Remove focus outline on hover and active mouse states
     outline: 0;
-  }
-  &:active {
-    color: darkslategray;
-    transition-duration: 50ms;
   }
 }
 

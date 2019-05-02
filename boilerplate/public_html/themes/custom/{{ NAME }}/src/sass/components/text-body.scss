@@ -67,11 +67,10 @@
 
   a {
     border-bottom: 2px solid transparent;
-    transition-property: color, border-bottom-color;
+    transition: border-bottom-color 250ms;
     color: blue;
 
     &:hover {
-      color: blue;
       border-bottom-color: currentColor;
     }
 
