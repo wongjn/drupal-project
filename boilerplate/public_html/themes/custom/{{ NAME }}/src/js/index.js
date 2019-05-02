@@ -6,6 +6,8 @@
 import './main-menu';
 import { lazyBehavior } from './lib/behaviors';
 
+import(/* webpackChunkName: "async" */ './async');
+
 const lazyBehaviors = [
   // Drupal status messages.
   ['messages'],
