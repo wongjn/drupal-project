@@ -10,24 +10,8 @@
   align-items: center;
   flex-wrap: wrap;
 
-  &--no-wrap {
-    flex-wrap: nowrap;
-
-    > .l-row__item {
-      flex-shrink: 1;
-    }
-  }
-
   &__item {
     max-width: 100%;
     flex-grow: 0;
-
-    &--end {
-      margin-left: auto;
-    }
-
-    &--flex-end {
-      align-self: flex-end;
-    }
   }
 }
