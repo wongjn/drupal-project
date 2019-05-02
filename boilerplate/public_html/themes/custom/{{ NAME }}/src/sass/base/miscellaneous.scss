@@ -6,6 +6,8 @@
 body {
   margin: 0;
   background-color: #fff;
+  --scrollbar-width: 0px;
+  --window-width: calc(100vw - var(--scrollbar-width));
 }
 
 // Change default box-sizing

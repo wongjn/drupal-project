@@ -4,6 +4,7 @@
  */
 
 import './main-menu';
+import './scrollbar-size';
 import { lazyBehavior } from './lib/behaviors';
 
 import(/* webpackChunkName: "async" */ './async');
