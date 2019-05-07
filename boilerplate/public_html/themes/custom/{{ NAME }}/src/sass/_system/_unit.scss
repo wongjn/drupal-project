@@ -125,3 +125,10 @@
 
   @return $value * map-get($units, $unit);
 }
+
+/**
+ * Returns $value but limited to $minimum and $maximum (inclusive).
+ */
+@function between($value, $minimum, $maximum) {
+  @return max(min($value, $maximum), $minimum);
+}

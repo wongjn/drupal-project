@@ -82,7 +82,13 @@ $LINE-HEIGHT: (24 / $FONT-SIZE);
  *   The minimum size for the given font size with rem units.
  */
 @function font-scale-minimum($size) {
-  @return px-to-rem(floor(($size + ($FONT-SIZE-SCALE-MINIMUM * 16))/ 16));
+  @return px-to-rem(
+    between(
+      floor(($size + ($FONT-SIZE-SCALE-MINIMUM * 16))/ 14),
+      $FONT-SIZE-SCALE-MINIMUM,
+      $size * 1px
+    )
+  );
 }
 
 /**
