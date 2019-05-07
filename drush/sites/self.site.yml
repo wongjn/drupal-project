@@ -9,5 +9,3 @@
 #   user: USER
 #   ssh:
 #     options: '-p 8899'
-#   paths:
-#     drush-script: /home/USER/vendor/bin/drush
