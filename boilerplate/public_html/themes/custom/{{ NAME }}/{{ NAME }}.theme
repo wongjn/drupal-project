@@ -267,3 +267,13 @@ function {{ NAME }}_theme_suggestions_block_alter(array &$suggestions, array $va
     $suggestions[] = 'block__block_content__' . $element['content']['#block_content']->bundle();
   }
 }
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for field.
+ */
+function {{ NAME }}_theme_suggestions_field_alter(array &$suggestions, array $variables) {
+  $element = $variables['element'];
+  if ($element['#is_multiple']) {
+    array_unshift($suggestions, 'field__list');
+  }
+}
