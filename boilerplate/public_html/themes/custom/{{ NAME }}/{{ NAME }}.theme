@@ -137,6 +137,32 @@ function {{ NAME }}_preprocess_block(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for block--system-main-block.html.twig.
+ */
+function {{ NAME }}_preprocess_block__system_main_block(&$variables) {
+  if (\Drupal::routeMatch()->getParameter('node')) {
+    // Remove container module class from nodes; it will be added per field
+    // instead. @see {{ NAME }}_preprocess_field().
+    $variables['attributes'] = (new Attribute($variables['attributes']))
+      ->removeClass('l-container__module')
+      ->toArray();
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field.html.twig.
+ */
+function {{ NAME }}_preprocess_field(&$variables) {
+  $element = $variables['element'];
+
+  // Container module class removed from system_main_block so that it can be
+  // added here for consistent spacing.
+  if ($element['#entity_type'] == 'node' && $element['#view_mode'] == 'full') {
+    $variables['attributes']['class'][] = 'l-container__module';
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK() for file-link.html.twig.
  */
 function {{ NAME }}_preprocess_file_link(&$variables) {
