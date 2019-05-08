@@ -207,6 +207,16 @@ function {{ NAME }}_preprocess_html__imce(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for image-formatter.html.twig.
+ */
+function {{ NAME }}_preprocess_image_formatter(&$variables) {
+  if ($variables['url']) {
+    $attributes = $variables['url']->getOption('attributes') ?: [];
+    $variables['link_attributes'] = new Attribute($attributes);
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK() for menu.html.twig.
  */
 function {{ NAME }}_preprocess_menu(&$variables) {
