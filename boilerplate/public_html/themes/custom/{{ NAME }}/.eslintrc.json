@@ -19,12 +19,5 @@
     "import/no-unresolved": 0,
     "//": "False error reporting for Drupal.behavior context parameter.",
     "react/destructuring-assignment": 0
-  },
-  "settings": {
-    "import/resolver": {
-      "webpack": {
-        "config": "./build/webpack.config.dev.js"
-      }
-    }
   }
 }
