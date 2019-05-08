@@ -21,11 +21,17 @@
  * @see {{ NAME }}_preprocess_field()
  */
 #}
+{%
+  set title_attributes = title_attributes
+    .addClass(label_display == 'visually_hidden' ? 'visually-hidden')
+%}
 <div{{ attributes }}>
   {%- if not label_hidden -%}
-    <div{{ title_attributes.addClass(label_display == 'visually_hidden' ? 'visually-hidden') }}>
-      {{- label -}}
-    </div>
+    {%- block label -%}
+      <div{{ title_attributes }}>
+        {{- label -}}
+      </div>
+    {%- endblock -%}
   {%- endif -%}
 
   <ul{{ content_attributes }}>
