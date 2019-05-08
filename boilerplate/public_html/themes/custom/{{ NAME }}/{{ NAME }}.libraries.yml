@@ -48,7 +48,7 @@ polyfill:
     name: MIT
     url: https://github.com/Financial-Times/polyfill-service/blob/master/LICENSE.md
   js:
-    https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Array.prototype.includes,CustomEvent,Element.prototype.closest,Element.prototype.matches,Element.prototype.remove,fetch,IntersectionObserver,Node.prototype.contains,Object.assign,Object.entries,Object.keys,Object.values,Promise,String.prototype.includes,URL,WeakSet:
+    https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Array.prototype.includes,CustomEvent,Element.prototype.closest,Element.prototype.matches,Element.prototype.remove,fetch,IntersectionObserver,Node.prototype.contains,Object.assign,Object.entries,Object.keys,Object.values,Promise,String.prototype.includes,URL,WeakSet:
       type: external
       minified: true
       weight: -100
