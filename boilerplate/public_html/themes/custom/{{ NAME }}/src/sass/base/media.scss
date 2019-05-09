@@ -26,7 +26,10 @@ svg {
   overflow: hidden;
 }
 
+// 1. Alt-text/unloadable image styling.
 img {
   max-width: 100%;
   height: auto;
+  color: #000; // 1
+  text-align: center; // 1
 }
