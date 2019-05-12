@@ -5,52 +5,45 @@
 
 @import '../system';
 
-$form-color-default: #999;
-$form-color-active: salmon;
-$form-font-size: 18;
-$form-height: 45;
-$form-height-rem: $form-height * 1rem / 16;
-$form-line-height: 1.2;
-$form-padding: ($form-height - ($form-font-size * 1px * $form-line-height)) / 2;
-
-:root {
-  --form-inactive-colour: #{$form-color-default};
-  --form-active-colour: #{$form-color-active};
-}
-
 label,
 legend {
-  font-weight: 700;
+  @include text-crop;
+  display: table;
+}
+
+label {
   cursor: pointer;
 }
 
 input,
 textarea,
 select {
-  transition: border-color 250ms, box-shadow 250ms;
-  border: 1px solid $form-color-default;
-  border-color: var(--form-inactive-colour);
+  border: 2px solid $form-color-default;
   background-color: transparent;
   font: inherit;
+  @include font-size($form-font-size);
   line-height: $form-line-height;
   color: inherit;
-  @include font-size($form-font-size);
   -webkit-appearance: none;
   appearance: none;
+  transition: border-color 250ms, box-shadow 250ms;
 
   &:focus {
     outline: 0;
     border-color: $form-color-active;
-    border-color: var(--form-active-colour);
-    box-shadow: 0 0 0 1px $form-color-active;
-    box-shadow: 0 0 0 1px var(--form-active-colour);
+    box-shadow: 0 0 3px $form-color-active;
   }
 }
 
 input,
 select,
 textarea {
-  padding: 0 ($form-height-rem * 0.667);
+  padding: 0 ($form-height-rem * 0.333);
+  max-width: 100%;
+
+  .l-grid__item & {
+    width: 100%;
+  }
 }
 
 input,
@@ -59,13 +52,8 @@ select,
   height: $form-height-rem;
 }
 
-input,
-select,
-[type="submit"] {
-  height: ($form-height * 1em / $form-font-size);
-}
-
 textarea {
+  display: block;
   padding-top: $form-padding;
   padding-bottom: $form-padding;
   resize: vertical;
@@ -109,16 +97,10 @@ button:disabled {
 }
 
 // For submit-type `input` form elements
-[type="submit"],
-[type="button"] {
-  border: 1px solid $form-color-active;
-  border-color: var(--form-active-colour);
-  padding:
-    ($form-padding * 0.9)
-    $form-padding
-    ($form-padding * 1.1);
+[type="submit"] {
+  @include font-size(24);
+  border-color: $form-color-active;
   background-color: $form-color-active;
-  background-color: var(--form-active-colour);
   color: #fff;
   cursor: pointer;
   transition: color 250ms, background-color 250ms, transform 250ms;
@@ -127,15 +109,13 @@ button:disabled {
   &:focus {
     background-color: transparent;
     color: $form-color-active;
-    color: var(--form-active-colour);
   }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.98);
     transition-duration: 101ms;
   }
 }
-
 
 fieldset {
   margin: 0;
