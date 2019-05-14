@@ -26,3 +26,12 @@ function {{ NAME }}_helper_preprocess_views_view(&$variables) {
     $extenders['inview']->preprocessViewsView($variables);
   }
 }
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for block_content_form.
+ */
+function {{ NAME }}_helper_form_block_content_form_alter(array &$form) {
+  // Hide block_content block description field from those who cannot administer
+  // blocks since they may assume this is the block title.
+  $form['info']['#access'] = \Drupal::currentUser()->hasPermission('administer blocks');
+}
