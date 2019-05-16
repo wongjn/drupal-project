@@ -3,6 +3,7 @@
  * Full menu drawer menu.
  */
 
+import { parse } from 'cookie';
 import templateParse from '../../lib/template-parser';
 
 // HTML ID for the drawer menu element.
@@ -11,7 +12,7 @@ const DRAWER_HTML_ID = 'drawer-menu';
 /**
  * Clones main menu markup.
  *
- * @param {HTMLULElement} menu
+ * @param {HTMLUListElement} menu
  *   The top-level main menu element.
  * @return {string}
  *   The modified menu ready for injection into the drawer.
@@ -62,7 +63,7 @@ const windowScrollManager = {
 
     // Get scrollbar width.
     const barWidth = window.innerWidth - document.documentElement.offsetWidth;
-    
+
     // Remove scrolling from body.
     document.body.style.overflow = disable ? 'hidden' : '';
     // Compensate for possible scrollbar layout jump.
@@ -83,15 +84,17 @@ export default class Drawer {
    *
    * @param {object} elements
    *   Dictionary of noteworthy elements.
-   * @param {HTMLULElement} elements.wrapper
+   * @param {HTMLDivElement} elements.wrapper
    *   The wrapper element of the main menu area.
-   * @param {HTMLULElement} elements.menu
+   * @param {HTMLUListElement} elements.menu
    *   Main menu item list.
    */
   constructor({ wrapper, menu }) {
     this._menuTopItems = Array.from(menu.children);
 
-    this._createOpenButtonWidget();
+    this.openButtonWrapper = wrapper.querySelector('.s-main-menu__drawer');
+    this.openButton = wrapper.querySelector('.s-main-menu__open-btn');
+    this._bootstrapOpenButton();
     this._createDrawer(menu);
 
     this.drawerOpen = this.drawerOpen.bind(this);
@@ -102,7 +105,6 @@ export default class Drawer {
 
     this._listeners('add');
 
-    wrapper.appendChild(this.openButtonWrapper);
     wrapper.appendChild(this.drawer);
   }
 
@@ -110,11 +112,12 @@ export default class Drawer {
     const hasHidden = this._menuTopItems.some(
       item => item.getAttribute('aria-hidden') === 'true',
     );
-    this.openButtonWrapper.style.display = hasHidden ? '' : 'none';
+
+    this.toggleOpenButton(hasHidden ? 'show' : 'hide');
+    document.cookie = `${Drawer.COOKIE_NAME}=${hasHidden ? 1 : 0}`;
   }
 
   onDestroy() {
-    this.openButtonWrapper.parentElement.removeChild(this.openButtonWrapper);
     this.drawer.parentElement.removeChild(this.drawer);
 
     this._drawerListeners('remove');
@@ -159,26 +162,25 @@ export default class Drawer {
   }
 
   /**
-   * Creates the drawer open button DOM.
+   * Bootstraps the open button element from cookies as saved state.
    */
-  _createOpenButtonWidget() {
-    const [wrapper, refs] = templateParse(`
-      <div class="s-main-menu__drawer" style="display:none">
-        <button
-          ref="button"
-          class="s-main-menu__open-btn"
-          aria-hidden="true"
-          aria-controls="${DRAWER_HTML_ID}"
-          tabIndex="-1"
-        >
-          <div class="s-main-menu__burger"></div>
-          ${Drupal.t('Full menu')}
-        </button>
-      </div>
-    `);
+  _bootstrapOpenButton() {
+    const cookies = parse(document.cookie);
+    const op =
+      Drawer.COOKIE_NAME in cookies && cookies[Drawer.COOKIE_NAME] === '1'
+        ? 'show'
+        : 'hide';
+    this.toggleOpenButton(op);
+  }
 
-    this.openButtonWrapper = wrapper;
-    this.openButton = refs.button;
+  /**
+   * Toggles visibility of the open drawer button.
+   *
+   * @param {'show'|'hide'} op
+   *   Whether to show or hide the button.
+   */
+  toggleOpenButton(op) {
+    this.openButtonWrapper.style.display = op === 'show' ? '' : 'none';
   }
 
   /**
@@ -270,3 +272,4 @@ export default class Drawer {
     }
   }
 }
+Drawer.COOKIE_NAME = 'md';

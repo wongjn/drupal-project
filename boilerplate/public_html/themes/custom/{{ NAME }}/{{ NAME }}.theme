@@ -224,6 +224,27 @@ function {{ NAME }}_preprocess_menu(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for menu--main.html.twig.
+ */
+function {{ NAME }}_preprocess_menu__main(&$variables) {
+  $cookies = \Drupal::request()->cookies;
+
+  // Preset height from cookie value.
+  if ($menu_height = $cookies->get('mh')) {
+    $variables['attributes']['style'] = "height:${menu_height}px";
+  }
+  $variables['#cache']['contexts'][] = 'cookies:mh';
+
+  $variables['drawer_attributes'] = new Attribute(['class' => ['s-main-menu__drawer']]);
+
+  // Preset whether drawer button is shown from cookie value.
+  if (!$cookies->get('md')) {
+    $variables['drawer_attributes']->setAttribute('style', 'display:none');
+  }
+  $variables['#cache']['contexts'][] = 'cookies:mh';
+}
+
+/**
  * Implements hook_preprocess_HOOK() for page-title.html.twig.
  */
 function {{ NAME }}_preprocess_page_title(&$variables) {

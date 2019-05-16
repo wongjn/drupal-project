@@ -8,18 +8,14 @@
 // 1. Set height to ensure wrapped elements (that are hidden) do not affect
 //    layout flow.
 .s-main-menu {
-  $font-size: 16;
   $y-padding: 10px;
   $x-padding: 10px;
 
-  @include font-size($font-size);
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
   position: relative;
   z-index: 400;
-  height: (($font-size * 1px) + ($y-padding * 2)); // 1
-  height: calc(var(--font-size-#{$font-size}) + #{$y-padding * 2}); // 1
   line-height: 1;
   text-transform: uppercase;
 
@@ -55,6 +51,9 @@
     flex: 0 1 auto;
     pointer-events: none; // 1
 
+    .is-menu-loading & {
+      overflow: hidden;
+    }
 
     > li {
       pointer-events: auto; // 1
