@@ -94,7 +94,7 @@ $LINE-HEIGHT: (24 / $FONT-SIZE);
 /**
  * Crops a box-model to cap height and baseline of a supported font family.
  */
-@mixin text-crop($font-family, $line-height: 1.3, $top-adjustment: 0px, $bottom-adjustment: 0px) {
+@mixin text-crop($font-family: '', $line-height: 1.3, $top-adjustment: 0px, $bottom-adjustment: 0px) {
   $top-crop: 0;
   $bottom-crop: 0;
   $crop-font-size: 24;
