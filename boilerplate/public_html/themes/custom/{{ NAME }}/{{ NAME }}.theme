@@ -5,6 +5,7 @@
  * Supporting theme hooks and functions.
  */
 
+use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\{{ NAME }}\Hash;
