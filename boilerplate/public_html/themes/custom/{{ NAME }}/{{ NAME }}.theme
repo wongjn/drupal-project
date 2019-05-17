@@ -9,7 +9,7 @@ use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\{{ NAME }}\Hash;
-use Drupal\{{ NAME }}\MenuData;
+use Drupal\{{ NAME }}\Menu;
 
 /**
  * Implements hook_theme().
@@ -221,13 +221,34 @@ function {{ NAME }}_preprocess_image_formatter(&$variables) {
  * Implements hook_preprocess_HOOK() for menu.html.twig.
  */
 function {{ NAME }}_preprocess_menu(&$variables) {
-  MenuData::addExternalOptions($variables['items']);
+  Menu::recursiveMenuApply(
+    ['\Drupal\{{ NAME }}\Menu', 'addExternalOptions'],
+    $variables['items']
+  );
+
+  $variables['attributes_map'] = [
+    'sub' => new Attribute(),
+    'deep' => new Attribute(),
+  ];
 }
 
 /**
  * Implements hook_preprocess_HOOK() for menu--main.html.twig.
  */
 function {{ NAME }}_preprocess_menu__main(&$variables) {
+  Menu::recursiveMenuApply(
+    ['\Drupal\{{ NAME }}\Menu', 'addMainMenuLinkClasses'],
+    $variables['items']
+  );
+
+  $variables['attributes']['class'][] = 'js-main-menu__menu';
+  $variables['attributes']['class'][] = 's-main-menu__top-menu';
+  $variables['attributes_map']['sub']->addClass('s-main-menu__sub-menu');
+  $variables['attributes_map']['deep']->addClass([
+    's-main-menu__sub-menu',
+    's-main-menu__sub-menu--deep',
+  ]);
+
   $cookies = \Drupal::request()->cookies;
 
   // Preset height from cookie value.
