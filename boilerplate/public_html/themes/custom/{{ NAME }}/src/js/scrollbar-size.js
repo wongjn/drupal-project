@@ -7,6 +7,13 @@ import resizeObserverLoad from './lib/resize-observer-load';
 
 resizeObserverLoad.then(Observer => {
   const resizeObserver = new Observer(([{ target }], observer) => {
+    if (
+      document.body.style.overflow === 'hidden' ||
+      document.body.style.overflowX === 'hidden'
+    ) {
+      return;
+    }
+    
     const { innerHeight, innerWidth } = window;
     const { offsetWidth, offsetHeight } = target;
 
