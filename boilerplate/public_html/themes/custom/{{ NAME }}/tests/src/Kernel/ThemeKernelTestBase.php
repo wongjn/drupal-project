@@ -12,6 +12,13 @@ abstract class ThemeKernelTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
+  public static $modules = [
+    'system',
+  ];
+
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
 
