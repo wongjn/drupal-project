@@ -74,6 +74,11 @@ select {
   opacity: 1;
   color: inherit;
 }
+// Edge
+::-webkit-input-placeholder {
+  opacity: 1;
+  color: inherit;
+}
 
 button {
   margin: 0;
