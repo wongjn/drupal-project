@@ -7,28 +7,24 @@
 
 @each $measure in () {
   .u-margin-bottom-#{$measure} {
-    @include viewport-scale(margin-bottom, $measure, 10px);
+    @include viewport-scale(margin-bottom, $measure * 1px, 10px);
   }
 }
 
 @each $measure in () {
   .u-margin-top-#{$measure} {
-    @include viewport-scale(margin-top, $measure, 10px);
+    @include viewport-scale(margin-top, $measure * 1px, 10px);
   }
 }
 
 @each $measure in () {
-  .u-margin-neighbor-vertical-#{$measure} {
-    & + & {
-      @include viewport-scale(margin-top, $measure, 10px);
-    }
+  * + .u-margin-neighbor-vertical-#{$measure} {
+    @include viewport-scale(margin-top, $measure * 1px, 10px);
   }
 }
 
 @each $measure in () {
-  .u-margin-neighbor-horizontal-#{$measure} {
-    & + & {
-      @include viewport-scale(margin-left, $measure, 10px);
-    }
+  * + .u-margin-neighbor-horizontal-#{$measure} {
+    @include viewport-scale(margin-left, $measure * 1px, 10px);
   }
 }
