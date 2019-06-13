@@ -41,17 +41,6 @@ function styleguideReload(done) {
 }
 
 /**
- * Reloads the website Browsersync instance.
- *
- * @param {function} done
- *   The callback function to call once a reload has been called.
- */
-function websiteReload(done) {
-  website.reload();
-  done();
-}
-
-/**
  * Initiates file watching and Browsersync instance servers.
  */
 function watcher() {
@@ -83,7 +72,7 @@ function watcher() {
     { ignoreInitial: false },
     series(streamSass, compileStyleguide, styleguideReload),
   );
-  watch(iconSrc, series(compileIcons, websiteReload));
+  watch(iconSrc, compileIcons);
 }
 
 exports.watch = series(compileIcons, watcher);
