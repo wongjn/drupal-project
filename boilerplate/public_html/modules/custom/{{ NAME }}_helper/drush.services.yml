@@ -1,6 +1,6 @@
 services:
   {{ NAME }}_helper.commands:
     class: \Drupal\{{ NAME }}_helper\Commands\{{ UCAMEL }}Commands
-    arguments: ['@library.discovery']
+    arguments: ['@library.discovery', '@entity_type.manager']
     tags:
       - { name: drush.command }
