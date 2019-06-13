@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Viridor Helper test module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function {{ NAME }}_helper_test_theme() {
+  return [
+    '{{ NAME }}_helper_test_twig_array' => [
+      'variables' => [
+        'list' => [],
+      ],
+      'template' => '{{ NAME }}-helper-test.array',
+    ],
+  ];
+}

@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Default theme implementation to test twig array filters.
+ *
+ * Available variables:
+ * - list: A list of items.
+ *
+ * @ingroup themeable
+ */
+#}
+{% import _self as array %}
+
+{% macro traverse(list, id = '') %}
+  {% import _self as array %}
+  <ul{% if id %} id="{{ id }}"{% endif %}>
+    {% for key, item in list %}
+      <li class="{{ key }}">
+        {% if item is iterable %}
+          {{ array.traverse(item) }}
+        {% else %}
+          {{ item }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
+{{ array.traverse(list|set_array_value(['foo'], 'New Value'), 'set1') }}
+{{ array.traverse(list|set_array_value(['bar', 'foo'], 'Lorem Ipsum'), 'set2') }}
+{{ array.traverse(list|append_array_value(['baz'], 'Append Value'), 'append1') }}
+{{ array.traverse(list|append_array_value(['baz', 'something'], 'Lorem Ipsum'), 'append2') }}
