@@ -114,7 +114,11 @@ const createList = (justInvoked = false) => list => {
     setUpLoader(onIntersect(load), parseFloat(list.dataset.ratio) || 0.2),
   );
 
-  justInvoked = false;
+  // Set on next computation frame so that multiple calls of the above
+  setTimeout(() => {
+    justInvoked = false;
+  }, 0);
+  
   return createCollection(list);
 };
 
