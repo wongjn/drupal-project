@@ -19,7 +19,7 @@ $columns: (
 @mixin variants($gutter: $gutter, $container-width: $SITE-WIDTH-PX) {
   @at-root {
     @each $name, $column in $columns {
-      #{if(#{&} == '.l-grid', '', &)}.l-grid--#{$name} {
+      #{if("#{&}" == '.l-grid', '', &)}.l-grid--#{$name} {
         // Exact width
         $width: column-width($column, $gutter, $container-width);
         // Min-width for grid to be at the desired column count at full site width
@@ -34,7 +34,7 @@ $columns: (
 
         // Fix overflowing grid areas
         &.l-grid--flexy {
-          @media (max-width: #{$min-width + $half-gutter}) {
+          @media (max-width: #{$min-width + ($gutter * 2)}) {
             grid-template-columns: repeat(auto-fill, minmax(0, var(--column-width)));
           }
         }
@@ -79,16 +79,5 @@ $columns: (
   // Stretches grids to fill container width instead of static widths.
   &--flexy {
     grid-template-columns: repeat(auto-fill, minmax(var(--column-min-width), 1fr));
-
-    // 1. Due to the way that this uses CSS grid, this will only shrink
-    //    reliably for full-site-width grids, uses container parent.
-    @supports (display: grid) {
-      justify-items: center; // 1
-
-      .l-grid__item {
-        width: 100%;
-        max-width: calc(100vw - var(--container-space-x)); // 1
-      }
-    }
   }
 }
