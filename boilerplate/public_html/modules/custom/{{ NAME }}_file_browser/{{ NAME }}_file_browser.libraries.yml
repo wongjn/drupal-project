@@ -1,6 +1,0 @@
-entity_browser.file_browser:
-  css:
-    component:
-      css/entity_browser.file_browser.css: {}
-  dependencies:
-    - entity_browser/file_browser

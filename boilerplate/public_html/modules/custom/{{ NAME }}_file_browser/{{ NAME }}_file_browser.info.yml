@@ -1,8 +1,0 @@
-name: {{ LABEL }} File Browser
-description: File Browser UI improvements
-package: {{ LABEL }}
-type: module
-core: 8.x
-project: {{ NAME }}
-dependencies:
-  - file_browser:file_browser

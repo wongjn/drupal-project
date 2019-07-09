@@ -16,6 +16,7 @@ module:
   ctools: 0
   datetime: 0
   dblog: 0
+  deny_tainted_urls: 0
   dropzonejs: 0
   dropzonejs_eb_widget: 0
   dynamic_page_cache: 0
@@ -38,6 +39,7 @@ module:
   options: 0
   page_cache: 0
   path: 0
+  projectcosmic_file_browser: 0
   quicklink: 0
   remove_asset_hash: 0
   responsive_image: 0
@@ -47,7 +49,6 @@ module:
   toolbar: 0
   user: 0
   view_unpublished: 0
-  {{ NAME }}_file_browser: 0
   {{ NAME }}_helper: 0
   menu_admin_per_menu: 1
   menu_link_content: 1

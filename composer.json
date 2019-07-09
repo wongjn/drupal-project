@@ -46,6 +46,8 @@
         "npm-asset/imagesloaded": "^4.1",
         "npm-asset/masonry-layout": "^4.2",
         "oomphinc/composer-installers-extender": "^1.1",
+        "projectcosmic/deny_tainted_urls": "^1.0",
+        "projectcosmic/projectcosmic_file_browser": "^1.0",
         "projectcosmic/remove_asset_hash": "^0.1.0",
         "projectcosmic/ex_icons": "^2.0.0",
         "webflo/drupal-finder": "^1.0.0",
