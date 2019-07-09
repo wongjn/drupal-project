@@ -13,16 +13,8 @@
     ],
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/wongjn/lazy_image"
-        },
-        {
-            "type": "vcs",
-            "url": "https://bitbucket.org/projectcosmic/remove_asset_hash"
-        },
-        {
-            "type": "vcs",
-            "url": "https://bitbucket.org/projectcosmic/ex_icons"
+            "type": "composer",
+            "url": "https://cosmic.org.uk/composer"
         },
         {
             "type": "composer",
