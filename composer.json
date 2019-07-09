@@ -71,7 +71,8 @@
         "drupal/drupal": "*"
     },
     "replace": {
-        "npm-asset/jquery": "*"
+        "npm-asset/jquery": "*",
+        "paragonie/random_compat": "9.99.99"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
