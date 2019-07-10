@@ -8,16 +8,18 @@ First you need to [install composer](https://getcomposer.org/doc/00-intro.md#ins
 You might need to replace `composer` with `php composer.phar` (or similar)
 for your setup.
 
-After that you can create the project:
+After that you can install the project dependencies:
 
 ```
 composer install
 ```
 
-Install Drupal with drush:
+Install the Drupal site with drush:
 
 ```
-vendor/bin/drush site-install {{ NAME }}_profile --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME --site-name="{{ LABEL }}"
+./vendor/bin/drush site-install minimal \
+    --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME \
+    --config-dir=../config/sync
 ```
 
 With `composer require ...` you can download new dependencies to your
@@ -53,7 +55,8 @@ new release of Drupal core.
 
 Follow the steps below to update your core files.
 
-1. Run `composer update drupal/core --with-dependencies` to update Drupal Core and its dependencies.
+1. Run `composer update drupal/core webflo/drupal-core-require-dev --with-dependencies`
+   to update Drupal Core and its dependencies.
 1. Run `git diff` to determine if any of the scaffolding files have changed.
    Review the files for any changes and restore any customizations to
   `.htaccess` or `robots.txt`.
