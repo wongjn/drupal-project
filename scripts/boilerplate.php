@@ -22,6 +22,7 @@ $replacements = [
   '{{ LABEL }}'  => $human_name,
   '{{ CAMEL }}'  => lcfirst($upper_camel),
   '{{ UCAMEL }}' => $upper_camel,
+  '{{ UPPER }}'  => strtoupper($machine_name),
 ];
 
 $finfo = new finfo(FILEINFO_MIME_TYPE);

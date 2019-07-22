@@ -47,7 +47,9 @@ function watcher() {
   const webpackCompiler = webpack(webpackDevConfig);
 
   website.init({
-    proxy: '{{ NAME }}.local',
+    proxy: '{{ UPPER }}_URL' in process.env
+      ? process.env.{{ UPPER }}_URL
+      : '{{ NAME }}.local',
     middleware: [
       webpackDevMiddleware(webpackCompiler, {
         stats: statsConfig,
