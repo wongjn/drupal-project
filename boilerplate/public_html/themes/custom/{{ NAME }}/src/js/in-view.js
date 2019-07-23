@@ -131,3 +131,6 @@ Drupal.behaviors.{{ CAMEL }}InViewList = behavior(
   '.js-inview-list[data-selector]',
   createList(true),
 );
+
+// Initial DOM attachment invocation.
+Drupal.behaviors.{{ CAMEL }}InViewList.attach(document.body, drupalSettings);

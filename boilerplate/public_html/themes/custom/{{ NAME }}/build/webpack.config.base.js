@@ -4,6 +4,7 @@
  */
 
 const path = require('path');
+const { DefinePlugin } = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const getBase = name => ({
@@ -36,7 +37,10 @@ const getBase = name => ({
       Sass: path.resolve(__dirname, '../src/sass'),
     },
   },
-  plugins: [new LodashModuleReplacementPlugin()],
+  plugins: [
+    new LodashModuleReplacementPlugin(),
+    new DefinePlugin({ BUNDLE_TYPE: JSON.stringify(name) }),
+  ],
 });
 
 module.exports = [getBase('legacy'), getBase('modern')];

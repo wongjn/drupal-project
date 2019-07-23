@@ -7,7 +7,13 @@ import './main-menu';
 import './scrollbar-size';
 import { lazyBehavior } from './lib/behaviors';
 
-import(/* webpackChunkName: "async" */ './async');
+import(/* webpackChunkName: "async" */ './in-view');
+
+if (BUNDLE_TYPE === 'legacy') {
+  // All browsers that support ES modules natively also support external-use
+  // SVGs, so only polyfill for the legacy bundle.
+  import(/* webpackChunkName: "async" */ './lib/svg-polyfill');
+}
 
 const lazyBehaviors = [
   // Drupal status messages.
