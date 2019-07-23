@@ -53,7 +53,7 @@ function watcher() {
     middleware: [
       webpackDevMiddleware(webpackCompiler, {
         stats: statsConfig,
-        publicPath: webpackDevConfig.output.publicPath,
+        publicPath: webpackDevConfig[0].output.publicPath,
       }),
       webpackHotMiddleware(webpackCompiler),
     ],

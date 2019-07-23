@@ -8,7 +8,7 @@
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
-use Drupal\{{ NAME }}\Hash;
+use Drupal\{{ NAME }}\Assets;
 use Drupal\{{ NAME }}\Menu;
 
 /**
@@ -70,7 +70,7 @@ function {{ NAME }}_js_alter(&$javascript) {
 
     if ($preprocess) {
       // Enable long-term caching.
-      $javascript[$file_path]['version'] = Hash::getHash($file_path);
+      $javascript[$file_path]['version'] = Assets::getHash($file_path);
     }
     else {
       $javascript[$file_path]['cache'] = FALSE;
@@ -93,19 +93,19 @@ function {{ NAME }}_page_attachments_alter(array &$attachments) {
   $theme_path_url = base_path() . $theme_path;
   $attachments['#attached']['drupalSettings']['{{ NAME }}']['path'] = $theme_path_url;
 
-  // Preload main script.
+  // Preload modern script.
   if (\Drupal::config('system.performance')->get('js.preprocess')) {
-    $main_js = "$theme_path/dist/js/main.js";
+    $modern_js = "$theme_path/dist/js/modern.js";
     $attachments['#attached']['html_head'][] = [
       [
         '#tag' => 'link',
         '#attributes' => [
           'as' => 'script',
           'rel' => 'preload',
-          'href' => base_path() . "$main_js?v=" . Hash::getHash($main_js),
+          'href' => base_path() . "$modern_js?v=" . Assets::getHash($modern_js),
         ],
       ],
-      '{{ NAME }}:preload:main.js',
+      '{{ NAME }}:preload:modern.js',
     ];
   }
 
@@ -310,6 +310,12 @@ function {{ NAME }}_element_info_alter(array &$info) {
   $info['view']['#pre_render'][] = '{{ NAME }}_view_pre_render';
   $info['processed_text']['#pre_render'][] = '{{ NAME }}_processed_text_pre_render';
   unset($info['page']['#theme_wrappers']['off_canvas_page_wrapper']);
+
+  // Add pre-render hook to alter module/nomodule script HTML tags.
+  if (!isset($info['html_tag']['#pre_render'])) {
+    $info['html_tag']['#pre_render'] = [];
+  }
+  array_unshift($info['html_tag']['#pre_render'], ['\Drupal\{{ NAME }}\Assets', 'preRenderHtmlTag']);
 }
 
 /**

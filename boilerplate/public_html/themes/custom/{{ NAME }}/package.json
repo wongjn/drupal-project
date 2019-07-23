@@ -6,7 +6,7 @@
     "start": "gulp watch",
     "lint": "eslint --ignore-path .gitignore .",
     "format": "prettier --write \"./**/*.js\" --ignore-path .gitignore&&eslint --fix --ignore-path .gitignore .",
-    "analyze": "webpack --config build/webpack.config.analyze.js --profile --json > dist/js/stats.json&webpack-bundle-analyzer dist/js/stats.json"
+    "analyze": "webpack --config build/webpack.config.analyze.js"
   },
   "repository": {
     "type": "git",

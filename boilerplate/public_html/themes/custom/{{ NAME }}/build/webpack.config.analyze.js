@@ -4,10 +4,12 @@
  */
 
 const merge = require('webpack-merge');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const prodConfig = require('./webpack.config.prod');
 
-module.exports = merge(prodConfig, {
-  output: {
-    chunkFilename: '[name].js',
-  },
-});
+module.exports = prodConfig.map(config =>
+  merge(config, {
+    output: { chunkFilename: '[name].js' },
+    plugins: [new BundleAnalyzerPlugin({ analyzerPort: 0 })],
+  }),
+);

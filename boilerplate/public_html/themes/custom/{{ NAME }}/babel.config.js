@@ -2,7 +2,6 @@ module.exports = api => {
   api.cache.never();
 
   return {
-    presets: [['@babel/preset-env', { modules: false }]],
     plugins: [
       'lodash',
       '@babel/plugin-syntax-dynamic-import',
@@ -13,5 +12,18 @@ module.exports = api => {
         },
       ],
     ],
+    env: {
+      legacy: {
+        presets: [['@babel/preset-env', { modules: false }]],
+      },
+      modern: {
+        presets: [
+          [
+            '@babel/preset-env',
+            { modules: false, targets: { esmodules: true } },
+          ],
+        ],
+      },
+    },
   };
 };

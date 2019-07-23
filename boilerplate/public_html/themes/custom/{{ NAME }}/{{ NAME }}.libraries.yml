@@ -20,9 +20,17 @@ global:
       dist/css/utilities.css:
         weight: 9999
   js:
-    dist/js/main.js:
+    dist/js/modern.js:
       preprocess: false
       minified: true
+      attributes:
+        type: module
+    dist/js/legacy.js:
+      preprocess: false
+      minified: true
+      attributes:
+        nomodule: true
+        defer: true
   dependencies:
     - {{ NAME }}/polyfill
     - core/drupal
