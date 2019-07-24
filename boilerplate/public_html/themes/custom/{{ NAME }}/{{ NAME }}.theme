@@ -101,7 +101,7 @@ function {{ NAME }}_page_attachments_alter(array &$attachments) {
         '#tag' => 'link',
         '#attributes' => [
           'as' => 'script',
-          'rel' => 'preload',
+          'rel' => 'modulepreload',
           'href' => base_path() . "$modern_js?v=" . Assets::getHash($modern_js),
         ],
       ],
