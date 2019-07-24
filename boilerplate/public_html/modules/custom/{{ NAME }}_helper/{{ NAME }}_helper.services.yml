@@ -3,8 +3,3 @@ services:
     class: Drupal\{{ NAME }}_helper\TwigExtension
     tags:
       - { name: twig.extension }
-  {{ NAME }}_helper.deny_odd_urls_render_cache:
-    class: Drupal\{{ NAME }}_helper\Render\DenyOddUrlsRenderCache
-    decorates: render_cache
-    arguments: ['@{{ NAME }}_helper.deny_odd_urls_render_cache.inner', '@request_stack']
-    public: false
