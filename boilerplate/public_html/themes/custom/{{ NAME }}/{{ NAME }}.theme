@@ -82,53 +82,19 @@ function {{ NAME }}_js_alter(&$javascript) {
  * Implements hook_page_attachments_alter().
  */
 function {{ NAME }}_page_attachments_alter(array &$attachments) {
-  // Add favicon markup. Requires #type to prevent defaulting to html_tag.
-  $favicons = [
-    '#type'  => FALSE,
-    '#theme' => 'favicons',
-  ];
-  $attachments['#attached']['html_head'][] = [$favicons, '{{ NAME }}:favicons'];
+  // Pass theme directory to JS.
+  $attachments['#attached']['drupalSettings']['{{ NAME }}']['path'] = file_url_transform_relative(
+    file_create_url(drupal_get_path('theme', '{{ NAME }}'))
+  );
 
-  $theme_path = drupal_get_path('theme', '{{ NAME }}');
-  $theme_path_url = base_path() . $theme_path;
-  $attachments['#attached']['drupalSettings']['{{ NAME }}']['path'] = $theme_path_url;
+  // Add favicons.
+  Assets::attachFavicons($attachments);
 
   // Preload modern script.
-  if (\Drupal::config('system.performance')->get('js.preprocess')) {
-    $modern_js = "$theme_path/dist/js/modern.js";
-    $attachments['#attached']['html_head'][] = [
-      [
-        '#tag' => 'link',
-        '#attributes' => [
-          'as' => 'script',
-          'rel' => 'modulepreload',
-          'href' => base_path() . "$modern_js?v=" . Assets::getHash($modern_js),
-        ],
-      ],
-      '{{ NAME }}:preload:modern.js',
-    ];
-  }
+  Assets::attachScriptPreload($attachments);
 
   // Preload critical fonts.
-  // $critical_fonts = [
-  //   'font1.woff2',
-  //   'font2.woff2',
-  // ];
-  // foreach ($critical_fonts as $font) {
-  //   $attachments['#attached']['html_head'][] = [
-  //     [
-  //       '#tag' => 'link',
-  //       '#attributes' => [
-  //         'as' => 'font',
-  //         'rel' => 'preload',
-  //         'type' => 'font/woff2',
-  //         'href' => "$theme_path_url/fonts/$font",
-  //         'crossorigin' => TRUE,
-  //       ],
-  //     ],
-  //     "{{ NAME }}:preload:$font",
-  //   ];
-  // }
+  // Assets::attachFontPreloads($attachments);
 }
 
 /**
