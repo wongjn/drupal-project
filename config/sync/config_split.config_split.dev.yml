@@ -11,6 +11,7 @@ module:
   devel: 0
   devel_generate: 0
   field_ui: 0
+  site_builder_console: 0
   views_ui: 0
 theme: {  }
 blacklist: {  }
