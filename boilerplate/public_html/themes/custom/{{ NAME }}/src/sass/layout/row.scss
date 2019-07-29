@@ -10,8 +10,8 @@
   align-items: center;
   flex-wrap: wrap;
 
+  // 1. Ensures item will always stay within parent width.
   &__item {
-    max-width: 100%;
-    flex-grow: 0;
+    min-width: 0; // 1
   }
 }
