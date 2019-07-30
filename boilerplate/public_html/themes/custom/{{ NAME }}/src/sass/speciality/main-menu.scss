@@ -37,7 +37,16 @@
   &__sub-menu {
     > li {
       position: relative; // 1
-      z-index: 1;
+
+      // Ensures open sub-menus overlap other items.
+      &:hover,
+      &:focus,
+      &.is-open {
+        z-index: 1;
+      }
+      &:focus-within {
+        z-index: 1;
+      }
     }
   }
 
@@ -122,8 +131,8 @@
       }
     }
 
-    > li:not(:last-child) {
-      border-bottom: 1px solid blue;
+    > li {
+      box-shadow: 0 1px 0 0 blue inset;
     }
 
     &--deep {
