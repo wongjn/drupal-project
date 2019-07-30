@@ -25,6 +25,7 @@ permissions:
   - 'dropzone upload files'
   - 'edit any page content'
   - 'revert all revisions'
+  - 'update any text block content'
   - 'use text format full_html'
   - 'view all revisions'
   - 'view any unpublished page content'
