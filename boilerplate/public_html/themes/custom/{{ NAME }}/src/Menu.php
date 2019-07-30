@@ -45,14 +45,14 @@ class Menu {
   }
 
   /**
-   * Recursively adds link classes to the main menu tree.
+   * Adds link classes to a main menu link.
    *
    * @param array $item
    *   A single menu item from template_preprocess_menu() or similar.
    * @param int $depth
    *   Depth of the menu being processed.
    */
-  public static function addMainMenuLinkClasses(array $item, $depth = 0) {
+  public static function mainMenuAddClasses(array $item, $depth = 0) {
     $item['url']->mergeOptions([
       'attributes' => [
         'class' => [

@@ -203,7 +203,7 @@ function {{ NAME }}_preprocess_menu(&$variables) {
  */
 function {{ NAME }}_preprocess_menu__main(&$variables) {
   Menu::recursiveMenuApply(
-    ['\Drupal\{{ NAME }}\Menu', 'addMainMenuLinkClasses'],
+    ['\Drupal\{{ NAME }}\Menu', 'mainMenuAddClasses'],
     $variables['items']
   );
 
