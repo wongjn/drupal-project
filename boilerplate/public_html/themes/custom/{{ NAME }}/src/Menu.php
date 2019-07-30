@@ -17,8 +17,8 @@ class Menu {
    * @param int $depth
    *   The depth of the menu being iterated over. For internal use.
    */
-  public static function recursiveMenuApply(callable $callable, array $items, $depth = 0) {
-    foreach ($items as $item) {
+  public static function recursiveMenuApply(callable $callable, array &$items, $depth = 0) {
+    foreach ($items as &$item) {
       if ($item['below']) {
         self::recursiveMenuApply($callable, $item['below'], $depth + 1);
       }
