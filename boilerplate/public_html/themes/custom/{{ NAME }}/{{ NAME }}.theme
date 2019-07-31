@@ -314,7 +314,7 @@ function {{ NAME }}_view_pre_render($element) {
 function {{ NAME }}_theme_suggestions_block_alter(array &$suggestions, array $variables) {
   $element = $variables['elements'];
   if ($element['#base_plugin_id'] == 'block_content') {
-    $index = array_search($element['#id'], $suggestions);
+    $index = array_search('block__' . $element['#id'], $suggestions);
     // Add suggestion for block_content block type.
     array_splice($suggestions, $index, 0, 'block__block_content__' . $element['content']['#block_content']->bundle());
   }
