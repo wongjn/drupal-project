@@ -3,11 +3,14 @@
 namespace Drupal\Tests\{{ NAME }}\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\{{ NAME }}\Traits\ThemeSetTrait;
 
 /**
  * A test base class for this theme.
  */
 abstract class ThemeKernelTestBase extends KernelTestBase {
+
+  use ThemeSetTrait;
 
   /**
    * {@inheritdoc}
@@ -21,9 +24,7 @@ abstract class ThemeKernelTestBase extends KernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
-
-    $this->container->get('theme_installer')->install(['{{ NAME }}'], FALSE);
-    $this->container->get('theme_handler')->setDefault('{{ NAME }}');
+    $this->setDefaultTheme();
   }
 
 }
