@@ -37,16 +37,6 @@
   &__sub-menu {
     > li {
       position: relative; // 1
-
-      // Ensures open sub-menus overlap other items.
-      &:hover,
-      &:focus,
-      &.is-open {
-        z-index: 1;
-      }
-      &:focus-within {
-        z-index: 1;
-      }
     }
   }
 
@@ -75,6 +65,7 @@
         opacity: 1;
         pointer-events: auto;
         transform: none;
+        z-index: 1;
       } @else {
         opacity: 0;
         transform: translateY(10px);
