@@ -130,6 +130,19 @@ function {{ NAME }}_preprocess_field(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for field--node--created.html.twig.
+ */
+function {{ NAME }}_preprocess_field__node__created(&$variables) {
+  $timestamp = $variables['element']['#items']->first()->value;
+
+  $variables['items'][0]['content'] = [
+    '#theme' => 'time',
+    '#timestamp' => $timestamp,
+    '#text' => \Drupal::service('date.formatter')->format($timestamp, 'medium'),
+  ];
+}
+
+/**
  * Implements hook_preprocess_HOOK() for file-link.html.twig.
  */
 function {{ NAME }}_preprocess_file_link(&$variables) {
