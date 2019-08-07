@@ -96,7 +96,7 @@ class {{ UCAMEL }}Commands extends DrushCommands {
         'block' => $block->id(),
       ];
       if ($custom_block->save()) {
-        $this->logger()->notice(
+        $this->logger()->success(
           dt('Created the custom block "{name}" for the {block} block.', $args)
         );
       }
