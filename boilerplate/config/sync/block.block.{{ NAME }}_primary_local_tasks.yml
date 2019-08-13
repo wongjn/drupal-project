@@ -3,8 +3,6 @@ status: true
 dependencies:
   theme:
     - {{ NAME }}
-_core:
-  default_config_hash: bSM9E_TlnbYstP1A1zsvcjb_7nhNGir0lbnXfz1sbIE
 id: {{ NAME }}_primary_local_tasks
 theme: {{ NAME }}
 region: content

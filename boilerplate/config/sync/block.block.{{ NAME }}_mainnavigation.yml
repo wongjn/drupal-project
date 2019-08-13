@@ -7,8 +7,6 @@ dependencies:
     - system
   theme:
     - {{ NAME }}
-_core:
-  default_config_hash: guDfGGrW5uxYPUsiD6wetrZZJPQv1cHhppQYdtZgv3Q
 id: {{ NAME }}_mainnavigation
 theme: {{ NAME }}
 region: primary_menu

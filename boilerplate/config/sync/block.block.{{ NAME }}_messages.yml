@@ -5,8 +5,6 @@ dependencies:
     - system
   theme:
     - {{ NAME }}
-_core:
-  default_config_hash: 3AZryOnVK0Ohf-59VM9bTmeg5YL2U2DKuvAnRdblKRk
 id: {{ NAME }}_messages
 theme: {{ NAME }}
 region: content
