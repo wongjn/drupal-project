@@ -1,0 +1,20 @@
+langcode: en
+status: false
+dependencies:
+  module:
+    - node
+id: plural
+label: 'Generic Plural'
+type: 'canonical_entities:node'
+pattern: '[node:type]s/[node:title]'
+selection_criteria:
+  9cc12a2b-2d4a-4adb-b124-43f0a6c72d8a:
+    id: node_type
+    bundles: {  }
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 9cc12a2b-2d4a-4adb-b124-43f0a6c72d8a
+selection_logic: and
+weight: -5
+relationships: {  }
