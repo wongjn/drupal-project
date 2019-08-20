@@ -3,8 +3,6 @@ status: true
 dependencies:
   module:
     - node
-_core:
-  default_config_hash: Vc5BxdUOlO6NvbU9KFIGnG_hVbfp_G8v-Uqcqc3XRto
 id: pages
 label: Pages
 type: 'canonical_entities:node'
