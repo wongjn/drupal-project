@@ -365,6 +365,45 @@ display:
           hide_alter_empty: false
           plugin_id: custom
       filters:
+        filemime_1:
+          id: filemime_1
+          table: file_managed
+          field: filemime
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: starts
+          value: image/
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: file
+          entity_field: filemime
+          plugin_id: string
         filename:
           id: filename
           table: file_managed
@@ -430,18 +469,31 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
-          is_grouped: false
+            placeholder: ''
+          is_grouped: true
           group_info:
-            label: ''
+            label: 'File type'
             description: ''
-            identifier: ''
+            identifier: filemime
             optional: true
             widget: select
             multiple: false
             remember: false
             default_group: All
             default_group_multiple: {  }
-            group_items: {  }
+            group_items:
+              1:
+                title: JPEG
+                operator: '='
+                value: image/jpeg
+              2:
+                title: PNG
+                operator: '='
+                value: image/png
+              3:
+                title: GIF
+                operator: '='
+                value: image/gif
           entity_type: file
           entity_field: filemime
           plugin_id: string
@@ -537,6 +589,10 @@ display:
       display_extenders: {  }
       css_class: ''
       use_ajax: true
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
     cache_metadata:
       contexts:
         - 'languages:language_content'
