@@ -8,11 +8,11 @@
  * - secondary: HTML list items representing primary tasks.
  */
 #}
-{%- if primary -%}
+{% if primary %}
   <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
   <ul class="">{{ primary }}</ul>
-{%- endif -%}
-{%- if secondary -%}
+{% endif %}
+{% if secondary %}
   <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
   <ul class="">{{ secondary }}</ul>
-{%- endif -%}
+{% endif %}

@@ -12,7 +12,7 @@
  * @see template_preprocess_form_element_label()
  */
 #}
-{%-
+{%
   set classes = [
     title_display == 'after' ? 'option' : 'form-label',
     title_display == 'invisible' ? 'visually-hidden',
@@ -20,7 +20,7 @@
     required ? 'form-required',
     required ? 'form-label--required',
   ]
--%}
-{%- if title is not empty or required -%}
+%}
+{% if title is not empty or required %}
   <label{{ attributes.addClass(classes) }}>{{ title }}</label>
-{%- endif %}
+{% endif %}

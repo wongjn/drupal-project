@@ -22,17 +22,17 @@
  */
 #}
 <div{{ attributes }}>
-  {%- if not label_hidden -%}
-    {%- block label -%}
+  {% if not label_hidden %}
+    {% block label %}
       <div{{ title_attributes }}>
-        {{- label -}}
+        {{ label }}
       </div>
-    {%- endblock -%}
-  {%- endif -%}
+    {% endblock %}
+  {% endif %}
 
   <ul{{ content_attributes }}>
-    {%- for item in items -%}
+    {% for item in items %}
       <li{{ item.attributes }}>{{ item.content }}</li>
-    {%- endfor -%}
+    {% endfor %}
   </ul>
 </div>
