@@ -127,6 +127,10 @@ function {{ NAME }}_preprocess_field(&$variables) {
   if ($element['#entity_type'] == 'node' && $element['#view_mode'] == 'full') {
     $variables['attributes']['class'][] = 'l-container__module';
   }
+
+  if ($variables['label_display'] == 'visually_hidden') {
+    $variables['title_attributes']['class'][] = 'visually-hidden';
+  }
 }
 
 /**
