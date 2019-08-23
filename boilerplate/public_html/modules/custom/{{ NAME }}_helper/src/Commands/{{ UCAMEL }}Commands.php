@@ -34,7 +34,7 @@ class {{ UCAMEL }}Commands extends DrushCommands {
   protected $blockContentStorage;
 
   /**
-   * Constructs a new ViridorCommands object.
+   * Constructs a new {{ UCAMEL }}Commands object.
    *
    * @param \Drupal\Core\Asset\LibraryDiscoveryInterface $library_discovery
    *   The library discovery service.
