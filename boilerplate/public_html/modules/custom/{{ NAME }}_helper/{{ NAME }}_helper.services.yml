@@ -1,5 +1,0 @@
-services:
-  {{ NAME }}_helper.twig_extension:
-    class: Drupal\{{ NAME }}_helper\TwigExtension
-    tags:
-      - { name: twig.extension }
