@@ -40,10 +40,6 @@ select,
 textarea {
   padding: 0 ($form-height-rem * 0.333);
   max-width: 100%;
-
-  .l-grid__item & {
-    width: 100%;
-  }
 }
 
 input,
@@ -64,9 +60,67 @@ textarea {
 select {
   cursor: pointer;
 
+  // Hide system drop-down arrow in IE.
+  &::-ms-expand {
+    display: none;
+  }
+
   &[size] {
     overflow: auto;
     resize: vertical;
+  }
+}
+
+[type="radio"],
+[type="checkbox"] {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  overflow: hidden;
+  height: 1px;
+  width: 1px;
+
+  + label {
+    // Remove text cropping.
+    &::before {
+      content: none;
+    }
+
+    &::after {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      margin: 0 0 0 1ch;
+      border-radius: $form-height-rem / 2;
+      border: 1px solid $form-color-default;
+      width: $form-height-rem;
+      height: $form-height-rem;
+      font-size: 1.5em;
+      line-height: 1;
+      color: transparent;
+      content: '✔';
+    }
+  }
+
+  &:checked + label::after {
+    color: inherit;
+  }
+
+  &:focus + label::after {
+    border-color: $form-color-active;
+    box-shadow: 0 0 3px $form-color-active;
+  }
+}
+
+[type="radio"] {
+  & + label::after {
+    background-image: radial-gradient(circle, transparent 40%, transparent 42%);
+    content: '';
+  }
+
+  // Needed for Chrome bug were currentColor does not update in gradients.
+  &:checked + label::after {
+    background-image: radial-gradient(circle, currentColor 40%, transparent 42%);
   }
 }
 
