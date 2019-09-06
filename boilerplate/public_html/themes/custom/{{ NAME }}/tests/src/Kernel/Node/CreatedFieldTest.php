@@ -47,6 +47,7 @@ class CreatedFieldTest extends EntityKernelTestBase {
     $this->setDefaultTheme();
 
     $node_type = NodeType::create(['type' => $this->randomMachineName()]);
+    $node_type->setDisplaySubmitted(FALSE);
     $node_type->save();
 
     $this->node = Node::create([
