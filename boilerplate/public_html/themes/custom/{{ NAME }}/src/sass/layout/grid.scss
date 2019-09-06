@@ -9,14 +9,7 @@
 $gutter: 40px;
 $half-gutter: $gutter / 2;
 
-// Supported grid widths, key as BEM variant name
-$columns: (
-  // thirds: 3,
-  // quarters: 4,
-  // sixths: 6,
-);
-
-@mixin variants($gutter: $gutter, $container-width: $SITE-WIDTH-PX) {
+@mixin variants($gutter, $container-width, $columns) {
   @at-root {
     @each $name, $column in $columns {
       #{if("#{&}" == '.l-grid', '', &)}.l-grid--#{$name} {
@@ -28,15 +21,13 @@ $columns: (
         --column-min-width: #{$min-width};
         --column-width: #{$width};
 
-        > .l-grid__item {
-          flex-basis: $width;
+        // Fix overflowing grid areas on narrow viewports.
+        @media (max-width: #{$min-width + ($gutter * 2)}) {
+          grid-template-columns: 1fr;
         }
 
-        // Fix overflowing grid areas
-        &.l-grid--flexy {
-          @media (max-width: #{$min-width + ($gutter * 2)}) {
-            grid-template-columns: repeat(auto-fill, minmax(0, var(--column-width)));
-          }
+        > .l-grid__item {
+          flex-basis: $width;
         }
       }
     }
@@ -46,7 +37,6 @@ $columns: (
 .l-grid {
   @include viewport-scale(--gutter-x, $half-gutter, 20px);
   @include viewport-scale(--gutter-y, $half-gutter, 20px);
-  @include variants;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -64,20 +54,21 @@ $columns: (
     }
   }
 
+  @include variants($gutter, $SITE_WIDTH_PX, (
+    // thirds: 3,
+    // quarters: 4,
+    // sixths: 6,
+  ));
+
+  // 1. When using fallback flexbox layout, ensures items are contained within
+  //    the containing element.
   &__item {
-    flex-shrink: 0;
     margin: $half-gutter;
     margin: var(--gutter-y) var(--gutter-x);
-    max-width: calc(100% - (var(--gutter-x) * 2));
+    min-width: 0; // 1
 
     @supports (display: grid) {
       margin: 0;
-      max-width: 100%;
     }
-  }
-
-  // Stretches grids to fill container width instead of static widths.
-  &--flexy {
-    grid-template-columns: repeat(auto-fill, minmax(var(--column-min-width), 1fr));
   }
 }
