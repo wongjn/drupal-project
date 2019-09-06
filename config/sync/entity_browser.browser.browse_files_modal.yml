@@ -37,7 +37,7 @@ widgets:
       submit_text: 'Select files'
       auto_select: true
     uuid: a4ad947c-9669-497c-9988-24351955a02f
-    weight: 1
+    weight: 0
     label: 'Files listing'
     id: view
   735d146c-a4b2-4327-a057-d109e0905e05:
@@ -55,6 +55,6 @@ widgets:
       submit_text: 'Select files'
       auto_select: false
     uuid: 735d146c-a4b2-4327-a057-d109e0905e05
-    weight: 0
+    weight: 1
     label: 'Upload files'
     id: dropzonejs
