@@ -1,0 +1,8 @@
+test.footer:
+  title: 'footer test'
+  route_name: '<front>'
+  menu_name: footer
+test.main:
+  title: 'main test'
+  route_name: '<front>'
+  menu_name: main

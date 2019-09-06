@@ -35,3 +35,24 @@ function {{ NAME }}_helper_form_block_content_form_alter(array &$form) {
   // blocks since they may assume this is the block title.
   $form['info']['#access'] = \Drupal::currentUser()->hasPermission('administer blocks');
 }
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function {{ NAME }}_helper_menu_links_discovered_alter(&$links) {
+  $editable_menus = [
+    'footer',
+    'main',
+  ];
+
+  // Remove static module-defined menu links on front-end, editable menus to
+  // avoid conflicts with menu overrides config syncing.
+  foreach ($links as $key => $link) {
+    if (
+      strpos($key, 'menu_link_content:') === FALSE &&
+      isset($link['menu_name']) && in_array($link['menu_name'], $editable_menus)
+    ) {
+      unset($links[$key]);
+    }
+  }
+}

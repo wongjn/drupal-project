@@ -1,0 +1,5 @@
+name: '{{ LABEL }} Helper Test'
+type: module
+description: 'Support module for {{ LABEL }} Helper tests.'
+package: Testing
+core: 8.x
