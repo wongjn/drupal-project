@@ -26,6 +26,7 @@ trait AssertOutputTrait {
       $this->xpath("${selector}[normalize-space(text())=:text]", [':text' => $text],
       $message ?: sprintf('%s has text "%s".', $css_selector, $text)
     ));
+  }
 
   /**
    * Renders an render array in isolation (i.e. without a bare page).
