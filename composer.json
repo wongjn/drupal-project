@@ -61,7 +61,7 @@
         "drupal/devel": "^2.1",
         "drupal/multiline_config": "^1.0",
         "webflo/drupal-core-require-dev": "~8.7.0",
-        "wongjn/site_builder_console": "^0.2.0"
+        "wongjn/site_builder_console": "^0.3.0"
     },
     "conflict": {
         "drupal/drupal": "*"
