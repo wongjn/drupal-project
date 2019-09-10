@@ -26,7 +26,7 @@
  * Converts a pixel unit length to rem.
  *
  * @param {number} $length
- *   The length to convert into rem units. Must be given in pixels.
+ *   The length to convert into rem units. Given in pixels or unitless.
  *
  * @return {number}
  *   The length converted to rem units.
@@ -34,8 +34,8 @@
  * @throws Error if $length is not in pixels.
  */
 @function px-to-rem($length) {
-  @if unit($length) != 'px' {
-    @error '"#{$length}" must be a pixel length value.';
+  @if str-length(unit($length)) > 0 and unit($length) != 'px' {
+    @error '"#{$length}" must be unitless or pixel length value.';
   }
 
   @return (strip-unit($length) * 1rem / 16);
