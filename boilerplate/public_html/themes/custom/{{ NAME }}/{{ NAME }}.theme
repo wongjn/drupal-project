@@ -246,7 +246,7 @@ function {{ NAME }}_preprocess_menu__main(&$variables) {
   if (!$cookies->get('md')) {
     $variables['drawer_attributes']->setAttribute('style', 'display:none');
   }
-  $variables['#cache']['contexts'][] = 'cookies:mh';
+  $variables['#cache']['contexts'][] = 'cookies:md';
 }
 
 /**
