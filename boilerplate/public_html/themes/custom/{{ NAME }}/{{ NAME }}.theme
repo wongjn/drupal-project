@@ -94,6 +94,18 @@ function {{ NAME }}_page_attachments_alter(array &$attachments) {
 
   // Preload critical fonts.
   // Assets::attachFontPreloads($attachments);
+
+  // Remove telephone number detection in Safari and Edge.
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'format-detection',
+        'content' => 'telephone=no',
+      ],
+    ],
+    'telephone_number_detection_off',
+  ];
 }
 
 /**
