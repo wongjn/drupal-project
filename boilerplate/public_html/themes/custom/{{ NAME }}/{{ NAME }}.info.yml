@@ -11,6 +11,7 @@ regions:
 libraries:
   - {{ NAME }}/global
 libraries-override:
+  paragraphs/drupal.paragraphs.unpublished: false
   system/base:
     css:
       component:
