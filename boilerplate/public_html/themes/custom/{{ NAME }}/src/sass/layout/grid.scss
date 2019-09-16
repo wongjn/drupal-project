@@ -46,7 +46,7 @@ $half-gutter: $gutter / 2;
   @supports (display: grid) {
     display: grid;
     margin: 0;
-    grid-template-columns: repeat(auto-fill, minmax(0, var(--column-width)));
+    grid-template-columns: repeat(auto-fill, minmax(var(--column-min-width), 1fr));
     grid-gap: calc(var(--gutter-y) * 2) calc(var(--gutter-x) * 2);
 
     @include edge {
