@@ -23,9 +23,9 @@ trait AssertOutputTrait {
     $selector = (new CssSelectorConverter())->toXPath($css_selector);
     $this->assertCount(
       1,
-      $this->xpath("${selector}[normalize-space(text())=:text]", [':text' => $text],
+      $this->xpath("${selector}[normalize-space(text())=:text]", [':text' => $text]),
       $message ?: sprintf('%s has text "%s".', $css_selector, $text)
-    ));
+    );
   }
 
   /**
