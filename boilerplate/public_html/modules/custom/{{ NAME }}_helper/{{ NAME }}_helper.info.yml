@@ -1,5 +1,5 @@
 name: {{ LABEL }} Helper
-description: Tweaks for the {{ LABEL }} theme to work properly and for the site in general.
+description: Tweaks for the {{ LABEL }} theme to work properly and for general site tweaks.
 package: {{ LABEL }}
 type: module
 core: 8.x
