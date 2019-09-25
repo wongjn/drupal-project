@@ -1,17 +1,23 @@
 <?xml version="1.0"?>
 <ruleset name="{{ LABEL }}">
 
-	<file>./public_html/themes/custom</file>
-	<file>./public_html/modules/custom</file>
+  <file>./public_html/themes/custom</file>
+  <file>./public_html/modules/custom</file>
 
-	<!-- Ignore third party code -->
-	<exclude-pattern>*/node_modules/*</exclude-pattern>
-	<exclude-pattern>*/core/*</exclude-pattern>
-	<exclude-pattern>*/contrib/*</exclude-pattern>
-	<!-- Ignore CSS and JS -->
-	<exclude-pattern>*.css</exclude-pattern>
-	<exclude-pattern>*.js</exclude-pattern>
+  <!-- Ignore third party code -->
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
+  <exclude-pattern>*/core/*</exclude-pattern>
+  <exclude-pattern>*/contrib/*</exclude-pattern>
+  <!-- Ignore CSS and JS -->
+  <exclude-pattern>*.css</exclude-pattern>
+  <exclude-pattern>*.js</exclude-pattern>
 
-	<rule ref="./vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml"/>
-	<rule ref="./vendor/drupal/coder/coder_sniffer/DrupalPractice/ruleset.xml"/>
+  <rule ref="./vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml"/>
+  <rule ref="./vendor/drupal/coder/coder_sniffer/DrupalPractice/ruleset.xml"/>
+
+  <!-- Ignore t() usage in test classes -->
+  <rule ref="DrupalPractice.Objects.GlobalFunction.GlobalFunction">
+    <exclude-pattern>*/tests/src/*</exclude-pattern>
+  </rule>
+
 </ruleset>
