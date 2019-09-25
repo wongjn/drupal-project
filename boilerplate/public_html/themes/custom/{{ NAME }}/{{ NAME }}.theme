@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Template\Attribute;
-use Drupal\file\FileInterface;
 use Drupal\{{ NAME }}\Assets;
 use Drupal\{{ NAME }}\Menu;
 
@@ -22,6 +21,16 @@ function {{ NAME }}_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function {{ NAME }}_theme_registry_alter(array &$theme_registry) {
+  $theme_registry['file_link']['preprocess functions'] = array_diff(
+    $theme_registry['file_link']['preprocess functions'],
+    ['template_preprocess_file_link']
+  );
 }
 
 /**
@@ -162,25 +171,27 @@ function {{ NAME }}_preprocess_field__node__created(&$variables) {
  * Implements hook_preprocess_HOOK() for file-link.html.twig.
  */
 function {{ NAME }}_preprocess_file_link(&$variables) {
+  /** @var \Drupal\file\FileInterface $file */
   $file = $variables['file'];
-  $file_entity = ($file instanceof FileInterface) ? $file : \Drupal::entityTypeManager()->getStorage('file')->load($file->fid);
 
   // Add href attribute.
-  $variables['attributes']->setAttribute('href', file_create_url($file_entity->getFileUri()));
+  $variables['attributes']['href'] = file_url_transform_relative(
+    file_create_url($file->getFileUri())
+  );
 
   // Set mime type info into attribute.
-  $mime_type = $file->getMimeType();
-  $variables['attributes']->setAttribute('type', "$mime_type; length=" . $file->getSize());
+  $variables['attributes']['type'] = sprintf(
+    '%s; length=%s',
+    $file->getMimeType(),
+    $file->getSize()
+  );
 
   if (empty($variables['description'])) {
-    $variables['description'] = $file_entity->getFilename();
-  }
-  else {
-    $variables['attributes']->setAttribute('title', $file_entity->getFilename());
+    $variables['description'] = $file->getFilename();
   }
 
-  $variables['attributes']->setAttribute('download', TRUE);
-  $variables['attributes']->setAttribute('target', '_blank');
+  $variables['attributes']['download'] = TRUE;
+  $variables['attributes']['target'] = '_blank';
 }
 
 /**
