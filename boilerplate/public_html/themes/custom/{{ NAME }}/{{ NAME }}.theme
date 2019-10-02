@@ -319,8 +319,10 @@ function {{ NAME }}_form_contact_message_form_alter(&$form, FormStateInterface $
  * Implements hook_element_info_alter().
  */
 function {{ NAME }}_element_info_alter(array &$info) {
-  $info['view']['#pre_render'][] = '{{ NAME }}_view_pre_render';
-  $info['processed_text']['#pre_render'][] = '{{ NAME }}_processed_text_pre_render';
+  $info['view']['#pre_render'][] = ['Drupal\{{ NAME }}\Render', 'preRenderViewElement'];
+  $info['processed_text']['#pre_render'][] = ['Drupal\{{ NAME }}\Render', 'preRenderProcessedText'];
+
+  // Remove unused off-canvas page wrapping markup.
   unset($info['page']['#theme_wrappers']['off_canvas_page_wrapper']);
 
   // Add pre-render hook to alter module/nomodule script HTML tags.
@@ -328,31 +330,6 @@ function {{ NAME }}_element_info_alter(array &$info) {
     $info['html_tag']['#pre_render'] = [];
   }
   array_unshift($info['html_tag']['#pre_render'], ['\Drupal\{{ NAME }}\Assets', 'preRenderHtmlTag']);
-}
-
-/**
- * Pre-render callback to wrap processed text.
- */
-function {{ NAME }}_processed_text_pre_render($element) {
-  $element['#theme_wrappers'][] = 'container';
-  $element['#attributes']['class'][] = 'c-text-body';
-
-  return $element;
-}
-
-/**
- * Pre-render callback to remove wrapper elements around views.
- */
-function {{ NAME }}_view_pre_render($element) {
-  if (isset($element['#theme_wrappers'])) {
-    $key = array_search('container', $element['#theme_wrappers']);
-
-    if (is_int($key)) {
-      unset($element['#theme_wrappers'][$key]);
-    }
-  }
-
-  return $element;
 }
 
 /**
