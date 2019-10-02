@@ -32,7 +32,7 @@ trait EntityCreationTrait {
    *   default) or an array of field storage settings.
    */
   protected function createEntityFields($entity_type, $bundle, array $fields) {
-    if (!EntityViewDisplay::load("$entity_type.$this->bundle.default")) {
+    if (!EntityViewDisplay::load("$entity_type.$bundle.default")) {
       EntityViewDisplay::create([
         'targetEntityType' => $entity_type,
         'bundle' => $bundle,
@@ -57,7 +57,7 @@ trait EntityCreationTrait {
         'bundle' => $bundle,
       ])->save();
 
-      EntityViewDisplay::load("$entity_type.$this->bundle.default")
+      EntityViewDisplay::load("$entity_type.$bundle.default")
         ->setComponent($field_name)
         ->save();
     }
