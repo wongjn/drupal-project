@@ -22,10 +22,12 @@ class Render {
       }
     }
 
-    // Remove unused 'views-element-container' HTML class.
-    $element['#attributes'] = (new Attribute($element['#attributes']))
-      ->removeClass('views-element-container')
-      ->toArray();
+    if (isset($element['#attributes'])) {
+      // Remove unused 'views-element-container' HTML class.
+      $element['#attributes'] = (new Attribute($element['#attributes']))
+        ->removeClass('views-element-container')
+        ->toArray();
+    }
 
     return $element;
   }
