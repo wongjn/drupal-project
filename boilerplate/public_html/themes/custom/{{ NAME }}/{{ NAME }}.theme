@@ -290,13 +290,6 @@ function {{ NAME }}_preprocess_region(&$variables) {
 }
 
 /**
- * Implements hook_form_alter().
- */
-function {{ NAME }}_form_alter(&$form) {
-  $form['#attached']['library'][] = '{{ NAME }}/form';
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter() for contact_message_form.
  */
 function {{ NAME }}_form_contact_message_form_alter(&$form, FormStateInterface $form_state) {

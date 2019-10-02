@@ -14,11 +14,8 @@
 #}
 {%
   set classes = [
-    title_display == 'after' ? 'option' : 'form-label',
     title_display == 'invisible' ? 'visually-hidden',
     required ? 'js-form-required',
-    required ? 'form-required',
-    required ? 'form-label--required',
   ]
 %}
 {% if title is not empty or required %}

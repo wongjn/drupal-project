@@ -35,11 +35,6 @@ global:
     - {{ NAME }}/polyfill
     - core/drupal
 
-form:
-  css:
-    component:
-      dist/css/components/form.css: {}
-
 imce-file-manager:
   css:
     component:
