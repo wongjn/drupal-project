@@ -27,10 +27,12 @@ function {{ NAME }}_theme($existing, $type, $theme, $path) {
  * Implements hook_theme_registry_alter().
  */
 function {{ NAME }}_theme_registry_alter(array &$theme_registry) {
+  if (isset($theme_registry['file_link'])) {
   $theme_registry['file_link']['preprocess functions'] = array_diff(
     $theme_registry['file_link']['preprocess functions'],
     ['template_preprocess_file_link']
   );
+}
 }
 
 /**
