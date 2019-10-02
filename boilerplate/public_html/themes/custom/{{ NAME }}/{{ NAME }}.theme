@@ -5,6 +5,7 @@
  * Supporting theme hooks and functions.
  */
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\{{ NAME }}\Assets;
 use Drupal\{{ NAME }}\Menu;
@@ -28,11 +29,11 @@ function {{ NAME }}_theme($existing, $type, $theme, $path) {
  */
 function {{ NAME }}_theme_registry_alter(array &$theme_registry) {
   if (isset($theme_registry['file_link'])) {
-  $theme_registry['file_link']['preprocess functions'] = array_diff(
-    $theme_registry['file_link']['preprocess functions'],
-    ['template_preprocess_file_link']
-  );
-}
+    $theme_registry['file_link']['preprocess functions'] = array_diff(
+      $theme_registry['file_link']['preprocess functions'],
+      ['template_preprocess_file_link']
+    );
+  }
 }
 
 /**
@@ -298,7 +299,18 @@ function {{ NAME }}_form_alter(&$form) {
 /**
  * Implements hook_form_BASE_FORM_ID_alter() for contact_message_form.
  */
-function {{ NAME }}_form_contact_message_form_alter(&$form) {
+function {{ NAME }}_form_contact_message_form_alter(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
+  $form_display = $form_state->get('form_display');
+
+  // Ensure base-fields have the weights they were assigned in form display
+  // configuration.
+  foreach (['mail', 'name', 'message'] as $base_field) {
+    if ($component = $form_display->getComponent($base_field)) {
+      $form[$base_field]['#weight'] = $component['weight'];
+    }
+  }
+
   $form['name']['#title'] = t('Name');
   $form['mail']['#title'] = t('Email');
   // $form['message']['widget'][0]['value']['#title'] = t('Query');
