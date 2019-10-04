@@ -80,13 +80,16 @@ abstract class NodeTestBase extends ThemeKernelTestBase {
    *
    * @param array $parameters
    *   (optional) Parameters to create a node.
-   * @param string $view_mode
-   *   (optional) The view mode to render a node in.
    *
    * @return \Drupal\node\NodeInterface
    *   The rendered node entity.
    */
-  protected function renderNode(array $parameters = [], $view_mode = 'full') {
+  protected function renderNode(array $parameters = []) {
+    $parameters += ['view_mode' => 'full'];
+
+    $view_mode = $parameters['view_mode'];
+    unset($parameters['view_mode']);
+
     $node = $this->createNode(['type' => $this->bundle] + $parameters);
 
     $build = $this->container

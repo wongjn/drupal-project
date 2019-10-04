@@ -74,13 +74,18 @@ abstract class ParagraphTestBase extends ThemeKernelTestBase {
    *   The rendered paragraph entity.
    */
   protected function renderParagraph(array $parameters = []) {
+    $parameters += ['view_mode' => 'full'];
+
+    $view_mode = $parameters['view_mode'];
+    unset($parameters['view_mode']);
+
     $paragraph = Paragraph::create(['type' => $this->bundle] + $parameters);
     $paragraph->save();
 
     $build = $this->container
       ->get('entity_type.manager')
       ->getViewBuilder('paragraph')
-      ->view($paragraph);
+      ->view($paragraph, $view_mode);
     $this->isolatedRender($build);
 
     return $paragraph;

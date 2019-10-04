@@ -70,25 +70,30 @@ abstract class BlockContentTestBase extends ThemeKernelTestBase {
    *
    * @param array $parameters
    *   (optional) Parameters to create a custom block.
-   * @param string $region
-   *   (optional) The region to place the block in before render.
-   * @param string $view_mode
-   *   (optional) The view mode that should be used to render the block.
    *
    * @return \Drupal\block_content\BlockContentInterface
    *   The block content entity.
    */
-  protected function renderPlacedBlock(array $parameters = [], $region = 'content', $view_mode = 'full') {
+  protected function renderPlacedBlock(array $parameters = []) {
+    $parameters += [
+      'region' => 'content',
+      'view_mode' => 'full',
+    ];
+
+    $block_settings = [];
+    foreach (['id', 'region', 'view_mode', 'visibility', 'weight'] as $key) {
+      if (isset($parameters[$key])) {
+        $block_settings[$key] = $parameters[$key];
+        // Remove extra values that do not belong in the parameters array.
+        unset($parameters[$key]);
+      }
+    }
+
     $block_content = BlockContent::create(['type' => $this->bundle] + $parameters);
     $block_content->save();
 
-    $block = $this->placeBlock(
-      'block_content:' . $block_content->uuid(),
-      [
-        'region' => $region,
-        'view_mode' => $view_mode,
-      ]
-    );
+    $block = $this->placeBlock('block_content:' . $block_content->uuid(), $block_settings);
+
     $build = $this->container
       ->get('entity_type.manager')
       ->getViewBuilder('block')
