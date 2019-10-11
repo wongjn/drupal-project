@@ -3,17 +3,17 @@ status: true
 dependencies:
   theme:
     - {{ NAME }}
-id: {{ NAME }}_secondary_local_tasks
+id: local_tasks
 theme: {{ NAME }}
 region: content
-weight: -7
+weight: -8
 provider: null
 plugin: local_tasks_block
 settings:
   id: local_tasks_block
-  label: 'Secondary tabs'
+  label: 'Local Tasks'
   provider: core
   label_display: '0'
-  primary: false
+  primary: true
   secondary: true
 visibility: {  }
