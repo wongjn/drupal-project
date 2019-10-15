@@ -7,7 +7,7 @@
 @use '../lib/viewport';
 
 .c-text-body {
-  @include font.crop('FONT-NAME', font.$LINE-HEIGHT);
+  @include font.crop(font.$LINE-HEIGHT);
   $block-spacing: font.$LINE-HEIGHT * 1rem;
 
   &--no-text-crop {
