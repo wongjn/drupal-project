@@ -14,14 +14,13 @@ body {
   @include font.size(font.$SIZE);
   color: #333;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-  letter-spacing: 0.025em;
   line-height: font.$LINE-HEIGHT;
   quotes: '“' '”' '‘' '’';
 }
 *,
 ::before,
 ::after {
-  letter-spacing: inherit;
+  letter-spacing: 0.025em;
 }
 
 ::selection {
