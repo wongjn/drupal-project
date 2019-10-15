@@ -118,6 +118,9 @@
             "drupal/core": {
                 "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch",
                 "Fix drupalimage CKEditor plugin requiring data-entity-uuid and data-entity-type when image upload is disabled": "https://www.drupal.org/files/issues/2018-09-13/drupalimage_ckeditor-2771837-34.patch"
+            },
+            "drupal/devel": {
+                "Fix menu link generation": "patches/devel_generate-fix_menu_link_generation.patch"
             }
         },
         "drupal-scaffold": {
