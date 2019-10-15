@@ -2,8 +2,8 @@
 
 The directory contains the SASS files, organized into folders by their roles:
 
-- **_system:** this folder should contain utility code (such as variables,
-mixins and functions) that does not output any CSS by itself.
+- **lib:** this folder should contain utility code (such as variables, mixin
+ and functions) that does not output any CSS by itself.
 - **base:** base styles and resets, should only contain element selectors.
 - **layout:** styles for layout purposes, such as grids or containers.
 Selectors should be namespaced by prefixing with `l-`.

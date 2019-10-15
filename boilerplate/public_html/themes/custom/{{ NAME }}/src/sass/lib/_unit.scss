@@ -1,0 +1,139 @@
+@use "sass:meta";
+@use "sass:string";
+@use "sass:map";
+@use "sass:list";
+@use "sass:math";
+/**
+ * @file
+ * Functions and mixins related to value unit manipulation.
+ */
+
+/**
+ * Casts a string to number.
+ *
+ * From https://hugogiraudel.com/2014/01/15/sass-string-to-number/
+ *
+ * @param {string|number} $value
+ *   Value to be parsed.
+ *
+ * @return {number}
+ *   Given value as a number.
+ */
+@function _to-number($value) {
+  @if meta.type-of($value) == 'number' {
+    @return $value;
+  } @else if meta.type-of($value) != 'string' {
+    @debug 'Value for `to-number` should be a number or a string.';
+  }
+
+  $result: 0;
+  $digits: 0;
+  $minus: string.slice($value, 1, 1) == '-';
+  $numbers: ('0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9);
+
+  @for $i from if($minus, 2, 1) through string.length($value) {
+    $character: string.slice($value, $i, $i);
+
+    @if not (list.index(map.keys($numbers), $character) or $character == '.') {
+      @return _to-length(if($minus, -$result, $result), string.slice($value, $i))
+    }
+
+    @if $character == '.' {
+      $digits: 1;
+    } @else if $digits == 0 {
+      $result: $result * 10 + map.get($numbers, $character);
+    } @else {
+      $digits: $digits * 10;
+      $result: $result + map.get($numbers, $character) / $digits;
+    }
+  }
+
+  @return if($minus, -$result, $result);;
+}
+
+/**
+ * Adds a unit to a numeric value.
+ *
+ * From https://hugogiraudel.com/2014/01/15/sass-string-to-number/
+ *
+ * @param {number} $value
+ *   Value to add unit to.
+ * @param {string} $unit
+ *   String representation of the unit.
+ *
+ * @return {number}
+ *   Value with unit.
+ */
+@function _to-length($value, $unit) {
+  $units: ('px': 1px, 'cm': 1cm, 'mm': 1mm, '%': 1%, 'ch': 1ch, 'pc': 1pc, 'in': 1in, 'em': 1em, 'rem': 1rem, 'pt': 1pt, 'ex': 1ex, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax);
+
+  @if not list.index(map.keys($units), $unit) {
+    @debug 'Invalid unit `#{$unit}`.';
+  }
+
+  @return $value * map.get($units, $unit);
+}
+
+/**
+ * Removes the unit of a length value.
+ *
+ * @param {number} $value
+ *   Length value to remove unit from.
+ *
+ * @return {number}
+ *   The unitless value.
+ */
+@function strip($value) {
+  @if meta.type-of($value) != number {
+    $given-value: $value;
+    $value: _to-number($value);
+    @debug '#{$given-value} given as a #{meta.type-of($given-value)}, converted to #{$value}';
+  }
+
+  @return if(math.is-unitless($value), $value, ($value / ($value * 0 + 1)));
+}
+
+/**
+ * Converts a pixel unit length to rem.
+ *
+ * @param {number} $length
+ *   The length to convert into rem units. Given in pixels or unitless.
+ *
+ * @return {number}
+ *   The length converted to rem units.
+ *
+ * @throws Error if $length is not in pixels.
+ */
+@function px-to-rem($length) {
+  @if string.length(math.unit($length)) > 0 and math.unit($length) != 'px' {
+    @error '"#{$length}" must be unitless or pixel length value.';
+  }
+
+  @return (strip($length) * 1rem / 16);
+}
+
+/**
+ * Converts a rem unit length to pixels.
+ *
+ * @param {number} $length
+ *   The length to convert into pixel units. Must be given in rem.
+ *
+ * @return {number}
+ *   The length converted to pixels units.
+ *
+ * @throws Error if $length is not in rem.
+ */
+@function rem-to-px($length) {
+  @if math.unit($length) != 'rem' {
+    @error '"#{$length}" must be a rem length value.';
+  }
+
+  @return (strip($length) * 1px * 16);
+}
+
+/**
+ * Returns $value but limited to $minimum and $maximum (inclusive).
+ */
+@function between($value, $minimum, $maximum) {
+  @return math.max(math.min($value, $maximum), $minimum);
+}

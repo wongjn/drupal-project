@@ -3,7 +3,7 @@
  * Base typography.
  */
 
-@import '../system';
+@use '../lib/font';
 
 html {
   // Prevent adjustments of font size after orientation changes in iOS.
@@ -11,11 +11,11 @@ html {
 }
 
 body {
-  @include font-size($FONT-SIZE);
+  @include font.size(font.$SIZE);
   color: #333;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   letter-spacing: 0.025em;
-  line-height: $LINE-HEIGHT;
+  line-height: font.$LINE-HEIGHT;
   quotes: '“' '”' '‘' '’';
 }
 *,

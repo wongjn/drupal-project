@@ -1,0 +1,12 @@
+/**
+ * @file
+ * Variables for forms.
+ */
+
+$color-default: grey;
+$color-active: orange;
+$font-size: 18;
+$height: 55;
+$height-rem: $height * 1rem / 16;
+$line-height: 1.2;
+$padding: ($height - ($font-size * 1px * $line-height)) / 2;

@@ -3,7 +3,5 @@
  * One-off (mostly) single-property classes.
  */
 
-@import 'system';
-
-@import 'utilities/layout';
-@import 'utilities/typography';
+@use 'utilities/layout';
+@use 'utilities/typography';

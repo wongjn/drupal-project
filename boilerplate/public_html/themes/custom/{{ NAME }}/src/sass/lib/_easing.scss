@@ -1,10 +1,11 @@
+@use "sass:map";
 /**
  * @file
  * Collection of timing easings.
  */
 
 // Easing values
-$EASING: (
+$_EASING: (
   in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53),
   in-cubic: cubic-bezier(0.550, 0.055, 0.675, 0.19),
   in-quart: cubic-bezier(0.895, 0.03, 0.685, 0.22),
@@ -36,6 +37,6 @@ $EASING: (
  * @return {cubic-bezier}
  *   The cubic-bezier timing function value.
  */
-@function get-easing($name) {
-  @return map-get($EASING, $name);
+@function get($name) {
+  @return map.get($_EASING, $name);
 }

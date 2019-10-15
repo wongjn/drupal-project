@@ -1,12 +1,15 @@
+@use "sass:math";
+@use "sass:list";
 /**
  * @file
  * Functions and mixins related to fonts.
  */
 
-@import 'unit';
+@use 'unit';
+@use 'viewport';
 
 // List of font sizes that will have scalable custom properties
-$FONT-SIZE-PRESETS: (
+$_SIZE-PRESETS: (
   72,
   60,
   48,
@@ -19,13 +22,31 @@ $FONT-SIZE-PRESETS: (
 );
 
 // Minimum size for font size to be considered scalable
-$FONT-SIZE-SCALE-MINIMUM: 12px;
+$_SIZE-SCALE-MINIMUM: 12px;
 
 // Default font size
-$FONT-SIZE: 16;
+$SIZE: 16;
 
 // Global default line height ratio
-$LINE-HEIGHT: (24 / $FONT-SIZE);
+$LINE-HEIGHT: (24 / $SIZE);
+
+/**
+ * Returns the minimum value to use for font scales.
+ *
+ * @param {number} $size
+ *   The unitless font size in pixels.
+ * @return {number}
+ *   The minimum size for the given font size with rem units.
+ */
+@function _scale-minimum($size) {
+  @return unit.px-to-rem(
+    unit.between(
+      math.floor(($size + ($_SIZE-SCALE-MINIMUM * 16))/ 14),
+      $_SIZE-SCALE-MINIMUM,
+      $size * 1px
+    )
+  );
+}
 
 /**
  * Outputs font size using fall-back and variables.
@@ -33,20 +54,20 @@ $LINE-HEIGHT: (24 / $FONT-SIZE);
  * @param {number} $size
  *   The unitless font size in pixels.
  */
-@mixin font-size($size) {
-  $rem-size: px-to-rem($size * 1px);
+@mixin size($size) {
+  $rem-size: unit.px-to-rem($size);
 
   // Too small to scale
-  @if $size <= $FONT-SIZE-SCALE-MINIMUM {
+  @if $size <= $_SIZE-SCALE-MINIMUM {
     font-size: $rem-size;
   }
   // Defined in :root as CSS custom properties
-  @else if index($FONT-SIZE-PRESETS, $size) {
+  @else if list.index($_SIZE-PRESETS, $size) {
     font-size: $rem-size;
     font-size: var(--font-size-#{$size});
   }
   @else {
-    @include viewport-scale(font-size, $rem-size, font-scale-minimum($size));
+    @include viewport.scale(font-size, $rem-size, _scale-minimum($size));
   }
 }
 
@@ -58,51 +79,33 @@ $LINE-HEIGHT: (24 / $FONT-SIZE);
  *   editor. Default false.
  *
  */
-@mixin font-size-custom-properties($editor-stylesheet: false) {
-  @each $size in $FONT-SIZE-PRESETS {
-    $rem-size: px-to-rem($size * 1px);
+@mixin size-custom-properties($editor-stylesheet: false) {
+  @each $size in $_SIZE-PRESETS {
+    $rem-size: unit.px-to-rem($size * 1px);
 
-    @if $size > $FONT-SIZE-SCALE-MINIMUM {
+    @if $size > $_SIZE-SCALE-MINIMUM {
       @if ($editor-stylesheet) {
         // No scaling for WYSIWYG editors
         --font-size-#{$size}: #{$rem-size};
       } @else {
-        @include viewport-scale(--font-size-#{$size}, $rem-size, font-scale-minimum($size));
+        @include viewport.scale(--font-size-#{$size}, $rem-size, _scale-minimum($size));
       }
     }
   }
 }
 
 /**
- * Returns the minimum value to use for font scales.
- *
- * @param {number} $size
- *   The unitless font size in pixels.
- * @return {number}
- *   The minimum size for the given font size with rem units.
- */
-@function font-scale-minimum($size) {
-  @return px-to-rem(
-    between(
-      floor(($size + ($FONT-SIZE-SCALE-MINIMUM * 16))/ 14),
-      $FONT-SIZE-SCALE-MINIMUM,
-      $size * 1px
-    )
-  );
-}
-
-/**
  * Crops a box-model to cap height and baseline of a supported font family.
  */
-@mixin text-crop($font-family: '', $line-height: 1.3, $top-adjustment: 0px, $bottom-adjustment: 0px) {
+@mixin crop($font-family: '', $line-height: 1.3, $top-adjustment: 0px, $bottom-adjustment: 0px) {
   $top-crop: 0;
   $bottom-crop: 0;
   $crop-font-size: 24;
   $crop-line-height: 1.5;
 
   // Apply values to calculate em-based margins that work with any font size
-  $dynamic-top-crop: max(($top-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size;
-  $dynamic-bottom-crop: max(($bottom-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size;
+  $dynamic-top-crop: math.max(($top-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size;
+  $dynamic-bottom-crop: math.max(($bottom-crop + ($line-height - $crop-line-height) * ($crop-font-size / 2)), 0) / $crop-font-size;
 
   // Mixin output
   line-height: $line-height;

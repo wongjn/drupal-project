@@ -1,10 +1,11 @@
+@use "sass:map";
 /**
  * @file
  * Drupal status messages.
  */
 
-@import '../system';
-@import '../../../node_modules/izitoast/dist/css/iziToast.min';
+@use '../lib/font';
+@use '../../../node_modules/izitoast/dist/css/iziToast.min';
 
 .iziToast {
   border-radius: 0;
@@ -21,7 +22,7 @@
 }
 
 .iziToast-message[class][class] {
-  @include font-size(16);
+  @include font.size(16);
   margin: 0;
   padding: 10px 0;
   overflow: auto;
@@ -85,12 +86,12 @@
   );
   @each $name, $data in $variants {
     &--#{$name} {
-      border-color: map-get($data, color);
+      border-color: map.get($data, color);
       padding: 1em;
 
       &::before {
-        background-color: map-get($data, color);
-        content: map-get($data, icon);
+        background-color: map.get($data, color);
+        content: map.get($data, icon);
         color: if($name == warning, #333, #fff);
       }
     }

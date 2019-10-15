@@ -2,10 +2,12 @@
  * Off-canvas drawer menu.
  */
 
-@import '../system';
+@use '../lib/unit';
+@use '../lib/easing';
+@use '../lib/font';
 
 .c-drawer-menu {
-  $title-size: px-to-rem(48);
+  $title-size: unit.px-to-rem(48);
   $title-padding: 2rem;
 
   $animation_duration_base: 350ms;
@@ -21,7 +23,7 @@
   background-color: #fff;
   transition-property: transform, visibility, opacity;
   transition-duration: $animation_duration_base;
-  transition-timing-function: get-easing(out-cubic);
+  transition-timing-function: easing.get(out-cubic);
   transform: translateX(100px);
   opacity: 0;
   visibility: hidden; // 1
@@ -80,7 +82,7 @@
       width: 100%;
       height: $line-width;
       background-color: blueviolet;
-      transition: transform 600ms get-easing(in-out-cubic);
+      transition: transform 600ms easing.get(in-out-cubic);
       content: '';
     }
 
@@ -115,8 +117,8 @@
     flex: 0 0 auto;
     transform: translateY(-30px);
     opacity: 0;
-    color: $BLUE;
-    font: 700 #{$title-size} / 1 $FONT_CONDENSED;
+    color: red;
+    font: 700 #{$title-size} / 1;
     text-transform: uppercase;
 
     .is-open & {
@@ -132,7 +134,7 @@
 
   &__top-menu {
     @extend %animation-element;
-    @include font-size(48);
+    @include font.size(48);
     overflow-x: hidden;
     overflow-y: auto;
     background-color: lime;
@@ -198,7 +200,7 @@
       transform: scaleX(0.3);
       opacity: 0;
       transition:
-        transform 250ms get-easing(out-quint),
+        transform 250ms easing.get(out-quint),
         opacity 250ms;
       content: '';
     }

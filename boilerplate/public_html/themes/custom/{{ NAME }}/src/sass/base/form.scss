@@ -3,11 +3,12 @@
  * Base form elements.
  */
 
-@import '../system';
+@use '../lib/font';
+@use '../lib/forms';
 
 label,
 legend {
-  @include text-crop;
+  @include font.crop;
   display: table;
 }
 
@@ -18,11 +19,11 @@ label {
 input,
 textarea,
 select {
-  border: 2px solid $form-color-default;
+  border: 2px solid forms.$color-default;
   background-color: transparent;
   font: inherit;
-  @include font-size($form-font-size);
-  line-height: $form-line-height;
+  @include font.size(forms.$font-size);
+  line-height: forms.$line-height;
   color: inherit;
   -webkit-appearance: none;
   appearance: none;
@@ -30,28 +31,28 @@ select {
 
   &:focus {
     outline: 0;
-    border-color: $form-color-active;
-    box-shadow: 0 0 3px $form-color-active;
+    border-color: forms.$color-active;
+    box-shadow: 0 0 3px forms.$color-active;
   }
 }
 
 input,
 select,
 textarea {
-  padding: 0 ($form-height-rem * 0.333);
+  padding: 0 (forms.$height-rem * 0.333);
   max-width: 100%;
 }
 
 input,
 select,
 [type="submit"] {
-  height: $form-height-rem;
+  height: forms.$height-rem;
 }
 
 textarea {
   display: block;
-  padding-top: $form-padding;
-  padding-bottom: $form-padding;
+  padding-top: forms.$padding;
+  padding-bottom: forms.$padding;
   resize: vertical;
   // Remove the default vertical scrollbar in IE 10+.
   overflow: auto;
@@ -91,10 +92,10 @@ select {
       justify-content: center;
       vertical-align: middle;
       margin: 0 0 0 1ch;
-      border-radius: $form-height-rem / 2;
-      border: 1px solid $form-color-default;
-      width: $form-height-rem;
-      height: $form-height-rem;
+      border-radius: forms.$height-rem / 2;
+      border: 1px solid forms.$color-default;
+      width: forms.$height-rem;
+      height: forms.$height-rem;
       font-size: 1.5em;
       line-height: 1;
       color: transparent;
@@ -107,8 +108,8 @@ select {
   }
 
   &:focus + label::after {
-    border-color: $form-color-active;
-    box-shadow: 0 0 3px $form-color-active;
+    border-color: forms.$color-active;
+    box-shadow: 0 0 3px forms.$color-active;
   }
 }
 
@@ -157,9 +158,9 @@ button:disabled {
 
 // For submit-type `input` form elements
 [type="submit"] {
-  @include font-size(24);
-  border-color: $form-color-active;
-  background-color: $form-color-active;
+  @include font.size(24);
+  border-color: forms.$color-active;
+  background-color: forms.$color-active;
   color: #fff;
   cursor: pointer;
   transition: color 250ms, background-color 250ms, transform 250ms;
@@ -167,7 +168,7 @@ button:disabled {
   &:hover,
   &:focus {
     background-color: transparent;
-    color: $form-color-active;
+    color: forms.$color-active;
   }
 
   &:active {

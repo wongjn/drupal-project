@@ -3,8 +3,8 @@
  * Global CSS variables.
  */
 
-@import '../system';
+@use '../lib/font';
 
 :root {
-  @include font-size-custom-properties;
+  @include font.size-custom-properties;
 }

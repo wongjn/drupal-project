@@ -3,7 +3,7 @@
  * Layout utilities such as margins or padding.
  */
 
-@import '../system';
+@use '../lib/viewport';
 
 /**
  * Creates scaling utility measurement rules.
@@ -22,7 +22,7 @@
       $measure-px: $measure * 1px;
 
       @if ($measure > 20) {
-        @include viewport-scale($property, $measure-px, 20px);
+        @include viewport.scale($property, $measure-px, 20px);
       }
       @else {
         #{$property}: $measure-px;

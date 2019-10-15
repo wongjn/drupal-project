@@ -3,11 +3,12 @@
  * CMS WYSIWYG-entered text.
  */
 
-@import '../system';
+@use '../lib/font';
+@use '../lib/viewport';
 
 .c-text-body {
-  @include text-crop('FONT-NAME', $LINE-HEIGHT);
-  $block-spacing: $LINE-HEIGHT * 1rem;
+  @include font.crop('FONT-NAME', font.$LINE-HEIGHT);
+  $block-spacing: font.$LINE-HEIGHT * 1rem;
 
   &--no-text-crop {
     &::before,
@@ -56,7 +57,7 @@
   );
   @each $level, $size in $heading-sizes {
     h#{$level} {
-      @include font-size($size);
+      @include font.size($size);
     }
   }
 
@@ -89,8 +90,8 @@
   }
   .align-left,
   .align-right {
-    @include viewport-scale(margin-right, 20px, 5px);
-    @include viewport-scale(margin-left, 20px, 5px);
+    @include viewport.scale(margin-right, 20px, 5px);
+    @include viewport.scale(margin-left, 20px, 5px);
   }
 
   &__emphasize {}

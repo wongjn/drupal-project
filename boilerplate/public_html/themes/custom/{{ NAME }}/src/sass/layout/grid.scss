@@ -3,7 +3,9 @@
  * Layout items in a grid.
  */
 
-@import '../system';
+@use '../lib/hacks';
+@use '../lib/layout';
+@use '../lib/viewport';
 
 // Spacing between items
 $gutter: 40px;
@@ -14,9 +16,9 @@ $half-gutter: $gutter / 2;
     @each $name, $column in $columns {
       #{if("#{&}" == '.l-grid', '', &)}.l-grid--#{$name} {
         // Exact width
-        $width: column-width($column, $gutter, $container-width);
+        $width: layout.column-width($column, $gutter, $container-width);
         // Min-width for grid to be at the desired column count at full site width
-        $min-width: (column-width($column + 1, $gutter, $container-width) + 1px);
+        $min-width: (layout.column-width($column + 1, $gutter, $container-width) + 1px);
 
         --column-min-width: #{$min-width};
         --column-width: #{$width};
@@ -35,8 +37,8 @@ $half-gutter: $gutter / 2;
 }
 
 .l-grid {
-  @include viewport-scale(--gutter-x, $half-gutter, 20px);
-  @include viewport-scale(--gutter-y, $half-gutter, 20px);
+  @include viewport.scale(--gutter-x, $half-gutter, 20px);
+  @include viewport.scale(--gutter-y, $half-gutter, 20px);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -49,12 +51,12 @@ $half-gutter: $gutter / 2;
     grid-template-columns: repeat(auto-fill, minmax(var(--column-min-width), 1fr));
     grid-gap: calc(var(--gutter-y) * 2) calc(var(--gutter-x) * 2);
 
-    @include edge {
+    @include hacks.edge {
       grid-gap: $gutter;
     }
   }
 
-  @include variants($gutter, $SITE_WIDTH_PX, (
+  @include variants($gutter, layout.$SITE_WIDTH_PX, (
     // thirds: 3,
     // quarters: 4,
     // sixths: 6,

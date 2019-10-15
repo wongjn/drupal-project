@@ -1,9 +1,9 @@
 /**
- * @file
- * IMCE file browser theme.
- */
+* @file
+* IMCE file browser theme.
+*/
 
-@import '../system';
+@use 'sass:color';
 
 $accent: hsl(210, 100%, 60%);
 $border-color: #ccc;
@@ -47,11 +47,11 @@ $border-radius: 4px;
   &.active {
     border-color: $accent;
     background-color: transparent;
-    color: darken($accent, 20%);
+    color: color.adjust($accent, $lightness: -20%);
   }
 
   &.active {
-    box-shadow: 0 0 2px darken($accent, 20%);
+    box-shadow: 0 0 2px color.adjust($accent, $lightness: -20%);
   }
 
   &.disabled {
@@ -368,7 +368,7 @@ $border-radius: 4px;
     cursor: pointer;
 
     &:focus {
-      box-shadow: 0 0 1px 1px darken($accent, 30%);
+      box-shadow: 0 0 1px 1px color.adjust($accent, $lightness: -30%);
       outline: 0;
     }
   }

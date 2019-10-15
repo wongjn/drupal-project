@@ -1,9 +1,12 @@
+@use "sass:math";
+@use "sass:list";
 /**
  * @file
  * Mixins and functions related to the viewport.
  */
 
-@import 'unit';
+@use 'layout';
+@use 'unit';
 
 /**
  * Outputs scaling values.
@@ -28,10 +31,10 @@
  * @output Property declaration for scaling value and media query for maximum
  *   value.
  */
-@mixin viewport-scale($property, $max-values, $min-value: 0, $at: $SITE-WIDTH * 1vw, $from: 600) {
+@mixin scale($property, $max-values, $min-value: 0, $at: layout.$SITE-WIDTH * 1vw, $from: 600) {
   $deprecated: if(
     typeof($max-values) == number,
-    if(unit($max-values) == 'vw' or unit($max-values) == 'vh', true, false),
+    if(math.unit($max-values) == 'vw' or math.unit($max-values) == 'vh', true, false),
     false
   );
 
@@ -47,10 +50,10 @@
 
   $max-values-unitless: ();
   @each $max-value in $max-values {
-    $max-values-unitless: append($max-values-unitless, strip-unit(if(unit($max-value) == 'rem', rem-to-px($max-value), $max-value)));
+    $max-values-unitless: list.append($max-values-unitless, unit.strip(if(math.unit($max-value) == 'rem', unit.rem-to-px($max-value), $max-value)));
   }
 
-  $min-value-unitless: strip-unit(if(unit($min-value) == 'rem', rem-to-px($min-value), $min-value));
+  $min-value-unitless: unit.strip(if(math.unit($min-value) == 'rem', unit.rem-to-px($min-value), $min-value));
 
   $scalers: ();
   $media-query-max: null;
@@ -60,7 +63,7 @@
   @if $at == 'vmin' {
     @each $max-value-unitless in $max-values-unitless {
       // $scalers: append($scalers, (($max-value-unitless - $min-value-unitless) / 9.8 * 1vmin));
-      $scalers: append(
+      $scalers: list.append(
         $scalers,
         '(#{$max-value-unitless - $min-value-unitless} * (100vmin / 980))'
       );
@@ -69,20 +72,20 @@
     $media-query-max: '(orientation: portrait) and (min-width: 980px), (orientation: landscape) and (min-height: 980px)';
   }
   // Specified dimension
-  @else if unit($at) == 'vw' or unit($at) == 'vh' {
-    $viewport-max: strip-unit($at);
+  @else if math.unit($at) == 'vw' or math.unit($at) == 'vh' {
+    $viewport-max: unit.strip($at);
     $divisor: 1 / ($viewport-max - $from);
 
     @each $max-value-unitless in $max-values-unitless {
-      $scalers: append(
+      $scalers: list.append(
         $scalers,
-        '(#{$max-value-unitless - $min-value-unitless} * (#{100 * $divisor}#{unit($at)} - #{$from * 1px * $divisor}))'
+        '(#{$max-value-unitless - $min-value-unitless} * (#{100 * $divisor}#{math.unit($at)} - #{$from * 1px * $divisor}))'
       );
     }
 
     // Determine media query from unit
-    $min-dimension: if(unit($at) == 'vw', 'width', 'height');
-    $media-query-max: '(min-#{$min-dimension}: #{strip-unit($at)}px)';
+    $min-dimension: if(math.unit($at) == 'vw', 'width', 'height');
+    $media-query-max: '(min-#{$min-dimension}: #{unit.strip($at)}px)';
     @if ($from > 0) {
       $media-query-scale: '(min-#{$min-dimension}: #{$from}px)';
     }
@@ -95,7 +98,7 @@
   // Scaling output
   $calcs: ();
   @each $scaler in $scalers {
-    $calcs: append($calcs, calc(#{$min-value} + #{$scaler}));
+    $calcs: list.append($calcs, calc(#{$min-value} + #{$scaler}));
   }
 
   @if ($from > 0) {
