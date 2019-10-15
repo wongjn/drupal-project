@@ -64,37 +64,6 @@ hr {
   border-top: 1px solid #e1e1e1;
 }
 
-q,
-blockquote {
-  &::before {
-    content: open-quote;
-  }
-  &::after {
-    content: close-quote;
-  }
-}
-
-blockquote {
-  position: relative;
-  padding-right: 1ch;
-  padding-left: 1ch;
-
-  &::before,
-  &::after {
-    position: absolute;
-  }
-
-  &::before {
-    top: 0;
-    left: 0;
-  }
-
-  &::after {
-    right: 0;
-    bottom: 0;
-  }
-}
-
 // Set font weight for emboldening tags
 b,
 strong {
