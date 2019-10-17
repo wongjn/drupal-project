@@ -74,7 +74,7 @@ abstract class ParagraphTestBase extends ThemeKernelTestBase {
    *   The rendered paragraph entity.
    */
   protected function renderParagraph(array $parameters = []) {
-    $parameters += ['view_mode' => 'full'];
+    $parameters += ['view_mode' => 'default'];
 
     $view_mode = $parameters['view_mode'];
     unset($parameters['view_mode']);
