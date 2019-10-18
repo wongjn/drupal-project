@@ -30,14 +30,13 @@ $SIZE: 16;
 // Global default line height ratio
 $LINE-HEIGHT: (24 / $SIZE);
 
-/**
- * Returns the minimum value to use for font scales.
- *
- * @param {number} $size
- *   The unitless font size in pixels.
- * @return {number}
- *   The minimum size for the given font size with rem units.
- */
+/// Returns the minimum value to use for font scales.
+///
+/// @param {Number} $size
+///   The unitless font size in pixels.
+///
+/// @return {Length.rem}
+///   The minimum size for the given font size with rem units.
 @function _scale-minimum($size) {
   @return unit.px-to-rem(
     unit.between(
@@ -48,12 +47,10 @@ $LINE-HEIGHT: (24 / $SIZE);
   );
 }
 
-/**
- * Outputs font size using fall-back and variables.
- *
- * @param {number} $size
- *   The unitless font size in pixels.
- */
+/// Outputs font size using fallback and variables.
+///
+/// @param {Number|Length.px} $size
+///   The font size in pixels.
 @mixin size($size) {
   $rem-size: unit.px-to-rem($size);
 
@@ -71,14 +68,10 @@ $LINE-HEIGHT: (24 / $SIZE);
   }
 }
 
-/**
- * Outputs custom properties for font size presets.
- *
- * @param {bool} [$editor-stylesheet=false]
- *   Optional. Indicates whether the mixin is in the context of a WYSIWYG
- *   editor. Default false.
- *
- */
+/// Outputs custom properties for font size presets.
+///
+/// @param {Bool} $editor-stylesheet [false]
+///   Indicates whether the mixin is in the context of a WYSIWYG editor.
 @mixin size-custom-properties($editor-stylesheet: false) {
   @each $size in $_SIZE-PRESETS {
     $rem-size: unit.px-to-rem($size * 1px);
@@ -94,10 +87,17 @@ $LINE-HEIGHT: (24 / $SIZE);
   }
 }
 
-/**
- * Crops a box-model to cap height and baseline of a supported font family.
- */
-@mixin crop($line-height: 1.3, $font-family: '', $top-adjustment: 0px, $bottom-adjustment: 0px) {
+/// Crops a box-model to cap height and baseline of a supported font family.
+///
+/// @param {Number} $line-height [1.3]
+///   Line height for the text being cropped.
+/// @param {String} $font ['']
+///   Font family being cropped.
+/// @param {Length.px} $top-adjustment [0px]
+///   Manual top margin adjustment.
+/// @param {Length.px} $bottom-adjustment [0px]
+///   Manual bottom margin adjustment.
+@mixin crop($line-height: 1.3, $font: '', $top-adjustment: 0px, $bottom-adjustment: 0px) {
   $top-crop: 0;
   $bottom-crop: 0;
   $crop-font-size: 24;

@@ -3,12 +3,18 @@
  * CSS Hacks and work-arounds.
  */
 
+/// Edge-only styles
+///
+/// @content Styles for Edge only.
 @mixin edge {
   @supports (-ms-ime-align: auto) {
     @content;
   }
 }
 
+/// IE 11-only styles
+///
+/// @content Styles for IE 11 only.
 @mixin ie {
   @media all and (-ms-high-contrast: none) {
     @content;

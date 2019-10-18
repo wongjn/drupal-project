@@ -8,17 +8,14 @@
  * Functions and mixins related to value unit manipulation.
  */
 
-/**
- * Casts a string to number.
- *
- * From https://hugogiraudel.com/2014/01/15/sass-string-to-number/
- *
- * @param {string|number} $value
- *   Value to be parsed.
- *
- * @return {number}
- *   Given value as a number.
- */
+/// Casts a string to number.
+///
+/// From https://hugogiraudel.com/2014/01/15/sass-string-to-number/
+///
+/// @param {String|Number} $value
+///   Value to be parsed.
+/// @return {Number}
+///   Given value as a number.
 @function _to-number($value) {
   @if meta.type-of($value) == 'number' {
     @return $value;
@@ -51,19 +48,17 @@
   @return if($minus, -$result, $result);;
 }
 
-/**
- * Adds a unit to a numeric value.
- *
- * From https://hugogiraudel.com/2014/01/15/sass-string-to-number/
- *
- * @param {number} $value
- *   Value to add unit to.
- * @param {string} $unit
- *   String representation of the unit.
- *
- * @return {number}
- *   Value with unit.
- */
+/// Adds a unit to a numeric value.
+///
+/// From https://hugogiraudel.com/2014/01/15/sass-string-to-number/
+///
+/// @param {Number} $value
+///   Value to add unit to.
+/// @param {String} $unit
+///   String representation of the unit.
+///
+/// @return {Number}
+///   Value with unit.
 @function _to-length($value, $unit) {
   $units: ('px': 1px, 'cm': 1cm, 'mm': 1mm, '%': 1%, 'ch': 1ch, 'pc': 1pc, 'in': 1in, 'em': 1em, 'rem': 1rem, 'pt': 1pt, 'ex': 1ex, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax);
 
@@ -74,15 +69,13 @@
   @return $value * map.get($units, $unit);
 }
 
-/**
- * Removes the unit of a length value.
- *
- * @param {number} $value
- *   Length value to remove unit from.
- *
- * @return {number}
- *   The unitless value.
- */
+/// Removes the unit of a length value.
+///
+/// @param {Length} $value
+///   Length value to remove unit from.
+///
+/// @return {Number}
+///   The unitless value.
 @function strip($value) {
   @if meta.type-of($value) != number {
     $given-value: $value;
@@ -93,17 +86,15 @@
   @return if(math.is-unitless($value), $value, ($value / ($value * 0 + 1)));
 }
 
-/**
- * Converts a pixel unit length to rem.
- *
- * @param {number} $length
- *   The length to convert into rem units. Given in pixels or unitless.
- *
- * @return {number}
- *   The length converted to rem units.
- *
- * @throws Error if $length is not in pixels.
- */
+/// Converts a pixel unit length to rem.
+///
+/// @param {Length.px|Number} $length
+///   The length to convert into rem units. Given in pixels or unitless.
+///
+/// @return {Length.rem}
+///   The length converted to rem units.
+///
+/// @throws Error if $length is not in pixels.
 @function px-to-rem($length) {
   @if string.length(math.unit($length)) > 0 and math.unit($length) != 'px' {
     @error '"#{$length}" must be unitless or pixel length value.';
@@ -112,17 +103,15 @@
   @return (strip($length) * 1rem / 16);
 }
 
-/**
- * Converts a rem unit length to pixels.
- *
- * @param {number} $length
- *   The length to convert into pixel units. Must be given in rem.
- *
- * @return {number}
- *   The length converted to pixels units.
- *
- * @throws Error if $length is not in rem.
- */
+/// Converts a rem unit length to pixels.
+///
+/// @param {Length.rem} $length
+///   The length to convert into pixel units. Must be given in rem.
+///
+/// @return {Length.px}
+///   The length converted to pixels units.
+///
+/// @throws Error if $length is not in rem.
 @function rem-to-px($length) {
   @if math.unit($length) != 'rem' {
     @error '"#{$length}" must be a rem length value.';
@@ -131,9 +120,17 @@
   @return (strip($length) * 1px * 16);
 }
 
-/**
- * Returns $value but limited to $minimum and $maximum (inclusive).
- */
+/// Returns $value but limited to $minimum and $maximum (inclusive).
+///
+/// @param {Length} $value
+///   The value to clamp.
+/// @param {Length} $minimum
+///   Minimum value.
+/// @param {Length} $maximum
+///   Maximum value.
+///
+/// @return {Length}
+///   The value guaranteed to be between $minimum and $maximum.
 @function between($value, $minimum, $maximum) {
   @return math.max(math.min($value, $maximum), $minimum);
 }
