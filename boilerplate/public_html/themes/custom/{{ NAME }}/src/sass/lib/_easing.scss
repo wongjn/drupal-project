@@ -1,8 +1,9 @@
-@use "sass:map";
 /**
  * @file
  * Collection of timing easings.
  */
+
+@use 'sass:map';
 
 // Easing values
 $_EASING: (
