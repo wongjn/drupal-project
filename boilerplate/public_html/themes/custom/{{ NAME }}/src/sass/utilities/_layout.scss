@@ -16,7 +16,7 @@
  *   (optional) Override the selector base string for each rule. Default is
  *   `.u-$property`.
  */
-@mixin offset-utility($property, $measures, $selector: '.u-#{$property}') {
+@mixin _offset-utility($property, $measures, $selector: '.u-#{$property}') {
   @each $measure in $measures {
     #{$selector}-#{$measure} {
       $measure-px: $measure * 1px;
@@ -31,7 +31,7 @@
   }
 }
 
-@include offset-utility('margin-bottom', ());
-@include offset-utility('margin-top', (20, 40, 80));
-@include offset-utility('margin-top', (), '* + .u-margin-neighbor-vertical');
-@include offset-utility('margin-left', (), '* + .u-margin-neighbor-horizontal');
+@include _offset-utility('margin-bottom', ());
+@include _offset-utility('margin-top', ());
+@include _offset-utility('margin-top', (), '* + .u-margin-neighbor-vertical');
+@include _offset-utility('margin-left', (), '* + .u-margin-neighbor-horizontal');
