@@ -5,7 +5,7 @@
 
 // 1. Set height to ensure wrapped elements (that are hidden) do not affect
 //    layout flow.
-.s-main-menu {
+.c-main-menu {
   $y-padding: 10px;
   $x-padding: 10px;
 
@@ -14,6 +14,7 @@
   align-items: flex-start;
   position: relative;
   z-index: 400;
+  // height: 1em; // 1
   line-height: 1;
   text-transform: uppercase;
 
@@ -50,6 +51,15 @@
 
     .is-menu-loading & {
       overflow: hidden;
+    }
+
+    // Hide all main menu items.
+    //
+    // 1. Hide.
+    // 2. Let scale to 0 width.
+    &.is-compact {
+      visibility: hidden; // 1
+      min-width: 0; // 2
     }
 
     > li {

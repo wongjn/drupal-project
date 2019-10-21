@@ -3,20 +3,12 @@
  * Contains the line break handler.
  */
 
-const LOCAL_STORAGE_KEY = 'menu-line-break';
-
 /**
- * Reduces elements to give the largest height.
+ * 30 days in seconds.
  *
- * @param {number} current
- *   Current largest height.
- * @param {HTMLElement} element
- *   Element to get height of.
- * @return {number}
- *   The current height or the height of the given element if it is larger.
+ * @constant {number}
  */
-const elementHeightReducer = (current = 0, element) =>
-  Math.max(current, element.offsetHeight);
+const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
 /**
  * Returns a reducer to give the index of where a line break occurs.
@@ -39,61 +31,46 @@ const reduceDifferentOffsetTop = reference => (current, element) => {
 };
 
 /**
- * Returns a function that calculates and hides the line break within the menu.
+ * Calculates the line break point within the menu.
  *
  * @param {HTMLUListElement} menu
  *   The main menu list.
- * @return {function}
- *   The calculator function that returns an object of
- *   `{ height: Number, index: Number }`.
+ *
+ * @return {number}
+ *   The cut-off index.
  */
 const calculateLinebreak = menu => {
   const menuItems = Array.from(menu.children);
 
   // First item as reference point.
   const reference = menuItems[0];
-  const remaining = menuItems.slice(1);
 
-  return () => {
-    const { index } = remaining.reduce(
-      reduceDifferentOffsetTop(reference.offsetTop),
-      { found: false, index: 0 },
-    );
+  const { index, found } = menuItems
+    .slice(1)
+    .reduce(reduceDifferentOffsetTop(reference.offsetTop), {
+      found: false,
+      index: 0,
+    });
 
-    const height = remaining
-      .slice(0, index)
-      .reduce(elementHeightReducer, reference.offsetHeight);
+  // Tight on space if showing only one element; add compact state class for
+  // CSS to possibly do something.
+  menu.classList[index < 2 && found ? 'add' : 'remove']('is-compact');
 
-    const state = { height, index };
+  const cookieAge = found ? THIRTY_DAYS : 0;
+  document.cookie = `mb=${index + 1};Max-Age=${cookieAge};path=/`;
 
-    document.cookie = `mh=${height}`;
-    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
-
-    return state;
-  };
+  return index;
 };
 
-/**
- * Returns a function that mutates the menu DOM per height and index cut-off.
- *
- * @param {HTMLUListElement} menu
- *   The menu element.
- * @return {function}
- *   The mutator that accepts a `{ height: Number, index: Number }` object to
- *   mutate the menu items with.
- */
-const mutator = menu => {
+export default menuWidget => {
+  const { menu } = menuWidget;
   const menuItems = Array.from(menu.children).slice(1);
 
-  return ({ height, index }) => {
-    // Update menu height for just the first line.
-    menu.style.height = `${height}px`;
-
-    // Get items on the first line.
-    const shownItems = menuItems.slice(0, index);
+  menuWidget.on('resize', () => {
+    const index = calculateLinebreak(menu);
 
     // Ensure first row items are visible.
-    shownItems.forEach(menuItem => {
+    menuItems.slice(0, index).forEach(menuItem => {
       menuItem.style.visibility = '';
       menuItem.removeAttribute('aria-hidden');
     });
@@ -102,30 +79,7 @@ const mutator = menu => {
       menuItem.style.visibility = 'hidden';
       menuItem.setAttribute('aria-hidden', 'true');
     });
-  };
+
+    menuWidget.fire('lineBreak', { isBroken: index < menuItems.length });
+  });
 };
-
-/**
- * Handles line break in the main menu.
- */
-export default class LineBreak {
-  /**
-   * Creates an instance of LineBreak.
-   *
-   * @param {object} elements
-   *   Dictionary of noteworthy elements.
-   * @param {HTMLUListElement} elements.menu
-   *   Main menu item list.
-   */
-  constructor({ menu }) {
-    const mutate = mutator(menu);
-
-    const data = window.localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (data) {
-      mutate(JSON.parse(data));
-    }
-
-    const calculator = calculateLinebreak(menu);
-    this.onResize = () => mutate(calculator());
-  }
-}

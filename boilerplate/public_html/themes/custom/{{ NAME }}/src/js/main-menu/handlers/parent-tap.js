@@ -4,77 +4,71 @@
  */
 
 /**
- * Handler for parent menu item tap.
+ * CSS class for opened sub-menu.
  *
- * @prop {HTMLLIElement|null} _openParent
- *   The currently open parent.
+ * @constant {string}
  */
-export default class ParentTap {
-  /**
-   * Creates an instance of ParentTap.
-   *
-   * @param {object} elements
-   *   Dictionary of noteworthy elements.
-   * @param {HTMLULElement} elements.menu
-   *   Main menu item list.
-   */
-  constructor({ menu }) {
-    this.menu = menu;
-    this._openParent = null;
+const OPEN_CLASS = 'is-open';
 
-    this._onTouch = this._onTouch.bind(this);
-    this._listeners('add');
-  }
+/**
+ * Opens a sub-menu if it exists without navigating to the link.
+ *
+ * @callback onTouch
+ *
+ * @param {TouchEvent} event
+ *   The touch event object.
+ */
 
-  onRouted() {
-    if (this._openParent) this._openParent.classList.remove('is-open');
-    this._openParent = null;
-  }
+/**
+ * Creates a touch handler for a menu widget.
+ *
+ * @param {HTMLElement} menu
+ *   Top-level menu item to manage touch on.
+ *
+ * @return {onTouch}
+ *   The touch handler.
+ */
+function onTouchHandler(menu) {
+  let openParent = null;
 
-  onDestroy() {
-    this._listeners('remove');
-  }
-
-  /**
-   * Manages event listeners.
-   *
-   * @param {'add'|'remove'} operation
-   *   The operation to perform for the listeners.
-   */
-  _listeners(operation) {
-    const method = `${operation}EventListener`;
-    document[method]('touchstart', this._onTouch, { passive: false });
-  }
-
-  /**
-   * Reacts on touch event.
-   *
-   * @param {TouchEvent} event
-   *   The touch event object.
-   */
-  _onTouch(event) {
+  return event => {
     const li = event.target.closest('li');
 
-    // Not tap in menu, close any open parent and return.
-    if (!this.menu.contains(event.target) || !li) {
-      if (this._openParent) this._openParent.classList.remove('is-open');
-      this._openParent = null;
+    // Not a tap in menu, close any open parent and return early.
+    if (!menu.contains(event.target) || !li) {
+      if (openParent) openParent.classList.remove(OPEN_CLASS);
+      openParent = null;
       return;
     }
 
-    // No sub menu to open or has already been open, return. Will be closed in
-    // onRouted().
+    // No sub menu to open or has already been open, return early.
     const subMenu = li.querySelector('ul');
-    if (!subMenu || li === this._openParent) {
+    if (!subMenu || li === openParent) {
       return;
     }
 
     // Close previously opened parent if any.
-    if (this._openParent) this._openParent.classList.remove('is-open');
+    if (openParent) openParent.classList.remove(OPEN_CLASS);
 
-    li.classList.add('is-open');
-    this._openParent = li;
+    li.classList.add(OPEN_CLASS);
+    openParent = li;
     event.preventDefault();
     event.stopPropagation();
-  }
+  };
 }
+
+export default menuWidget => {
+  const callback = onTouchHandler(menuWidget.menu);
+  const options = { passive: false };
+
+  document.body.addEventListener('touchstart', callback, options);
+
+  if (module.hot) {
+    menuWidget.on('destroy', () => {
+      document.body.removeEventListener('touchstart', callback, options);
+      Array.from(menuWidget.menu.querySelectorAll(`.${OPEN_CLASS}`)).forEach(
+        menu => menu.classList.remove(OPEN_CLASS),
+      );
+    });
+  }
+};

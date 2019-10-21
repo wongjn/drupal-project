@@ -56,8 +56,8 @@ class Menu {
     $item['url']->mergeOptions([
       'attributes' => [
         'class' => [
-          's-main-menu__link',
-          $depth === 0 ? 's-main-menu__link--top' : 's-main-menu__link--sub',
+          'c-main-menu__link',
+          $depth === 0 ? 'c-main-menu__link--top' : 'c-main-menu__link--sub',
           $item['in_active_trail'] ? 'is-active-trail' : '',
         ],
       ],

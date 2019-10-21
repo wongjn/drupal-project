@@ -5,271 +5,281 @@
 
 import { parse } from 'cookie';
 import templateParse from '../../lib/template-parser';
+import { windowScrollManager } from '../window-scroll-manager';
 
-// HTML ID for the drawer menu element.
+/**
+ * HTML ID for the drawer menu element.
+ *
+ * @constant {string}
+ */
 const DRAWER_HTML_ID = 'drawer-menu';
 
 /**
- * Clones main menu markup.
+ * 30 days in seconds.
  *
- * @param {HTMLUListElement} menu
- *   The top-level main menu element.
- * @return {string}
- *   The modified menu ready for injection into the drawer.
+ * @constant {number}
  */
-function cloneMenu(menu) {
-  return (
-    menu.outerHTML
-      // Replace main menu classes with drawer classes.
-      .replace(/(\W)s-main-menu/g, '$1c-drawer-menu')
-      // Remove any attributes from line break handler.
-      .replace(/ (aria-hidden|style)="(.+?)"/g, '')
-  );
-}
-
-// Manages window scrolling.
-const windowScrollManager = {
-  /**
-   * Window ScrollX value before drawer is opened.
-   *
-   * @var {number}
-   */
-  x: 0,
-  /**
-   * Window ScrollY value before drawer is opened.
-   *
-   * @var {number}
-   */
-  y: 0,
-  /**
-   * The browser's scrollbar width.
-   *
-   * False to indicate that it has not been calculated.
-   *
-   * @var {bool|number}
-   */
-  barWidth: false,
-  /**
-   * Toggles scrolling.
-   *
-   * @param {bool} disable
-   *   True to disable scrolling, otherwise false to enable.
-   */
-  scrollingToggle(disable) {
-    if (disable) {
-      this.x = window.scrollX;
-      this.y = window.scrollY;
-    }
-
-    // Get scrollbar width.
-    const barWidth = window.innerWidth - document.documentElement.offsetWidth;
-
-    // Remove scrolling from body.
-    document.body.style.overflow = disable ? 'hidden' : '';
-    // Compensate for possible scrollbar layout jump.
-    document.body.style.paddingRight = disable ? `${barWidth}px` : '';
-
-    if (!disable) {
-      window.scroll(this.x, this.y);
-    }
-  },
-};
+const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
 /**
- * Drawer manager.
+ * Cookie name for saving state across pages.
+ *
+ * @constant {string}
  */
-export default class Drawer {
-  /**
-   * Creates an instance of Drawer.
-   *
-   * @param {object} elements
-   *   Dictionary of noteworthy elements.
-   * @param {HTMLDivElement} elements.wrapper
-   *   The wrapper element of the main menu area.
-   * @param {HTMLUListElement} elements.menu
-   *   Main menu item list.
-   */
-  constructor({ wrapper, menu }) {
-    this._menuTopItems = Array.from(menu.children);
+const COOKIE_NAME = 'md';
 
-    this.openButtonWrapper = wrapper.querySelector('.s-main-menu__drawer');
-    this.openButton = wrapper.querySelector('.s-main-menu__open-btn');
-    this._bootstrapOpenButton();
-    this._createDrawer(menu);
+/**
+ * Toggles visibility of the drawer-opening button.
+ *
+ * @callback openButtonToggle
+ *
+ * @param {'show'|'hide'} op
+ *   Whether to show or hide the button.
+ */
 
-    this.drawerOpen = this.drawerOpen.bind(this);
-    this.drawerClose = this.drawerClose.bind(this);
-    this._escClose = this._escClose.bind(this);
-    this._trapFocus = this._trapFocus.bind(this);
-    this._navigateClose = this._navigateClose.bind(this);
+/**
+ * Creates a drawer-open button toggling function.
+ *
+ * @param {HTMLButtonElement} openButton
+ *   The button element.
+ *
+ * @return {openButtonToggle}
+ *   Button toggling function.
+ */
+function openButtonToggler(openButton) {
+  openButton.setAttribute('aria-expanded', 'false');
+  const buttonWrapper = openButton.closest('.c-main-menu__drawer');
 
-    this._listeners('add');
-
-    wrapper.appendChild(this.drawer);
-  }
-
-  onResize() {
-    const hasHidden = this._menuTopItems.some(
-      item => item.getAttribute('aria-hidden') === 'true',
-    );
-
-    this.toggleOpenButton(hasHidden ? 'show' : 'hide');
-    document.cookie = `${Drawer.COOKIE_NAME}=${hasHidden ? 1 : 0}`;
-  }
-
-  onDestroy() {
-    this.drawer.parentElement.removeChild(this.drawer);
-
-    this._drawerListeners('remove');
-    this._listeners('remove');
-  }
-
-  /**
-   * Opens the drawer menu.
-   */
-  drawerOpen() {
-    this.drawer.classList.add('is-open');
-    this.topMenu.scrollTop = 0;
-    this.title.focus();
-
-    this._drawerListeners('add');
-
-    windowScrollManager.scrollingToggle(true);
-  }
-
-  /**
-   * Closes the drawer menu.
-   */
-  drawerClose() {
-    this.drawer.classList.remove('is-open');
-
-    this._drawerListeners('remove');
-
-    this.openButton.focus();
-    windowScrollManager.scrollingToggle(false);
-  }
-
-  /**
-   * Manages event listeners for the open drawer element.
-   *
-   * @param {'add'|'remove'} operation
-   *   The operation to perform for the listeners.
-   */
-  _drawerListeners(operation) {
-    const method = `${operation}EventListener`;
-    document[method]('keydown', this._escClose);
-    document[method]('focusin', this._trapFocus);
-  }
-
-  /**
-   * Bootstraps the open button element from cookies as saved state.
-   */
-  _bootstrapOpenButton() {
-    const cookies = parse(document.cookie);
-    const op =
-      Drawer.COOKIE_NAME in cookies && cookies[Drawer.COOKIE_NAME] === '1'
-        ? 'show'
-        : 'hide';
-    this.toggleOpenButton(op);
-  }
-
-  /**
-   * Toggles visibility of the open drawer button.
-   *
-   * @param {'show'|'hide'} op
-   *   Whether to show or hide the button.
-   */
-  toggleOpenButton(op) {
-    this.openButtonWrapper.style.display = op === 'show' ? '' : 'none';
-  }
-
-  /**
-   * Creates the drawer element.
-   *
-   * @param {HTMLUListElement} menu
-   *   The top-level main menu element.
-   */
-  _createDrawer(menu) {
-    const [drawer, refs] = templateParse(`
-      <div id="${DRAWER_HTML_ID}" class="c-drawer-menu">
-        <header class="c-drawer-menu__title" tabIndex="-1" ref="title">
-          <h2 class="o-title">${Drupal.t('Full menu')}</h2>
-        </header>
-        <button
-          ref="button"
-          tabIndex="0"
-          aria-controls="${DRAWER_HTML_ID}"
-          class="c-drawer-menu__close-btn"
-        >
-          ${Drupal.t('Close full menu')}
-        </button>
-        ${cloneMenu(menu)}
-      </div>
-    `);
-
-    this.drawer = drawer;
-    this.closeButton = refs.button;
-    this.title = refs.title;
-
-    this.topMenu = this.drawer.querySelector('.c-drawer-menu__top-menu');
-    const links = this.topMenu.querySelectorAll('a');
-    this.lastLink = links[links.length - 1];
-  }
-
-  /**
-   * Manages event listeners.
-   *
-   * @param {'add'|'remove'} operation
-   *   The operation to perform for the listeners.
-   */
-  _listeners(operation) {
-    const method = `${operation}EventListener`;
-    this.openButton[method]('click', this.drawerOpen);
-    this.closeButton[method]('click', this.drawerClose);
-    this.drawer[method]('click', this._navigateClose);
-  }
-
-  /**
-   * Closes the drawer on keyboard 'esc' key.
-   *
-   * @param {KeyboardEvent} event
-   *   The keyboard event object.
-   */
-  _escClose({ key }) {
-    if (key === 'Escape') {
-      this.drawerClose();
-    }
-  }
-
-  /**
-   * Traps focus within the component.
-   *
-   * @param {FocusEvent} event
-   *   The focus event object.
-   */
-  _trapFocus({ target }) {
-    if (this.drawer.contains(target)) {
-      this.lastFocused = target;
-      return;
-    }
-
-    if (this.lastFocused === this.lastLink) {
-      this.closeButton.focus();
-    } else {
-      this.lastLink.focus();
-    }
-  }
-
-  /**
-   * Closes the drawer on link click.
-   *
-   * @param {MouseEvent} event
-   *   The mouse event object.
-   */
-  _navigateClose({ target }) {
-    if (target.tagName === 'A') {
-      this.drawerClose();
-    }
-  }
+  return op => {
+    buttonWrapper.style.display = op === 'show' ? '' : 'none';
+  };
 }
-Drawer.COOKIE_NAME = 'md';
+
+/**
+ * Trap focus within an element.
+ *
+ * @callback focusTrap
+ *
+ * @param {FocusEvent} event
+ *   The focus event to potentially trap.
+ */
+
+/**
+ * Creates a `focusin` event handler to trap focus within the drawer.
+ *
+ * @param {HTMLElement} drawer
+ *   The drawer element.
+ *
+ * @return {focusTrap}
+ *   A global-level event -listener for the `focusin` event to trap focus within
+ *   the given element.
+ */
+function focusTrapper(drawer) {
+  const focusables = Array.from(
+    drawer.querySelectorAll('button,a,[tabindex="-1"],[tabindex="0"]'),
+  );
+  const first = focusables.shift();
+  const last = focusables.pop();
+
+  return ({ target, relatedTarget }) => {
+    if (!relatedTarget || drawer.contains(target)) return;
+    (relatedTarget === last ? first : last).focus();
+  };
+}
+
+/**
+ * Notable elements of the drawer.
+ *
+ * @typedef {object} drawerToggleElements
+ *
+ * @prop {HTMLElement} drawer
+ *   The drawer element.
+ * @prop {HTMLButtonElement} openButton
+ *   Button that opens the drawer element.
+ */
+
+/**
+ * Toggles the visibility of the drawer.
+ *
+ * @callback drawerToggle
+ *
+ * @param {'open'|'close'} op
+ *   Whether to show or hide the drawer.
+ */
+
+/**
+ * Creates an drawer-toggling function.
+ *
+ * @param {drawerToggleElements} elements
+ *   Notable elements of the drawer.
+ *
+ * @return {drawerToggle}
+ *   Drawer toggling function.
+ */
+function drawerToggler({ drawer, openButton }) {
+  const topMenu = drawer.querySelector('.c-drawer-menu__top-menu');
+  const title = drawer.querySelector('.c-drawer-menu__title');
+
+  // Event listeners.
+  let escClose = () => {};
+  const focusTrap = focusTrapper(drawer);
+
+  const toggle = op => {
+    drawer.classList[op === 'open' ? 'add' : 'remove']('is-open');
+    openButton.setAttribute('aria-expanded', String(op === 'open'));
+
+    topMenu.scrollTop = 0;
+
+    // On open, focus drawer title.
+    if (op === 'open') title.focus();
+
+    const eventOp = `${op === 'open' ? 'add' : 'remove'}EventListener`;
+    document[eventOp]('keydown', escClose);
+    document[eventOp]('focusin', focusTrap);
+
+    // On close, focus open button.
+    if (op === 'close') openButton.focus();
+
+    windowScrollManager.scrollingToggle(op === 'open');
+  };
+
+  escClose = ({ key }) => key === 'Escape' && toggle('close');
+
+  return toggle;
+}
+
+/**
+ * Creates an event listener to close the drawer when navigating to a new page.
+ *
+ * @param {function} close
+ *   Callback to close the menu drawer.
+ *
+ * @return {EventListener}
+ *   Event listener that will close the drawer when navigating to a new page.
+ */
+const navigateCloser = close => ({ target }) =>
+  target.tagName === 'A' && close();
+
+/**
+ * Builds the drawer DOM.
+ *
+ * @param {HTMLULList} menu
+ *   The menu list from the main DOM.
+ *
+ * @return {Object}
+ *   Object of remarkable built DOM elements.
+ */
+function buildDrawer(menu) {
+  const clonedMenu = menu.outerHTML
+    // Replace main menu classes with drawer classes.
+    .replace(/\bc-main-menu/g, 'c-drawer-menu')
+    // Remove any attributes from line break handler.
+    .replace(/\b(aria-hidden|style)=".+?"/g, '');
+
+  const [drawer, refs] = templateParse(`
+    <div id="${DRAWER_HTML_ID}" class="c-drawer-menu">
+      <header class="c-drawer-menu__title" tabIndex="-1">
+        <h2 class="o-title">${Drupal.t('Full menu')}</h2>
+      </header>
+      <button
+        ref="closeButton"
+        tabIndex="0"
+        aria-controls="${DRAWER_HTML_ID}"
+        class="c-drawer-menu__close-btn"
+      >
+        ${Drupal.t('Close full menu')}
+      </button>
+      ${clonedMenu}
+    </div>`);
+
+  return { drawer, ...refs };
+}
+
+/**
+ * Information about a line break.
+ *
+ * @typedef lineBreakData
+ *
+ * @prop {boolean} isBroken
+ *   Whether a line break exists.
+ */
+
+/**
+ * Acts on a line break.
+ *
+ * @callback lineBreak
+ *
+ * @param {lineBreakData} data
+ *   Information about a line break.
+ */
+
+/**
+ * Drawer managing object via methods.
+ *
+ * @typedef Manager
+ *
+ * @prop {lineBreak} lineBreak
+ *   Act on top-level menu item line-breaks.
+ * @prop {function} destroy
+ *   Destroys the object, remove event listeners and observers.
+ */
+
+/**
+ * Constructs a drawer manager object.
+ *
+ * @param {MenuOrchestrator} menuWidget
+ *   Orchestrator object for managing the menu.
+ *
+ * @return {Manager}
+ *   The manager object.
+ */
+function initializeManager({ wrapper, menu }) {
+  const openButton = wrapper.querySelector('.c-main-menu__open-btn');
+  const { drawer, closeButton } = buildDrawer(menu);
+  wrapper.insertAdjacentElement('afterend', drawer);
+
+  const openButtonToggle = openButtonToggler(openButton);
+  const drawerToggle = drawerToggler({ drawer, openButton });
+  const drawerOpen = drawerToggle.bind(null, 'open');
+  const drawerClose = drawerToggle.bind(null, 'close');
+  const navigateClose = navigateCloser(drawerClose);
+
+  // Set initial button state from cookie.
+  openButtonToggle(COOKIE_NAME in parse(document.cookie) ? 'show' : 'hide');
+
+  openButton.addEventListener('click', drawerOpen);
+  closeButton.addEventListener('click', drawerClose);
+  drawer.addEventListener('click', navigateClose);
+
+  return {
+    lineBreak({ isBroken }) {
+      openButtonToggle(isBroken ? 'show' : 'hide');
+
+      const cookieAge = isBroken ? THIRTY_DAYS : 0;
+      document.cookie = `${COOKIE_NAME}=;Max-Age=${cookieAge};path=/`;
+    },
+    offsetChange(offsets) {
+      Array.from(Object.entries(offsets)).forEach(([side, value]) => {
+        drawer.style[side] = `${value}px`;
+      });
+    },
+    destroy() {
+      drawerClose();
+      openButton.removeEventListener('click', drawerOpen);
+      closeButton.removeEventListener('click', drawerClose);
+      drawer.removeEventListener('click', navigateClose);
+      drawer.style = '';
+    },
+  };
+}
+
+let drawerManager;
+export default menuWidget => {
+  drawerManager = drawerManager || initializeManager(menuWidget);
+
+  menuWidget.on('lineBreak', drawerManager.lineBreak);
+  menuWidget.on('drupalViewportOffsetChange', drawerManager.offsetChange);
+  if (module.hot) {
+    menuWidget.on('destroy', drawerManager.destroy);
+  }
+};

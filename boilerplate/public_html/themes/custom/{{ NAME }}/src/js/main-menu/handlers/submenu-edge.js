@@ -31,38 +31,13 @@ function moveOverlaps(menus) {
   });
 }
 
-/**
- * Submenu edge overlapping handler.
- */
-export default class SubmenuEdge {
-  /**
-   * Creates an instance of SubmenuEdge.
-   *
-   * @param {object} elements
-   *   Dictionary of noteworthy elements.
-   * @param {HTMLULElement} elements.menu
-   *   Main menu item list.
-   */
-  constructor({ menu }) {
-    const menus = Array.from(menu.querySelectorAll('.s-main-menu__sub-menu'));
-    moveOverlaps(menus);
+export default menuWidget => {
+  const { menu } = menuWidget;
+  const menus = Array.from(menu.querySelectorAll('.c-main-menu__sub-menu'));
 
-    this._updater = debounce(moveOverlaps.bind(null, menus), 500);
-    this._listeners('add');
-  }
+  moveOverlaps(menus);
 
-  onDestroy() {
-    this._listeners('remove');
-  }
-
-  /**
-   * Manages event listeners.
-   *
-   * @param {'add'|'remove'} operation
-   *   The operation to perform for the listeners.
-   */
-  _listeners(operation) {
-    const method = `${operation}EventListener`;
-    window[method]('resize', this._updater);
-  }
-}
+  const updater = debounce(moveOverlaps.bind(null, menus), 500);
+  window.addEventListener('resize', updater);
+  menuWidget.on('destroy', () => window.removeEventListener('resize', updater));
+};

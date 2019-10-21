@@ -251,25 +251,34 @@ function {{ NAME }}_preprocess_menu__main(&$variables) {
   );
 
   $variables['attributes']['class'][] = 'js-main-menu__menu';
-  $variables['attributes']['class'][] = 's-main-menu__top-menu';
-  $variables['attributes_map']['sub']->addClass('s-main-menu__sub-menu');
+  $variables['attributes']['class'][] = 'c-main-menu__top-menu';
+  $variables['attributes_map']['sub']->addClass('c-main-menu__sub-menu');
   $variables['attributes_map']['deep']->addClass([
-    's-main-menu__sub-menu',
-    's-main-menu__sub-menu--deep',
+    'c-main-menu__sub-menu',
+    'c-main-menu__sub-menu--deep',
   ]);
+
+  $variables['drawer_attributes'] = new Attribute(['class' => ['c-main-menu__drawer']]);
 
   $cookies = \Drupal::request()->cookies;
 
-  // Preset height from cookie value.
-  if ($menu_height = $cookies->get('mh')) {
-    $variables['attributes']['style'] = "height:${menu_height}px";
-  }
-  $variables['#cache']['contexts'][] = 'cookies:mh';
+  // Get line-break from cookie value.
+  // @see src/js/main-menu/handlers/line-break.js
+  if ($line_break = $cookies->get('mb')) {
+    // Pre-hide menu items.
+    foreach (array_slice($variables['items'], $line_break) as $item) {
+      $item['attributes']->setAttribute('style', 'visibility:hidden');
+    }
 
-  $variables['drawer_attributes'] = new Attribute(['class' => ['s-main-menu__drawer']]);
+    if ($line_break == 1) {
+      $variables['attributes']['class'][] = 'is-compact';
+    }
+  }
+  $variables['#cache']['contexts'][] = 'cookies:mb';
 
   // Preset whether drawer button is shown from cookie value.
-  if (!$cookies->get('md')) {
+  // @see src/js/main-menu/handlers/drawer.js
+  if (!$cookies->has('md')) {
     $variables['drawer_attributes']->setAttribute('style', 'display:none');
   }
   $variables['#cache']['contexts'][] = 'cookies:md';

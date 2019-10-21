@@ -22,27 +22,28 @@
  *   - sub: HTML attributes for second-level menus.
  *   - deep: HTML attributes for the third-level and deeper menus.
  *
- * @see {{ NAME }}_preprocess_menu()
- * @see {{ NAME }}_preprocess_menu__main()
+ * @see moorvision_preprocess_menu()
+ * @see moorvision_preprocess_menu__main()
  */
 #}
 {% import 'menu.html.twig' as menus %}
 
 {% spaceless %}
-<div class="js-main-menu s-main-menu is-menu-loading">
+<div class="js-main-menu c-main-menu is-menu-loading">
   {#
     We call a macro which calls itself to render the full tree.
     @see http://twig.sensiolabs.org/doc/tags/macro.html
   #}
   {{ menus.menu_links(items, attributes, 0, attributes_map) }}
   <div{{ drawer_attributes }}>
-    <button class="s-main-menu__open-btn">{{ 'Full menu'|t }}</button>
+    <button class="c-main-menu__open-btn">{{ 'Full menu'|t }}</button>
   </div>
 </div>
 <noscript>
 <style>
-.s-main-menu__top-menu{height:auto!important;overflow:visible!important}
-.s-main-menu__drawer{display:none!important}
+.c-main-menu.is-compact{visibility:visible!important}
+.c-main-menu__top-menu,.c-main-menu__top-menu>li{overflow:visible!important}
+.c-main-menu__drawer{display:none!important}
 </style>
 </noscript>
 {% endspaceless %}

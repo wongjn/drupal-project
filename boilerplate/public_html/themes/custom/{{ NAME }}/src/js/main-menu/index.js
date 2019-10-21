@@ -1,50 +1,48 @@
+/**
+ * @file
+ * Boostrap menu file.
+ */
+
 import debounce from 'lodash/debounce';
 import resizeObserverLoader from '../lib/resize-observer-load';
-import LineBreak from './handlers/line-break';
-import SubmenuEdge from './handlers/submenu-edge';
-import Drawer from './handlers/drawer';
-import ParentTap from './handlers/parent-tap';
+import createOrchestrator from '../lib/orchestrator';
+import attachLineBreak from './handlers/line-break';
+import attachSubmenuEdge from './handlers/submenu-edge';
+import attachDrawer from './handlers/drawer';
+import attachParentTap from './handlers/parent-tap';
 
-const handlers = [LineBreak, SubmenuEdge, Drawer, ParentTap];
-
-// Relevant elements.
 const wrapper = document.querySelector('.js-main-menu');
-const menu = wrapper.querySelector('.js-main-menu__menu');
+const menu = wrapper && wrapper.querySelector('.js-main-menu__menu');
 
-// Construct the instances for each handler.
-const instances = handlers.map(Handler => new Handler({ wrapper, menu }));
-wrapper.classList.remove('is-menu-loading');
+if (wrapper && menu) {
+  const menuWidget = createOrchestrator({ wrapper, menu });
 
-/**
- * Creates a plugin action function.
- *
- * @param {string} event
- *   The event name.
- * @return {function}
- *   The plugin action function, all arguments are supplied to plugin methods.
- */
-function createEventMediator(event) {
-  const methodName = `on${event.charAt(0).toUpperCase()}${event.slice(1)}`;
-  return (...args) => {
-    instances.forEach(instance => {
-      if (typeof instance[methodName] === 'function') {
-        instance[methodName](...args);
-      }
+  // Apply functionality from sub-module files.
+  attachLineBreak(menuWidget);
+  attachSubmenuEdge(menuWidget);
+  attachDrawer(menuWidget);
+  attachParentTap(menuWidget);
+
+  wrapper.classList.remove('is-menu-loading');
+
+  // Menu element resize observations.
+  const observerPromise = resizeObserverLoader.then(
+    ObserverClass =>
+      new ObserverClass(debounce(() => menuWidget.fire('resize'), 300)),
+  );
+  observerPromise.then(observer => observer.observe(menu));
+
+  if ('jQuery' in window) {
+    jQuery(document).on('drupalViewportOffsetChange', (event, offsets) =>
+      menuWidget.fire('drupalViewportOffsetChange', offsets),
+    );
+  }
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => {
+      observerPromise.then(observer => observer.disconnect());
+      menuWidget.fire('destroy');
     });
-  };
-}
-
-// Menu element resize observations.
-let observer = { disconnect() {} };
-resizeObserverLoader.then(Observer => {
-  observer = new Observer(debounce(createEventMediator('resize'), 500));
-  observer.observe(menu);
-});
-
-if (module.hot) {
-  module.hot.accept();
-  module.hot.dispose(() => {
-    observer.disconnect();
-    createEventMediator('destroy')();
-  });
+  }
 }
