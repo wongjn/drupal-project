@@ -1,0 +1,6 @@
+{{ NAME }}_helper_test.cookies_test:
+  path: '/{{ NAME }}-helper-test/cookies-test'
+  defaults:
+    _controller: '{{ NAME }}_helper_test.pages:buildTestCookies'
+  requirements:
+    _access: 'TRUE'

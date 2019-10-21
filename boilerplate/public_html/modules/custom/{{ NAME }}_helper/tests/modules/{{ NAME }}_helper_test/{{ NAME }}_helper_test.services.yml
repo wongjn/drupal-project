@@ -1,0 +1,4 @@
+services:
+  {{ NAME }}_helper_test.pages:
+    class: Drupal\{{ NAME }}_helper_test\Controller\Pages
+    arguments: ['@request_stack']
