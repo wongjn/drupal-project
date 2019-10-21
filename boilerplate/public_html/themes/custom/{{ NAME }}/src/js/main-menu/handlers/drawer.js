@@ -268,7 +268,7 @@ function initializeManager({ wrapper, menu }) {
       openButton.removeEventListener('click', drawerOpen);
       closeButton.removeEventListener('click', drawerClose);
       drawer.removeEventListener('click', navigateClose);
-      drawer.style = '';
+      drawer.remove();
     },
   };
 }
