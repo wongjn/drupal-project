@@ -256,7 +256,7 @@ function initializeManager({ wrapper, menu }) {
       openButtonToggle(isBroken ? 'show' : 'hide');
 
       const cookieAge = isBroken ? THIRTY_DAYS : 0;
-      document.cookie = `${COOKIE_NAME}=;Max-Age=${cookieAge};path=/`;
+      document.cookie = `${COOKIE_NAME}=1;Max-Age=${cookieAge};path=/`;
     },
     offsetChange(offsets) {
       Array.from(Object.entries(offsets)).forEach(([side, value]) => {
