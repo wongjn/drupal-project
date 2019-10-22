@@ -19,15 +19,21 @@ function moveOverlaps(menus) {
       return;
     }
 
+    // Remove transitions that may be caused by 'is-moved' class removal so that
+    // getBoundingClientRect() measures the inate position, not the
+    // transitioning position.
+    menu.style.transition = 'none';
     // Remove position class temporarily.
     menu.classList.remove('is-moved');
 
     const { right } = menu.getBoundingClientRect();
 
-    // Add class if necessary.
     if (windowWidth < right) {
       menu.classList.add('is-moved');
     }
+
+    // Restore transitions.
+    menu.style.transition = '';
   });
 }
 
