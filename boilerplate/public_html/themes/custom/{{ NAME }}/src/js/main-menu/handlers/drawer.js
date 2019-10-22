@@ -174,7 +174,7 @@ function buildDrawer(menu) {
     // Replace main menu classes with drawer classes.
     .replace(/\bc-main-menu/g, 'c-drawer-menu')
     // Remove any attributes from line break handler.
-    .replace(/\b(aria-hidden|style)=".+?"/g, '');
+    .replace(/\b(aria-hidden|style)=".*?"/g, '');
 
   const [drawer, refs] = templateParse(`
     <div id="${DRAWER_HTML_ID}" class="c-drawer-menu">
