@@ -137,6 +137,7 @@
     @include font.size(48);
     overflow-x: hidden;
     overflow-y: auto;
+    flex-grow: 1;
     background-color: lime;
     transform: translateY(20px);
     opacity: 0;
