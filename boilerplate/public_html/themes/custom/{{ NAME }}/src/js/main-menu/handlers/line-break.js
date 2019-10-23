@@ -54,7 +54,7 @@ const calculateLinebreak = menu => {
 
   // Tight on space if showing only one element; add compact state class for
   // CSS to possibly do something.
-  menu.classList[index < 2 && found ? 'add' : 'remove']('is-compact');
+  menu.classList[index < 1 && found ? 'add' : 'remove']('is-compact');
 
   const cookieAge = found ? THIRTY_DAYS : 0;
   document.cookie = `mb=${index + 1};Max-Age=${cookieAge};path=/`;
