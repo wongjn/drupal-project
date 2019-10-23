@@ -12,9 +12,6 @@ element-like component. These are different from *components* by the fact that
 they should not contain any other *components* or *objects*. Namespaced by `o-`.
 - **components:** higher-level UI components that are more specialized and
 particular in their usage, such as a modal. Namespaced by `c-`.
-- **speciality:** even more specialized components than *components*, these are
-components used **once** at a very particular spot on any given page. Namespaced
-by `s-`.
 - **theme.css:** theme styles that are not attached to a particular component
 or object.
 - **utilities.css:** single purpose utility classes for one-off adjustments to
