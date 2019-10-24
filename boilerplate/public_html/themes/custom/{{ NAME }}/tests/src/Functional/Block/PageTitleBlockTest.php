@@ -16,7 +16,6 @@ class PageTitleBlockTest extends ThemeFunctionalTestBase {
    */
   protected static $modules = [
     'block',
-    'node',
   ];
 
   /**
@@ -24,15 +23,15 @@ class PageTitleBlockTest extends ThemeFunctionalTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    $this->drupalPlaceBlock('page_title_block', ['region' => 'content']);
+    $this->drupalPlaceBlock('page_title_block', ['id' => 'title', 'region' => 'content']);
   }
 
   /**
-   * Test 'normal' page title style.
+   * Tests output.
    */
-  public function testNormalOutput() {
+  public function testOutput() {
     $this->drupalGet('');
-    $this->assertSession()->elementExists('css', '.o-title');
+    $this->assertSession()->elementExists('css', '#block-title h1[class="o-title"]');
   }
 
 }
