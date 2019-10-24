@@ -281,5 +281,6 @@ export default menuWidget => {
   menuWidget.on('drupalViewportOffsetChange', drawerManager.offsetChange);
   if (module.hot) {
     menuWidget.on('destroy', drawerManager.destroy);
+    drawerManager = undefined;
   }
 };
