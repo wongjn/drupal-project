@@ -37,7 +37,6 @@ module:
   menu_ui: 0
   node: 0
   options: 0
-  page_cache: 0
   path: 0
   projectcosmic_file_browser: 0
   quicklink: 0
