@@ -12,7 +12,7 @@ import debounce from 'lodash/debounce';
  *   The menu list.
  */
 function moveOverlaps(menus) {
-  const { innerWidth: windowWidth } = window;
+  const { offsetWidth: docWidth } = document.documentElement;
 
   menus.forEach(menu => {
     if (menu.closest('[aria-hidden="true"]')) {
@@ -28,7 +28,7 @@ function moveOverlaps(menus) {
 
     const { right } = menu.getBoundingClientRect();
 
-    if (windowWidth < right) {
+    if (docWidth < right) {
       menu.classList.add('is-moved');
     }
 
