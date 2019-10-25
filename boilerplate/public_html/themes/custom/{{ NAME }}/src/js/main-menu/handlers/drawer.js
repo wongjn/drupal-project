@@ -178,9 +178,9 @@ function buildDrawer(menu) {
 
   const [drawer, refs] = templateParse(`
     <div id="${DRAWER_HTML_ID}" class="c-drawer-menu">
-      <header class="c-drawer-menu__title" tabIndex="-1">
-        <h2 class="o-title">${Drupal.t('Full menu')}</h2>
-      </header>
+      <h2 class="c-drawer-menu__title" tabIndex="-1">
+        ${Drupal.t('Full Menu')}
+      </h2>
       <button
         ref="closeButton"
         tabIndex="0"
