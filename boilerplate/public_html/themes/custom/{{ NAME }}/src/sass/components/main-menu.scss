@@ -57,8 +57,10 @@
     //
     // 1. Hide.
     // 2. Let scale to 0 width.
+    // 3. Clip any overflow from long text links that may cause scrollbars.
     &.is-compact {
       visibility: hidden; // 1
+      overflow-x: hidden; // 3
       min-width: 0; // 2
     }
 
