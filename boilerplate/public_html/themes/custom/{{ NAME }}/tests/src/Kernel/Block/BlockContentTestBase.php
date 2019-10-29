@@ -5,23 +5,19 @@ namespace Drupal\Tests\{{ NAME }}\Kernel\Block;
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\block_content\Entity\BlockContentType;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\Tests\block\Traits\BlockCreationTrait;
-use Drupal\Tests\{{ NAME }}\Kernel\ThemeKernelTestBase;
 use Drupal\Tests\{{ NAME }}\Traits\EntityCreationTrait;
 
 /**
  * Base class for block content output tests.
  */
-abstract class BlockContentTestBase extends ThemeKernelTestBase {
+abstract class BlockContentTestBase extends BlockTestBase {
 
-  use BlockCreationTrait;
   use EntityCreationTrait;
 
   /**
    * {@inheritdoc}
    */
   protected static $modules = [
-    'block',
     'block_content',
     'field',
     'user',
@@ -74,7 +70,7 @@ abstract class BlockContentTestBase extends ThemeKernelTestBase {
    * @return \Drupal\block_content\BlockContentInterface
    *   The block content entity.
    */
-  protected function renderPlacedBlock(array $parameters = []) {
+  protected function renderBlockContent(array $parameters = []) {
     $parameters += [
       'region' => 'content',
       'view_mode' => 'full',
@@ -92,13 +88,7 @@ abstract class BlockContentTestBase extends ThemeKernelTestBase {
     $block_content = BlockContent::create(['type' => $this->bundle] + $parameters);
     $block_content->save();
 
-    $block = $this->placeBlock('block_content:' . $block_content->uuid(), $block_settings);
-
-    $build = $this->container
-      ->get('entity_type.manager')
-      ->getViewBuilder('block')
-      ->view($block);
-    $this->isolatedRender($build);
+    $this->placeRenderBlock("block_content:{$block_content->uuid()}", $block_settings);
 
     return $block_content;
   }
