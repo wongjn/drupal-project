@@ -283,7 +283,7 @@ function {{ NAME }}_preprocess_menu__main(&$variables) {
 function {{ NAME }}_preprocess_node(&$variables) {
   // Container module class removed from system_main_block so that it can be
   // added here for consistent spacing.
-  if ($variables['page']) {
+  if ($variables['view_mode'] == 'full') {
     foreach (Element::getVisibleChildren($variables['content']) as $key) {
       $variables['content'][$key]['#attributes']['class'][] = 'l-container__module';
     }
