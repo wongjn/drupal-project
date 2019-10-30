@@ -18,6 +18,8 @@
   flex-direction: column;
   position: fixed;
   top: 0;
+  right: 0;
+  bottom: 0;
   left: 0;
   z-index: 500;
   background-color: #fff;
@@ -27,8 +29,6 @@
   transform: translateX(100px);
   opacity: 0;
   visibility: hidden; // 1
-  width: 100vw;
-  height: 100vh;
   pointer-events: none;
 
   &.is-open {
