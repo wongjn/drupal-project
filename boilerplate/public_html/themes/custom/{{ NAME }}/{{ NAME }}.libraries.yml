@@ -16,7 +16,6 @@ global:
       dist/css/components/text-body.css: {}
       dist/css/objects/title.css: {}
     theme:
-      dist/css/theme.css: {}
       dist/css/utilities.css:
         weight: 9999
   js:

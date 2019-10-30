@@ -58,7 +58,6 @@ async function compileStyleguide() {
   // Get list of all files.
   const files = (await Promise.all([
     ...CSS_SUBDIRS.map(subdir => readDirFull(path.join(CSS_DIR, subdir))),
-    [path.join(CSS_DIR, 'theme.css')],
     [path.join(CSS_DIR, 'utilities.css')],
   ]))
     // Reduce list to single level list.
