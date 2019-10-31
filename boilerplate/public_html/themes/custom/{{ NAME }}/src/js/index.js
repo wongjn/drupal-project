@@ -22,6 +22,14 @@ const lazyBehaviors = [
 
 lazyBehaviors.forEach(args => lazyBehavior(...args));
 
+// Differential serving loads the legacy entry script asynchronously, meaning
+// that it may miss out on the DOMContentLoaded event on the document whereby
+// the an initial Drupal.attachBehaviors() is called for the whole page. Hence
+// Drupal.attachBehaviors() is called again for the legacy bundle.
+if (BUNDLE_TYPE === 'legacy' && document.readyState !== 'loading') {
+  Drupal.attachBehaviors(document);
+}
+
 if (module.hot) {
   module.hot.accept('./lib/behaviors', () => {
     lazyBehaviors.forEach(args => lazyBehavior(...args));
