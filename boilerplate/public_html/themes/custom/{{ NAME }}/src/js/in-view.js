@@ -7,7 +7,7 @@
 
 import { curry, forEach, filter, pipe } from 'rambda';
 import { behavior } from './lib/behaviors';
-import dom from './lib/dom';
+import { match } from './lib/dom';
 
 // CSS variable for animation delay.
 const CSS_PROPERTY_NAME = '--inview-delay';
@@ -109,7 +109,7 @@ const isInWindow = element => {
  */
 const createList = (justInvoked = false) => list => {
   const createCollection = pipe(
-    curry(dom)(list.dataset.selector),
+    curry(match)(list.dataset.selector),
     justInvoked ? filter(isInWindow) : args => args,
     setUpLoader(onIntersect(load), parseFloat(list.dataset.ratio) || 0.2),
   );

@@ -3,7 +3,7 @@
  * Drupal behavior extension class to load extra JS asynchronously.
  */
 
-import dom from './dom';
+import { match } from './dom';
 
 // Noop function.
 const noop = () => {};
@@ -92,7 +92,7 @@ export const lazyBehavior = (fileName, selector = `.js-${fileName}`) => {
 
   Drupal.behaviors[key] = {
     async attach(context, settings) {
-      if (!context.querySelector(selector)) {
+      if (match(selector, context).length === 0) {
         return;
       }
 

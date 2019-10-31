@@ -4,7 +4,7 @@
  */
 
 import { parse } from 'cookie';
-import templateParse from '../../lib/template-parser';
+import { templateParse } from '../../lib/dom';
 import { windowScrollManager } from '../window-scroll-manager';
 
 /**
