@@ -50,10 +50,12 @@ $half-gutter: $gutter / 2;
     margin: 0;
     grid-template-columns: repeat(auto-fill, minmax(var(--column-min-width), 1fr));
     grid-gap: calc(var(--gutter-y) * 2) calc(var(--gutter-x) * 2);
+  }
 
-    @include hacks.edge {
-      grid-gap: $gutter;
-    }
+  // Edge 17 does not support CSS variables in calc() that use calc()
+  // themselves.
+  @include hacks.edge(17) {
+    grid-gap: $gutter;
   }
 
   @include variants($gutter, layout.$SITE_WIDTH_PX, (

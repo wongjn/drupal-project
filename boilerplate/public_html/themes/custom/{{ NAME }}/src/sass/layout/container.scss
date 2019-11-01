@@ -23,7 +23,9 @@ $fallback-gutter: 20px;
   max-width: calc(#{layout.$SITE-WIDTH-PX} + (var(--container-space-x) * 2)); // 1
   --container-space-y: 40px;
 
-  @include hacks.edge {
+  // Edge 17 does not support CSS variables in calc() that use calc()
+  // themselves.
+  @include hacks.edge(17) {
     max-width: (layout.$SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
   }
 
@@ -43,7 +45,9 @@ $fallback-gutter: 20px;
     padding: $fallback-gutter;
     padding: var(--container-space-y) var(--container-space-x);
 
-    @include hacks.edge {
+    // Edge 17 does not support CSS variables in calc() that use calc()
+    // themselves.
+    @include hacks.edge(17) {
       padding: $fallback-gutter;
     }
 

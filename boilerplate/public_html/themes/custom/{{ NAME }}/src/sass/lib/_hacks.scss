@@ -5,9 +5,18 @@
 
 /// Edge-only styles
 ///
+/// @param {Number} $version [0]
+///   The edge version to select up to. Use 0 for all.
+///
 /// @content Styles for Edge only.
-@mixin edge {
-  @supports (-ms-ime-align: auto) {
+@mixin edge($version: 0) {
+  $query: '(-ms-ime-align: auto)';
+
+  @if ($version > 0) {
+    $query: $query + if($version == 17, ' and (not (-webkit-mask: url()))', '');
+  }
+
+  @supports #{$query} {
     @content;
   }
 }
