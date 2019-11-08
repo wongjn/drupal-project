@@ -73,7 +73,7 @@ abstract class BlockContentTestBase extends BlockTestBase {
   protected function renderBlockContent(array $parameters = []) {
     $parameters += [
       'region' => 'content',
-      'view_mode' => 'full',
+      'view_mode' => 'default',
     ];
 
     $block_settings = [];
