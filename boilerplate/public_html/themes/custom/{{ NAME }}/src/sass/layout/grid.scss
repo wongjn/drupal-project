@@ -7,11 +7,7 @@
 @use '../lib/layout';
 @use '../lib/viewport';
 
-// Spacing between items
-$gutter: 40px;
-$half-gutter: $gutter / 2;
-
-@mixin variants($gutter, $container-width, $columns) {
+@mixin _variants($gutter, $container-width, $columns) {
   @at-root {
     @each $name, $column in $columns {
       #{if("#{&}" == '.l-grid', '', &)}.l-grid--#{$name} {
@@ -37,19 +33,22 @@ $half-gutter: $gutter / 2;
 }
 
 .l-grid {
-  @include viewport.scale(--gutter-x, $half-gutter, 20px);
-  @include viewport.scale(--gutter-y, $half-gutter, 20px);
+  // Spacing between items.
+  $gutter: 40px;
+
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: ($half-gutter * -1);
-  margin: calc(var(--gutter-y) * -1) calc(var(--gutter-x) * -1);
+  margin: ($gutter * -0.5);
+  margin: calc(var(--gutter-y) * -0.5) calc(var(--gutter-x) * -0.5);
+  --gutter-x: #{$gutter};
+  --gutter-y: #{$gutter};
 
   @supports (display: grid) {
     display: grid;
     margin: 0;
     grid-template-columns: repeat(auto-fill, minmax(var(--column-min-width), 1fr));
-    grid-gap: calc(var(--gutter-y) * 2) calc(var(--gutter-x) * 2);
+    grid-gap: var(--gutter-y) var(--gutter-x);
   }
 
   // Edge 17 does not support CSS variables in calc() that use calc()
@@ -58,7 +57,7 @@ $half-gutter: $gutter / 2;
     grid-gap: $gutter;
   }
 
-  @include variants($gutter, layout.$SITE_WIDTH_PX, (
+  @include _variants($gutter, layout.$SITE_WIDTH_PX, (
     // thirds: 3,
     // quarters: 4,
     // sixths: 6,
@@ -67,8 +66,8 @@ $half-gutter: $gutter / 2;
   // 1. When using fallback flexbox layout, ensures items are contained within
   //    the containing element.
   &__item {
-    margin: $half-gutter;
-    margin: var(--gutter-y) var(--gutter-x);
+    margin: ($gutter * -0.5);
+    margin: calc(var(--gutter-y) * -0.5) calc(var(--gutter-x) * -0.5);
     min-width: 0; // 1
 
     @supports (display: grid) {
