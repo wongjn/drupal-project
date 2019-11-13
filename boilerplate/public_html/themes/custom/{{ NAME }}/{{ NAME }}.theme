@@ -191,6 +191,36 @@ function {{ NAME }}_preprocess_file_link(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for form-element.html.twig.
+ */
+function {{ NAME }}_preprocess_form_element(&$variables) {
+  // Override themeable used for radio/checkbox elements.
+  if (in_array($variables['type'], ['radio', 'checkbox'])) {
+    $variables['label']['#theme'] = 'form_element_label__option';
+  }
+  else {
+    $variables['element'] += ['#label_display' => 'above'];
+
+    if ($variables['element']['#label_display'] == 'above') {
+      $variables['label']['#attributes']['class'][] = 'u-margin-bottom-30';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for form-element-label.html.twig.
+ */
+function {{ NAME }}_preprocess_form_element_label(&$variables) {
+  if ($variables['title_display'] == 'invisible') {
+    $variables['attributes']['class'][] = 'visually-hidden';
+  }
+
+  if ($variables['required']) {
+    $variables['attributes']['class'][] = 'js-form-required';
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK() for html--imce.html.twig.
  *
  * Alters libraries attached to IMCE file manager dialog.
