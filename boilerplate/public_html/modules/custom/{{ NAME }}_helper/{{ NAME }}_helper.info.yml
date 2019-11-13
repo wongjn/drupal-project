@@ -3,4 +3,5 @@ description: Tweaks for the {{ LABEL }} theme to work properly and for general s
 package: {{ LABEL }}
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 project: {{ NAME }}
