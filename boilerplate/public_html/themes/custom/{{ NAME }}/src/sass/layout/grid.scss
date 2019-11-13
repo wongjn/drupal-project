@@ -66,8 +66,8 @@
   // 1. When using fallback flexbox layout, ensures items are contained within
   //    the containing element.
   &__item {
-    margin: ($gutter * -0.5);
-    margin: calc(var(--gutter-y) * -0.5) calc(var(--gutter-x) * -0.5);
+    margin: ($gutter * 0.5);
+    margin: calc(var(--gutter-y) * 0.5) calc(var(--gutter-x) * 0.5);
     min-width: 0; // 1
 
     @supports (display: grid) {
