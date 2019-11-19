@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies: {  }
+id: test_extender_inview
+label: ''
+module: views
+description: ''
+tag: ''
+base_table: views_test_data
+base_field: nid
+core: '8'
+display:
+  default:
+    display_plugin: default
+    id: default
+    display_options:
+      fields:
+        name:
+          id: name
+          table: views_test_data
+          field: name
+          relationship: none
+  embed_1:
+    display_plugin: embed
+    id: embed_1
+    display_options:
+      display_extenders:
+        inview:
+          selector: '.select'
+          ratio: 0.5
