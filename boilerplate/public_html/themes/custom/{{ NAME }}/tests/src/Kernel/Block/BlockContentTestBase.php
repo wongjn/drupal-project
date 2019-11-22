@@ -77,7 +77,7 @@ abstract class BlockContentTestBase extends BlockTestBase {
     ];
 
     $block_settings = [];
-    foreach (['id', 'region', 'view_mode', 'visibility', 'weight'] as $key) {
+    foreach (['id', 'label', 'region', 'view_mode', 'visibility', 'weight'] as $key) {
       if (isset($parameters[$key])) {
         $block_settings[$key] = $parameters[$key];
         // Remove extra values that do not belong in the parameters array.
