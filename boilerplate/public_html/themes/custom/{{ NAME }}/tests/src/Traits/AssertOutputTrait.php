@@ -29,6 +29,30 @@ trait AssertOutputTrait {
   }
 
   /**
+   * Asserts an element's attribute has expected value.
+   *
+   * This is a looser assertion, whereby values separated by spaces match but
+   * not necessarily in the same order.
+   *
+   * @param \SimpleXMLElement $attribute
+   *   The attribute value.
+   * @param string $expected_value
+   *   Expected attribute value.
+   * @param string $message
+   *   (optional) Message for the test.
+   */
+  protected function assertXmlAttribute(SimpleXMLElement $attribute, $expected_value, $message = NULL) {
+    $actual = explode(' ', (string) $attribute);
+    $expected = explode(' ', $expected_value);
+
+    $this->assertEquals(
+      sort($actual),
+      sort($expected),
+      $message ?: "`{$attribute->getName()}` attribute value matches '$expected_value'."
+    );
+  }
+
+  /**
    * Renders an render array in isolation (i.e. without a bare page).
    *
    * @param array $build
