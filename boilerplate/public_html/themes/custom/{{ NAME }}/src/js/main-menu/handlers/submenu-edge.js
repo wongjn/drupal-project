@@ -37,6 +37,12 @@ function moveOverlaps(menus) {
   });
 }
 
+/**
+ * Initializes this handler.
+ * 
+ * @param {import('../').MenuWidget} menuWidget
+ *   The menu orchestrator object.
+ */
 export default menuWidget => {
   const { menu } = menuWidget;
   const menus = Array.from(menu.querySelectorAll('.c-main-menu__sub-menu'));

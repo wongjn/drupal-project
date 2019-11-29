@@ -21,7 +21,7 @@ const NullMap = {
  *
  * @param {string} selector
  *   The CSS selector to match relevant elements.
- * @param {function} func
+ * @param {(element: Element,...args: any[]) => ((...args: any[]) => void) | void} func
  *   The function to run on attachment. Will receive a relevant element as first
  *   parameter and drupalSettings as second parameter. Return a another function
  *   as the detachment callback. Mark the function as `sideEffectsOnly` using

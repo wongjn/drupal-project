@@ -10,32 +10,23 @@ import { windowScrollManager } from '../window-scroll-manager';
 /**
  * HTML ID for the drawer menu element.
  *
- * @constant {string}
+ * @constant
  */
 const DRAWER_HTML_ID = 'drawer-menu';
 
 /**
  * 30 days in seconds.
  *
- * @constant {number}
+ * @constant
  */
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
 /**
  * Cookie name for saving state across pages.
  *
- * @constant {string}
+ * @constant
  */
 const COOKIE_NAME = 'md';
-
-/**
- * Toggles visibility of the drawer-opening button.
- *
- * @callback openButtonToggle
- *
- * @param {'show'|'hide'} op
- *   Whether to show or hide the button.
- */
 
 /**
  * Creates a drawer-open button toggling function.
@@ -43,7 +34,7 @@ const COOKIE_NAME = 'md';
  * @param {HTMLButtonElement} openButton
  *   The button element.
  *
- * @return {openButtonToggle}
+ * @return {(op: 'show'|'hide') => void}
  *   Button toggling function.
  */
 function openButtonToggler(openButton) {
@@ -56,21 +47,12 @@ function openButtonToggler(openButton) {
 }
 
 /**
- * Trap focus within an element.
- *
- * @callback focusTrap
- *
- * @param {FocusEvent} event
- *   The focus event to potentially trap.
- */
-
-/**
  * Creates a `focusin` event handler to trap focus within the drawer.
  *
  * @param {HTMLElement} drawer
  *   The drawer element.
  *
- * @return {focusTrap}
+ * @return {(event: FocusEvent) => void}
  *   A global-level event -listener for the `focusin` event to trap focus within
  *   the given element.
  */
@@ -99,21 +81,12 @@ function focusTrapper(drawer) {
  */
 
 /**
- * Toggles the visibility of the drawer.
- *
- * @callback drawerToggle
- *
- * @param {'open'|'close'} op
- *   Whether to show or hide the drawer.
- */
-
-/**
  * Creates an drawer-toggling function.
  *
  * @param {drawerToggleElements} elements
  *   Notable elements of the drawer.
  *
- * @return {drawerToggle}
+ * @return {(op: 'open'|'close') => void}
  *   Drawer toggling function.
  */
 function drawerToggler({ drawer, openButton }) {
@@ -151,7 +124,7 @@ function drawerToggler({ drawer, openButton }) {
 /**
  * Creates an event listener to close the drawer when navigating to a new page.
  *
- * @param {function} close
+ * @param {() => void} close
  *   Callback to close the menu drawer.
  *
  * @return {EventListener}
@@ -166,7 +139,7 @@ const navigateCloser = close => ({ target }) =>
  * @param {HTMLULList} menu
  *   The menu list from the main DOM.
  *
- * @return {Object}
+ * @return {Object<string,HTMLElement>}
  *   Object of remarkable built DOM elements.
  */
 function buildDrawer(menu) {
@@ -196,38 +169,20 @@ function buildDrawer(menu) {
 }
 
 /**
- * Information about a line break.
- *
- * @typedef lineBreakData
- *
- * @prop {boolean} isBroken
- *   Whether a line break exists.
- */
-
-/**
- * Acts on a line break.
- *
- * @callback lineBreak
- *
- * @param {lineBreakData} data
- *   Information about a line break.
- */
-
-/**
  * Drawer managing object via methods.
  *
- * @typedef Manager
+ * @typedef {Object} Manager
  *
- * @prop {lineBreak} lineBreak
+ * @prop {(data: { isBroken: boolean }) => void} lineBreak
  *   Act on top-level menu item line-breaks.
- * @prop {function} destroy
+ * @prop {() => void} destroy
  *   Destroys the object, remove event listeners and observers.
  */
 
 /**
  * Constructs a drawer manager object.
  *
- * @param {MenuOrchestrator} menuWidget
+ * @param {import('../').MenuWidget} menuWidget
  *   Orchestrator object for managing the menu.
  *
  * @return {Manager}
@@ -273,7 +228,15 @@ function initializeManager({ wrapper, menu }) {
   };
 }
 
+/** @type {Manager} */
 let drawerManager;
+
+/**
+ * Initializes this handler.
+ * 
+ * @param {import('../').MenuWidget} menuWidget
+ *   The menu orchestrator object.
+ */
 export default menuWidget => {
   drawerManager = drawerManager || initializeManager(menuWidget);
 

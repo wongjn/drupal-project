@@ -4,42 +4,20 @@
  */
 
 /**
- * Adds an event listener.
- *
- * @callback orchestratorOn
- *
- * @param {string} event
- *   The name of the event to listen on.
- * @param {function} callback
- *   The function to call when the event is fired.
- */
-
-/**
- * Fires all event listeners of the a given event type.
- *
- * @callback orchestratorFire
- *
- * @param {string} event
- *   The name of the event to fire.
- * @param {object|void} [data=undefined]
- *   (optional) Extra data of the event.
- */
-
-/**
  * Orchestrating object that 'plugins' can attach to.
  *
  * @typedef Orchestrator
  *
- * @prop {orchestratorOn} on
+ * @prop {(event: string, callback: (data?: Object) => void) => void} on
  *   Adds an event listener.
- * @prop {orchestratorFire} fire
+ * @prop {(event: string, data?: Object) => void} fire
  *   Fires all event listeners of the a given event type.
  */
 
 /**
  * Creates a plugin-style orchestrator.
  *
- * @param {object} [fields={}]
+ * @param {Object} [fields={}]
  *   (optional) Object mapping of a any extra fields to add.
  *
  * @return {Orchestrator}

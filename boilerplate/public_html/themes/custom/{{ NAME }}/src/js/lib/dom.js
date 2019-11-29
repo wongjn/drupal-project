@@ -10,6 +10,7 @@
  *   The CSS selector to match.
  * @param {HTMLDocument|HTMLElement} context
  *   The DOM element to get matching elements from.
+ * 
  * @return {HTMLElement[]}
  *   The matching elements.
  */
@@ -23,6 +24,7 @@ export const matchChildren = (selector, context) =>
  *   The CSS selector to match.
  * @param {HTMLDocument|HTMLElement} context
  *   The DOM element set as matching.
+ * 
  * @return {HTMLElement[]}
  *   Matching self in an array or empty array.
  */
@@ -36,6 +38,7 @@ export const matchSelf = (selector, context) =>
  *   The CSS selector to match.
  * @param {HTMLDocument|HTMLElement} context
  *   The DOM element to get matching elements from.
+ * 
  * @return {HTMLElement[]}
  *   The matching elements.
  */
@@ -61,7 +64,8 @@ export const match = (selector, context) => [
  * @param {string} html
  *   HTML fragment to convert to DOM objects. Only the first parent in the
  *   string will be returned.
- * @return {Array}
+ * 
+ * @return {[HTMLElement, Object<string, HTMLElement>]}
  *   First element is the full DOM. Second element is an object mapping of
  *   reference elements.
  */

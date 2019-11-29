@@ -24,13 +24,13 @@ export const windowScrollManager = {
    *
    * False to indicate that it has not been calculated.
    *
-   * @var {bool|number}
+   * @var {false|number}
    */
   barWidth: false,
   /**
    * Toggles scrolling.
    *
-   * @param {bool} disable
+   * @param {boolean} disable
    *   True to disable scrolling, otherwise false to enable.
    */
   scrollingToggle(disable) {

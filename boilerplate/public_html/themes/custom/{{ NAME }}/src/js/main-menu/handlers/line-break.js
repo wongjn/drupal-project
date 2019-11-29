@@ -6,16 +6,27 @@
 /**
  * 30 days in seconds.
  *
- * @constant {number}
+ * @constant
  */
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
+
+/**
+ * Line break reduction result object.
+ * 
+ * @typedef {Object} LineBreakResult
+ * 
+ * @prop {boolean} found
+ *   Whether line break has been found.
+ * @prop {number} index
+ *   The index of the last element on the first line before the line break.
+ */
 
 /**
  * Returns a reducer to give the index of where a line break occurs.
  *
  * @param {number} reference
  *   The offsetTop value to test against.
- * @return {function}
+ * @return {(current: LineBreakResult, element: HTMLElement) => LineBreakResult}
  *   A reducer accepting a state of { found: Boolean, index: number } and an
  *   element to test as arguments.
  */
@@ -62,6 +73,12 @@ const calculateLinebreak = menu => {
   return index;
 };
 
+/**
+ * Initializes this handler.
+ * 
+ * @param {import('../').MenuWidget} menuWidget
+ *   The menu orchestrator object.
+ */
 export default menuWidget => {
   const { menu } = menuWidget;
   const menuItems = Array.from(menu.children).slice(1);

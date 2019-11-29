@@ -9,13 +9,32 @@ import { curry, forEach, filter, pipe } from 'rambda';
 import { behavior } from './lib/behaviors';
 import { match } from './lib/dom';
 
-// CSS variable for animation delay.
+/**
+ * CSS variable for animation delay.
+ * 
+ * @constant
+ */
 const CSS_PROPERTY_NAME = '--inview-delay';
-// Class for an element currently outside the viewport.
+
+/**
+ * Class for an element currently outside the viewport.
+ * 
+ * @constant
+ */
 const OUTSIDE_VIEWPORT_CLASSNAME = 'is-outside-viewport';
-// Class for an element currently animating.
+
+/**
+ * Class for an element currently animating.
+ * 
+ * @constant
+ */
 const LOADING_CLASSNAME = 'is-loading';
-// Class for an element finished animating.
+
+/**
+ * Class for an element finished animating.
+ * 
+ * @constant
+ */
 const LOADED_CLASSNAME = 'is-loaded';
 
 /**
@@ -43,12 +62,12 @@ const load = (element, delay = 0) => {
 /**
  * Sets up the loader for elements.
  *
- * @param {function} callback
+ * @param {IntersectionObserverCallback} callback
  *   The function to run on any intersection.
  * @param {number} threshold
  *   The threshold parameter for the IntersectionObserver options.
  *
- * @return {function}
+ * @return {(elements: Element[]) => () => void}
  *   The loader that accepts an array of elements to watch for intersection and
  *   that returns a function to destroy the loader.
  */
@@ -69,11 +88,11 @@ const setUpLoader = (callback, threshold) => {
 /**
  * Builds an on-intersection IntersectionObserver callback.
  *
- * @param {function} loader
+ * @param {(element: Element, delay: number) => void} loader
  *   The loader to run on an IntersectionObserverEntry.target when it is
  *   intersecting the viewport.
  *
- * @return {function}
+ * @return {IntersectionObserverCallback}
  *   Callback for IntersectionObserver objects.
  */
 const onIntersect = loader => (entries, observer) =>
@@ -90,7 +109,7 @@ const onIntersect = loader => (entries, observer) =>
  * @param {HTMLElement} element
  *   The element to check.
  *
- * @return {bool}
+ * @return {boolean}
  *   True if the element is within the browser window.
  */
 const isInWindow = element => {
@@ -101,10 +120,10 @@ const isInWindow = element => {
 /**
  * Returns a function to create a in-view animating list of elements.
  *
- * @param {bool} justInvoked
+ * @param {boolean} justInvoked
  *   True if this is the first invocation after script load.
  *
- * @return {function}
+ * @return {() => void}
  *   The list creator. The creator returns the destroy function.
  */
 const createList = (justInvoked = false) => list => {

@@ -12,6 +12,6 @@ const resizeObserverLoad = RESIZE_OBSERVER
 /**
  * The ResizeObserver constructor as a promise.
  *
- * @var {Promise}
+ * @type {Promise}
  */
 export default resizeObserverLoad.then(module => module.default);

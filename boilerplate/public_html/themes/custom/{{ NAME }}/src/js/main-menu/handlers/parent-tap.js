@@ -6,18 +6,9 @@
 /**
  * CSS class for opened sub-menu.
  *
- * @constant {string}
+ * @constant
  */
 const OPEN_CLASS = 'is-open';
-
-/**
- * Opens a sub-menu if it exists without navigating to the link.
- *
- * @callback onTouch
- *
- * @param {TouchEvent} event
- *   The touch event object.
- */
 
 /**
  * Creates a touch handler for a menu widget.
@@ -25,7 +16,7 @@ const OPEN_CLASS = 'is-open';
  * @param {HTMLElement} menu
  *   Top-level menu item to manage touch on.
  *
- * @return {onTouch}
+ * @return {(event: TouchEvent) => void}
  *   The touch handler.
  */
 function onTouchHandler(menu) {
@@ -57,6 +48,12 @@ function onTouchHandler(menu) {
   };
 }
 
+/**
+ * Initializes this handler.
+ * 
+ * @param {import('../').MenuWidget} menuWidget
+ *   The menu orchestrator object.
+ */
 export default menuWidget => {
   const callback = onTouchHandler(menuWidget.menu);
   const options = { passive: false };

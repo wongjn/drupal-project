@@ -6,7 +6,7 @@
 /**
  * Returns a promise that resolves on next animation frame.
  *
- * @return {Promise}
+ * @return {Promise<void>}
  *   A promise that resolves on next animation frame.
  */
 export default function requestAnimationFramePromise() {

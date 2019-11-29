@@ -6,6 +6,7 @@
 import resizeObserverLoad from './lib/resize-observer-load';
 
 resizeObserverLoad.then(Observer => {
+  /** @type {ResizeObserver} */
   const resizeObserver = new Observer(([{ target }], observer) => {
     if (
       document.body.style.overflow === 'hidden' ||
