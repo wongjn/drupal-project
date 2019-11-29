@@ -15,12 +15,22 @@ if (BUNDLE_TYPE === 'legacy') {
   import(/* webpackChunkName: "async" */ './lib/svg-polyfill');
 }
 
-const lazyBehaviors = [
-  // Drupal status messages.
-  ['messages'],
-];
+/**
+ * Register behaviors as lazy.
+ *
+ * @param {Object<string,string|null>} definitions
+ *   Map of behaviors, key is the JS file to load in behaviors/ and value is
+ *   the CSS selector or `null` for default value derived from the filename.
+ *
+ * @return {void}
+ */
+const registerModules = definitions =>
+  Object.entries(definitions).forEach(([behavior, selector]) =>
+    // YAML cannot declare undefined value; use null instead.
+    lazyBehavior(behavior, selector === null ? undefined : selector),
+  );
 
-lazyBehaviors.forEach(args => lazyBehavior(...args));
+registerModules(drupalSettings.{{ CAMEL }}.modules);
 
 // Differential serving loads the legacy entry script asynchronously, meaning
 // that it may miss out on the DOMContentLoaded event on the document whereby
@@ -32,7 +42,7 @@ if (BUNDLE_TYPE === 'legacy' && document.readyState !== 'loading') {
 
 if (module.hot) {
   module.hot.accept('./lib/behaviors', () => {
-    lazyBehaviors.forEach(args => lazyBehavior(...args));
+    registerModules(drupalSettings.{{ CAMEL }}.modules);
     Drupal.attachBehaviors(document.body, drupalSettings);
   });
 }

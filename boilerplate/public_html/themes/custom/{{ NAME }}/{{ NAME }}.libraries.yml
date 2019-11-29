@@ -18,6 +18,9 @@ global:
     theme:
       dist/css/utilities.css:
         weight: 9999
+  drupalSettings:
+    {{ CAMEL }}:
+      modules: []
   js:
     dist/js/modern.js:
       preprocess: false
@@ -43,6 +46,9 @@ messages:
   css:
     component:
       dist/css/components/messages.css: {}
+  drupalSettings:
+    {{ CAMEL }}:
+      modules: { messages: null }
 
 polyfill:
   remote: https://polyfill.io/
