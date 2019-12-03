@@ -3,62 +3,37 @@
 namespace Drupal\Tests\{{ NAME }}\Kernel\Block;
 
 use Drupal\block_content\Entity\BlockContent;
-use Drupal\block_content\Entity\BlockContentType;
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\Tests\{{ NAME }}\Traits\EntityCreationTrait;
+use Drupal\Tests\block\Traits\BlockCreationTrait;
+use Drupal\Tests\{{ NAME }}\Kernel\FieldableEntityTestBase;
 
 /**
  * Base class for block content output tests.
  */
-abstract class BlockContentTestBase extends BlockTestBase {
+abstract class BlockContentTestBase extends FieldableEntityTestBase {
 
-  use EntityCreationTrait;
+  use BlockCreationTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $entityType = 'block_content';
 
   /**
    * {@inheritdoc}
    */
   protected static $modules = [
+    'block',
     'block_content',
-    'field',
-    'user',
   ];
-
-  /**
-   * The block content bundle being tested.
-   *
-   * @var string
-   */
-  protected $bundle;
-
-  /**
-   * Fields to add to the test block content bundle.
-   *
-   * Keyed by field name with storage settings as the array value or a string to
-   * specify only the field type with the rest of settings as defaults.
-   *
-   * @var array|string[]
-   */
-  protected $fields = [];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
-    parent::setUp();
-
+  protected function setUpEntityBundle() {
     $this->installEntitySchema('block_content');
+    parent::setUpEntityBundle();
 
-    BlockContentType::create(['id' => $this->bundle])->save();
-
-    EntityViewDisplay::create([
-      'targetEntityType' => 'block_content',
-      'bundle' => $this->bundle,
-      'mode' => 'default',
-      'status' => TRUE,
-    ])->save();
-
-    $this->createEntityFields('block_content', $this->bundle, $this->fields);
-    $this->maybeCreateFile();
+    $this->viewBuilder = $this->container->get('entity_type.manager')->getViewBuilder('block');
   }
 
   /**
@@ -70,11 +45,8 @@ abstract class BlockContentTestBase extends BlockTestBase {
    * @return \Drupal\block_content\BlockContentInterface
    *   The block content entity.
    */
-  protected function renderBlockContent(array $parameters = []) {
-    $parameters += [
-      'region' => 'content',
-      'view_mode' => 'default',
-    ];
+  protected function renderEntity(array $parameters = []) {
+    $parameters += ['region' => 'content'];
 
     $block_settings = [];
     foreach (['id', 'label', 'region', 'view_mode', 'visibility', 'weight'] as $key) {
@@ -88,7 +60,8 @@ abstract class BlockContentTestBase extends BlockTestBase {
     $block_content = BlockContent::create(['type' => $this->bundle] + $parameters);
     $block_content->save();
 
-    $this->placeRenderBlock("block_content:{$block_content->uuid()}", $block_settings);
+    $block = $this->placeBlock("block_content:{$block_content->uuid()}", $block_settings);
+    $this->isolatedRender($this->viewBuilder->view($block));
 
     return $block_content;
   }

@@ -21,6 +21,22 @@ class BlockTestBase extends ThemeKernelTestBase {
   ];
 
   /**
+   * View builder.
+   *
+   * @var \Drupal\block\BlockViewBuilder
+   */
+  protected $viewBuilder;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    $this->viewBuilder = $this->container->get('entity_type.manager')->getViewBuilder('block');
+  }
+
+  /**
    * Places and renders (in isolation) a block.
    *
    * @param string $plugin_id
@@ -35,12 +51,7 @@ class BlockTestBase extends ThemeKernelTestBase {
    */
   protected function placeRenderBlock($plugin_id, array $settings = []) {
     $block = $this->placeBlock($plugin_id, $settings);
-
-    $build = $this->container
-      ->get('entity_type.manager')
-      ->getViewBuilder('block')
-      ->view($block);
-    $this->isolatedRender($build);
+    $this->isolatedRender($this->viewBuilder->view($block));
 
     return $block;
   }

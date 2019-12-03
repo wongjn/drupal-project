@@ -41,8 +41,7 @@ class TextBlockContentTest extends BlockContentTestBase {
    * Tests base output.
    */
   public function testOutput() {
-    $block = $this->renderBlockContent(['body' => $this->randomMachineName()]);
-
+    $block = $this->renderEntity(['body' => $this->randomMachineName()]);
     $this->assertElementText('[class="c-text-body"] > p', $block->body->value, 'Body text.');
   }
 
