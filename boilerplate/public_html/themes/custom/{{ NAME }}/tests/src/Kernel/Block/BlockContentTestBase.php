@@ -30,7 +30,6 @@ abstract class BlockContentTestBase extends FieldableEntityTestBase {
    * {@inheritdoc}
    */
   protected function setUpEntityBundle() {
-    $this->installEntitySchema('block_content');
     parent::setUpEntityBundle();
 
     $this->viewBuilder = $this->container->get('entity_type.manager')->getViewBuilder('block');

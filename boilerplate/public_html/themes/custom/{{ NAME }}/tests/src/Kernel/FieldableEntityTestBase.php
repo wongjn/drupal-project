@@ -79,6 +79,8 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
    * Sets up entity bundle for tests.
    */
   protected function setUpEntityBundle() {
+    $this->installEntitySchema('user');
+
     /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
     $entity_type_manager = $this->container->get('entity_type.manager');
 

@@ -22,12 +22,4 @@ abstract class ParagraphTestBase extends FieldableEntityTestBase {
     'paragraphs',
   ];
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUpEntityBundle() {
-    $this->installEntitySchema('paragraph');
-    parent::setUpEntityBundle();
-  }
-
 }

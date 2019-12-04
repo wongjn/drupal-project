@@ -41,8 +41,6 @@ abstract class NodeTestBase extends FieldableEntityTestBase {
    * {@inheritdoc}
    */
   protected function setUpEntityBundle() {
-    $this->installEntitySchema('user');
-    $this->installEntitySchema('node');
     $this->installSchema('node', ['node_access']);
     // Install system config for date formats.
     $this->installConfig(['system']);
