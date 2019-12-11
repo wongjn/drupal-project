@@ -2,12 +2,23 @@
 
 namespace Drupal\{{ NAME }};
 
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\Template\Attribute;
 
 /**
  * Static class helper for rendering.
  */
-class Render {
+class Render implements TrustedCallbackInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return [
+      'preRenderProcessedText',
+      'preRenderViewElement',
+    ];
+  }
 
   /**
    * View element pre render callback.

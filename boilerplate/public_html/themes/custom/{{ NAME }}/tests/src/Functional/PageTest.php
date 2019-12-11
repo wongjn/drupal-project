@@ -2,12 +2,14 @@
 
 namespace Drupal\Tests\{{ NAME }}\Functional;
 
+use Drupal\Tests\BrowserTestBase;
+
 /**
  * Tests page layout markup.
  *
  * @group {{ NAME }}
  */
-class PageTest extends ThemeFunctionalTestBase {
+class PageTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -15,5 +17,10 @@ class PageTest extends ThemeFunctionalTestBase {
   protected static $modules = [
     'block',
   ];
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = '{{ NAME }}';
 
 }

@@ -3,14 +3,14 @@
 namespace Drupal\Tests\{{ NAME }}\Functional\Block;
 
 use Drupal\menu_link_content\Entity\MenuLinkContent;
-use Drupal\Tests\{{ NAME }}\Functional\ThemeFunctionalTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests output for the main menu block.
  *
  * @group {{ NAME }}
  */
-class MainSystemMenuBlockTest extends ThemeFunctionalTestBase {
+class MainSystemMenuBlockTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -19,6 +19,11 @@ class MainSystemMenuBlockTest extends ThemeFunctionalTestBase {
     'block',
     'menu_link_content',
   ];
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = '{{ NAME }}';
 
   /**
    * The main menu block under test.

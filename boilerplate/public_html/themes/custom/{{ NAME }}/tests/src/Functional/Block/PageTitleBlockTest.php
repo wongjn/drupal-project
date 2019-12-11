@@ -2,14 +2,14 @@
 
 namespace Drupal\Tests\{{ NAME }}\Functional\Block;
 
-use Drupal\Tests\{{ NAME }}\Functional\ThemeFunctionalTestBase;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests output of the page title.
  *
  * @group {{ NAME }}
  */
-class PageTitleBlockTest extends ThemeFunctionalTestBase {
+class PageTitleBlockTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -17,6 +17,11 @@ class PageTitleBlockTest extends ThemeFunctionalTestBase {
   protected static $modules = [
     'block',
   ];
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = '{{ NAME }}';
 
   /**
    * {@inheritdoc}
