@@ -41,7 +41,7 @@
         "drupal/pathauto": "^1.5",
         "drupal/quicklink": "^1.1",
         "drupal/view_unpublished": "^1.0@alpha",
-        "drush/drush": "^9.0.0",
+        "drush/drush": "^10.1",
         "npm-asset/dropzone": "^5.5",
         "npm-asset/imagesloaded": "^4.1",
         "npm-asset/masonry-layout": "^4.2",
