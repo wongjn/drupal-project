@@ -103,7 +103,7 @@
             "public_html/modules/contrib/{$name}": ["type:drupal-module"],
             "public_html/profiles/contrib/{$name}": ["type:drupal-profile"],
             "public_html/themes/contrib/{$name}": ["type:drupal-theme"],
-            "drush/Commands/{$name}": ["type:drupal-drush"]
+            "drush/Commands/contrib/{$name}": ["type:drupal-drush"]
         },
         "patches": {
             "drupal/core": {
