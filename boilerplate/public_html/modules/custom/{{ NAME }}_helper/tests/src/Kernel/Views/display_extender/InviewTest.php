@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\{{ NAME }}_helper\Kernel\Views\area;
+namespace Drupal\Tests\{{ NAME }}_helper\Kernel\Views\display_extender;
 
 use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
 use Drupal\views\Tests\ViewTestData;
