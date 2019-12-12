@@ -40,8 +40,6 @@ assert_options(ASSERT_ACTIVE, TRUE);
  */
 $settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';
 
-$config['config_split.config_split.dev']['status'] = TRUE;
-// $config['system.file']['path']['temporary'] = 'c:/wamp64/tmp';
 $config['system.logging']['error_level'] = ERROR_REPORTING_DISPLAY_VERBOSE;
 $config['system.mail']['interface']['default'] = 'devel_mail_log';
 $config['system.performance']['css']['preprocess'] = FALSE;
@@ -57,3 +55,9 @@ $settings['cache']['bins']['page'] = 'cache.backend.null';
 $settings['cache']['bins']['render'] = 'cache.backend.null';
 $settings['rebuild_access'] = TRUE;
 $settings['skip_permissions_hardening'] = TRUE;
+$settings['config_exclude_modules'] = [
+  'devel',
+  'devel_generate',
+  'field_ui',
+  'views_ui',
+];
