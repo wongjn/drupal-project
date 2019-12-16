@@ -1,0 +1,42 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "build",
+      "path": "public_html/themes/custom/{{ NAME }}/",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "npm",
+      "script": "start",
+      "path": "public_html/themes/custom/{{ NAME }}/",
+      "problemMatcher": []
+    },
+    {
+      "type": "shell",
+      "label": "PHPUnit Test",
+      "command": "./vendor/bin/phpunit --printer=\"\\Drupal\\Tests\\Listeners\\HtmlOutputPrinter\" -c ./public_html/core ${relativeFile}",
+      "options": {
+        "env": {
+          "BROWSERTEST_OUTPUT_DIRECTORY": "public_html/sites/default/files",
+          "SIMPLETEST_BASE_URL": "http://{{ NAME }}.local",
+          "SIMPLETEST_DB": "mysql://root@localhost/tests"
+        }
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "clear": true,
+      }
+    }
+  ]
+}

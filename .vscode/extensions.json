@@ -1,0 +1,10 @@
+{
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"EditorConfig.EditorConfig",
+		"esbenp.prettier-vscode",
+		"felixfbecker.php-debug",
+		"mblode.twig-language-2",
+		"wongjn.php-sniffer"
+	]
+}

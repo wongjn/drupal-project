@@ -1,0 +1,16 @@
+{
+  "phpSniffer.executablesFolder": "./vendor/bin/",
+  "phpSniffer.standard": "./phpcs.xml",
+  "phpSniffer.snippetExcludeSniffs": [
+    "Drupal.Classes.UnusedUseStatement",
+    "Drupal.Commenting.FileComment",
+    "Drupal.Files.EndFileNewline",
+    "Drupal.WhiteSpace.OpenTagNewline",
+    "Drupal.WhiteSpace.OperatorSpacing",
+    "Squiz.Strings.ConcatenationSpacing",
+  ],
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#0678BE",
+    "statusBar.background": "#0678BE",
+  }
+}
