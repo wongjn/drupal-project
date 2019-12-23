@@ -8,7 +8,7 @@ import debounce from 'lodash/debounce';
 /**
  * Moves a menu if it overlaps.
  *
- * @param {HTMLULElement[]} menus
+ * @param {HTMLUListElement[]} menus
  *   The menu list.
  */
 function moveOverlaps(menus) {

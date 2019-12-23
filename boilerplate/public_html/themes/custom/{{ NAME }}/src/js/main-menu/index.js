@@ -1,6 +1,6 @@
 /**
  * @file
- * Boostrap menu file.
+ * Bootstrap menu file.
  */
 
 import debounce from 'lodash/debounce';

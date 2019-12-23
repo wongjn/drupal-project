@@ -136,7 +136,7 @@ const navigateCloser = close => ({ target }) =>
 /**
  * Builds the drawer DOM.
  *
- * @param {HTMLULList} menu
+ * @param {HTMLUListElement} menu
  *   The menu list from the main DOM.
  *
  * @return {Object<string,HTMLElement>}
