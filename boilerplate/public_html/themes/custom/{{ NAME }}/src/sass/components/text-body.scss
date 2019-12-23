@@ -3,12 +3,13 @@
  * CMS WYSIWYG-entered text.
  */
 
+@use '../lib/colors';
 @use '../lib/font';
 @use '../lib/viewport';
 
 .c-text-body {
   @include font.crop(font.$LINE-HEIGHT);
-  $block-spacing: font.$LINE-HEIGHT * 1rem;
+	$block-spacing: font.$LINE-HEIGHT * 1rem * ( font.$SIZE / 16 );
 
   &--no-text-crop {
     &::before,
