@@ -3,6 +3,7 @@
  * Functions and mixins related to fonts.
  */
 
+@use 'sass:map';
 @use 'sass:math';
 @use 'sass:list';
 @use 'unit';
@@ -10,21 +11,16 @@
 
 // List of font sizes that will have scalable custom properties
 $_SIZE-PRESETS: (
-  72,
-  60,
-  48,
-  40,
-  36,
-  30,
-  24,
-  18,
-  16,
+  72: 30,
+  60: 30,
+  48: 30,
+  36: 24,
+  30: 24,
+  24: 24,
+  18: 18,
 );
 
-// Minimum size for font size to be considered scalable
-$_SIZE-SCALE-MINIMUM: 12px;
-
-// Default font size
+// Default font size, also minimum font size for scaling.
 $SIZE: 16;
 
 // Global default line height ratio
@@ -40,8 +36,8 @@ $LINE-HEIGHT: (24 / $SIZE);
 @function _scale-minimum($size) {
   @return unit.px-to-rem(
     unit.between(
-      math.floor(($size + ($_SIZE-SCALE-MINIMUM * 16))/ 14),
-      $_SIZE-SCALE-MINIMUM,
+      math.floor(($size + ($SIZE * 16))/ 14),
+      $SIZE,
       $size * 1px
     )
   );
@@ -55,11 +51,11 @@ $LINE-HEIGHT: (24 / $SIZE);
   $rem-size: unit.px-to-rem($size);
 
   // Too small to scale
-  @if $size <= $_SIZE-SCALE-MINIMUM {
+  @if $size <= $SIZE {
     font-size: $rem-size;
   }
   // Defined in :root as CSS custom properties
-  @else if list.index($_SIZE-PRESETS, $size) {
+  @else if map.has-key( $_SIZE-PRESETS, $size ) {
     font-size: $rem-size;
     font-size: var(--font-size-#{$size});
   }
@@ -73,16 +69,14 @@ $LINE-HEIGHT: (24 / $SIZE);
 /// @param {Bool} $editor-stylesheet [false]
 ///   Indicates whether the mixin is in the context of a WYSIWYG editor.
 @mixin size-custom-properties($editor-stylesheet: false) {
-  @each $size in $_SIZE-PRESETS {
-    $rem-size: unit.px-to-rem($size * 1px);
+  @each $size, $min in $_SIZE-PRESETS {
+    $rem-size: unit.px-to-rem($size);
 
-    @if $size > $_SIZE-SCALE-MINIMUM {
-      @if ($editor-stylesheet) {
-        // No scaling for WYSIWYG editors
-        --font-size-#{$size}: #{$rem-size};
-      } @else {
-        @include viewport.scale(--font-size-#{$size}, $rem-size, _scale-minimum($size));
-      }
+    @if $editor-stylesheet {
+      // No scaling for WYSIWYG editors.
+      --font-size-#{$size}: #{$rem-size};
+    } @else {
+      @include viewport.scale(--font-size-#{$size}, $rem-size, unit.px-to-rem($min));
     }
   }
 }
