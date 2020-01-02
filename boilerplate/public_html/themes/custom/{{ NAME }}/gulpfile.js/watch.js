@@ -49,7 +49,7 @@ function watcher() {
   website.init({
     proxy: '{{ UPPER }}_URL' in process.env
       ? process.env.{{ UPPER }}_URL
-      : '{{ NAME }}.local',
+      : '{{ NAME }}.test',
     middleware: [
       webpackDevMiddleware(webpackCompiler, {
         stats: statsConfig,

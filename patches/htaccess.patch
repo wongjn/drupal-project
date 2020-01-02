@@ -16,7 +16,7 @@
    RewriteRule ^ - [E=protossl:s]
 
 +  # Not local development, force HTTPS
-+  RewriteCond %{HTTP_HOST} !^(.+\.local|localhost|127\.0\.0\.1)$
++  RewriteCond %{HTTP_HOST} !^(.+\.test|localhost|127\.0\.0\.1)$
 +  RewriteCond %{HTTPS} off
 +  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
 +
