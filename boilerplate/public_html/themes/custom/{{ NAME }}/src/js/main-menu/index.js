@@ -4,7 +4,6 @@
  */
 
 import debounce from 'lodash/debounce';
-import resizeObserverLoader from '../lib/resize-observer-load';
 import createOrchestrator from '../lib/orchestrator';
 import attachLineBreak from './handlers/line-break';
 import attachSubmenuEdge from './handlers/submenu-edge';
@@ -44,11 +43,10 @@ if (wrapper && menu) {
   wrapper.classList.remove('is-menu-loading');
 
   // Menu element resize observations.
-  const observerPromise = resizeObserverLoader.then(
-    ObserverClass =>
-      new ObserverClass(debounce(() => menuWidget.fire('resize'), 300)),
+  const observer = new ResizeObserver(
+    debounce(() => menuWidget.fire('resize'), 300)
   );
-  observerPromise.then(observer => observer.observe(menu));
+  observer.observe(menu);
 
   if ('jQuery' in window) {
     jQuery(document).on('drupalViewportOffsetChange', (event, offsets) =>
@@ -59,7 +57,7 @@ if (wrapper && menu) {
   if (module.hot) {
     module.hot.accept();
     module.hot.dispose(() => {
-      observerPromise.then(observer => observer.disconnect());
+      observer.disconnect();
       menuWidget.fire('destroy');
     });
   }
