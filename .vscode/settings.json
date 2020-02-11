@@ -1,6 +1,4 @@
 {
-  "phpSniffer.executablesFolder": "./vendor/bin/",
-  "phpSniffer.standard": "./phpcs.xml",
   "phpSniffer.snippetExcludeSniffs": [
     "Drupal.Classes.UnusedUseStatement",
     "Drupal.Commenting.FileComment",

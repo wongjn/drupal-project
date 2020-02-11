@@ -12,8 +12,8 @@
   <exclude-pattern>*.css</exclude-pattern>
   <exclude-pattern>*.js</exclude-pattern>
 
-  <rule ref="./vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml"/>
-  <rule ref="./vendor/drupal/coder/coder_sniffer/DrupalPractice/ruleset.xml"/>
+  <rule ref="Drupal"/>
+  <rule ref="DrupalPractice"/>
 
   <!-- Ignore t() usage in test classes -->
   <rule ref="DrupalPractice.Objects.GlobalFunction.GlobalFunction">
