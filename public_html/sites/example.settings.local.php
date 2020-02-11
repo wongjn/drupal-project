@@ -40,6 +40,7 @@ assert_options(ASSERT_ACTIVE, TRUE);
  */
 $settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';
 
+$config['devel.settings']['debug_mail_directory'] = 'public://mail';
 $config['system.logging']['error_level'] = ERROR_REPORTING_DISPLAY_VERBOSE;
 $config['system.mail']['interface']['default'] = 'devel_mail_log';
 $config['system.performance']['css']['preprocess'] = FALSE;
