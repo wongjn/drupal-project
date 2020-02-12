@@ -1,5 +1,5 @@
---- public_html/.htaccess	2019-12-04 08:44:18.000000000 +0000
-+++ public_html/.htaccess	2019-12-12 09:29:25.749225500 +0000
+--- public_html/.htaccess
++++ public_html/.htaccess
 @@ -44,8 +44,8 @@
    # Enable expirations.
    ExpiresActive On
