@@ -54,12 +54,12 @@ $settings['browsersync'] = TRUE;
 $settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
 $settings['cache']['bins']['page'] = 'cache.backend.null';
 $settings['cache']['bins']['render'] = 'cache.backend.null';
+$settings['config_exclude_modules'][] = 'config_inspector';
+$settings['config_exclude_modules'][] = 'devel';
+$settings['config_exclude_modules'][] = 'devel_generate';
+$settings['config_exclude_modules'][] = 'field_ui';
+$settings['config_exclude_modules'][] = 'multiline_config';
+$settings['config_exclude_modules'][] = 'views_ui';
 $settings['file_private_path'] = 'sites/default/private';
 $settings['rebuild_access'] = TRUE;
 $settings['skip_permissions_hardening'] = TRUE;
-$settings['config_exclude_modules'] = [
-  'devel',
-  'devel_generate',
-  'field_ui',
-  'views_ui',
-];
