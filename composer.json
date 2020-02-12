@@ -113,9 +113,10 @@
             },
             "file-mapping": {
                 "[web-root]/.ht.router.php": false,
+                "[web-root]/.csslintrc": false,
+                "[web-root]/example.gitignore": false,
                 "[web-root]/sites/development.services.yml": false,
                 "[web-root]/sites/example.settings.local.php": false,
-                "[web-root]/sites/example.sites.php": false,
                 "[web-root]/web.config": false
             }
         }
