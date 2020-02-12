@@ -54,6 +54,7 @@ $settings['browsersync'] = TRUE;
 $settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
 $settings['cache']['bins']['page'] = 'cache.backend.null';
 $settings['cache']['bins']['render'] = 'cache.backend.null';
+$settings['file_private_path'] = 'sites/default/private';
 $settings['rebuild_access'] = TRUE;
 $settings['skip_permissions_hardening'] = TRUE;
 $settings['config_exclude_modules'] = [
