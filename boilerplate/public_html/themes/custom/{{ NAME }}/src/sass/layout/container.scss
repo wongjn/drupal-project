@@ -19,40 +19,16 @@ $fallback-gutter: 20px;
   @include viewport.scale(--container-space-x, 40px, 20px);
   margin-right: auto;
   margin-left: auto;
+  padding: ($fallback-gutter / 2) $fallback-gutter;
+  padding: calc(var(--container-space-y) / 2) var(--container-space-x);
   max-width: (layout.$SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
   max-width: calc(#{layout.$SITE-WIDTH-PX} + (var(--container-space-x) * 2)); // 1
   --container-space-y: 40px;
 
-  // Edge 17 does not support CSS variables in calc() that use calc()
-  // themselves.
-  @include hacks.edge(17) {
-    max-width: (layout.$SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
-  }
-
-  &,
   &__module {
-    padding: ($fallback-gutter / 2);
-    padding: calc(var(--container-space-y) / 2) calc(var(--container-space-x) / 2);
-
-    @include hacks.edge {
-      padding: ($fallback-gutter / 2);
-    }
-  }
-
-  // Merges padding and module into the top level element, such that no __module
-  // sub-components are required.
-  &--module {
-    padding: $fallback-gutter;
-    padding: var(--container-space-y) var(--container-space-x);
-
-    // Edge 17 does not support CSS variables in calc() that use calc()
-    // themselves.
-    @include hacks.edge(17) {
-      padding: $fallback-gutter;
-    }
-
-    .l-container__module {
-      padding: 0;
-    }
+    padding-top: ($fallback-gutter / 2);
+    padding-bottom: ($fallback-gutter / 2);
+    padding-top: calc(var(--container-space-y) / 2);
+    padding-bottom: calc(var(--container-space-y) / 2);
   }
 }
