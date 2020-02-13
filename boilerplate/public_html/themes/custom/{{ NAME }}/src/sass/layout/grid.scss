@@ -51,12 +51,6 @@
     grid-gap: var(--gutter-y) var(--gutter-x);
   }
 
-  // Edge 17 does not support CSS variables in calc() that use calc()
-  // themselves.
-  @include hacks.edge(17) {
-    grid-gap: $gutter;
-  }
-
   @include _variants($gutter, layout.$SITE_WIDTH_PX, (
     // thirds: 3,
     // quarters: 4,
