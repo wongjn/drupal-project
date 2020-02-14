@@ -152,4 +152,8 @@ Drupal.behaviors.{{ CAMEL }}InViewList = behavior(
 );
 
 // Initial DOM attachment invocation.
-Drupal.behaviors.{{ CAMEL }}InViewList.attach(document.body, drupalSettings);
+export default Drupal.behaviors.{{ CAMEL }}InViewList.attach.bind(
+  null,
+  document.body,
+  drupalSettings,
+);

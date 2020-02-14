@@ -34,14 +34,14 @@ const NullMap = {
 export const behavior = (selector, func) => ({
   list: func.sideEffectsOnly ? NullMap : new WeakMap(),
   attach(context, ...args) {
-    dom(selector, context)
+    match(selector, context)
       .filter(element => !this.list.has(element))
       .forEach(element => this.list.set(element, func(element, ...args)));
   },
   detach: func.sideEffectsOnly
     ? undefined
     : function detach(context, ...args) {
-        dom(selector, context)
+        match(selector, context)
           .filter(element => this.list.has(element))
           .forEach(element => {
             (this.list.get(element) || noop)(...args);
@@ -96,9 +96,9 @@ export const lazyBehavior = (fileName, selector = `.js-${fileName}`) => {
         return;
       }
 
-      const {
-        default: callback,
-      } = await import(/* webpackChunkName: "behavior-[request]" */ `../behaviors/${fileName}`);
+      const { default: callback } = await import(
+        /* webpackChunkName: "behavior-[request]" */ `../behaviors/${fileName}`
+      );
 
       Drupal.behaviors[key] = behavior(selector, callback);
       Drupal.behaviors[key].attach(context, settings);

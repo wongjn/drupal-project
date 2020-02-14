@@ -18,6 +18,7 @@
     "//": "Cannot resolve Webpack aliases. Webpack will complain at compile time anyway.",
     "import/no-unresolved": 0,
     "//": "False error reporting for Drupal.behavior context parameter.",
-    "react/destructuring-assignment": 0
+    "react/destructuring-assignment": 0,
+    "valid-jsdoc": 0
   }
 }

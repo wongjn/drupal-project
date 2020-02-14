@@ -7,12 +7,16 @@ import './main-menu';
 import './scrollbar-size';
 import { lazyBehavior } from './lib/behaviors';
 
-import(/* webpackChunkName: "async" */ './in-view');
+import(/* webpackChunkName: "async" */ './in-view').then(({ default: f }) =>
+  f(),
+);
 
 if (BUNDLE_TYPE === 'legacy') {
   // All browsers that support ES modules natively also support external-use
   // SVGs, so only polyfill for the legacy bundle.
-  import(/* webpackChunkName: "async" */ './lib/svg-polyfill');
+  import(
+    /* webpackChunkName: "async" */ './lib/svg-polyfill'
+  ).then(({ default: f }) => f());
 }
 
 /**
@@ -34,7 +38,7 @@ registerModules(drupalSettings.{{ CAMEL }}.modules);
 
 // Differential serving loads the legacy entry script asynchronously, meaning
 // that it may miss out on the DOMContentLoaded event on the document whereby
-// the an initial Drupal.attachBehaviors() is called for the whole page. Hence
+// an initial Drupal.attachBehaviors() is called for the whole page. Hence
 // Drupal.attachBehaviors() is called again for the legacy bundle.
 if (BUNDLE_TYPE === 'legacy' && document.readyState !== 'loading') {
   Drupal.attachBehaviors(document);
