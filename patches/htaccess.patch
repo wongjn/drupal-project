@@ -16,7 +16,7 @@
    RewriteRule ^ - [E=protossl:s]
 
 +  # Not local development, force HTTPS
-+  RewriteCond %{ENV:__DEV__} !^$
++  RewriteCond %{ENV:__DEV__} ^$
 +  RewriteCond %{HTTPS} off
 +  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
 +
@@ -40,7 +40,7 @@
 +  </filesMatch>
 +</IfModule>
 +
-+# php -- BEGIN cPanel-generated handler, do not edit
++# php -- BEGIN cPanel-generated handler, do not editp
 +# Set the “ea-php73” package as the default “PHP” programming language.
 +<IfModule mime_module>
 +  AddHandler application/x-httpd-ea-php73 .php .php7 .phtml
