@@ -26,7 +26,7 @@
       "options": {
         "env": {
           "BROWSERTEST_OUTPUT_DIRECTORY": "public_html/sites/default/files",
-          "SIMPLETEST_BASE_URL": "http://{{ NAME }}.local",
+          "SIMPLETEST_BASE_URL": "http://{{ NAME }}.test",
           "SIMPLETEST_DB": "mysql://root@localhost/tests"
         }
       },

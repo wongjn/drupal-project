@@ -3,4 +3,4 @@
 #
 
 options:
-  uri: 'http://{{ NAME }}.local'
+  uri: 'http://{{ NAME }}.test'
