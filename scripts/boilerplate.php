@@ -98,7 +98,7 @@ function boilerplate_generate($source, $dest) {
 
   // Make destination directory
   if (!is_dir($dest)) {
-    mkdir($dest, '0755');
+    mkdir($dest, 0755);
   }
 
   // Loop through the folder
