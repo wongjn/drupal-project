@@ -253,32 +253,24 @@ function {{ NAME }}_preprocess_image_formatter(&$variables) {
  * Implements hook_preprocess_HOOK() for menu.html.twig.
  */
 function {{ NAME }}_preprocess_menu(&$variables) {
-  Menu::recursiveMenuApply(
-    ['\Drupal\{{ NAME }}\Menu', 'addExternalOptions'],
-    $variables['items']
-  );
-
-  $variables['attributes_map'] = [
-    'sub' => new Attribute(),
-    'deep' => new Attribute(),
-  ];
+  Menu::recursiveMenuApply('\Drupal\{{ NAME }}\Menu::addExternalOptions', $variables['items']);
+  $variables['attributes_set'] = [];
 }
 
 /**
  * Implements hook_preprocess_HOOK() for menu--main.html.twig.
  */
 function {{ NAME }}_preprocess_menu__main(&$variables) {
-  Menu::recursiveMenuApply(
-    ['\Drupal\{{ NAME }}\Menu', 'mainMenuAddClasses'],
-    $variables['items']
-  );
+  Menu::recursiveMenuApply('\Drupal\{{ NAME }}\Menu::mainMenuAddClasses', $variables['items']);
 
-  $variables['attributes']['class'][] = 'js-main-menu__menu';
   $variables['attributes']['class'][] = 'c-main-menu__top-menu';
-  $variables['attributes_map']['sub']->addClass('c-main-menu__sub-menu');
-  $variables['attributes_map']['deep']->addClass([
-    'c-main-menu__sub-menu',
-    'c-main-menu__sub-menu--deep',
+
+  $variables['attributes_set'][] = new Attribute(['class' => ['c-main-menu__sub-menu']]);
+  $variables['attributes_set'][] = new Attribute([
+    'class' => [
+      'c-main-menu__sub-menu'
+      'c-main-menu__sub-menu--deep',
+    ],
   ]);
 
   $variables['drawer_attributes'] = new Attribute(['class' => ['c-main-menu__drawer']]);

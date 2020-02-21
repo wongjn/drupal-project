@@ -18,12 +18,11 @@
  *   - in_active_trail: TRUE if the link is in the active trail.
  * - attributes: HTML attributes for the top level menu list.
  * - drawer_attributes: HTML attributes for the drawer_wrapper.
- * - attributes_map: A list of attributes for sub menus:
- *   - sub: HTML attributes for second-level menus.
- *   - deep: HTML attributes for the third-level and deeper menus.
+ * - attributes_set: An array of attributes, one for each level. The last
+ *   attributes will be reused for menu lists deeper than the given set length.
  *
- * @see moorvision_preprocess_menu()
- * @see moorvision_preprocess_menu__main()
+ * @see {{ NAME }}_preprocess_menu()
+ * @see {{ NAME }}_preprocess_menu__main()
  */
 #}
 {% import 'menu.html.twig' as menus %}
@@ -34,7 +33,7 @@
     We call a macro which calls itself to render the full tree.
     @see http://twig.sensiolabs.org/doc/tags/macro.html
   #}
-  {{ menus.menu_links(items, attributes, 0, attributes_map) }}
+  {{ menus.menu_links(items, attributes, attributes_set) }}
   <div{{ drawer_attributes }}>
     <button class="c-main-menu__open-btn">{{ 'Full menu'|t }}</button>
   </div>
