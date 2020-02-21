@@ -7,7 +7,7 @@ dependencies:
     - system
   theme:
     - {{ NAME }}
-id: {{ NAME }}_mainnavigation
+id: {{ NAME }}_main_navigation
 theme: {{ NAME }}
 region: primary_menu
 weight: 0

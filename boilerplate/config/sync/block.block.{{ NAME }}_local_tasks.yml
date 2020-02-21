@@ -3,7 +3,7 @@ status: true
 dependencies:
   theme:
     - {{ NAME }}
-id: local_tasks
+id: {{ NAME }}_local_tasks
 theme: {{ NAME }}
 region: content
 weight: -8
