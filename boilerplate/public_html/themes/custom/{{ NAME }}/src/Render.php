@@ -47,9 +47,11 @@ class Render implements TrustedCallbackInterface {
    * Processed text element pre render callback.
    */
   public static function preRenderProcessedText(array $element) {
-    // Add wrapper to apply class to style WYSIWYG-entered markup.
-    $element['#theme_wrappers'][] = 'container';
-    $element['#attributes']['class'][] = 'c-text-body';
+    if (\Drupal::routeMatch()->getRouteName() != 'media.filter.preview') {
+      // Add wrapper to apply class to style WYSIWYG-entered markup.
+      $element['#theme_wrappers'][] = 'container';
+      $element['#attributes']['class'][] = 'c-text-body';
+    }
 
     return $element;
   }
