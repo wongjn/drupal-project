@@ -9,7 +9,7 @@
 
 .c-text-body {
   @include font.crop(font.$LINE-HEIGHT);
-	$block-spacing: font.$LINE-HEIGHT * 1rem * ( font.$SIZE / 16 );
+  $block-spacing: font.$LINE-HEIGHT * 1rem * ( font.$SIZE / 16 );
 
   &--no-text-crop {
     &::before,
@@ -81,18 +81,22 @@
     }
   }
 
-
-  // WYSIWYG alignment classes
-  .align-left,
-  .align-right,
-  .align-center {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
+  // WYSIWYG alignment classes.
   .align-left,
   .align-right {
     @include viewport.scale(margin-right, 20px, 5px);
     @include viewport.scale(margin-left, 20px, 5px);
+  }
+
+  &__media {
+    * + * {
+      margin-top: 0;
+    }
+
+    // Remove bottom whitespace from default inline display.
+    img {
+      vertical-align: top;
+    }
   }
 
   &__emphasize {}

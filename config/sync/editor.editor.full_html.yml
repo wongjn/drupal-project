@@ -39,7 +39,7 @@ settings:
         -
           name: Media
           items:
-            - DrupalImage
+            - DrupalMediaLibrary
             - HorizontalRule
         -
           name: 'Block Formatting'

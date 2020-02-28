@@ -1,0 +1,27 @@
+/**
+ * @file
+ * Media library item for WYSIWYG editors.
+ */
+
+// Based on seven/css/theme/media-library.css
+.media-library-item__edit {
+  position: absolute;
+  right: 40px;
+  top: 10px;
+  z-index: 1;
+  overflow: hidden;
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  background: #fff url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#787878"%3E<path d="M15 3l-2-2h-1l-2 2 3 3 2-2V3zM5 14l-2-3 7-7 2 3zM1 15l2-1-1-1-1 2z"/%3E</svg%3E') no-repeat center / 17px;
+  width: 30px;
+  height: 30px;
+  transition: 0.2s border-color;
+  color: transparent;
+  font-size: 0;
+  text-shadow: none;
+
+  &:focus,
+  &:hover {
+    border-color: #40b6ff;
+  }
+}

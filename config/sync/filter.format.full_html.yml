@@ -1,6 +1,10 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - core.entity_view_mode.media.body_content
+  module:
+    - media
 _core:
   default_config_hash: 6Dw8OWCJiJtO3QsI1hpo_kONGmLmEZLhNd5CwuP5Nsk
 name: 'Full HTML'
@@ -13,7 +17,7 @@ filters:
     status: true
     weight: -10
     settings:
-      allowed_html: '<a href target rel> <em> <strong> <ul type> <ol start type> <li> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <hr> <br> <p class=" text-align-left text-align-center text-align-right c-text-body__emphasize">'
+      allowed_html: '<a href target rel> <em> <strong> <ul type> <ol start type> <li> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <hr> <br> <p class=" text-align-left text-align-center text-align-right c-text-body__emphasize"> <drupal-media data-entity-type data-entity-uuid data-view-mode data-align data-caption alt title>'
       filter_html_help: true
       filter_html_nofollow: false
   filter_align:
@@ -28,3 +32,14 @@ filters:
     status: true
     weight: 10
     settings: {  }
+  media_embed:
+    id: media_embed
+    provider: media
+    status: true
+    weight: 100
+    settings:
+      default_view_mode: body_content
+      allowed_media_types:
+        image: image
+      allowed_view_modes:
+        body_content: body_content

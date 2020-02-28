@@ -42,6 +42,7 @@ ckeditor_stylesheets:
   - dist/css/base/media.css
   - dist/css/base/miscellaneous.css
   - dist/css/base/typography.css
+  - dist/css/components/media-library-item.editor.css
   - dist/css/components/text-body.css
 
 # Empty features list invokes undesired defaults, do not let it be empty here.
