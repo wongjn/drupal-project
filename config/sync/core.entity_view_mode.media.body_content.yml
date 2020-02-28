@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.body_content
+label: 'Body content'
+targetEntityType: media
+cache: true

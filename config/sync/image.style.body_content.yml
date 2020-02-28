@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: body_content
+label: 'Body Content'
+effects:
+  128f52d0-4f91-482a-899b-537f6b6da3fb:
+    uuid: 128f52d0-4f91-482a-899b-537f6b6da3fb
+    id: image_scale
+    weight: 1
+    data:
+      width: 800
+      height: null
+      upscale: false

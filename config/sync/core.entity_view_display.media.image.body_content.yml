@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.body_content
+    - field.field.media.image.field_media_image
+    - image.style.body_content
+    - image.style.lazy_placeholder_default
+    - media.type.image
+  module:
+    - lazy_image
+id: media.image.body_content
+targetEntityType: media
+bundle: image
+mode: body_content
+content:
+  field_media_image:
+    label: hidden
+    weight: 0
+    settings:
+      image_style: body_content
+      image_link: ''
+      lazy_placeholder_style: lazy_placeholder_default
+      classes: ''
+    third_party_settings: {  }
+    type: lazy_image
+    region: content
+hidden:
+  created: true
+  name: true
+  thumbnail: true
+  uid: true
