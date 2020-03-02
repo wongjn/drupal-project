@@ -32,13 +32,12 @@ boilerplate_generate(BOILERPLATE_ROOT, '.');
 copy('public_html/sites/example.settings.local.php', 'public_html/sites/default/settings.local.php');
 
 echo "Rewriting composer.json\n";
-
-$config = json_decode(file_get_contents('composer.json'), TRUE);
-unset($config['scripts']['boilerplate']);
-$config['name']        = "$vendor/$machine_name";
-$config['description'] = "$human_name Drupal 8 project managed with composer";
-
-file_put_contents('composer.json', json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+file_put_contents('composer.json', preg_replace(
+  ['/("name": ").+"/', '/("description": ").+"/'],
+  [sprintf('$1%s/%s"', $vendor, $machine_name), sprintf('$1%s Drupal 8 project managed with composer."', $human_name)],
+  file_get_contents('composer.json'),
+  1,
+));
 
 echo "Removing boilerplate files...\n";
 remove_directory_recursive(BOILERPLATE_ROOT);

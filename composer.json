@@ -66,9 +66,6 @@
     "scripts": {
         "post-drupal-scaffold-cmd": [
             "patch -p0 < patches/htaccess.patch"
-        ],
-        "boilerplate": [
-            "@php scripts/boilerplate.php"
         ]
     },
     "extra": {
