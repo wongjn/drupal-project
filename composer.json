@@ -86,7 +86,8 @@
                 "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch"
             },
             "drupal/devel": {
-                "Fix menu link generation": "patches/devel_generate-fix_menu_link_generation.patch"
+                "Fix menu link generation": "patches/devel_generate-fix_menu_link_generation.patch",
+                "Fix missing Drush commands": "https://www.drupal.org/files/issues/2020-01-29/drush-service-rename-3106091-2.patch"
             }
         },
         "drupal-scaffold": {
