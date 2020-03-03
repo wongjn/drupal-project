@@ -68,12 +68,13 @@
   }
 
   a {
-    border-bottom: 2px solid transparent;
-    transition: border-bottom-color 250ms;
+    background: linear-gradient(0deg, currentColor, currentColor) no-repeat right bottom / 0 2px;
+    transition: background-size 350ms;
     color: blue;
 
     &:hover {
-      border-bottom-color: currentColor;
+      background-position-x: left;
+      background-size: 100% 2px;
     }
 
     &:active {
