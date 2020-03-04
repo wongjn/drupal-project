@@ -5,24 +5,23 @@
 
 @use '../lib/viewport';
 
-/**
- * Creates scaling utility measurement rules.
- *
- * @param {string} $property
- *   The CSS property to make the measurement rules for.
- * @param {number[]} $measures
- *   The list of scalar number values to make individual selector-rules for.
- * @param {string} $selector
- *   (optional) Override the selector base string for each rule. Default is
- *   `.u-$property`.
- */
-@mixin _offset-utility($property, $measures, $selector: '.u-#{$property}') {
+/// Creates scaling utility measurement rules.
+///
+/// @param {String} $property
+///   The CSS property to make the measurement rules for.
+/// @param {Number[]} $measures
+///   The list of scalar number values to make individual selector-rules for.
+/// @param {String} $selector ['.u-#{$property}']
+///   (optional) Override the selector base string for each rule.
+/// @param {Number} $minimum [20]
+///   (optional) Minimum value for scaling.
+@mixin _offset-utility($property, $measures, $selector: '.u-#{$property}', $minimum: 20) {
   @each $measure in $measures {
     #{$selector}-#{$measure} {
       $measure-px: $measure * 1px;
 
-      @if ($measure > 20) {
-        @include viewport.scale($property, $measure-px, 20px);
+      @if ($measure > $minimum) {
+        @include viewport.scale($property, $measure-px, $minimum * 1px);
       }
       @else {
         #{$property}: $measure-px;
@@ -31,7 +30,7 @@
   }
 }
 
-@include _offset-utility('margin-bottom', ());
-@include _offset-utility('margin-top', ());
+@include _offset-utility('margin-bottom', (), '.u-mb');
+@include _offset-utility('margin-top', (), '.u-mt');
 @include _offset-utility('margin-top', (), '* + .u-margin-neighbor-vertical');
 @include _offset-utility('margin-left', (), '* + .u-margin-neighbor-horizontal');
