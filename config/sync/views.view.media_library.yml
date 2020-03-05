@@ -1,3 +1,4 @@
+uuid: bea6dbaf-452d-4c8e-8571-472c164d60cf
 langcode: en
 status: true
 dependencies:
@@ -925,8 +926,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -967,8 +966,6 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -984,46 +981,6 @@ display:
           entity_type: media
           entity_field: name
           plugin_id: string
-        default_langcode:
-          id: default_langcode
-          table: media_field_data
-          field: default_langcode
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: media
-          entity_field: default_langcode
-          plugin_id: boolean
       filter_groups:
         operator: AND
         groups:
@@ -1050,7 +1007,7 @@ display:
           summary_options:
             base_path: ''
             count: true
-            items_per_page: 24
+            items_per_page: 25
             override: false
           summary:
             sort_order: asc
