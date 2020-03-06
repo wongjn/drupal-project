@@ -12,6 +12,7 @@ regions:
 libraries:
   - {{ NAME }}/global
 libraries-override:
+  media/oembed.formatter: false
   paragraphs/drupal.paragraphs.unpublished: false
   system/base:
     css:
