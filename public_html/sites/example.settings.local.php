@@ -60,6 +60,7 @@ $settings['config_exclude_modules'][] = 'devel';
 $settings['config_exclude_modules'][] = 'devel_generate';
 $settings['config_exclude_modules'][] = 'field_ui';
 $settings['config_exclude_modules'][] = 'multiline_config';
+$settings['config_exclude_modules'][] = 'site_builder_console';
 $settings['config_exclude_modules'][] = 'views_ui';
 $settings['file_private_path'] = 'sites/default/private';
 $settings['rebuild_access'] = TRUE;
