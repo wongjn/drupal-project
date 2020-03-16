@@ -38,7 +38,6 @@ libraries-override:
       component:
         /core/themes/stable/css/views/views.module.css: false
 ckeditor_stylesheets:
-  - dist/css/base/variables.editor.css
   - dist/css/base/form.css
   - dist/css/base/media.css
   - dist/css/base/miscellaneous.css
