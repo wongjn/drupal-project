@@ -6,6 +6,7 @@
 @use 'sass:map';
 @use 'sass:math';
 @use 'sass:list';
+@use 'layout';
 @use 'unit';
 @use 'viewport';
 
@@ -65,18 +66,24 @@ $LINE-HEIGHT: (24 / $SIZE);
 }
 
 /// Outputs custom properties for font size presets.
-///
-/// @param {Bool} $editor-stylesheet [false]
-///   Indicates whether the mixin is in the context of a WYSIWYG editor.
-@mixin size-custom-properties($editor-stylesheet: false) {
-  @each $size, $min in $_SIZE-PRESETS {
-    $rem-size: unit.px-to-rem($size);
+@mixin size-custom-properties {
+  @each $size, $min in $_SIZE_PRESETS {
+    --font-size-#{$size}: #{unit.px-to-rem($min)};
+  }
 
-    @if $editor-stylesheet {
-      // No scaling for WYSIWYG editors.
-      --font-size-#{$size}: #{$rem-size};
-    } @else {
-      @include viewport.scale(--font-size-#{$size}, $rem-size, unit.px-to-rem($min));
+  @media (min-width: 600px) {
+    @each $size, $min in $_SIZE_PRESETS {
+      @if ($min != $size) {
+        --font-size-#{$size}: calc(#{unit.px-to-rem($min)} + #{viewport.scaler(unit.strip($size - $min))});
+      }
+    }
+  }
+
+  @media (min-width: layout.$SITE_WIDTH_PX) {
+    @each $size, $min in $_SIZE_PRESETS {
+      @if ($min != $size) {
+        --font-size-#{$size}: #{unit.px-to-rem($size)};
+      }
     }
   }
 }

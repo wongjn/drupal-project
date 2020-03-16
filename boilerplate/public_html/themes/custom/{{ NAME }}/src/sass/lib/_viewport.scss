@@ -8,6 +8,24 @@
 @use 'layout';
 @use 'unit';
 
+/// Returns the CSS calculation value to scale a length by viewport size.
+///
+/// @param {Number} $amount
+///   Amount to scale, as pixel length but without unit.
+/// @param {'vw'|'vh'} $direction ['vw']
+///   The viewport dimension to scale with, 'vw' for width or 'vh' for height.
+/// @param {Number} $at [layout.$SITE_WIDTH]
+///   The viewport dimension length where the scaling should stop at.
+/// @param {Number} $from [600]
+///   The minimum viewport dimension at which the value will start scaling.
+///
+/// @return {String}
+///   The CSS calculation expression.
+@function scaler($amount, $direction: 'vw', $at: layout.$SITE-WIDTH, $from: 600) {
+  $divisor: 1 / ($at - $from);
+  @return '(#{100 * $divisor * $amount}#{$direction} - #{$from * 1px * $divisor * $amount})';
+}
+
 /// Outputs scaling values.
 ///
 /// @param {String} $property
@@ -71,14 +89,8 @@
   }
   // Specified dimension
   @else if math.unit($at) == 'vw' or math.unit($at) == 'vh' {
-    $viewport-max: unit.strip($at);
-    $divisor: 1 / ($viewport-max - $from);
-
     @each $max-value-unitless in $max-values-unitless {
-      $scalers: list.append(
-        $scalers,
-        '(#{$max-value-unitless - $min-value-unitless} * (#{100 * $divisor}#{math.unit($at)} - #{$from * 1px * $divisor}))'
-      );
+      $scalers: list.append($scalers, scaler($max-value-unitless - $min-value-unitless, math.unit($at), unit.strip($at), $from));
     }
 
     // Determine media query from unit
