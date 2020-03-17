@@ -37,6 +37,11 @@ global:
     - {{ NAME }}/polyfill
     - core/drupal
 
+imce-file-manager:
+  css:
+    component:
+      dist/css/components/imce-file-manager.css: {}
+
 messages:
   css:
     component:
