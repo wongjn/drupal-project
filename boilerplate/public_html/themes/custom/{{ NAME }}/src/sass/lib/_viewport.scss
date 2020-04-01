@@ -5,6 +5,7 @@
 
 @use 'sass:math';
 @use 'sass:list';
+@use 'sass:string';
 @use 'layout';
 @use 'unit';
 
@@ -31,10 +32,10 @@
 /// @param {String} $property
 ///   The CSS property to scale a value with, e.g. `margin-right`.
 /// @param {Length.px|Length.rem|List<Length.px|Length.rem>} $max-values
-///   The value(s) at maximum *gate* breakpoint. Works with `px` and `rem` values
-///   only.
-/// @param {Length.px|Length.rem} $min-value [0]
-///   The minimum value when (conceptually) at 0vmin.
+///   The value(s) at maximum *gate* breakpoint. Works with `px` and `rem`
+///   values only.
+/// @param {Length.px|Length.rem|List<Length.px|Length.rem} $min-value [0px]
+///   The minimum value(s).
 /// @param {String|Length.vw|Length.vh} $at [layout.$SITE_WIDTH * 1vw]
 ///   The breakpoint where the scaling should stop at. Possible values are:
 ///   - `vmin`: to *gate* when viewport height and width is more than 980px
@@ -45,9 +46,10 @@
 ///   viewport dimension is assumed from $at. This value has no effect if $at is
 ///   'vmin'.
 ///
-/// @output Property declaration for scaling value and media query for maximum
-///   value.
-@mixin scale($property, $max-values, $min-value: 0, $at: layout.$SITE-WIDTH * 1vw, $from: 600) {
+/// @output
+///   Property declaration for scaling value(s) between minimum and maximum
+///   values base on viewport.
+@mixin scale($property, $max-values, $min-value: 0px, $at: layout.$SITE-WIDTH * 1vw, $from: 600) {
   $deprecated: if(
     typeof($max-values) == number,
     if(math.unit($max-values) == 'vw' or math.unit($max-values) == 'vh', true, false),
@@ -57,64 +59,52 @@
   @if $max-values == 'vmin' or $deprecated {
     @warn '$at parameter moved to fourth position';
 
-    // Transpose arguments to correct places from old API
+    // Transpose arguments to correct places from old API.
     $temp: $max-values;
     $max-values: $min-value;
     $min-value: if($at == 'vmin', 0, $at);
     $at: $temp;
   }
 
-  $max-values-unitless: ();
-  @each $max-value in $max-values {
-    $max-values-unitless: list.append($max-values-unitless, unit.strip(if(math.unit($max-value) == 'rem', unit.rem-to-px($max-value), $max-value)));
-  }
-
-  $min-value-unitless: unit.strip(if(math.unit($min-value) == 'rem', unit.rem-to-px($min-value), $min-value));
-
-  $scalers: ();
-  $media-query-max: null;
-  $media-query-scale: null;
-
-  // Vmin special case
-  @if $at == 'vmin' {
-    @each $max-value-unitless in $max-values-unitless {
-      // $scalers: append($scalers, (($max-value-unitless - $min-value-unitless) / 9.8 * 1vmin));
-      $scalers: list.append(
-        $scalers,
-        '(#{$max-value-unitless - $min-value-unitless} * (100vmin / 980))'
-      );
-    }
-
-    $media-query-max: '(orientation: portrait) and (min-width: 980px), (orientation: landscape) and (min-height: 980px)';
-  }
-  // Specified dimension
-  @else if math.unit($at) == 'vw' or math.unit($at) == 'vh' {
-    @each $max-value-unitless in $max-values-unitless {
-      $scalers: list.append($scalers, scaler($max-value-unitless - $min-value-unitless, math.unit($at), unit.strip($at), $from));
-    }
-
-    // Determine media query from unit
-    $min-dimension: if(math.unit($at) == 'vw', 'width', 'height');
-    $media-query-max: '(min-#{$min-dimension}: #{unit.strip($at)}px)';
-    @if ($from > 0) {
-      $media-query-scale: '(min-#{$min-dimension}: #{$from}px)';
-    }
-  }
-  // Invalid unit for $at
-  @else {
+  /**
+   * FireFox min() max() fallback START
+   *
+   * @todo: Remove section once Firefox 76 drops.
+   */
+  @if ($at != 'vmin' and math.unit($at) != 'vw' and math.unit($at) != 'vh') {
     @error '#{$at} should be a CSS value of vw or vh, with the value being the "maximum gate" breakpoint or literally "vmin".';
   }
 
-  // Scaling output
+  // Ensure $min-values matches length of $max-values.
+  @while (list.length($min-value) < list.length($max-values)) {
+    $min-value: list.append($min-value, list.nth($min-value, -1));
+  }
+
+  $media-query-dimension: if(math.unit($at) == 'vw', 'width', 'height');
+  $media-query-max: if(
+    $at == 'vmin',
+    '(orientation: portrait) and (min-width: 980px), (orientation: landscape) and (min-height: 980px)',
+    '(min-#{$media-query-dimension}: #{unit.strip($at)}px)'
+  );
+  $media-query-min: if(
+    $at != 'vmin' and $from > 0,
+    '(min-#{$media-query-dimension}: #{$from}px)',
+    null
+  );
+
+  // Scaling output.
   $calcs: ();
-  @each $scaler in $scalers {
-    $calcs: list.append($calcs, calc(#{$min-value} + #{$scaler}));
+  @each $value in scale($max-values, $min-value, $at, $from) {
+    $scale_start_index: string.index($value, 'min(') + 4;
+    $scale_start: string.slice($value, $scale_start_index);
+    $scale_end_index: string.index($scale_start, ',') - 1;
+    $calcs: list.append($calcs, calc(#{string.slice($scale_start, 0, $scale_end_index)}));
   }
 
   @if ($from > 0) {
     #{$property}: $min-value;
 
-    @media #{$media-query-scale} {
+    @media #{$media-query-min} {
       #{$property}: $calcs;
     }
   }
@@ -126,4 +116,79 @@
   @media #{$media-query-max} {
     #{$property}: $max-values;
   }
+
+  // === FireFox min() max() fallback END === //
+  // #{$property}: scale($max-values, $min-value, $at, $from);
+}
+
+/// Outputs values scaling based on viewport dimensions.
+///
+/// @param {Length.px|Length.rem|List<Length.px|Length.rem>} $max-values
+///   The value(s) at maximum *gate* breakpoint. Works with `px` and `rem`
+///   values only.
+/// @param {Length.px|Length.rem|List<Length.px|Length.rem} $min-values [0px]
+///   The minimum value(s).
+/// @param {String|Length.vw|Length.vh} $at [layout.$SITE_WIDTH * 1vw]
+///   The breakpoint where the scaling should stop at. Possible values are:
+///   - `vmin`: to *gate* when viewport height and width is more than 980px
+///   - `Xvw`: to *gate* when viewport width is more than Xpx
+///   - `Xvh`: to *gate* when viewport height is more than Xpx
+/// @param {Number} $from [600]
+///   The minimum breakpoint at which the value should start scaling. The
+///   viewport dimension is assumed from $at. This value has no effect if $at is
+///   'vmin'.
+///
+/// @return {Value|List<Value>}
+///   Scaling value(s) between minimum and maximum values based on viewport.
+@function scale($max-values, $min-values: 0px, $at: layout.$SITE-WIDTH * 1vw, $from: 600) {
+  @if ($at != 'vmin' and math.unit($at) != 'vw' and math.unit($at) != 'vh') {
+    @error '#{$at} should be a CSS value of vw or vh, with the value being the "maximum gate" breakpoint or literally "vmin".';
+  }
+
+  // Ensure $min-values matches length of $max-values.
+  @while (list.length($min-values) < list.length($max-values)) {
+    $min-values: list.append($min-values, list.nth($min-values, -1));
+  }
+
+  $max-values-unitless: ();
+  $min-values-unitless: ();
+  @for $i from 1 through list.length($max-values) {
+    $max: list.nth($max-values, $i);
+    $min: list.nth($min-values, $i);
+
+    $max-values-unitless: list.append($max-values-unitless, unit.strip(
+      if(math.unit($max) == 'rem', unit.rem-to-px($max), $max))
+    );
+    $min-values-unitless: list.append($min-values-unitless, unit.strip(
+      if(math.unit($min) == 'rem', unit.rem-to-px($min), $min))
+    );
+  }
+
+  $values-unitless: list.zip($min-values-unitless, $max-values-unitless);
+
+  $scalers: ();
+  @each $min, $max in $values-unitless {
+    $scalers: list.append($scalers, if(
+      $at == 'vmin',
+      '(#{$max - $min} * (100vmin / 980))',
+      scaler($max - $min, math.unit($at), unit.strip($at), $from)
+    ));
+  }
+
+  // Scaling output.
+  $values: ();
+  @for $i from 1 through list.length($scalers) {
+    $max: list.nth($max-values, $i);
+    $min: list.nth($min-values, $i);
+
+    $scale: list.nth($scalers, $i);
+    @if ($min > 0) {
+      $scale: string.insert($scale, '#{$min} + ', 1);
+    }
+
+    // Using clamp() would be more readable here, but no support in Safari.
+    $values: list.append($values, max(#{$min}, min(#{$scale}, #{$max})));
+  }
+
+  @return $values;
 }
