@@ -1,100 +1,70 @@
-@use "sass:map";
-/**
- * @file
- * Drupal status messages.
- */
+/*
+Messages
 
-@use '../lib/font';
-@use '../../../node_modules/izitoast/dist/css/iziToast.min';
+No namespacing letter to conform with Drupal Messages API in message(.es6).js in
+the core/drupal.message library.
 
-.iziToast {
-  border-radius: 0;
-  font: inherit;
+.messages--status  - Status message type.
+.messages--warning - Warning message type.
+.messages--error   - Error message type.
 
-  // Remove drop-shadow.
-  &::after {
-    content: none;
-  }
-}
+Markup:
+<div class="messages {{ modifier_class }}" >I am a message.</div>
 
-.iziToast-texts[class][class] {
-  margin: 0;
-}
+Styleguide: Components.Messages
+*/
 
-.iziToast-message[class][class] {
-  @include font.size(16);
-  margin: 0;
-  padding: 10px 0;
-  max-height: 40vh;
-  overflow: auto;
+@use 'sass:map';
+
+.messages {
+  $gutter_width: 1.5em;
+
+  position: relative;
+  padding: 0.5em 1em 0.5em ($gutter_width + 1em);
+  background: #f5f5f5;
   color: #000;
 
-  a {
-    color: inherit;
-    box-shadow: 0 2px darkblue;
-
-    &:focus {
-      box-shadow: 0 4px darkblue;
-    }
-  }
-}
-
-// Position message-type icon to top corner instead of middle.
-.iziToast-icon[class][class] {
-  top: 18px;
-}
-
-// Position close icon to top corner instead of middle.
-.iziToast-close[class] {
-  top: 18px;
-  height: 20px;
-}
-
-// No-js fallback styling
-.c-messages {
-  position: relative;
-  border: 2px solid;
-
-  // Icon.
-  &::before {
-    $size: 1.5em;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: ($size * -0.5);
-    left: ($size * -0.5);
-    width: $size;
-    height: $size;
-    font-weight: 700;
-    text-align: center;
-  }
-
   $variants: (
-    status: (
-      color: #2ecc71,
-      icon: '\2713',
-    ),
-    warning: (
-      color: #f1c40f,
-      icon: '!',
-    ),
-    error: (
-      color: #e74c3c,
-      icon: '\2717',
-    ),
+    status:  (color: #2ecc71, icon: '\2713'),
+    warning: (color: #f1c40f, icon: '!'),
+    error:   (color: #e74c3c, icon: '\2717'),
   );
   @each $name, $data in $variants {
     &--#{$name} {
       border-color: map.get($data, color);
-      padding: 1em;
 
       &::before {
         background-color: map.get($data, color);
         content: map.get($data, icon);
-        color: if($name == warning, #333, #fff);
+        color: #fff;
       }
+    }
+  }
+
+  & + & {
+    margin-top: 1em;
+  }
+
+  // Icon.
+  &::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: $gutter_width;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  a {
+    background: linear-gradient(0deg, currentColor, currentColor) no-repeat right bottom / 100% 1px;
+
+    &:active {
+      color: currentColor;
     }
   }
 }

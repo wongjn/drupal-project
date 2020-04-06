@@ -46,9 +46,6 @@ messages:
   css:
     component:
       dist/css/components/messages.css: {}
-  drupalSettings:
-    {{ CAMEL }}:
-      modules: { messages: null }
 
 polyfill:
   remote: https://polyfill.io/

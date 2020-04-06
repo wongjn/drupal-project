@@ -46,4 +46,16 @@ class Render implements RenderCallbackInterface {
     return $element;
   }
 
+  /**
+   * Pre-render callback for status messages.
+   */
+  public static function preRenderStatusMessages(array $element) {
+    // Add extra class into fallback element.
+    if (isset($element['fallback'])) {
+      $element['fallback']['#markup'] = str_replace('class="', 'class="l-container__module ', $element['fallback']['#markup']);
+    }
+
+    return $element;
+  }
+
 }

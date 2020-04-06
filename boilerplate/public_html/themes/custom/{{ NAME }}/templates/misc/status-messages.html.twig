@@ -17,40 +17,25 @@
  * - status_headings: List of all status types.
  * - display: (optional) May have a value of 'status' or 'error' when only
  *   displaying messages of that specific type.
- * - attributes: HTML attributes for the element, including:
- *   - class: HTML classes.
  */
 #}
 {{ attach_library('{{ NAME }}/messages') }}
-<noscript{{ create_attribute({ class: 'js-messages', 'data-messages': message_list|json_encode() })}}>
-{% for type, messages in message_list %}
-  {%
-    set classes = [
-      'c-messages',
-      'c-messages--' ~ type,
-    ]
-  %}
+<div class="l-site-content__piece" data-drupal-messages>
+  {#
+    Drupal.Message.defaultWrapper() in message(.es6).js in core/drupal.message
+    needs an extra internal wrapper element.
+  #}
+  <div>
+    {% for type, messages in message_list %}
+      {% for message in messages %}
+        <div class="messages messages--{{ type }}"{% if type == 'error' %} role="alert"{% endif %}>
+          {% if status_headings[type] %}
+            <h2 class="visually-hidden">{{ status_headings[type] }}</h2>
+          {% endif %}
 
-  <div class="l-container__module">
-    <div role="contentinfo" aria-label="{{ status_headings[type] }}"{{ attributes.addClass(classes)|without('role', 'aria-label') }}>
-      {% if type == 'error' %}
-        <div role="alert">
-      {% endif %}
-        {% if status_headings[type] %}
-          <h2 class="visually-hidden">{{ status_headings[type] }}</h2>
-        {% endif %}
-        <ul>
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% if type == 'error' %}
+          {{ message }}
         </div>
-      {% endif %}
-    </div>
+      {% endfor %}
+    {% endfor %}
   </div>
-
-  {# Remove type specific classes. #}
-  {% set attributes = attributes.removeClass(classes) %}
-{% endfor %}
-</noscript>
+</div>
