@@ -18,21 +18,9 @@ global:
     theme:
       dist/css/utilities.css:
         weight: 9999
-  drupalSettings:
-    {{ CAMEL }}:
-      modules: []
   js:
-    dist/js/modern.js:
-      preprocess: false
-      minified: true
-      attributes:
-        type: module
-    dist/js/legacy.js:
-      preprocess: false
-      minified: true
-      attributes:
-        nomodule: true
-        defer: true
+    dist/js/runtime.js: {}
+    dist/js/main.js: {}
   dependencies:
     - {{ NAME }}/polyfill
     - core/drupal
@@ -53,7 +41,7 @@ polyfill:
     name: MIT
     url: https://github.com/Financial-Times/polyfill-service/blob/master/LICENSE.md
   js:
-    https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Array.prototype.fill,Element.prototype.closest,Element.prototype.matches,Element.prototype.remove,IntersectionObserver,Node.prototype.contains,Object.entries,Object.getOwnPropertyDescriptors,Promise,ResizeObserver,Set:
+    https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Array.prototype.fill,Element.prototype.closest,Element.prototype.matches,Element.prototype.remove,IntersectionObserver,Node.prototype.contains,Object.entries,Object.getOwnPropertyDescriptors,Promise,ResizeObserver,Set,WeakMap:
       type: external
       minified: true
       weight: -100

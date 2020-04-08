@@ -79,7 +79,7 @@ class Assets {
         // Check whether ESM has been used before injecting script tag to load
         // the fallback script. This is needed since Edge 18, Safari 10.1 will
         // still parse this script even though they support ES modules.
-        $element['#value'] = sprintf('!function(g,d,s){g._ESM||((s=(s=(s=d.getElementsByTagName("script"))[s.length-1]).parentNode.insertBefore(d.createElement("script"),s)).defer=!0,s.src="%s")}(window,document);', $element['#attributes']['src']);
+        $element['#value'] = sprintf('window._ESM||window.__{{ CAMEL }}Load("%s")', $element['#attributes']['src']);
         unset($element['#attributes']['src']);
       }
     }
@@ -123,21 +123,23 @@ class Assets {
       return;
     }
 
-    // Build script URL exactly as it will appear from Drupal JS attachment.
-    // 'v' query parameter comes from the 'version' parameter for the script.
-    // This must mean the script is separate from Drupal JS concatenation by
-    // setting its 'process' parameter to FALSE.
-    $script_path = drupal_get_path('theme', '{{ NAME }}') . '/dist/js/modern.js';
-    $url = file_url_transform_relative(file_create_url($script_path))
-      . '?v='
-      . self::getHash($script_path);
+    foreach (['runtime', 'main'] as $basename) {
+      // Build script URL exactly as it will appear from Drupal JS attachment.
+      // 'v' query parameter comes from the 'version' parameter for the script.
+      // This must mean the script is separate from Drupal JS concatenation by
+      // setting its 'process' parameter to FALSE.
+      $script_path = drupal_get_path('theme', '{{ NAME }}') . "/dist/js/$basename.modern.js";
+      $url = file_url_transform_relative(file_create_url($script_path))
+        . '?v='
+        . self::getHash($script_path);
 
-    $attachments['#attached']['html_head_link'][][] = [
-      'as' => 'script',
-      'href' => $url,
-      // Directive similar to 'preload' but for ES modules.
-      'rel' => 'modulepreload',
-    ];
+      $attachments['#attached']['html_head_link'][][] = [
+        'as' => 'script',
+        'href' => $url,
+        // Directive similar to 'preload' but for ES modules.
+        'rel' => 'modulepreload',
+      ];
+    }
   }
 
   /**

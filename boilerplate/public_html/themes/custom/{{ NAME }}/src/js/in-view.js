@@ -6,7 +6,7 @@
  */
 
 import { curry, forEach, filter, pipe } from 'rambda';
-import { behavior } from './lib/behaviors';
+import { createBehavior } from './lib/behaviors';
 import { match } from './lib/dom';
 
 /**
@@ -146,14 +146,7 @@ const createList = (justInvoked = false) => list => {
  *
  * @type {Drupal~behavior}
  */
-Drupal.behaviors.{{ CAMEL }}InViewList = behavior(
+Drupal.behaviors.{{ CAMEL }}InViewList = createBehavior(
   '.js-inview-list[data-selector]',
   createList(true),
-);
-
-// Initial DOM attachment invocation.
-export default Drupal.behaviors.{{ CAMEL }}InViewList.attach.bind(
-  Drupal.behaviors.{{ CAMEL }}InViewList,
-  document.body,
-  drupalSettings,
 );

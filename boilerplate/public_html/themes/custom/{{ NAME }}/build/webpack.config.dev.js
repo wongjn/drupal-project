@@ -9,12 +9,14 @@ const baseConfig = require('./webpack.config.base');
 
 module.exports = baseConfig.map(config =>
   merge(config, {
-    entry:
+    entry: {
       // HMR client relies on EventSource that is not supported for the legacy
       // bundle targets, hence only add it for modern config.
-      config.name === 'modern'
-        ? [`webpack-hot-middleware/client?reload=true&name=${config.name}`]
-        : [],
+      main:
+        config.name === 'modern'
+          ? [`webpack-hot-middleware/client?reload=true&name=${config.name}`]
+          : [],
+    },
     devtool: 'eval-source-map',
     mode: 'development',
     plugins: [new webpack.HotModuleReplacementPlugin()],

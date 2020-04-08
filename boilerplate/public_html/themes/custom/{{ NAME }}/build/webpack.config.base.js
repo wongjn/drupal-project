@@ -6,15 +6,28 @@
 const path = require('path');
 const { DefinePlugin } = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ChunkRenamePlugin = require('webpack-chunk-rename-plugin');
 
 const getBase = name => ({
   name,
-  entry: [path.resolve(__dirname, '../src/js')],
+  context: path.resolve(__dirname, '../'),
+  entry: {
+    main: [
+      './src/js/menu/index.js',
+      './src/js/in-view.js',
+      './src/js/scrollbar-size.js',
+      ...(name === 'legacy' ? ['./src/js/svg-polyfill.js'] : []),
+    ],
+  },
   output: {
-    filename: `${name}.js`,
+    filename: `[name].${name}.js`,
     chunkFilename: '[chunkhash].js',
     path: path.resolve(__dirname, '../dist/js'),
     publicPath: '/themes/custom/{{ NAME }}/dist/js/',
+  },
+  optimization: {
+    moduleIds: 'hashed',
+    runtimeChunk: 'single',
   },
   module: {
     rules: [
@@ -48,6 +61,7 @@ const getBase = name => ({
   plugins: [
     new LodashModuleReplacementPlugin(),
     new DefinePlugin({ BUNDLE_TYPE: JSON.stringify(name) }),
+    new ChunkRenamePlugin({ initialChunksWithEntry: true }),
   ],
 });
 
