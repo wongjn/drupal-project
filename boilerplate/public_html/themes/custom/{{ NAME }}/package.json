@@ -27,6 +27,7 @@
     "cookie": "^0.4.0",
     "lodash": "^4.17.4",
     "rambda": "^2.3.1",
+    "svelte": "^3.20.1",
     "svg4everybody": "^2.1.8"
   },
   "devDependencies": {
@@ -59,6 +60,7 @@
     "lodash-webpack-plugin": "^0.11.5",
     "prettier": "^1.14.0",
     "sass": "^1.23.0",
+    "svelte-loader": "^2.13.6",
     "webpack": "^4.0.0",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2",

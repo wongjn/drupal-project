@@ -19,12 +19,17 @@ const getBase = name => ({
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: /node_modules\/(?!rambda).*/,
+        test: /\.(m?js|svelte)$/,
+        exclude: /node_modules\/(?!(rambda|svelte))/,
         use: {
           loader: 'babel-loader',
           options: { envName: name },
         },
+      },
+      {
+        test: /\.svelte$/,
+        exclude: /node_modules/,
+        use: 'svelte-loader',
       },
       {
         test: /\.scss$/,
@@ -35,7 +40,10 @@ const getBase = name => ({
   resolve: {
     alias: {
       Sass: path.resolve(__dirname, '../src/sass'),
+      svelte: path.resolve('node_modules', 'svelte'),
     },
+    extensions: ['.mjs', '.js', '.svelte'],
+    mainFields: ['svelte', 'browser', 'module', 'main'],
   },
   plugins: [
     new LodashModuleReplacementPlugin(),
