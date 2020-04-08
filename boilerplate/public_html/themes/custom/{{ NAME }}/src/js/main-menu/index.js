@@ -3,7 +3,7 @@
  * Bootstrap menu file.
  */
 
-import debounce from 'lodash/debounce';
+import debounce from 'lodash.debounce';
 import createOrchestrator from '../lib/orchestrator';
 import attachLineBreak from './handlers/line-break';
 import attachSubmenuEdge from './handlers/submenu-edge';

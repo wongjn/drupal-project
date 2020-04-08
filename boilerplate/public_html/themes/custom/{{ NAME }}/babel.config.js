@@ -3,7 +3,6 @@ module.exports = api => {
 
   return {
     plugins: [
-      'lodash',
       '@babel/plugin-syntax-dynamic-import',
       [
         '@babel/plugin-transform-runtime',

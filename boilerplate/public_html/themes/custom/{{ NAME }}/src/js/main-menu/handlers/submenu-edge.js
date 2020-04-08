@@ -3,7 +3,7 @@
  * Contains the submenu edge handler.
  */
 
-import debounce from 'lodash/debounce';
+import debounce from 'lodash.debounce';
 
 /**
  * Moves a menu if it overlaps.

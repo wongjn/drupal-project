@@ -5,7 +5,6 @@
 
 const path = require('path');
 const { DefinePlugin } = require('webpack');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ChunkRenamePlugin = require('webpack-chunk-rename-plugin');
 
 const getBase = name => ({
@@ -59,7 +58,6 @@ const getBase = name => ({
     mainFields: ['svelte', 'browser', 'module', 'main'],
   },
   plugins: [
-    new LodashModuleReplacementPlugin(),
     new DefinePlugin({ BUNDLE_TYPE: JSON.stringify(name) }),
     new ChunkRenamePlugin({ initialChunksWithEntry: true }),
   ],
