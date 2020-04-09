@@ -11,6 +11,9 @@ regions:
   footer: Footer
 libraries:
   - {{ NAME }}/global
+libraries-extend:
+  system/base:
+    - {{ NAME }}/align.module
 libraries-override:
   media/oembed.formatter: false
   paragraphs/drupal.paragraphs.unpublished: false

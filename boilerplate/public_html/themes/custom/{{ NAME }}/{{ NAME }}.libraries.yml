@@ -25,6 +25,11 @@ global:
     - {{ NAME }}/polyfill
     - core/drupal
 
+align.module:
+  css:
+    component:
+      dist/css/components/align.module.css: {}
+
 imce-file-manager:
   css:
     component:

@@ -90,6 +90,20 @@
   }
 
   &__media {
+    &.align-left,
+    &.align-right {
+      @media (max-width: 1199px) {
+        float: none;
+        display: table;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      @media (min-width: 1200px) {
+        max-width: 50%;
+      }
+    }
+
     * + * {
       margin-top: 0;
     }
@@ -97,6 +111,12 @@
     // Remove bottom whitespace from default inline display.
     img {
       vertical-align: top;
+    }
+
+    // Anchor tags that wrap media items do not get margin-top (since they are
+    // inline display). Add the margin onto the child media instead.
+    a:not(:first-child) > & {
+      margin-top: $block-spacing;
     }
   }
 
