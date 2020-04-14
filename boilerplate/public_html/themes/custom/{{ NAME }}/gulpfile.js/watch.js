@@ -57,6 +57,7 @@ function watcher() {
       }),
       webpackHotMiddleware(webpackCompiler),
     ],
+    ui: false,
     ghostMode: false,
     open: false,
   });
