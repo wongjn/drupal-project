@@ -29,7 +29,7 @@
         "drupal/block_content_permissions": "^1.6",
         "drupal/core-composer-scaffold": "~8.8.2",
         "drupal/core-recommended": "~8.8.2",
-        "drupal/imce": "^1.5",
+        "drupal/imce": "^2.2",
         "drupal/menu_admin_per_menu": "^1.0",
         "drupal/menu_trail_by_path": "^1.1",
         "drupal/pathauto": "^1.5",
