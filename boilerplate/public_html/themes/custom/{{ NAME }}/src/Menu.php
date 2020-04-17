@@ -38,7 +38,7 @@ class Menu {
       $item['url']->mergeOptions([
         'attributes' => [
           'target' => '_blank',
-          'rel' => ['nofollow', 'noopener'],
+          'rel' => ['nofollow', 'noreferrer'],
         ],
       ]);
     }
