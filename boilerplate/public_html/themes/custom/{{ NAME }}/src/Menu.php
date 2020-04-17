@@ -45,6 +45,18 @@ class Menu {
   }
 
   /**
+   * Recursively adds class to menu links in the active trail.
+   *
+   * @param array $item
+   *   A single menu item from template_preprocess_menu() or similar.
+   */
+  public static function addActiveTrailClass(array $item) {
+    if ($item['in_active_trail']) {
+      $item['url']->mergeOptions(['attributes' => ['class' => ['is-active-trail']]]);
+    }
+  }
+
+  /**
    * Adds link classes to a main menu link.
    *
    * @param array $item
@@ -58,7 +70,6 @@ class Menu {
         'class' => [
           'c-main-menu__link',
           $depth === 0 ? 'c-main-menu__link--top' : 'c-main-menu__link--sub',
-          $item['in_active_trail'] ? 'is-active-trail' : '',
         ],
       ],
     ]);

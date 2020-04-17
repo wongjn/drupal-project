@@ -293,6 +293,7 @@ function {{ NAME }}_preprocess_image_formatter(&$variables) {
  */
 function {{ NAME }}_preprocess_menu(&$variables) {
   Menu::recursiveMenuApply('\Drupal\{{ NAME }}\Menu::addExternalOptions', $variables['items']);
+  Menu::recursiveMenuApply('\Drupal\{{ NAME }}\Menu::addActiveTrailClass', $variables['items']);
   $variables['attributes_set'] = [];
 }
 
