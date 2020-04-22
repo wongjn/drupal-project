@@ -27,13 +27,6 @@ class InviewTest extends ViewsKernelTestBase {
   public static $testViews = ['test_extender_inview'];
 
   /**
-   * The renderer.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
    * {@inheritdoc}
    */
   protected function setUp($import_test_views = TRUE) {
@@ -43,8 +36,6 @@ class InviewTest extends ViewsKernelTestBase {
     $this->config('views.settings')
       ->set('display_extenders', ['inview' => 'inview'])
       ->save();
-
-    $this->renderer = $this->container->get('renderer');
   }
 
   /**
@@ -53,7 +44,7 @@ class InviewTest extends ViewsKernelTestBase {
   public function testRender() {
     $view = Views::getView('test_extender_inview');
     $build = $view->preview('embed_1');
-    $this->setRawContent($this->renderer->renderPlain($build));
+    $this->render($build);
 
     $elements = $this->cssSelect('[class*="js-view-dom-id-"].js-inview-list[data-selector=".select"][data-ratio="0.5"]');
     $this->assertCount(1, $elements);
