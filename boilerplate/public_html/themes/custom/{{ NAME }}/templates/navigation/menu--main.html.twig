@@ -27,7 +27,6 @@
 #}
 {% import 'menu.html.twig' as menus %}
 
-{% spaceless %}
 <div class="js-main-menu c-main-menu is-menu-loading">
   {#
     We call a macro which calls itself to render the full tree.
@@ -38,11 +37,10 @@
     <button class="c-main-menu__open-btn">{{ 'Full menu'|t }}</button>
   </div>
 </div>
+
 <noscript>
-<style>
-.c-main-menu.is-compact{visibility:visible!important}
-.c-main-menu__top-menu,.c-main-menu__top-menu>li{overflow:visible!important}
-.c-main-menu__drawer{display:none!important}
-</style>
+  <style>
+    .c-main-menu__top-menu{overflow:visible!important;height:auto!important}
+    .c-main-menu__drawer{display:none!important}
+  </style>
 </noscript>
-{% endspaceless %}

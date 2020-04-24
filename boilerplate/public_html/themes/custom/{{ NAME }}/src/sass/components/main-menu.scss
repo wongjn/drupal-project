@@ -3,8 +3,6 @@
  * Main site menu.
  */
 
-// 1. Set height to ensure wrapped elements (that are hidden) do not affect
-//    layout flow.
 .c-main-menu {
   $y-padding: 10px;
   $x-padding: 10px;
@@ -14,13 +12,8 @@
   align-items: flex-start;
   position: relative;
   z-index: 400;
-  // height: 1em; // 1
   line-height: 1;
   text-transform: uppercase;
-
-  &.is-menu-loading {
-    overflow: hidden;
-  }
 
   &__link {
     display: block;
@@ -39,7 +32,9 @@
     }
   }
 
-  // 1. Layout box is still here when collapsed. This prevents unclickable
+  // 1. Set height to ensure wrapped elements (that are hidden) do not affect
+  //    layout flow.
+  // 2. Layout box is still here when collapsed. This prevents unclickable
   //    elements underneath.
   &__top-menu {
     display: flex;
@@ -47,7 +42,8 @@
     flex-wrap: wrap;
     align-items: flex-start;
     flex: 0 1 auto;
-    pointer-events: none; // 1
+    // height: 1em; // 1
+    pointer-events: none; // 2
 
     .is-menu-loading & {
       overflow: hidden;
