@@ -3,27 +3,30 @@
 namespace Drupal\Tests\{{ NAME }}\Functional\Block;
 
 use Drupal\menu_link_content\Entity\MenuLinkContent;
-use Drupal\Tests\BrowserTestBase;
+use Drupal\system\Entity\Menu;
+use Drupal\Tests\block\Traits\BlockCreationTrait;
+use Drupal\Tests\{{ NAME }}\Kernel\ThemeKernelTestBase;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Tests output for the main menu block.
  *
  * @group {{ NAME }}
  */
-class MainSystemMenuBlockTest extends BrowserTestBase {
+class MainSystemMenuBlockTest extends ThemeKernelTestBase {
+
+  use BlockCreationTrait;
 
   /**
    * {@inheritdoc}
    */
   protected static $modules = [
     'block',
+    'link',
     'menu_link_content',
+    'system',
+    'user',
   ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = '{{ NAME }}';
 
   /**
    * The main menu block under test.
@@ -38,10 +41,12 @@ class MainSystemMenuBlockTest extends BrowserTestBase {
   protected function setUp() {
     parent::setUp();
 
-    $this->container->setParameter('render.config', NestedArray::mergeDeep(
-      $this->container->getParameter('render.config'),
-      ['auto_placeholder_conditions' => ['contexts' => ['cookies:{{ NAME }}_menu_break', 'cookies:{{ NAME }}_menu_drawer']]]
-    ));
+    $this->installSchema('system', ['sequences']);
+    $this->installSchema('user', ['users_data']);
+    $this->installEntitySchema('menu_link_content');
+    $this->installEntitySchema('user');
+
+    Menu::create(['id' => 'main'])->save();
 
     $parent = MenuLinkContent::create([
       'title' => 'Parent 1',
@@ -65,23 +70,19 @@ class MainSystemMenuBlockTest extends BrowserTestBase {
       'link' => 'https://example.com/child/grandchild',
     ])->save();
 
-    $this->block = $this->drupalPlaceBlock('system_menu_block:main', [
-      'expand_all_items' => TRUE,
-      'region' => 'primary_menu',
-    ]);
+    $this->block = $this->placeBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
   }
 
   /**
    * Tests base output.
    */
   public function testBaseOutput() {
-    $this->drupalGet('');
+    $this->isolatedRender($this->block->getPlugin()->build());
 
-    $block_id = "#block-{$this->block->id()}";
-    $elements = $this->cssSelect($block_id . '> [class="js-main-menu c-main-menu is-menu-loading"]');
+    $elements = $this->cssSelect('[class="js-main-menu c-main-menu is-menu-loading"]');
     $this->assertCount(1, $elements, 'Main menu wrapper.');
 
-    $elements = $this->cssSelect('.c-main-menu > ul[class="js-main-menu__menu c-main-menu__top-menu"]');
+    $elements = $this->cssSelect('.c-main-menu > ul[class="c-main-menu__top-menu"]');
     $this->assertCount(1, $elements, 'Top level main menu.');
 
     $elements = $this->cssSelect('.c-main-menu__top-menu > li > a[class="c-main-menu__link c-main-menu__link--top"]');
@@ -110,7 +111,8 @@ class MainSystemMenuBlockTest extends BrowserTestBase {
    * Tests output with line break state-saving cookie.
    */
   public function testLineBreakCookieOutput() {
-    $this->getSession()->setCookie('{{ NAME }}_menu_break', 1);
+    /** @var \Symfony\Component\HttpFoundation\RequestStack $request_stack */
+    $request_stack = $this->container->get('request_stack');
 
     for ($i = 0; $i < 3; $i++) {
       MenuLinkContent::create([
@@ -120,13 +122,14 @@ class MainSystemMenuBlockTest extends BrowserTestBase {
       ])->save();
     }
 
-    $this->drupalGet('');
+    $request_stack->push(Request::create('/', 'GET', [], ['{{ NAME }}_menu_break' => 1]));
+    $this->isolatedRender($this->block->getPlugin()->build());
 
     $elements = $this->cssSelect('.c-main-menu__top-menu.is-compact');
     $this->assertCount(1, $elements, 'Main menu wrapper has "is-compact" class with line break of 1.');
 
-    $this->getSession()->setCookie('{{ NAME }}_menu_break', 2);
-    $this->drupalGet('');
+    $request_stack->push(Request::create('/', 'GET', [], ['{{ NAME }}_menu_break' => 2]));
+    $this->isolatedRender($this->block->getPlugin()->build());
 
     $elements = $this->cssSelect('.c-main-menu__top-menu > li[style*="visibility:hidden"]');
     $this->assertCount(2, $elements, 'Top-level menu items hidden per line break value.');
@@ -136,13 +139,15 @@ class MainSystemMenuBlockTest extends BrowserTestBase {
    * Tests out with drawer open button.
    */
   public function testDrawerWrapperCookieOutput() {
-    $this->drupalGet('');
+    $this->isolatedRender($this->block->getPlugin()->build());
 
     $elements = $this->cssSelect('.c-main-menu__drawer[style*="display:none"]');
     $this->assertCount(1, $elements, 'Drawer button wrapper has "display: none" with no cookie set.');
 
-    $this->getSession()->setCookie('{{ NAME }}_menu_drawer', '1');
-    $this->drupalGet('');
+    $this->container
+      ->get('request_stack')
+      ->push(Request::create('/', 'GET', [], ['{{ NAME }}_menu_drawer' => '1']));
+    $this->isolatedRender($this->block->getPlugin()->build());
 
     $elements = $this->cssSelect('.c-main-menu__drawer:not([style*="display:none"])');
     $this->assertCount(1, $elements, 'Drawer button has no display style set with cookie set.');
