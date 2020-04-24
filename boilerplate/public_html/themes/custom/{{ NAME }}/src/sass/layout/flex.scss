@@ -1,9 +1,9 @@
 /**
  * @file
- * Display items in a row.
+ * Generic layout using flexbox.
  */
 
-.l-row {
+.l-flex {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
