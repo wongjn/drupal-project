@@ -312,7 +312,7 @@ function {{ NAME }}_preprocess_menu__main(&$variables) {
   $variables['attributes_set'][] = new Attribute(['class' => ['c-main-menu__sub-menu']]);
   $variables['attributes_set'][] = new Attribute([
     'class' => [
-      'c-main-menu__sub-menu'
+      'c-main-menu__sub-menu',
       'c-main-menu__sub-menu--deep',
     ],
   ]);
