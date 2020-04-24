@@ -38,8 +38,10 @@ class MainSystemMenuBlockTest extends BrowserTestBase {
   protected function setUp() {
     parent::setUp();
 
-    // Uninstall the page_cache module.
-    $this->container->get('module_installer')->uninstall(['page_cache']);
+    $this->container->setParameter('render.config', NestedArray::mergeDeep(
+      $this->container->getParameter('render.config'),
+      ['auto_placeholder_conditions' => ['contexts' => ['cookies:{{ NAME }}_menu_break', 'cookies:{{ NAME }}_menu_drawer']]]
+    ));
 
     $parent = MenuLinkContent::create([
       'title' => 'Parent 1',
@@ -108,7 +110,7 @@ class MainSystemMenuBlockTest extends BrowserTestBase {
    * Tests output with line break state-saving cookie.
    */
   public function testLineBreakCookieOutput() {
-    $this->getSession()->setCookie('mb', 1);
+    $this->getSession()->setCookie('{{ NAME }}_menu_break', 1);
 
     for ($i = 0; $i < 3; $i++) {
       MenuLinkContent::create([
@@ -123,7 +125,7 @@ class MainSystemMenuBlockTest extends BrowserTestBase {
     $elements = $this->cssSelect('.c-main-menu__top-menu.is-compact');
     $this->assertCount(1, $elements, 'Main menu wrapper has "is-compact" class with line break of 1.');
 
-    $this->getSession()->setCookie('mb', 2);
+    $this->getSession()->setCookie('{{ NAME }}_menu_break', 2);
     $this->drupalGet('');
 
     $elements = $this->cssSelect('.c-main-menu__top-menu > li[style*="visibility:hidden"]');
@@ -139,7 +141,7 @@ class MainSystemMenuBlockTest extends BrowserTestBase {
     $elements = $this->cssSelect('.c-main-menu__drawer[style*="display:none"]');
     $this->assertCount(1, $elements, 'Drawer button wrapper has "display: none" with no cookie set.');
 
-    $this->getSession()->setCookie('md', '1');
+    $this->getSession()->setCookie('{{ NAME }}_menu_drawer', '1');
     $this->drupalGet('');
 
     $elements = $this->cssSelect('.c-main-menu__drawer:not([style*="display:none"])');

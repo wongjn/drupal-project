@@ -323,7 +323,7 @@ function {{ NAME }}_preprocess_menu__main(&$variables) {
 
   // Get line-break from cookie value.
   // @see src/js/main-menu/handlers/line-break.js
-  if ($line_break = $cookies->get('mb')) {
+  if ($line_break = $cookies->get('{{ NAME }}_menu_break')) {
     // Pre-hide menu items.
     foreach (array_slice($variables['items'], $line_break) as $item) {
       $item['attributes']->setAttribute('style', 'visibility:hidden');
@@ -333,14 +333,14 @@ function {{ NAME }}_preprocess_menu__main(&$variables) {
       $variables['attributes']['class'][] = 'is-compact';
     }
   }
-  $variables['#cache']['contexts'][] = 'cookies:mb';
+  $variables['#cache']['contexts'][] = 'cookies:{{ NAME }}_menu_break';
 
   // Preset whether drawer button is shown from cookie value.
   // @see src/js/main-menu/handlers/drawer.js
-  if (!$cookies->has('md')) {
+  if (!$cookies->has('{{ NAME }}_menu_drawer')) {
     $variables['drawer_attributes']->setAttribute('style', 'display:none');
   }
-  $variables['#cache']['contexts'][] = 'cookies:md';
+  $variables['#cache']['contexts'][] = 'cookies:{{ NAME }}_menu_drawer';
 }
 
 /**

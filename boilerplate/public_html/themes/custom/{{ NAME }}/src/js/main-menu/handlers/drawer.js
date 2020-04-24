@@ -26,7 +26,7 @@ const THIRTY_DAYS = 60 * 60 * 24 * 30;
  *
  * @constant
  */
-const COOKIE_NAME = 'md';
+const COOKIE_NAME = '{{ NAME }}_menu_drawer';
 
 /**
  * Creates a drawer-open button toggling function.
@@ -94,7 +94,7 @@ function drawerToggler({ drawer, openButton }) {
   const title = drawer.querySelector('.c-drawer-menu__title');
 
   // Event listeners.
-  let escClose = () => {};
+  let escClose = () => { };
   const focusTrap = focusTrapper(drawer);
 
   const toggle = op => {

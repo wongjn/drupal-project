@@ -68,7 +68,8 @@ const calculateLinebreak = menu => {
   menu.classList[index < 1 && found ? 'add' : 'remove']('is-compact');
 
   const cookieAge = found ? THIRTY_DAYS : 0;
-  document.cookie = `mb=${index + 1};Max-Age=${cookieAge};path=/`;
+  document.cookie =
+    `{{ NAME }}_menu_break=${index + 1};Max-Age=${cookieAge};path=/`;
 
   return index;
 };
