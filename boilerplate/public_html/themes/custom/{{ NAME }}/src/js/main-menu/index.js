@@ -12,9 +12,9 @@ import attachParentTap from './handlers/parent-tap';
 
 /**
  * Menu orchestrator fields.
- * 
+ *
  * @typedef {Object} MenuWidgetFields
- * 
+ *
  * @prop {HTMLElement} wrapper
  *   The top-most element wrapper for the menu UI.
  * @prop {HTMLUListElement} menu
@@ -23,7 +23,7 @@ import attachParentTap from './handlers/parent-tap';
 
 /**
  * The menu event mediator orchestrator object.
- * 
+ *
  * @typedef {MenuWidgetFields & import('../lib/orchestrator').Orchestrator} MenuWidget
  */
 

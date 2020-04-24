@@ -11,28 +11,28 @@ import { match } from './lib/dom';
 
 /**
  * CSS variable for animation delay.
- * 
+ *
  * @constant
  */
 const CSS_PROPERTY_NAME = '--inview-delay';
 
 /**
  * Class for an element currently outside the viewport.
- * 
+ *
  * @constant
  */
 const OUTSIDE_VIEWPORT_CLASSNAME = 'is-outside-viewport';
 
 /**
  * Class for an element currently animating.
- * 
+ *
  * @constant
  */
 const LOADING_CLASSNAME = 'is-loading';
 
 /**
  * Class for an element finished animating.
- * 
+ *
  * @constant
  */
 const LOADED_CLASSNAME = 'is-loaded';
@@ -137,7 +137,7 @@ const createList = (justInvoked = false) => list => {
   setTimeout(() => {
     justInvoked = false;
   }, 0);
-  
+  $
   return createCollection(list);
 };
 
@@ -146,7 +146,7 @@ const createList = (justInvoked = false) => list => {
  *
  * @type {Drupal~behavior}
  */
-Drupal.behaviors.{{ CAMEL }}InViewList = createBehavior(
+Drupal.behaviors.{ { CAMEL } } InViewList = createBehavior(
   '.js-inview-list[data-selector]',
   createList(true),
 );

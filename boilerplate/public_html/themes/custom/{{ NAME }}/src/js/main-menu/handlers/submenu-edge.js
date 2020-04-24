@@ -39,7 +39,7 @@ function moveOverlaps(menus) {
 
 /**
  * Initializes this handler.
- * 
+ *
  * @param {import('../').MenuWidget} menuWidget
  *   The menu orchestrator object.
  */

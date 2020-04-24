@@ -12,9 +12,9 @@ const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
 /**
  * Line break reduction result object.
- * 
+ *
  * @typedef {Object} LineBreakResult
- * 
+ *
  * @prop {boolean} found
  *   Whether line break has been found.
  * @prop {number} index
@@ -76,7 +76,7 @@ const calculateLinebreak = menu => {
 
 /**
  * Initializes this handler.
- * 
+ *
  * @param {import('../').MenuWidget} menuWidget
  *   The menu orchestrator object.
  */

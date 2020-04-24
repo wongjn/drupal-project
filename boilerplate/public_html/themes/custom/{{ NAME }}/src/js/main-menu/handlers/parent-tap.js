@@ -50,7 +50,7 @@ function onTouchHandler(menu) {
 
 /**
  * Initializes this handler.
- * 
+ *
  * @param {import('../').MenuWidget} menuWidget
  *   The menu orchestrator object.
  */
