@@ -16,8 +16,7 @@ global:
       dist/css/components/text-body.css: {}
       dist/css/objects/title.css: {}
     theme:
-      dist/css/utilities.css:
-        weight: 9999
+      dist/css/utilities.css: {}
   js:
     dist/js/main.modern.js: { differential_serve: 'modern', minified: true }
     dist/js/main.legacy.js: { differential_serve: 'legacy', minified: true }
