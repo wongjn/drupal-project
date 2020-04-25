@@ -19,11 +19,29 @@ global:
       dist/css/utilities.css:
         weight: 9999
   js:
-    dist/js/runtime.js: {}
-    dist/js/main.js: {}
+    dist/js/main.modern.js: { differential_serve: 'modern', minified: true }
+    dist/js/main.legacy.js: { differential_serve: 'legacy', minified: true }
   dependencies:
-    - {{ NAME }}/polyfill
+    - {{ NAME }}/global.runtime
     - core/drupal
+
+global.polyfill:
+  remote: https://polyfill.io/
+  license:
+    name: MIT
+    url: https://github.com/Financial-Times/polyfill-service/blob/master/LICENSE.md
+  js:
+    https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Array.prototype.fill,Element.prototype.closest,Element.prototype.matches,Element.prototype.remove,IntersectionObserver,Node.prototype.contains,Object.entries,Object.getOwnPropertyDescriptors,Promise,ResizeObserver,Set,WeakMap:
+      type: external
+      minified: true
+
+global.runtime:
+  js:
+    dist/js/runtime.modern.js: { differential_serve: 'modern', minified: true }
+    dist/js/runtime.legacy.js: { differential_serve: 'legacy', minified: true }
+  dependencies:
+    - differential_serve/legacy-loader
+    - {{ NAME }}/global.polyfill
 
 align.module:
   css:
@@ -39,14 +57,3 @@ messages:
   css:
     component:
       dist/css/components/messages.css: {}
-
-polyfill:
-  remote: https://polyfill.io/
-  license:
-    name: MIT
-    url: https://github.com/Financial-Times/polyfill-service/blob/master/LICENSE.md
-  js:
-    https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Array.prototype.fill,Element.prototype.closest,Element.prototype.matches,Element.prototype.remove,IntersectionObserver,Node.prototype.contains,Object.entries,Object.getOwnPropertyDescriptors,Promise,ResizeObserver,Set,WeakMap:
-      type: external
-      minified: true
-      weight: -100

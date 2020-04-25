@@ -77,54 +77,8 @@ function {{ NAME }}_js_alter(&$javascript) {
   $theme_path = drupal_get_path('theme', '{{ NAME }}');
 
   foreach ($javascript as $file_path => $options) {
-    if (strpos($file_path, $theme_path) !== 0 || $options['type'] != 'file') {
-      continue;
-    }
-
-    if ($preprocess) {
-      // Enable long-term caching.
-      $javascript[$file_path]['version'] = Assets::getHash($file_path);
-    }
-    else {
+    if (!$preprocess && strpos($file_path, $theme_path) === 0 && $options['type'] == 'file') {
       $javascript[$file_path]['cache'] = FALSE;
-    }
-  }
-}
-
-/**
- * Implements hook_library_info_alter().
- */
-function {{ NAME }}_library_info_alter(&$libraries, $extension) {
-  if ($extension == '{{ NAME }}') {
-    foreach ($libraries as $name => $library) {
-      if (!isset($library['js'])) {
-        continue;
-      }
-
-      // Replace scripts declared in libraries with their differential-served
-      // counterparts.
-      foreach ($library['js'] as $source => $options) {
-        if (isset($options['type']) && $options['type'] == 'external') {
-          continue;
-        }
-
-        foreach (['modern', 'legacy'] as $type) {
-          $file = preg_replace('/\.js$/', ".$type.js", $source);
-          $libraries[$name]['js'][$file] = NestedArray::mergeDeep(
-            [
-              'preprocess' => FALSE,
-              'minified' => TRUE,
-              'attributes' => [
-                'type' => $type == 'modern' ? 'module' : FALSE,
-                'defer' => $type == 'legacy',
-                'nomodule' => $type == 'legacy',
-              ],
-            ],
-            $options
-          );
-        }
-        unset($libraries[$name]['js'][$source]);
-      }
     }
   }
 }
@@ -140,9 +94,6 @@ function {{ NAME }}_page_attachments_alter(array &$attachments) {
 
   // Add favicons.
   Assets::attachFavicons($attachments);
-
-  // Preload modern script.
-  Assets::attachScriptPreload($attachments);
 
   // Preload critical fonts.
   // Assets::attachFontPreloads($attachments);
@@ -415,12 +366,6 @@ function {{ NAME }}_element_info_alter(array &$info) {
 
   // Remove unused off-canvas page wrapping markup.
   unset($info['page']['#theme_wrappers']['off_canvas_page_wrapper']);
-
-  // Add pre-render hook to alter module/nomodule script HTML tags.
-  if (!isset($info['html_tag']['#pre_render'])) {
-    $info['html_tag']['#pre_render'] = [];
-  }
-  array_unshift($info['html_tag']['#pre_render'], ['\Drupal\{{ NAME }}\Assets', 'preRenderHtmlTag']);
 }
 
 /**

@@ -15,6 +15,7 @@ module:
   datetime: 0
   dblog: 0
   deny_tainted_urls: 0
+  differential_serve: 0
   dynamic_page_cache: 0
   editor: 0
   ex_icons: 0
