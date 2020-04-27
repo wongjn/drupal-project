@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "cookie": "^0.4.0",
-    "lodash": "^4.17.4",
+    "lodash.debounce": "^4.0.8",
     "rambda": "^2.3.1",
     "svelte": "^3.20.1",
     "svg4everybody": "^2.1.8"
@@ -59,6 +59,7 @@
     "prettier": "^1.14.0",
     "sass": "^1.23.0",
     "svelte-loader": "^2.13.6",
+    "svelte-preprocess": "^3.7.4",
     "webpack": "^4.0.0",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-chunk-rename-plugin": "^1.0.3",

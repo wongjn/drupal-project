@@ -10,7 +10,8 @@
         "devDependencies": [
           "./build/*.js",
           "**/gulpfile.js/**/*.js",
-          "**/postcss.config.js"
+          "**/postcss.config.js",
+          "**/svelte.config.js"
         ],
         "optionalDependencies": false
       }

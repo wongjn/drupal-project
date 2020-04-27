@@ -11,7 +11,6 @@ global:
       dist/css/layout/flex.css: {}
       dist/css/layout/grid.css: {}
     component:
-      dist/css/components/drawer-menu.css: {}
       dist/css/components/main-menu.css: {}
       dist/css/components/text-body.css: {}
       dist/css/objects/title.css: {}
@@ -30,7 +29,7 @@ global.polyfill:
     name: MIT
     url: https://github.com/Financial-Times/polyfill-service/blob/master/LICENSE.md
   js:
-    https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Array.prototype.fill,Element.prototype.closest,Element.prototype.matches,Element.prototype.remove,IntersectionObserver,Node.prototype.contains,Object.entries,Object.getOwnPropertyDescriptors,Promise,ResizeObserver,Set,WeakMap:
+    https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Array.prototype.fill,Element.prototype.closest,Element.prototype.matches,IntersectionObserver,Node.prototype.contains,Object.entries,Object.getOwnPropertyDescriptors,Promise,ResizeObserver,Set,WeakMap:
       type: external
       minified: true
 

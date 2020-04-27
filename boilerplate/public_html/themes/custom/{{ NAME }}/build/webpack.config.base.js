@@ -7,7 +7,7 @@ const path = require('path');
 const { DefinePlugin } = require('webpack');
 const ChunkRenamePlugin = require('webpack-chunk-rename-plugin');
 
-const getBase = name => ({
+const getBase = name => (production = true) => ({
   name,
   context: path.resolve(__dirname, '../'),
   entry: {
@@ -18,6 +18,7 @@ const getBase = name => ({
       ...(name === 'legacy' ? ['./src/js/svg-polyfill.js'] : []),
     ],
   },
+  mode: production ? 'production' : 'development',
   output: {
     filename: `[name].${name}.js`,
     chunkFilename: '[chunkhash].js',
@@ -41,7 +42,10 @@ const getBase = name => ({
       {
         test: /\.svelte$/,
         exclude: /node_modules/,
-        use: 'svelte-loader',
+        use: {
+          loader: 'svelte-loader',
+          options: { ...svelteConfig, dev: !production },
+        },
       },
       {
         test: /\.scss$/,
@@ -51,10 +55,8 @@ const getBase = name => ({
   },
   resolve: {
     alias: {
-      Sass: path.resolve(__dirname, '../src/sass'),
-      svelte: path.resolve('node_modules', 'svelte'),
+      svelte: path.resolve(__dirname, '../node_modules/svelte'),
     },
-    extensions: ['.mjs', '.js', '.svelte'],
     mainFields: ['svelte', 'browser', 'module', 'main'],
   },
   plugins: [

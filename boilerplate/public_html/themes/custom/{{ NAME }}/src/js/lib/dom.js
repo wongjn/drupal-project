@@ -48,37 +48,75 @@ export const match = (selector, context) => [
 ];
 
 /**
- * Parses HTMl string to DOM elements.
+ * Returns whether a given parameter is a hidden input element.
  *
- * Any elements with the 'ref' attribute will be returned in the second
- * element in the return array keyed by the attribute value.
+ * @param {any} node
+ *   The thing to check.
  *
- * @example
- * const [root, { title, content }] = templateParse(`
- *  <div class="root">
- *    <h1 ref="title">Title</h1>
- *    <p ref="content">…</p>
- *  </div>
- * `);
- *
- * @param {string} html
- *   HTML fragment to convert to DOM objects. Only the first parent in the
- *   string will be returned.
- *
- * @return {[HTMLElement, Object<string, HTMLElement>]}
- *   First element is the full DOM. Second element is an object mapping of
- *   reference elements.
+ * @return {boolean}
+ *   Returns true if it is an input HTML element with [type="hidden"], false
+ *   otherwise.
  */
-export function templateParse(html) {
-  const dom = new DOMParser().parseFromString(html, 'text/html');
-  const [main] = Array.from(dom.body.children);
+const isHiddenInput = node =>
+  node instanceof HTMLInputElement && node.type === 'hidden';
 
-  const refElements = Array.from(main.querySelectorAll('[ref]'));
-  const refs = refElements.reduce((map, element) => {
-    map[element.getAttribute('ref')] = element;
-    element.removeAttribute('ref');
-    return map;
-  }, {});
+/**
+ * Get a list of focusable elements.
+ *
+ * @param {ParentNode} node
+ *   Node to get focusable children of.
+ *
+ * @return {Element[]}
+ *   Array of focusable elements.
+ */
+const getFocusables = node =>
+  [
+    ...node.querySelectorAll(
+      'a,button,input,textarea,select,details,[tabindex]:not([tabindex="-1"])',
+    ),
+  ]
+    .filter(element => !element.hasAttribute('disabled'))
+    .filter(element => !isHiddenInput(element));
 
-  return [main, refs];
-}
+/**
+ * Creates a trapping focusin event listener.
+ *
+ * @param {Node} node
+ *   The DOM node to trap focus within.
+ *
+ * @return {(event: FocusEvent) => void}
+ *   Focusin event listener.
+ */
+export const createFocusTrapper = node => {
+  const focusables = getFocusables(node);
+  const [first] = focusables;
+  const last = focusables[focusables.length - 1];
+
+  // Target is the element receiving focus, relatedTarget is the element losing
+  // focus.
+  return ({ target, relatedTarget }) => {
+    if (!relatedTarget || node.contains(target)) return;
+    (relatedTarget === last ? first : last).focus();
+  };
+};
+
+/**
+ * Toggle document body scrolling.
+ *
+ * @param {boolean} disable
+ *   Pass true to disable scrolling or false to enable.
+ */
+export const toggleScrolling = disable => {
+  // Get scrollbar width.
+  const barWidth = window.innerWidth - document.documentElement.offsetWidth;
+
+  // Save scrollbar width to DOM object for reuse.
+  if (disable) {
+    document.body.style.setProperty('--body-scrollbar-width', `${barWidth}px`);
+  }
+
+  // Remove scrolling from body.
+  document.body.style.overflow = disable ? 'hidden' : '';
+  // Compensate for possible layout jump due to scrollbar show/hide.
+  document.body.style.paddingRight = disable ? `${barWidth}px` : '';
+};
