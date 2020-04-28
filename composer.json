@@ -43,7 +43,6 @@
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
         "drupal/config_inspector": "^1.0@beta",
-        "drupal/console": "^1.0.2",
         "drupal/core-dev": "~8.8.2",
         "drupal/devel": "^2.1",
         "drupal/multiline_config": "^1.0",
