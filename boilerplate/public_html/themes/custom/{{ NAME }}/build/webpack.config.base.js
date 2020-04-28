@@ -12,9 +12,9 @@ const getBase = name => (production = true) => ({
   context: path.resolve(__dirname, '../'),
   entry: {
     main: [
+      './src/js/webpack-path.js',
       './src/js/menu/index.js',
       './src/js/in-view.js',
-      './src/js/scrollbar-size.js',
       ...(name === 'legacy' ? ['./src/js/svg-polyfill.js'] : []),
     ],
   },
