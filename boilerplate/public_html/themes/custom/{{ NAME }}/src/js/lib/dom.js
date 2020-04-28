@@ -48,6 +48,19 @@ export const match = (selector, context) => [
 ];
 
 /**
+ * Dispatches a bubbling custom event on an element.
+ *
+ * @param {Element} element
+ *   The element to dispatch the event on.
+ * @param {string} eventName
+ *   The name of the event.
+ * @param {any} [detail]
+ *   Optional. Extra information to pass in the event.
+ */
+export const dispatchEvent = (element, eventName, detail) =>
+  element.dispatchEvent(new CustomEvent(eventName, { detail, bubbles: true }));
+
+/**
  * Returns whether a given parameter is a hidden input element.
  *
  * @param {any} node

@@ -40,16 +40,17 @@ function moveOverlaps(menus) {
 /**
  * Initializes this handler.
  *
- * @param {import('../').MenuWidget} menuWidget
- *   The menu orchestrator object.
+ * @param {Object} elements
+ *   Remarkable DOM nodes for the main menu.
+ * @param {HTMLUListElement} elements.menu
+ *   Top level menu element.
  */
-export default menuWidget => {
-  const { menu } = menuWidget;
-  const menus = Array.from(menu.querySelectorAll('.c-main-menu__sub-menu'));
+export default ({ menu }) => {
+  const menus = [...menu.querySelectorAll('.c-main-menu__sub-menu')];
 
   moveOverlaps(menus);
 
   const updater = debounce(moveOverlaps.bind(null, menus), 500);
   window.addEventListener('resize', updater);
-  menuWidget.on('destroy', () => window.removeEventListener('resize', updater));
+  return () => window.removeEventListener('resize', updater);
 };

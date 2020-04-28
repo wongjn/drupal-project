@@ -41,12 +41,14 @@ function openButtonToggler(openButton) {
 /**
  * Initializes this handler.
  *
- * @param {import('../').MenuWidget} menuWidget
- *   The menu orchestrator object.
+ * @param {Object} elements
+ *   Remarkable DOM nodes for the main menu.
+ * @param {HTMLElement} elements.wrapper
+ *   The root element.
+ * @param {HTMLUListElement} elements.menu
+ *   Top level menu element.
  */
-export default menuWidget => {
-  const { wrapper, menu } = menuWidget;
-
+export default ({ wrapper, menu }) => {
   const openButton = wrapper.querySelector('.c-main-menu__open-btn');
   const openButtonToggle = openButtonToggler(openButton);
   // Set initial button state from cookie.
@@ -63,26 +65,32 @@ export default menuWidget => {
 
   const drawerOpen = () => drawer.$set({ open: true });
   const drawerClose = () => drawer.$set({ open: false });
+  const onOffsetChange = (_, offsets) => drawer.$set(offsets);
+  const onLineBreak = ({ detail: isBroken }) => {
+    openButtonToggle(isBroken ? 'show' : 'hide');
+
+    const cookieAge = isBroken ? THIRTY_DAYS : 0;
+    document.cookie = `${COOKIE_NAME}=1;Max-Age=${cookieAge};path=/`;
+  };
 
   openButton.addEventListener('click', drawerOpen);
+  wrapper.addEventListener('linebreak', onLineBreak);
 
   drawer.$on('close', drawerClose);
   // Focus on microtask queue so that it is after svelte update.
   drawer.$on('outroend', () => queueMicrotask(() => openButton.focus()));
 
-  menuWidget.on('lineBreak', ({ isBroken }) => {
-    openButtonToggle(isBroken ? 'show' : 'hide');
-
-    const cookieAge = isBroken ? THIRTY_DAYS : 0;
-    document.cookie = `${COOKIE_NAME}=1;Max-Age=${cookieAge};path=/`;
-  });
-
-  menuWidget.on('drupalViewportOffsetChange', drawer.$set.bind(drawer));
-
-  if (module.hot) {
-    menuWidget.on('destroy', () => {
-      openButton.removeEventListener('click', drawerOpen);
-      drawer.$destroy();
-    });
+  if ('jQuery' in window) {
+    jQuery(document).on('drupalViewportOffsetChange', onOffsetChange);
   }
+
+  return () => {
+    openButton.removeEventListener('click', drawerOpen);
+    wrapper.removeEventListener('linebreak', onLineBreak);
+    drawer.$destroy();
+
+    if ('jQuery' in window) {
+      jQuery(document).off('drupalViewportOffsetChange', onOffsetChange);
+    }
+  };
 };

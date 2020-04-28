@@ -51,21 +51,21 @@ function onTouchHandler(menu) {
 /**
  * Initializes this handler.
  *
- * @param {import('../').MenuWidget} menuWidget
- *   The menu orchestrator object.
+ * @param {Object} elements
+ *   Remarkable DOM nodes for the main menu.
+ * @param {HTMLUListElement} elements.menu
+ *   Top level menu element.
  */
-export default menuWidget => {
-  const callback = onTouchHandler(menuWidget.menu);
+export default ({ menu }) => {
+  const callback = onTouchHandler(menu);
   const options = { passive: false };
 
   document.body.addEventListener('touchstart', callback, options);
 
-  if (module.hot) {
-    menuWidget.on('destroy', () => {
-      document.body.removeEventListener('touchstart', callback, options);
-      Array.from(menuWidget.menu.querySelectorAll(`.${OPEN_CLASS}`)).forEach(
-        menu => menu.classList.remove(OPEN_CLASS),
-      );
-    });
-  }
+  return () => {
+    document.body.removeEventListener('touchstart', callback, options);
+    [...menu.querySelectorAll(`.${OPEN_CLASS}`)].forEach(subMenu =>
+      subMenu.classList.remove(OPEN_CLASS),
+    );
+  };
 };

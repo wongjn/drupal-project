@@ -3,6 +3,8 @@
  * Contains the line break handler.
  */
 
+import { dispatchEvent } from '../../lib/dom';
+
 /**
  * 30 days in seconds.
  *
@@ -68,8 +70,8 @@ const calculateLinebreak = menu => {
   menu.classList[index < 1 && found ? 'add' : 'remove']('is-compact');
 
   const cookieAge = found ? THIRTY_DAYS : 0;
-  document.cookie =
-    `{{ NAME }}_menu_break=${index + 1};Max-Age=${cookieAge};path=/`;
+  document.cookie = `{{ NAME }}_menu_break=${index +
+    1};Max-Age=${cookieAge};path=/`;
 
   return index;
 };
@@ -77,14 +79,18 @@ const calculateLinebreak = menu => {
 /**
  * Initializes this handler.
  *
- * @param {import('../').MenuWidget} menuWidget
- *   The menu orchestrator object.
+ * @param {Object} elements
+ *   Remarkable DOM nodes for the main menu.
+ * @param {HTMLElement} elements.wrapper
+ *   The root element.
+ * @param {HTMLUListElement} elements.menu
+ *   Top level menu element.
  */
-export default menuWidget => {
-  const { menu } = menuWidget;
-  const menuItems = Array.from(menu.children).slice(1);
+export default ({ wrapper, menu }) => {
+  const menuItems = [...menu.children].slice(1);
 
-  menuWidget.on('resize', () => {
+  // Menu element resize observations.
+  const observer = new ResizeObserver(() => {
     const index = calculateLinebreak(menu);
 
     // Ensure first row items are visible.
@@ -98,6 +104,9 @@ export default menuWidget => {
       menuItem.setAttribute('aria-hidden', 'true');
     });
 
-    menuWidget.fire('lineBreak', { isBroken: index < menuItems.length });
+    dispatchEvent(wrapper, 'linebreak', index < menuItems.length);
   });
+  observer.observe(menu);
+
+  return () => observer.disconnect();
 };
