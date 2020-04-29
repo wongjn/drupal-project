@@ -54,7 +54,6 @@ $settings['browsersync'] = TRUE;
 $settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
 $settings['cache']['bins']['page'] = 'cache.backend.null';
 $settings['cache']['bins']['render'] = 'cache.backend.null';
-$settings['config_exclude_modules'][] = 'config';
 $settings['config_exclude_modules'][] = 'config_inspector';
 $settings['config_exclude_modules'][] = 'devel';
 $settings['config_exclude_modules'][] = 'devel_generate';
