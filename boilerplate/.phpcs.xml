@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <ruleset name="{{ LABEL }}">
 
-  <arg name="extensions" value="php,inc,install,module,profile,theme"/>
+  <arg name="extensions" value="inc,info,install,md,module,php,profile,test,theme,txt,yml"/>
 
   <file>./public_html/themes/custom</file>
   <file>./public_html/modules/custom</file>
 
   <!-- Ignore third party code -->
   <exclude-pattern>*/node_modules/*</exclude-pattern>
-  <!-- Ignore CSS and JS -->
-  <exclude-pattern>\.css$</exclude-pattern>
-  <exclude-pattern>\.js$</exclude-pattern>
 
   <rule ref="Drupal"/>
   <rule ref="DrupalPractice"/>
