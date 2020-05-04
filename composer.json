@@ -30,6 +30,7 @@
         "drupal/core-composer-scaffold": "~8.8.2",
         "drupal/core-recommended": "~8.8.2",
         "drupal/differential_serve": "^1.0@beta",
+        "drupal/ex_icons": "^1.0@RC",
         "drupal/imce": "^2.2",
         "drupal/menu_admin_per_menu": "^1.0",
         "drupal/menu_trail_by_path": "^1.1",
@@ -37,7 +38,6 @@
         "drupal/view_unpublished": "^1.0@alpha",
         "drush/drush": "^10.1",
         "projectcosmic/deny_tainted_urls": "^1.0",
-        "projectcosmic/ex_icons": "^2.0.0",
         "wongjn/lazy_image": "^2.0"
     },
     "require-dev": {
