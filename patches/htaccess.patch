@@ -3,19 +3,19 @@
 @@ -44,8 +44,8 @@
    # Enable expirations.
    ExpiresActive On
-
+ 
 -  # Cache all files for 2 weeks after access (A).
 -  ExpiresDefault A1209600
 +  # Cache all files for 1 year after access (A).
 +  ExpiresDefault A31536000
-
+ 
    <FilesMatch \.php$>
      # Do not allow PHP scripts to be cached unless they explicitly send cache
 @@ -76,6 +76,11 @@
    RewriteCond %{HTTPS} on
    RewriteRule ^ - [E=protossl:s]
-
-+  # Not local development, force HTTPS
+ 
++  # Not local development, force HTTPS.
 +  RewriteCond %{ENV:__DEV__} ^$
 +  RewriteCond %{HTTPS} off
 +  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
