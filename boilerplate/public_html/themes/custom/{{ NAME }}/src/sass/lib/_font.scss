@@ -21,11 +21,14 @@ $_SIZE-PRESETS: (
   18: 18,
 );
 
-// Default font size, also minimum font size for scaling.
+// Default font size.
 $SIZE: 16;
 
 // Global default line height ratio
 $LINE-HEIGHT: (24 / $SIZE);
+
+// Minimum font size for viewport scaling.
+$_SIZE_MIN: 18;
 
 /// Returns the minimum value to use for font scales.
 ///
@@ -34,13 +37,9 @@ $LINE-HEIGHT: (24 / $SIZE);
 ///
 /// @return {Length.rem}
 ///   The minimum size for the given font size with rem units.
-@function _scale-minimum($size) {
-  @return unit.px-to-rem(
-    unit.between(
-      math.floor(($size + ($SIZE * 16))/ 14),
-      $SIZE,
-      $size * 1px
-    )
+@function _scale_minimum($size) {
+  @return unit.px_to_rem(
+    unit.between(math.floor(($size + ($_SIZE_MIN * 16))/ 14), $_SIZE_MIN, $size)
   );
 }
 
@@ -49,43 +48,34 @@ $LINE-HEIGHT: (24 / $SIZE);
 /// @param {Number|Length.px} $size
 ///   The font size in pixels.
 @mixin size($size) {
-  $rem-size: unit.px-to-rem($size);
+  $rem_size: unit.px_to_rem($size);
 
-  // Too small to scale
-  @if $size <= $SIZE {
-    font-size: $rem-size;
-  }
-  // Defined in :root as CSS custom properties
-  @else if map.has-key( $_SIZE-PRESETS, $size ) {
-    font-size: $rem-size;
-    font-size: var(--font-size-#{$size});
-  }
-  @else {
-    @include viewport.scale(font-size, $rem-size, _scale-minimum($size));
+  // Fallback for clamp() or custom properties or when size is too small to
+  // attempt to scale.
+  font-size: $rem_size;
+
+  @if $size > $_SIZE_MIN {
+    // Defined in body as CSS custom properties.
+    @if map.has_key($_SIZE_PRESETS, $size) {
+      font-size: var(--font-size-#{$size});
+    }
+    @else {
+      @supports (font-size: clamp(0%, 1%, 2%)) {
+        font-size: viewport.scale($rem-size, _scale_minimum($size));
+      }
+    }
   }
 }
 
 /// Outputs custom properties for font size presets.
 @mixin size-custom-properties {
-  @each $size, $min in $_SIZE_PRESETS {
-    --font-size-#{$size}: #{unit.px-to-rem($min)};
-  }
+	@each $size, $min in $_SIZE_PRESETS {
+		--font-size-#{$size}: #{unit.px_to_rem($min)};
 
-  @media (min-width: 600px) {
-    @each $size, $min in $_SIZE_PRESETS {
-      @if ($min != $size) {
-        --font-size-#{$size}: calc(#{unit.px-to-rem($min)} + #{viewport.scaler(unit.strip($size - $min))});
-      }
-    }
-  }
-
-  @media (min-width: layout.$SITE_WIDTH_PX) {
-    @each $size, $min in $_SIZE_PRESETS {
-      @if ($min != $size) {
-        --font-size-#{$size}: #{unit.px-to-rem($size)};
-      }
-    }
-  }
+		@supports (top: clamp(0%, 1%, 2%)) {
+			--font-size-#{$size}: #{viewport.scale($size * 1px, $min * 1px)};
+		}
+	}
 }
 
 $_crop-font-size: 24;

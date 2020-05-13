@@ -85,8 +85,13 @@
   // WYSIWYG alignment classes.
   .align-left,
   .align-right {
-    @include viewport.scale(margin-right, 20px, 5px);
-    @include viewport.scale(margin-left, 20px, 5px);
+    margin-right: 5px;
+    margin-left: 5px;
+
+    @supports (top: clamp(0%, 1%, 2%)) {
+      margin-right: viewport.scale(20px, 5px);
+      margin-left: viewport.scale(20px, 5px);
+    }
   }
 
   &__media {
