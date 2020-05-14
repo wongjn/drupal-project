@@ -3,69 +3,66 @@
  * Layout items in a grid.
  */
 
-@use '../lib/hacks';
 @use '../lib/layout';
+@use '../lib/unit';
 @use '../lib/viewport';
 
-@mixin _variants($gutter, $container-width, $columns) {
-  @at-root {
-    @each $name, $column in $columns {
-      #{if("#{&}" == '.l-grid', '', &)}.l-grid--#{$name} {
-        // Exact width
-        $width: layout.column-width($column, $gutter, $container-width);
-        // Min-width for grid to be at the desired column count at full site width
-        $min-width: (layout.column-width($column + 1, $gutter, $container-width) + 1px);
-
-        --column-min-width: #{$min-width};
-        --column-width: #{$width};
-
-        // Fix overflowing grid areas on narrow viewports.
-        @media (max-width: #{$min-width + ($gutter * 2)}) {
-          grid-template-columns: 1fr;
-        }
-
-        > .l-grid__item {
-          flex-basis: $width;
-        }
-      }
-    }
-  }
-}
-
 .l-grid {
-  // Spacing between items.
-  $gutter: 40px;
-
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: ($gutter * -0.5);
-  margin: calc(var(--gutter-y) * -0.5) calc(var(--gutter-x) * -0.5);
-  --gutter-x: #{$gutter};
-  --gutter-y: #{$gutter};
+  margin: (layout.$GUTTER_FALLBACK_PX * -0.5);
+  margin: calc(var(--site-gutter) * -0.5);
 
   @supports (display: grid) {
     display: grid;
     margin: 0;
-    grid-template-columns: repeat(auto-fill, minmax(var(--column-min-width), 1fr));
-    grid-gap: var(--gutter-y) var(--gutter-x);
+    grid-template-columns: repeat(var(--columns), 1fr);
+    grid-gap: var(--site-gutter);
+    --columns: 1;
   }
 
-  @include _variants($gutter, layout.$SITE_WIDTH_PX, (
-    // thirds: 3,
-    // quarters: 4,
-    // sixths: 6,
-  ));
+  $mappings: (
+    thirds: (420px, 800px),
+  );
+  @each $name, $mapping in $mappings {
+    &--#{$name} {
+      @for $i from 1 through list.length($mapping) {
+        @media (min-width: list.nth($mapping, $i)) {
+          --columns: #{$i + 1};
+        }
+      }
+    }
+  }
 
   // 1. When using fallback flexbox layout, ensures items are contained within
   //    the containing element.
   &__item {
-    margin: ($gutter * 0.5);
-    margin: calc(var(--gutter-y) * 0.5) calc(var(--gutter-x) * 0.5);
+    padding: (layout.$GUTTER_FALLBACK_PX * 0.5);
+    padding: calc(var(--site-gutter) * 0.5);
     min-width: 0; // 1
+    flex-grow: 1;
+
+    @each $name, $mapping in $mappings {
+      .l-grid--#{$name} > & {
+        @for $i from 1 through list.length($mapping) {
+          @media (min-width: list.nth($mapping, $i)) {
+            // Use width instead of flex-basis for flexbox fall-back since IE11
+            // does not respect box-sizing with flex-basis.
+            width: (100% / ($i + 1));
+          }
+        }
+      }
+    }
 
     @supports (display: grid) {
-      margin: 0;
+      padding: 0;
+
+      // Extra attribute selector to be of equal specificity to override
+      // width declarations above.
+      &[class] {
+        width: auto;
+      }
     }
   }
 }

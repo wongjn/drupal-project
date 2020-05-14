@@ -6,14 +6,11 @@
 $SITE-WIDTH: 1294;
 $SITE-WIDTH-PX: $SITE-WIDTH * 1px;
 
-/// Calculates the column width for a number of columns.
-///
-/// @param {number} $columns
-///   The number of columns.
-/// @param {pxlength} $gutter
-///   The gutter size between columns.
-/// @param {pxlength} $container-width
-///   The container width.
-@function column-width($columns, $gutter, $container-width: $SITE-WIDTH-PX) {
-  @return ($container-width - ($gutter * ($columns - 1))) / $columns;
-}
+$GUTTER_FALLBACK: 20;
+$GUTTER_FALLBACK_PX: $GUTTER_FALLBACK * 1px;
+
+$GUTTER_MAX: 40;
+$GUTTER_MAX_PX: $GUTTER_MAX * 1px;
+
+$GUTTER_MIN: 15;
+$GUTTER_MIN_PX: $GUTTER_MIN * 1px;
