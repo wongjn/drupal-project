@@ -5,6 +5,7 @@
 
 const path = require('path');
 const { DefinePlugin } = require('webpack');
+const svelteConfig = require('../svelte.config');
 const ChunkRenamePlugin = require('webpack-chunk-rename-plugin');
 
 const getBase = name => (production = true) => ({
