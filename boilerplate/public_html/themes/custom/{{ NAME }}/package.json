@@ -1,6 +1,7 @@
 {
   "name": "{{ NAME }}",
   "scripts": {
+    "postinstall": "node ./build/patch.js",
     "prebuild": "npm run lint",
     "build": "gulp build",
     "start": "gulp watch",
