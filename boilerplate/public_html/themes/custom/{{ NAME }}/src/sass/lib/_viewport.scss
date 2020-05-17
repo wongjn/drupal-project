@@ -46,7 +46,7 @@
 ///
 /// @return {Value|List<Value>}
 ///   Scaling value(s) between minimum and maximum values based on viewport.
-@function scale($max-values, $min-values: 0, $at: layout.$SITE-WIDTH * 1vw, $from: 600) {
+@function scale($max-values, $min-values: 0px, $at: layout.$SITE-WIDTH * 1vw, $from: 600) {
   @if ($at != 'vmin' and math.unit($at) != 'vw' and math.unit($at) != 'vh') {
     @error '#{$at} should be a CSS value of vw or vh, with the value being the "maximum gate" breakpoint or literally "vmin".';
   }
@@ -65,10 +65,10 @@
     $max_unit: math.unit($max);
     $min_unit: math.unit($min);
 
-    @if ($max_unit != 'rem' and $max_unit != 'px' and $max != 0) {
+    @if ($max_unit != 'rem' and $max_unit != 'px') {
       @error 'Value #{$i} "#{$max}", must be in px or rem units.';
     }
-    @if ($min_unit != 'rem' and $min_unit != 'px' and $min != 0) {
+    @if ($min_unit != 'rem' and $min_unit != 'px') {
       @error 'Min-value #{$i} "#{$min}", must be in px or rem units.';
     }
 
@@ -102,19 +102,15 @@
     @if $max != $min {
       $scale: list.nth($scalers, $i);
 
-      @if ($min == 0) {
-        $value: string.unquote('#{if($max > 0, 'min', 'max')}(#{$scale}, #{$max})');
-      }
-      @else {
-        $max_unitless: list.nth($max-values-unitless, $i);
-        $min_unitless: list.nth($min-values-unitless, $i);
+      $max_unitless: list.nth($max-values-unitless, $i);
+      $min_unitless: list.nth($min-values-unitless, $i);
 
-        $lower: if($max_unitless > $min_unitless, $min, $max);
-        $scale: string.insert($scale, '#{$min} + ', 1);
-        $upper: if($max_unitless > $min_unitless, $max, $min);
+      $lower: if($max_unitless > $min_unitless, $min, $max);
+      $scale: string.insert($scale, '#{$min} + ', 1);
+      $upper: if($max_unitless > $min_unitless, $max, $min);
 
-        $value: clamp(#{$lower}, #{$scale}, #{$upper});
-      }
+      // Older Safari, FF does not support clamp(), use max() and min() instead.
+      $value: max(#{$lower}, min(#{$scale}, #{$upper});
     }
 
     $values: list.append($values, $value);
