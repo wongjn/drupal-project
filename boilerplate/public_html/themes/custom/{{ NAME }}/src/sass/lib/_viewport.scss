@@ -24,7 +24,10 @@
 ///   The CSS calculation expression.
 @function scaler($amount, $direction: 'vw', $at: layout.$SITE-WIDTH, $from: 600) {
   $divisor: 1 / ($at - $from);
-  @return '(#{100 * $divisor * $amount}#{$direction} - #{$from * 1px * $divisor * $amount})';
+
+  $scaler: math.round(1000 * $divisor * $amount) / 10;
+  $offset: math.round($from * 10px * $divisor * $amount) / 10;
+  @return '(#{$scaler}#{$direction} - #{$offset})';
 }
 
 /// Outputs values scaling based on viewport dimensions.
