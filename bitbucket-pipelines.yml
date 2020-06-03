@@ -1,0 +1,59 @@
+image: cosmicjustin/bitbucket-pipelines:latest
+pipelines:
+  default:
+    - step:
+        name: Build
+        caches:
+          - composer
+          - vendor
+          - core
+          - contrib
+        script:
+          - composer install --quiet
+        artifacts:
+          - vendor/**
+          - public_html/core/**
+          - public_html/*/contrib/**
+    - parallel:
+      - step:
+          name: Coding standards
+          script:
+            - ./vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1 --report=summary
+      - step:
+          name: Test modules
+          services:
+            - mysql
+          script:
+            - composer drupal:scaffold --quiet
+            - mkdir public_html/sites/simpletest
+            - mkdir public_html/sites/simpletest/browser_output
+            - chmod -R 777 public_html/sites
+            - sed -ri -e "s@/var/www/html@$BITBUCKET_CLONE_DIR/public_html@g" /etc/apache2/sites-available/*.conf
+            - sed -ri -e "s@/var/www/@$BITBUCKET_CLONE_DIR/public_html@g" /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+            - service apache2 start
+            - sudo -u www-data SIMPLETEST_DB='mysql://user:password@127.0.0.1:3306/pipelines' SIMPLETEST_BASE_URL="http://127.0.0.1:80" ./vendor/bin/phpunit -c ./public_html/core --testdox public_html/modules/custom
+      - step:
+          name: Test themes
+          services:
+            - mysql
+          script:
+            - composer drupal:scaffold --quiet
+            - mkdir public_html/sites/simpletest
+            - chmod -R 777 public_html/sites
+            - sed -ri -e "s@/var/www/html@$BITBUCKET_CLONE_DIR/public_html@g" /etc/apache2/sites-available/*.conf
+            - sed -ri -e "s@/var/www/@$BITBUCKET_CLONE_DIR/public_html@g" /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+            - service apache2 start
+            - sudo -u www-data SIMPLETEST_DB='mysql://user:password@127.0.0.1:3306/pipelines' SIMPLETEST_BASE_URL="http://127.0.0.1:80" ./vendor/bin/phpunit -c ./public_html/core --testdox public_html/themes/custom
+definitions:
+  services:
+    mysql:
+      image: mysql:5.7
+      variables:
+        MYSQL_DATABASE: pipelines
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+  caches:
+    vendor: vendor
+    core: public_html/core
+    contrib: public_html/modules/contrib
