@@ -1,4 +1,5 @@
 {
+  "intelephense.environment.documentRoot": "public_html/index.php",
   "workbench.colorCustomizations": {
     "titleBar.activeBackground": "#0678BE",
     "statusBar.background": "#0678BE",
