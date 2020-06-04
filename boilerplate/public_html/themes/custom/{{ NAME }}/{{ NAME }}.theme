@@ -53,18 +53,10 @@ function {{ NAME }}_css_alter(&$css) {
     array_map($extract_files, $library_manager->getLibraryByName('{{ NAME }}', 'global')['css'])
   );
 
-  $browser_sync = \Drupal::service('settings')->get('browsersync');
-  $theme_path = drupal_get_path('theme', '{{ NAME }}');
-
   foreach (array_keys($css) as $location) {
     // Group global libraries into their own group.
     if (in_array($location, $global_stylesheets)) {
       $css[$location]['group'] = -2;
-    }
-
-    // Force theme CSS to use <link> tags (for BrowserSync development).
-    if ($browser_sync && strpos($location, $theme_path) !== FALSE) {
-      $css[$location]['preprocess'] = FALSE;
     }
   }
 }

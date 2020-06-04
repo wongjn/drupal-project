@@ -50,7 +50,6 @@ $config['views.settings']['skip_cache'] = TRUE;
 $config['views.settings']['ui']['show']['advanced_column'] = TRUE;
 $config['views.settings']['ui']['show']['sql_query']['enabled'] = TRUE;
 
-$settings['browsersync'] = TRUE;
 $settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
 $settings['cache']['bins']['page'] = 'cache.backend.null';
 $settings['cache']['bins']['render'] = 'cache.backend.null';
