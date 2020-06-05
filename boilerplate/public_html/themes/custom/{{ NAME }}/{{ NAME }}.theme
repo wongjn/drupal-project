@@ -53,11 +53,8 @@ function {{ NAME }}_css_alter(&$css) {
     array_map($extract_files, $library_manager->getLibraryByName('{{ NAME }}', 'global')['css'])
   );
 
-  foreach (array_keys($css) as $location) {
-    // Group global libraries into their own group.
-    if (in_array($location, $global_stylesheets)) {
-      $css[$location]['group'] = -2;
-    }
+  foreach (array_intersect(array_keys($css), $global_stylesheets) as $stylesheet) {
+    $css[$stylesheet]['group'] = 10;
   }
 }
 
