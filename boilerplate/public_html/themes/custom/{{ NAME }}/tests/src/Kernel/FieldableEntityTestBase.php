@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\{{ NAME }}\Kernel;
 
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
@@ -153,14 +151,14 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
     }
 
     if ($view_mode) {
-      $display = EntityViewDisplay::load("$this->entityType.$this->bundle.$view_mode");
-      if (!$display) {
-        $display = $this->createViewDisplay($view_mode);
-      }
+      $display = $this->container
+        ->get('entity_display.repository')
+        ->getViewDisplay($this->entityType, $this->bundle, $view_mode);
 
       foreach (array_keys($fields) as $field_name) {
         $display->setComponent($field_name);
       }
+
       $display->save();
     }
   }
@@ -186,29 +184,6 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
       }
       $class = get_parent_class($class);
     }
-  }
-
-  /**
-   * Creates an entity view mode and display.
-   *
-   * @param string $view_mode
-   *   The ID of the view mode to create.
-   *
-   * @return \Drupal\Core\Entity\Entity\EntityViewDisplay
-   *   The unsaved view display.
-   */
-  protected function createViewDisplay($view_mode) {
-    EntityViewMode::create([
-      'id' => "$this->entityType.$view_mode",
-      'targetEntityType' => $this->entityType,
-    ])->save();
-
-    return EntityViewDisplay::create([
-      'targetEntityType' => $this->entityType,
-      'bundle' => $this->bundle,
-      'mode' => $view_mode,
-      'status' => TRUE,
-    ]);
   }
 
 }
