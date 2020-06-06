@@ -34,21 +34,37 @@ trait AssertOutputTrait {
    * This is a looser assertion, whereby values separated by spaces match but
    * not necessarily in the same order.
    *
-   * @param \SimpleXMLElement $attribute
-   *   The attribute value.
    * @param string $expected_value
    *   Expected attribute value.
+   * @param \SimpleXMLElement $attribute
+   *   The attribute value.
    * @param string $message
    *   (optional) Message for the test.
    */
-  protected function assertXmlAttribute(SimpleXMLElement $attribute, $expected_value, $message = NULL) {
+  protected function assertXmlAttribute($expected_value, SimpleXMLElement $attribute, $message = NULL) {
     $actual = explode(' ', (string) $attribute);
     $expected = explode(' ', $expected_value);
 
-    $this->assertEquals(
-      sort($actual),
-      sort($expected),
-      $message ?: "`{$attribute->getName()}` attribute value matches '$expected_value'."
+    $this->assertEqualsCanonicalizing($expected, $actual, $message ?: "`{$attribute->getName()}` attribute value matches '$expected_value'.");
+  }
+
+  /**
+   * Asserts an element's attribute contains the expected value(s).
+   *
+   * @param string $expected_value
+   *   Expected attribute value.
+   * @param \SimpleXMLElement $attribute
+   *   The attribute value.
+   * @param string $message
+   *   (optional) Message for the test.
+   */
+  protected function assertXmlAttributeContains($expected_value, SimpleXMLElement $attribute, $message = NULL) {
+    $actual = explode(' ', (string) $attribute);
+    $expected = explode(' ', $expected_value);
+
+    $this->assertEmpty(
+      array_diff($expected, $actual),
+      $message ?: "{$attribute->getName()} value contains '$expected_value'."
     );
   }
 
