@@ -25,7 +25,7 @@
       "command": "./vendor/bin/phpunit -c ./public_html/core ${relativeFile}",
       "options": {
         "env": {
-          "BROWSERTEST_OUTPUT_DIRECTORY": "public_html/sites/default/files",
+          "BROWSERTEST_OUTPUT_DIRECTORY": "public_html/sites/simpletest/browser_output",
           "SIMPLETEST_BASE_URL": "http://{{ NAME }}.test",
           "SIMPLETEST_DB": "mysql://root@localhost/tests"
         }
