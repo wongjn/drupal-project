@@ -22,7 +22,7 @@
     {
       "type": "shell",
       "label": "PHPUnit Test",
-      "command": "./vendor/bin/phpunit --testdox -c ./public_html/core ${relativeFile}",
+      "command": "./vendor/bin/phpunit -c ./public_html/core ${relativeFile}",
       "options": {
         "env": {
           "BROWSERTEST_OUTPUT_DIRECTORY": "public_html/sites/default/files",
