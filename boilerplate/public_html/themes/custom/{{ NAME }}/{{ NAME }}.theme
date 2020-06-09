@@ -109,6 +109,16 @@ function {{ NAME }}_preprocess_block(&$variables) {
     ->load($variables['elements']['#id'])
     ->getRegion();
   $variables['attributes']['class'][] = 'l-container__module';
+
+  if ($variables['elements']['#base_plugin_id'] == 'views_block') {
+    // Remove unused 'views-element-container' HTML class.
+    $variables['attributes'] = (new Attribute($variables['attributes']))
+      ->removeClass('views-element-container')
+      ->toArray();
+    // Remove view contextual links — they have already been moved onto the
+    // block element.
+    unset($variables['content']['view_build']['#view']->element['#contextual_links']);
+  }
 }
 
 /**
