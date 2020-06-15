@@ -53,8 +53,8 @@ $_SIZE_MIN: 18;
 @mixin size($size) {
   $rem_size: unit.px_to_rem($size);
 
-  // Fallback for clamp() or custom properties or when size is too small to
-  // attempt to scale.
+  // Fallback for custom properties or when size is too small to attempt to
+  // scale.
   font-size: $rem_size;
 
   @if $size > $_SIZE_MIN {
@@ -63,7 +63,7 @@ $_SIZE_MIN: 18;
       font-size: var(--font-size-#{$size});
     }
     @else {
-      @supports (font-size: clamp(0%, 1%, 2%)) {
+      @supports (top: min(0%, 1%)) {
         font-size: viewport.scale($rem-size, _scale_minimum($size));
       }
     }
@@ -72,13 +72,13 @@ $_SIZE_MIN: 18;
 
 /// Outputs custom properties for font size presets.
 @mixin size-custom-properties {
-	@each $size, $min in $_SIZE_PRESETS {
-		--font-size-#{$size}: #{unit.px_to_rem($min)};
+  @each $size, $min in $_SIZE_PRESETS {
+    --font-size-#{$size}: #{unit.px_to_rem($min)};
 
-		@supports (top: clamp(0%, 1%, 2%)) {
-			--font-size-#{$size}: #{viewport.scale($size * 1px, $min * 1px)};
-		}
-	}
+    @supports (top: min(0%, 1%)) {
+      --font-size-#{$size}: #{viewport.scale($size * 1px, $min * 1px)};
+    }
+  }
 }
 
 $_crop-font-size: 24;
