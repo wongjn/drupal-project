@@ -33,7 +33,7 @@ $LINE-HEIGHT: (24 / $SIZE);
 // Minimum font size for viewport scaling.
 $_SIZE_MIN: 18;
 
-/// Returns the minimum value to use for font scales.
+/// Returns a minimum value to use for a particular font scale size.
 ///
 /// @param {Number} $size
 ///   The unitless font size in pixels.
