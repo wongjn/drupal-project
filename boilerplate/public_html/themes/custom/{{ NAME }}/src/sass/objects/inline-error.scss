@@ -1,0 +1,27 @@
+/**
+ * @file
+ * Error message for a form element.
+ */
+
+.o-inline-error {
+  position: relative;
+  padding-left: 2em;
+  font-size: 0.9em;
+  line-height: 1.5;
+
+  &::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background-color: #e74c3c;
+    width: 1.5em;
+    height: 1.5em;
+    color: #fff;
+    content: '\2717';
+    content: '\2717' / 'Error';
+  }
+}

@@ -78,7 +78,8 @@
   {% endif %}
 
   {% if errors %}
-    <div>{{ errors }}</div>
+    {{ attach_library('{{ NAME }}/inline-error') }}
+    <div class="o-inline-error u-mt-10">{{ errors }}</div>
   {% endif %}
 
   {% if description_display in ['after', 'invisible'] and description.content %}

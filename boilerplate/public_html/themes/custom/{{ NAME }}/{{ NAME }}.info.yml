@@ -24,7 +24,6 @@ libraries-override:
         /core/themes/stable/css/system/components/autocomplete-loading.module.css: false
         /core/themes/stable/css/system/components/fieldgroup.module.css: false
         /core/themes/stable/css/system/components/details.module.css: false
-        /core/themes/stable/css/system/components/item-list.module.css: false
         /core/themes/stable/css/system/components/js.module.css: false
         /core/themes/stable/css/system/components/nowrap.module.css: false
         /core/themes/stable/css/system/components/progress.module.css: false

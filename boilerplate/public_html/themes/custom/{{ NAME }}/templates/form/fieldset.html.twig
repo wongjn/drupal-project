@@ -1,0 +1,45 @@
+{#
+/**
+ * @file
+ * Theme override for a fieldset element and its children.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the <fieldset> element.
+ * - errors: (optional) Any errors for this <fieldset> element, may not be set.
+ * - required: Boolean indicating whether the <fieldeset> element is required.
+ * - legend: The <legend> element containing the following properties:
+ *   - title: Title of the <fieldset>, intended for use as the text
+       of the <legend>.
+ *   - attributes: HTML attributes to apply to the <legend> element.
+ * - description: The description element containing the following properties:
+ *   - content: The description content of the <fieldset>.
+ *   - attributes: HTML attributes to apply to the description container.
+ * - children: The rendered child elements of the <fieldset>.
+ * - prefix: The content to add before the <fieldset> children.
+ * - suffix: The content to add after the <fieldset> children.
+ *
+ * @see template_preprocess_fieldset()
+ */
+#}
+<fieldset{{ attributes.addClass(['js-form-item', 'js-form-wrapper']) }}>
+  {# Always wrap fieldset legends in a <span> for CSS positioning. #}
+  <legend{{ legend.attributes }}>
+    <span{{ legend_span.attributes.addClass(required ? 'js-form-required') }}>{{ legend.title }}</span>
+  </legend>
+  <div>
+
+    {% if prefix %}<span>{{ prefix }}</span>{% endif %}
+    {{ children }}
+    {% if suffix %}<span>{{ suffix }}</span>{% endif %}
+
+    {% if errors %}
+      {{ attach_library('{{ NAME }}/inline-error') }}
+      <div class="o-inline-error u-mt-10">{{ errors }}</div>
+    {% endif %}
+
+    {% if description.content %}
+      <div{{ description.attributes }}>{{ description.content }}</div>
+    {% endif %}
+
+  </div>
+</fieldset>

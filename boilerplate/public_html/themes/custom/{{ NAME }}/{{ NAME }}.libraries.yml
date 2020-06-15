@@ -51,6 +51,11 @@ imce-file-manager:
     component:
       dist/css/components/imce-file-manager.css: {}
 
+inline-error:
+  css:
+    component:
+      dist/css/objects/inline-error.css: {}
+
 messages:
   css:
     component:

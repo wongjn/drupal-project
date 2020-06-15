@@ -24,6 +24,7 @@ module:
   filter: 0
   image: 0
   imce: 0
+  inline_form_errors: 0
   lazy_image: 0
   link: 0
   media: 0
