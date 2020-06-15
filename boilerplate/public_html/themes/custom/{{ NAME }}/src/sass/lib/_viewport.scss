@@ -113,7 +113,7 @@
       $upper: if($max_unitless > $min_unitless, $max, $min);
 
       // Older Safari, FF does not support clamp(), use max() and min() instead.
-      $value: max(#{$lower}, min(#{$scale}, #{$upper});
+      $value: max(#{$lower}, min(#{$scale}, #{$upper}));
     }
 
     $values: list.append($values, $value);
