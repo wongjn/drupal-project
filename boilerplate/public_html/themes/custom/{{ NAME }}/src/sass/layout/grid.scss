@@ -12,7 +12,6 @@
   flex-wrap: wrap;
   justify-content: center;
   margin: (layout.$GUTTER_FALLBACK_PX * -0.5);
-  margin: calc(var(--site-gutter) * -0.5);
 
   @supports (display: grid) {
     display: grid;
@@ -22,47 +21,31 @@
     --columns: 1;
   }
 
-  $mappings: (
-    thirds: (420px, 800px),
-  );
-  @each $name, $mapping in $mappings {
-    &--#{$name} {
-      @for $i from 1 through list.length($mapping) {
-        @media (min-width: list.nth($mapping, $i)) {
-          --columns: #{$i + 1};
-        }
+  @mixin columns($width, $columns) {
+    @for $i from 2 through $columns {
+      @media (min-width: ($width + 20px) * ($i - 1)) {
+        --columns: #{$i};
       }
     }
+
+    > .l-grid__item {
+      flex-basis: $width;
+    }
+  }
+
+  &--thirds {
+    @include columns(400px, 3);
   }
 
   // 1. When using fallback flexbox layout, ensures items are contained within
   //    the containing element.
   &__item {
-    padding: (layout.$GUTTER_FALLBACK_PX * 0.5);
-    padding: calc(var(--site-gutter) * 0.5);
+    margin: (layout.$GUTTER_FALLBACK_PX * 0.5);
     min-width: 0; // 1
     flex-grow: 1;
 
-    @each $name, $mapping in $mappings {
-      .l-grid--#{$name} > & {
-        @for $i from 1 through list.length($mapping) {
-          @media (min-width: list.nth($mapping, $i)) {
-            // Use width instead of flex-basis for flexbox fall-back since IE11
-            // does not respect box-sizing with flex-basis.
-            width: (100% / ($i + 1));
-          }
-        }
-      }
-    }
-
     @supports (display: grid) {
-      padding: 0;
-
-      // Extra attribute selector to be of equal specificity to override
-      // width declarations above.
-      &[class] {
-        width: auto;
-      }
+      margin: 0;
     }
   }
 }
