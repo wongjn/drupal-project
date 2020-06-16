@@ -109,7 +109,7 @@
       $min_unitless: list.nth($min-values-unitless, $i);
 
       $lower: if($max_unitless > $min_unitless, $min, $max);
-      $scale: string.insert($scale, '#{$min} + ', 1);
+      $scale: if(unit.strip($min) != 0, string.insert($scale, '#{$min} + ', 1), $scale);
       $upper: if($max_unitless > $min_unitless, $max, $min);
 
       // Older Safari, FF does not support clamp(), use max() and min() instead.
