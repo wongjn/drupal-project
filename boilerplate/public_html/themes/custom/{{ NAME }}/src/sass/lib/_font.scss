@@ -58,13 +58,11 @@ $_SIZE_MIN: 18;
   font-size: $rem_size;
 
   @if $size > $_SIZE_MIN {
-    // Defined in body as CSS custom properties.
-    @if map.has_key($_SIZE_PRESETS, $size) {
-      font-size: var(--font-size-#{$size});
-    }
-    @else {
-      font-size: viewport.scale($rem-size, _scale_minimum($size));
-    }
+    font-size: if(
+      map.has_key($_SIZE_PRESETS, $size),
+      var(--font-size-#{$size}),
+      viewport.scale($rem-size, _scale_minimum($size))
+    );
   }
 }
 
