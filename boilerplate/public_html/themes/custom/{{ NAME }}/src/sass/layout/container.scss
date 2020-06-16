@@ -25,8 +25,8 @@ $fallback-gutter: 20px;
   --container-space-y: 40px;
   --container-space-x: 20px;
 
-  @supports (top: clamp(0%, 1%, 2%)) {
-    --container-space-x: viewport.scale(40px, 20px);
+  @supports (top: min(0%, 1%)) {
+    --container-space-x: #{viewport.scale(40px, 20px)};
   }
 
   &__module {

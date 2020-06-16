@@ -11,7 +11,7 @@ body {
   background-color: #fff;
   --site-gutter: #{layout.$GUTTER_FALLBACK_PX};
 
-  @supports (top: clamp(0%, 1%, 2%)) {
+  @supports (top: min(0%, 1%)) {
     --site-gutter: #{viewport.scale(layout.$GUTTER_MAX_PX, layout.$GUTTER_MIN_PX)};
   }
 }
