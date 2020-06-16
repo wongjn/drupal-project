@@ -63,9 +63,7 @@ $_SIZE_MIN: 18;
       font-size: var(--font-size-#{$size});
     }
     @else {
-      @supports (top: min(0%, 1%)) {
-        font-size: viewport.scale($rem-size, _scale_minimum($size));
-      }
+      font-size: viewport.scale($rem-size, _scale_minimum($size));
     }
   }
 }

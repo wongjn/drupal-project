@@ -22,10 +22,7 @@
 
       @if ($measure > $minimum) {
         #{$property}: ($measure_px * 0.5);
-
-        @supports (top: clamp(0%, 1%, 2%)) {
-          #{$property}: viewport.scale($measure_px, $minimum * 1px);
-        }
+        #{$property}: viewport.scale($measure_px, $minimum * 1px);
       }
       @else {
         #{$property}: $measure-px;
