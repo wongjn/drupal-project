@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\{{ NAME }}\Kernel;
 
+use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
@@ -51,6 +52,13 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
   protected $file;
 
   /**
+   * Entity view display repository.
+   *
+   * @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface
+   */
+  protected $displayRepository;
+
+  /**
    * Entity storage.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
@@ -78,12 +86,14 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
    */
   protected function setUpEntityBundle() {
     $this->installEntitySchema('user');
+    $this->installEntitySchema($this->entityType);
 
     /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
     $entity_type_manager = $this->container->get('entity_type.manager');
 
     $this->storage = $entity_type_manager->getStorage($this->entityType);
     $this->viewBuilder = $entity_type_manager->getViewBuilder($this->entityType);
+    $this->displayRepository = $this->container->get('entity_display.repository');
 
     $entity_type = $this->storage->getEntityType();
 
@@ -151,9 +161,11 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
     }
 
     if ($view_mode) {
-      $display = $this->container
-        ->get('entity_display.repository')
-        ->getViewDisplay($this->entityType, $this->bundle, $view_mode);
+      if (!EntityViewMode::load("$this->entityType.$view_mode")) {
+        $this->createViewMode($view_mode);
+      }
+
+      $display = $this->displayRepository->getViewDisplay($this->entityType, $this->bundle, $view_mode);
 
       foreach (array_keys($fields) as $field_name) {
         $display->setComponent($field_name);
@@ -184,6 +196,25 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
       }
       $class = get_parent_class($class);
     }
+  }
+
+  /**
+   * Creates an entity view mode.
+   *
+   * @param string $view_mode
+   *   The ID of the view mode to create.
+   *
+   * @return \Drupal\Core\Entity\EntityViewModeInterface
+   *   The view mode.
+   */
+  protected function createViewMode($view_mode) {
+    $mode = EntityViewMode::create([
+      'id' => "$this->entityType.$view_mode",
+      'targetEntityType' => $this->entityType,
+    ]);
+    $mode->save();
+
+    return $mode;
   }
 
 }
