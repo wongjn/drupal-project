@@ -45,7 +45,7 @@
         "drupal/config_inspector": "^1.1",
         "drupal/console": "^1.0.2",
         "drupal/core-dev": "~8.8.2",
-        "drupal/devel": "^2.1",
+        "drupal/devel": "^4.0@RC",
         "drupal/multiline_config": "^1.0",
         "wongjn/site_builder_console": "^0.3.0",
         "zaporylie/composer-drupal-optimizations": "^1.0"
@@ -82,10 +82,6 @@
         "patches": {
             "drupal/core": {
                 "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch"
-            },
-            "drupal/devel": {
-                "Fix menu link generation": "patches/devel_generate-fix_menu_link_generation.patch",
-                "Fix missing Drush commands": "https://www.drupal.org/files/issues/2020-01-29/drush-service-rename-3106091-2.patch"
             }
         },
         "drupal-scaffold": {
