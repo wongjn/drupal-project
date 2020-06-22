@@ -43,3 +43,10 @@ ignore_words: 'a, an, as, at, before, but, by, for, from, is, in, into, like, of
 update_action: 0
 _core:
   default_config_hash: 49BtpTo_dHDLNglRqfHBuFMBAVy_Ywk73ZL1QjwFaR0
+safe_tokens:
+  - alias
+  - path
+  - join-path
+  - login-url
+  - url
+  - url-brief
