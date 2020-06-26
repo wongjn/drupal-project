@@ -31,4 +31,3 @@ permissions:
   - 'view all media revisions'
   - 'view all revisions'
   - 'view any unpublished content'
-  - 'view own unpublished content'

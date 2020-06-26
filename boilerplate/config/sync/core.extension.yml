@@ -10,6 +10,7 @@ module:
   breakpoint: 0
   ckeditor: 0
   contact: 0
+  content_moderation: 0
   contextual: 0
   ctools: 0
   datetime: 0
@@ -42,7 +43,7 @@ module:
   token: 0
   toolbar: 0
   user: 0
-  view_unpublished: 0
+  workflows: 0
   {{ NAME }}_helper: 0
   menu_admin_per_menu: 1
   menu_link_content: 1
