@@ -161,7 +161,7 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
     }
 
     if ($view_mode) {
-      $display = $this->getViewDisplay($this->entityType, $this->bundle, $view_mode);
+      $display = $this->getViewDisplay($view_mode);
 
       foreach (array_keys($fields) as $field_name) {
         $display->setComponent($field_name);
