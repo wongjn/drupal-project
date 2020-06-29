@@ -27,45 +27,45 @@ trait AssertOutputTrait {
       $message ?: sprintf('%s has text "%s".', $css_selector, $text)
     );
   }
-
+  
   /**
-   * Asserts an element's attribute has expected value.
+   * Asserts a string is a space-separated list of values.
    *
-   * This is a looser assertion, whereby values separated by spaces match but
-   * not necessarily in the same order.
+   * Asserts values separated by spaces match but not necessarily in the same
+   * order as expected.
    *
-   * @param string $expected_value
-   *   Expected attribute value.
-   * @param \SimpleXMLElement $attribute
-   *   The attribute value.
+   * @param string $expected
+   *   Expected value.
+   * @param string $actual
+   *   Actual value.
    * @param string $message
    *   (optional) Message for the test.
    */
-  protected function assertXmlAttribute($expected_value, SimpleXMLElement $attribute, $message = NULL) {
-    $actual = explode(' ', (string) $attribute);
-    $expected = explode(' ', $expected_value);
+  protected function assertStringList($expected, $actual, $message = NULL) {
+    $actual_list = explode(' ', $actual);
+    $expected_list = explode(' ', $expected);
 
-    $this->assertEqualsCanonicalizing($expected, $actual, $message ?: "`{$attribute->getName()}` attribute value matches '$expected_value'.");
+    $this->assertEqualsCanonicalizing($expected_list, $actual_list, $message);
   }
 
   /**
-   * Asserts an element's attribute contains the expected value(s).
+   * Asserts a string contains a space-separated list of values.
    *
-   * @param string $expected_value
-   *   Expected attribute value.
-   * @param \SimpleXMLElement $attribute
-   *   The attribute value.
+   * Asserts values separated by spaces match but not necessarily in the same
+   * order as expected.
+   *
+   * @param string $expected
+   *   Expected value.
+   * @param string $actual
+   *   Actual value.
    * @param string $message
    *   (optional) Message for the test.
    */
-  protected function assertXmlAttributeContains($expected_value, SimpleXMLElement $attribute, $message = NULL) {
-    $actual = explode(' ', (string) $attribute);
-    $expected = explode(' ', $expected_value);
+  protected function assertStringListContains($expected, $actual, $message = NULL) {
+    $actual_list = explode(' ', $actual);
+    $expected_list = explode(' ', $expected);
 
-    $this->assertEmpty(
-      array_diff($expected, $actual),
-      $message ?: "{$attribute->getName()} value contains '$expected_value'."
-    );
+    $this->assertEmpty(array_diff($expected_list, $actual_list), $message);
   }
 
   /**
