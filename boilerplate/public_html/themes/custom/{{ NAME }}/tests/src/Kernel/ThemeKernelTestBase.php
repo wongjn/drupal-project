@@ -5,6 +5,7 @@ namespace Drupal\Tests\{{ NAME }}\Kernel;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\{{ NAME }}\Traits\AssertOutputTrait;
 use Drupal\Tests\{{ NAME }}\Traits\RandomTrait;
+use Drupal\Tests\{{ NAME }}\Traits\ThemeFixturesTrait;
 use Drupal\Tests\{{ NAME }}\Traits\ThemeSetTrait;
 
 /**
@@ -14,6 +15,7 @@ abstract class ThemeKernelTestBase extends KernelTestBase {
 
   use AssertOutputTrait;
   use RandomTrait;
+  use ThemeFixturesTrait;
   use ThemeSetTrait;
 
   /**
@@ -27,6 +29,8 @@ abstract class ThemeKernelTestBase extends KernelTestBase {
    * {@inheritdoc}
    */
   protected function setUp() {
+    $this->setUpIconsFixture();
+
     parent::setUp();
     $this->setDefaultTheme();
   }
