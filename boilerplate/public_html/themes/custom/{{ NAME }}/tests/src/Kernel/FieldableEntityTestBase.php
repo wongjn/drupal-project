@@ -161,11 +161,7 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
     }
 
     if ($view_mode) {
-      if (!EntityViewMode::load("$this->entityType.$view_mode")) {
-        $this->createViewMode($view_mode);
-      }
-
-      $display = $this->displayRepository->getViewDisplay($this->entityType, $this->bundle, $view_mode);
+      $display = $this->getViewDisplay($this->entityType, $this->bundle, $view_mode);
 
       foreach (array_keys($fields) as $field_name) {
         $display->setComponent($field_name);
@@ -199,22 +195,24 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
   }
 
   /**
-   * Creates an entity view mode.
+   * Gets an entity view display for a view mode.
    *
    * @param string $view_mode
-   *   The ID of the view mode to create.
+   *   The ID of the view mode display to get.
    *
-   * @return \Drupal\Core\Entity\EntityViewModeInterface
-   *   The view mode.
+   * @return \Drupal\Core\Entity\Display\EntityViewDisplayInterface
+   *   The display.
    */
-  protected function createViewMode($view_mode) {
-    $mode = EntityViewMode::create([
-      'id' => "$this->entityType.$view_mode",
-      'targetEntityType' => $this->entityType,
-    ]);
-    $mode->save();
+  protected function getViewDisplay($view_mode) {
+    if ($view_mode != 'default' && !EntityViewMode::load("$this->entityType.$view_mode")) {
+      $mode = EntityViewMode::create([
+        'id' => "$this->entityType.$view_mode",
+        'targetEntityType' => $this->entityType,
+      ]);
+      $mode->save();
+    }
 
-    return $mode;
+    return $this->displayRepository->getViewDisplay($this->entityType, $this->bundle, $view_mode);
   }
 
 }
