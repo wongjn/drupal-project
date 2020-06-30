@@ -40,7 +40,7 @@
         "wongjn/lazy_image": "^2.0"
     },
     "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "drupal/config_inspector": "^1.1",
         "drupal/console": "^1.0.2",
         "drupal/core-dev": "~8.8.2",
