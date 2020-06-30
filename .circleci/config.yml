@@ -1,0 +1,20 @@
+version: 2.1
+
+orbs:
+  drupal: 'projectcosmic/drupal@1.0.1'
+
+workflows:
+  build_and_test:
+    jobs:
+      - drupal/build
+      - drupal/code_style: &require_build
+          requires:
+            - drupal/build
+      - drupal/phpunit:
+          <<: *require_build
+          name: test_modules
+          path: public_html/modules/custom
+      - drupal/phpunit:
+          <<: *require_build
+          name: test_themes
+          path: public_html/themes/custom
