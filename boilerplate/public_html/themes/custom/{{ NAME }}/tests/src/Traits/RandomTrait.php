@@ -15,6 +15,7 @@ trait RandomTrait {
    */
   protected function randomIcon() {
     $icons = $this->container->get('ex_icons.manager')->getDefinitions();
+    unset($icons['ex_icon_null']);
     return array_rand($icons);
   }
 
