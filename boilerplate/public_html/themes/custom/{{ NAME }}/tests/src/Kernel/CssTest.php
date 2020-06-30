@@ -29,6 +29,7 @@ class CssTest extends ThemeKernelTestBase {
     // node-built assets, such as CI.
     $stylesheet = __DIR__ . '/../../../dist/css/base/variables.css';
     if (!file_exists($stylesheet)) {
+      mkdir(dirname($stylesheet), 0777, TRUE);
       file_put_contents($stylesheet, 'test{SPECIFY CSS HERE}');
     }
   }
