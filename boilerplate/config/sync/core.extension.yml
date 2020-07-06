@@ -36,7 +36,6 @@ module:
   options: 0
   path: 0
   path_alias: 0
-  remove_asset_hash: 0
   responsive_image: 0
   system: 0
   text: 0
