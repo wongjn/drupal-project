@@ -14,7 +14,7 @@ const getBase = name => (production = true) => ({
   entry: {
     main: [
       './src/js/webpack-path.js',
-      './src/js/menu/index.js',
+      './src/js/main-menu/index.js',
       './src/js/in-view.js',
       ...(name === 'legacy' ? ['./src/js/svg-polyfill.js'] : []),
     ],
