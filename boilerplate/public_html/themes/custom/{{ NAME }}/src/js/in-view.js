@@ -137,7 +137,7 @@ const createList = (justInvoked = false) => list => {
   setTimeout(() => {
     justInvoked = false;
   }, 0);
-  $
+
   return createCollection(list);
 };
 
