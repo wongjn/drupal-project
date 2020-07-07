@@ -146,7 +146,7 @@ const createList = (justInvoked = false) => list => {
  *
  * @type {Drupal~behavior}
  */
-Drupal.behaviors.{ { CAMEL } } InViewList = createBehavior(
+Drupal.behaviors.{{ CAMEL }}InViewList = createBehavior(
   '.js-inview-list[data-selector]',
   createList(true),
 );
