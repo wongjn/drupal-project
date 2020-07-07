@@ -76,7 +76,7 @@ function {{ NAME }}_js_alter(&$javascript) {
  */
 function {{ NAME }}_page_attachments_alter(array &$attachments) {
   // Pass theme directory to JS.
-  $attachments['#attached']['drupalSettings']['{{ NAME }}']['path'] = file_url_transform_relative(
+  $attachments['#attached']['drupalSettings']['{{ CAMEL }}']['path'] = file_url_transform_relative(
     file_create_url(drupal_get_path('theme', '{{ NAME }}'))
   );
 
