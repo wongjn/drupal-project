@@ -60,7 +60,7 @@
     "prettier": "^1.14.0",
     "sass": "^1.23.0",
     "svelte-loader": "^2.13.6",
-    "svelte-preprocess": "^3.7.4",
+    "svelte-preprocess": "^4.0.8",
     "webpack": "^4.0.0",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-chunk-rename-plugin": "^1.0.3",
