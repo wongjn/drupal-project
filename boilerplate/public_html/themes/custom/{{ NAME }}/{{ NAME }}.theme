@@ -8,7 +8,6 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Template\Attribute;
-use Drupal\{{ NAME }}\Assets;
 use Drupal\{{ NAME }}\Menu;
 use Drupal\{{ NAME }}\{{ UCAMEL }}PreRender;
 
@@ -76,16 +75,35 @@ function {{ NAME }}_js_alter(&$javascript) {
  * Implements hook_page_attachments_alter().
  */
 function {{ NAME }}_page_attachments_alter(array &$attachments) {
+  $theme_path = drupal_get_path('theme', '{{ NAME }}');
+
   // Pass theme directory to JS.
   $attachments['#attached']['drupalSettings']['{{ CAMEL }}']['path'] = file_url_transform_relative(
-    file_create_url(drupal_get_path('theme', '{{ NAME }}'))
+    file_create_url($theme_path)
   );
 
-  // Add favicons.
-  Assets::attachFavicons($attachments);
+  $attachments['#attached']['html_head'][] = [
+    [
+      // Set '#type' to FALSE to prevent 'html_tag' being used.
+      '#type'  => FALSE,
+      '#theme' => 'favicons',
+    ],
+    '{{ NAME }}_favicons',
+  ];
 
-  // Preload critical fonts.
-  // Assets::attachFontPreloads($attachments);
+  // $critical_fonts = [
+  //   "$theme_path/fonts/font1.woff2",
+  //   "$theme_path/fonts/font2.woff2",
+  // ];
+  // foreach ($critical_fonts as $font_path) {
+  //   $attachments['#attached']['html_head_link'][][] = [
+  //     'as' => 'font',
+  //     'rel' => 'preload',
+  //     'type' => 'font/woff2',
+  //     'href' => file_url_transform_relative(file_create_url($font_path)),
+  //     'crossorigin' => TRUE,
+  //   ];
+  // }
 
   // Remove telephone number detection in Safari and Edge.
   $attachments['#attached']['html_head'][] = [
@@ -96,7 +114,7 @@ function {{ NAME }}_page_attachments_alter(array &$attachments) {
         'content' => 'telephone=no',
       ],
     ],
-    'telephone_number_detection_off',
+    '{{ NAME }}_format_detection_telephone_no',
   ];
 }
 
