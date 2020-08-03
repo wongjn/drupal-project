@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @group {{ NAME }}
  */
-class PageThemeTest extends ThemeKernelTestBase {
+class PageRenderTest extends ThemeKernelTestBase {
 
   use BlockCreationTrait;
 
