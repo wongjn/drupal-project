@@ -1,12 +1,7 @@
-/**
- * @file
- * Site width container.
- *
- * Lots of Edge-only hacks due to it not being able to properly parse CSS
- * variables with nested calc()s.
- */
+////
+//// Site width container.
+////
 
-@use '../lib/hacks';
 @use '../lib/layout';
 @use '../lib/viewport';
 
