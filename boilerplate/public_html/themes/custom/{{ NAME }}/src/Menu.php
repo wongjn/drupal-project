@@ -8,7 +8,7 @@ namespace Drupal\{{ NAME }};
 class Menu {
 
   /**
-   * Recursively applies a function to menus in a menu tree.
+   * Recursively applies a function to menu items in a menu tree.
    *
    * @param callable $callable
    *   The function to run on each item.
@@ -17,10 +17,10 @@ class Menu {
    * @param int $depth
    *   The depth of the menu being iterated over. For internal use.
    */
-  public static function recursiveMenuApply(callable $callable, array &$items, $depth = 0) {
+  public static function recurse(callable $callable, array &$items, $depth = 0) {
     foreach ($items as &$item) {
       if ($item['below']) {
-        self::recursiveMenuApply($callable, $item['below'], $depth + 1);
+        self::recurse($callable, $item['below'], $depth + 1);
       }
 
       $callable($item, $depth);
@@ -28,7 +28,7 @@ class Menu {
   }
 
   /**
-   * Recursively adds external link related attributes to a menu tree.
+   * Adds external link related attributes to a menu item.
    *
    * @param array $item
    *   A single menu item from template_preprocess_menu() or similar.
@@ -45,7 +45,7 @@ class Menu {
   }
 
   /**
-   * Recursively adds class to menu links in the active trail.
+   * Adds class to a menu links if it is in the active trail.
    *
    * @param array $item
    *   A single menu item from template_preprocess_menu() or similar.
