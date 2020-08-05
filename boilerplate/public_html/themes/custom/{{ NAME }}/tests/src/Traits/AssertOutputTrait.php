@@ -41,7 +41,7 @@ trait AssertOutputTrait {
    * @param string $message
    *   (optional) Message for the test.
    */
-  protected function assertStringList(array $expected, $actual, $message = NULL) {
+  protected function assertStringList(array $expected, $actual, $message = '') {
     $actual_list = explode(' ', $actual);
     $this->assertEqualsCanonicalizing($expected, $actual_list, $message);
   }
@@ -59,7 +59,7 @@ trait AssertOutputTrait {
    * @param string $message
    *   (optional) Message for the test.
    */
-  protected function assertStringListContains(array $expected, $actual, $message = NULL) {
+  protected function assertStringListContains(array $expected, $actual, $message = '') {
     $actual_list = explode(' ', $actual);
     $this->assertEmpty(array_diff($expected, $actual_list), $message);
   }
