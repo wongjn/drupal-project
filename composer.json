@@ -35,6 +35,7 @@
         "drupal/menu_trail_by_path": "^1.1",
         "drupal/pathauto": "^1.5",
         "drush/drush": "^10.1",
+        "projectcosmic/config_import_missing_content": "^1.0@alpha",
         "projectcosmic/deny_tainted_urls": "^1.0",
         "wongjn/lazy_image": "^2.0"
     },
