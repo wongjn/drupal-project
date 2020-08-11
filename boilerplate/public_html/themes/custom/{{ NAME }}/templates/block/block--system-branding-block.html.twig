@@ -18,10 +18,8 @@
 {% extends "block.html.twig" %}
 {% block content %}
   {% if site_logo %}
-    {% spaceless %}
     <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">
       LOGO HERE
     </a>
-    {% endspaceless %}
   {% endif %}
 {% endblock %}
