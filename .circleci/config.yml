@@ -6,7 +6,8 @@ orbs:
 workflows:
   build_and_test:
     jobs:
-      - drupal/build
+      - drupal/build:
+          drupal_version: 9
       - drupal/code_style: &require_build
           requires:
             - drupal/build

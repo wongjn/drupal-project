@@ -19,6 +19,18 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "drupal/multiline_config",
+                "type": "drupal-module",
+                "version": "1.0.0",
+                "dist": {
+                    "url": "https://ftp.drupal.org/files/projects/multiline_config-8.x-1.0.zip",
+                    "type": "zip"
+                }
+            }
         }
     ],
     "require": {
@@ -26,10 +38,10 @@
         "cweagans/composer-patches": "^1.6.5",
         "drupal/admin_toolbar": "^2.0",
         "drupal/block_content_permissions": "^1.6",
-        "drupal/core-composer-scaffold": "~8.9.1",
-        "drupal/core-recommended": "~8.9.1",
+        "drupal/core-composer-scaffold": "~9.0.3",
+        "drupal/core-recommended": "~9.0.3",
         "drupal/differential_serve": "^1.0@beta",
-        "drupal/ex_icons": "^1.0@RC",
+        "drupal/ex_icons": "^1.0",
         "drupal/imce": "^2.2",
         "drupal/menu_admin_per_menu": "^1.0",
         "drupal/menu_trail_by_path": "^1.1",
@@ -41,7 +53,7 @@
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-        "drupal/core-dev": "~8.9.1",
+        "drupal/core-dev": "~9.0.3",
         "drupal/devel": "^4.0",
         "drupal/multiline_config": "^1.0",
         "wongjn/site_builder_console": "^0.3.0",
@@ -75,6 +87,9 @@
         "patches": {
             "drupal/core": {
                 "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch"
+            },
+            "drupal/multiline_config": {
+                "Drupal 9 support": "patches/multiline_config-drupal_9.patch"
             }
         },
         "drupal-scaffold": {
