@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  drupal: 'projectcosmic/drupal@1.0.1'
+  drupal: projectcosmic/drupal@1.1.0
 
 workflows:
   build_and_test:
@@ -12,9 +12,4 @@ workflows:
             - drupal/build
       - drupal/phpunit:
           <<: *require_build
-          name: test_modules
-          path: public_html/modules/custom
-      - drupal/phpunit:
-          <<: *require_build
-          name: test_themes
-          path: public_html/themes/custom
+          path: [public_html/modules/custom, public_html/themes/custom]
