@@ -92,15 +92,15 @@ function {{ NAME }}_page_attachments_alter(array &$attachments) {
   ];
 
   // $critical_fonts = [
-  //   "$theme_path/fonts/font1.woff2",
-  //   "$theme_path/fonts/font2.woff2",
+  //   'font1.woff2',
+  //   'font2.woff2',
   // ];
-  // foreach ($critical_fonts as $font_path) {
+  // foreach ($critical_fonts as $font) {
   //   $attachments['#attached']['html_head_link'][][] = [
   //     'as' => 'font',
   //     'rel' => 'preload',
   //     'type' => 'font/woff2',
-  //     'href' => file_url_transform_relative(file_create_url($font_path)),
+  //     'href' => file_url_transform_relative(file_create_url("$theme_path/fonts/$font")),
   //     'crossorigin' => TRUE,
   //   ];
   // }
