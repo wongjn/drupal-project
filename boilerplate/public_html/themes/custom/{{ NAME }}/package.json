@@ -1,5 +1,6 @@
 {
   "name": "{{ NAME }}",
+  "private": true,
   "scripts": {
     "postinstall": "node ./build/patch.js",
     "prebuild": "npm run lint",
@@ -13,16 +14,10 @@
     "type": "git",
     "url": "git+https://bitbucket.org/projectcosmic/{{ NAME }}.git"
   },
-  "keywords": [
-    "drupal8",
-    "theme"
-  ],
   "author": {
     "name": "Justin Wong",
     "email": "justin@cosmic.org.uk"
   },
-  "license": "ISC",
-  "private": true,
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "cookie": "^0.4.0",
