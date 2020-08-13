@@ -2,11 +2,12 @@
  * @file
  * Drupal behavior helper functions.
  */
+/* eslint-disable import/prefer-default-export */
 
 import { match } from './dom';
 
 // Noop function.
-const noop = () => { };
+const noop = () => {};
 
 // Noop map interface.
 const NullMap = {
@@ -24,15 +25,18 @@ const NullMap = {
  * @param {(element: Element,...args: any[]) => ((...args: any[]) => void) | void} func
  *   The function to run on attachment. Will receive a relevant element as first
  *   parameter and drupalSettings as second parameter. Return another function
- *   as the detachment callback. Mark the function as `sideEffectsOnly` using
- *   `markSideEffectsOnly()` when it does not need to react on DOM detachment
- *   for performance gains.
+ *   as the detachment callback.
+ * @param {boolean} [sideEffectsOnly=false]
+ *   Indicates the behavior invokes side effects only, with no detach function.
+ *   This parameter is not strictly required if the function does not provide
+ *   a detach function but setting this parameter to true in such cases will
+ *   improve performance.
  *
  * @return {Drupal~behavior}
  *   The Drupal behavior.
  */
-export const createBehavior = (selector, func) => {
-  const list = func.sideEffectsOnly ? NullMap : new WeakMap();
+export const createBehavior = (selector, func, sideEffectsOnly = false) => {
+  const list = sideEffectsOnly ? NullMap : new WeakMap();
 
   const behavior = {
     attach(context, ...args) {
@@ -40,16 +44,16 @@ export const createBehavior = (selector, func) => {
         .filter(element => !list.has(element))
         .forEach(element => list.set(element, func(element, ...args)));
     },
-    detach: func.sideEffectsOnly
+    detach: sideEffectsOnly
       ? undefined
       : function detach(context, ...args) {
-        match(selector, context)
-          .filter(element => list.has(element))
-          .forEach(element => {
-            (list.get(element) || noop)(...args);
-            list.delete(element);
-          });
-      },
+          match(selector, context)
+            .filter(element => list.has(element))
+            .forEach(element => {
+              (list.get(element) || noop)(...args);
+              list.delete(element);
+            });
+        },
   };
 
   // Differential serving loads the legacy entry script asynchronously, meaning
@@ -62,20 +66,4 @@ export const createBehavior = (selector, func) => {
   }
 
   return behavior;
-};
-
-/**
- * Marks a function as sideEffectsOnly.
- *
- * @param {function} func
- *   The function to mark.
- *
- * @return {function}
- *   The marked function.
- */
-export const markSideEffectsOnly = (func = noop) => {
-  // Clone function to avoid mutation.
-  const marked = func.bind(null);
-  marked.sideEffectsOnly = true;
-  return marked;
 };
