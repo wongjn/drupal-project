@@ -44,13 +44,13 @@ function {{ NAME }}_css_alter(&$css) {
   /** @var \Drupal\Core\Asset\LibraryDiscovery $library_manager */
   $library_manager = \Drupal::service('library.discovery');
 
-  $extract_files = function ($css) {
-    return $css['data'];
-  };
   $global_stylesheets = array_merge(
-    array_map($extract_files, $library_manager->getLibraryByName('system', 'base')['css']),
-    array_map($extract_files, $library_manager->getLibraryByName('{{ NAME }}', 'global')['css'])
+    $library_manager->getLibraryByName('system', 'base')['css'],
+    $library_manager->getLibraryByName('{{ NAME }}', 'global')['css']
   );
+  $global_stylesheets = array_map(function ($css) {
+    return $css['data'];
+  }, $global_stylesheets);
 
   foreach (array_intersect(array_keys($css), $global_stylesheets) as $stylesheet) {
     $css[$stylesheet]['group'] = 10;
