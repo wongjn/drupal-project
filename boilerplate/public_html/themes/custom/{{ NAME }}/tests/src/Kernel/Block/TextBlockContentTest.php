@@ -12,10 +12,7 @@ class TextBlockContentTest extends BlockContentTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'filter',
-    'text',
-  ];
+  protected static $modules = ['filter', 'text'];
 
   /**
    * {@inheritdoc}
@@ -25,9 +22,7 @@ class TextBlockContentTest extends BlockContentTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $fields = [
-    'body' => 'text',
-  ];
+  protected $fields = ['body' => 'text'];
 
   /**
    * {@inheritdoc}

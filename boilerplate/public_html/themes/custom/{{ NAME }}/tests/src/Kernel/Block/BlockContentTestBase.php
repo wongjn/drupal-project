@@ -21,10 +21,7 @@ abstract class BlockContentTestBase extends FieldableEntityTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'block',
-    'block_content',
-  ];
+  protected static $modules = ['block', 'block_content'];
 
   /**
    * {@inheritdoc}

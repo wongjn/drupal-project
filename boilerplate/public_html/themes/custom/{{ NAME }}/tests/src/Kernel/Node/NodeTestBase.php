@@ -18,9 +18,7 @@ abstract class NodeTestBase extends FieldableEntityTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'node',
-  ];
+  protected static $modules = ['node'];
 
   /**
    * {@inheritdoc}

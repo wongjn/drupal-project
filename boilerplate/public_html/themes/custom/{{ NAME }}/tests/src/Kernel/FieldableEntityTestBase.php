@@ -15,10 +15,7 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'field',
-    'user',
-  ];
+  protected static $modules = ['field', 'user'];
 
   /**
    * Name of the entity type being tested.

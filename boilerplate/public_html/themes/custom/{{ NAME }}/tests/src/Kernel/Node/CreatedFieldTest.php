@@ -19,9 +19,7 @@ class CreatedFieldTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
-    'node',
-  ];
+  public static $modules = ['node'];
 
   /**
    * The node test subject.

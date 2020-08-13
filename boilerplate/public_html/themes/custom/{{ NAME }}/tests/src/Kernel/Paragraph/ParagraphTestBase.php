@@ -17,9 +17,6 @@ abstract class ParagraphTestBase extends FieldableEntityTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'file',
-    'paragraphs',
-  ];
+  protected static $modules = ['file', 'paragraphs'];
 
 }

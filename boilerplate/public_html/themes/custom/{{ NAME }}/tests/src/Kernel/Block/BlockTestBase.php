@@ -15,10 +15,7 @@ class BlockTestBase extends ThemeKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'block',
-    'user',
-  ];
+  protected static $modules = ['block', 'user'];
 
   /**
    * View builder.

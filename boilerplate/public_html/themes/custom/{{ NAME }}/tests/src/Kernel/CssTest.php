@@ -14,9 +14,7 @@ class CssTest extends ThemeKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'system',
-  ];
+  protected static $modules = ['system'];
 
   /**
    * {@inheritdoc}
