@@ -181,24 +181,13 @@ function {{ NAME }}_preprocess_file_link(&$variables) {
   /** @var \Drupal\file\FileInterface $file */
   $file = $variables['file'];
 
-  // Add href attribute.
-  $variables['attributes']['href'] = file_url_transform_relative(
-    file_create_url($file->getFileUri())
-  );
-
-  // Set mime type info into attribute.
-  $variables['attributes']['type'] = sprintf(
-    '%s; length=%s',
-    $file->getMimeType(),
-    $file->getSize()
-  );
+  $variables['attributes']['href'] = file_url_transform_relative(file_create_url($file->getFileUri()));
+  $variables['attributes']['type'] = sprintf('%s; length=%s',$file->getMimeType(),$file->getSize());
+  $variables['attributes']['download'] = TRUE;
 
   if (empty($variables['description'])) {
     $variables['description'] = $file->getFilename();
   }
-
-  $variables['attributes']['download'] = TRUE;
-  $variables['attributes']['target'] = '_blank';
 }
 
 /**
