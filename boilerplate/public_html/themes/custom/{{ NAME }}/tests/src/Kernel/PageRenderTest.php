@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\{{ NAME }}\Kernel;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Tests\block\Traits\BlockCreationTrait;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -35,9 +36,29 @@ class PageRenderTest extends ThemeKernelTestBase {
   }
 
   /**
+   * Places an example block.
+   *
+   * @param string $region
+   *   The region to place the block in.
+   * @param array $settings
+   *   (optional) Any additional settings to pass to the created block.
+   *
+   * @return \Drupal\block\Entity\Block
+   *   The block entity.
+   */
+  protected function placeExampleBlock($region, array $settings = []) {
+    return $this->placeBlock('system_powered_by_block', [
+      'id' => $region,
+      'region' => $region,
+    ] + $settings);
+  }
+
+  /**
    * Renders a page.
    */
   protected function renderPage() {
+    Html::resetSeenIds();
+
     $content = [
       '#title' => 'Test page',
       '#markup' => 'Test content',
