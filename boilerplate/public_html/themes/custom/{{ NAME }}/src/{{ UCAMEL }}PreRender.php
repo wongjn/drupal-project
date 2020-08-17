@@ -17,9 +17,7 @@ class {{ UCAMEL }}PreRender implements RenderCallbackInterface {
     if (\Drupal::routeMatch()->getRouteName() != 'media.filter.preview') {
       // Add wrapper to apply class to style WYSIWYG-entered markup.
       $element['#theme_wrappers'][] = 'container';
-
-      // $element['#attributes']['class'][] = 'c-text-body';
-      $element['#attributes']['class'][] = 'content';
+      $element['#attributes']['class'][] = 'c-text-body';
     }
 
     return $element;
