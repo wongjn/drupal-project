@@ -1,7 +1,6 @@
 global:
   css:
     base:
-      dist/css/base/variables.css: {}
       dist/css/base/form.css: {}
       dist/css/base/media.css: {}
       dist/css/base/miscellaneous.css: {}
