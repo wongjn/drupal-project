@@ -19,7 +19,6 @@ function {{ NAME }}_theme($existing, $type, $theme, $path) {
     'favicons' => [
       'variables' => [
         'path' => file_url_transform_relative(file_create_url("$path/favicons")),
-        'colour' => '#123456',
       ],
     ],
   ];
