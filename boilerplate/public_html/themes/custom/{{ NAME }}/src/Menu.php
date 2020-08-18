@@ -53,6 +53,7 @@ class Menu {
   public static function addActiveTrailClass(array $item) {
     if ($item['in_active_trail']) {
       $item['url']->mergeOptions(['attributes' => ['class' => ['is-active-trail']]]);
+      $item['attributes']->addClass('is-active-trail');
     }
   }
 
@@ -65,14 +66,18 @@ class Menu {
    *   Depth of the menu being processed.
    */
   public static function mainMenuAddClasses(array $item, $depth = 0) {
+    $suffix = $depth === 0 ? 'top' : 'sub';
+
     $item['url']->mergeOptions([
       'attributes' => [
         'class' => [
           'c-main-menu__link',
-          $depth === 0 ? 'c-main-menu__link--top' : 'c-main-menu__link--sub',
+          "c-main-menu__link--$suffix",
         ],
       ],
     ]);
+
+    $item['attributes']->addClass(['c-main-menu__item', "c-main-menu__item--$suffix"]);
   }
 
 }

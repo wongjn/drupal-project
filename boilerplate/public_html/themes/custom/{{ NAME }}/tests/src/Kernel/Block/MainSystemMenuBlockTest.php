@@ -1,11 +1,9 @@
 <?php
 
-namespace Drupal\Tests\{{ NAME }}\Functional\Block;
+namespace Drupal\Tests\{{ NAME }}\Kernel\Block;
 
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\system\Entity\Menu;
-use Drupal\Tests\block\Traits\BlockCreationTrait;
-use Drupal\Tests\{{ NAME }}\Kernel\ThemeKernelTestBase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -13,27 +11,12 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @group {{ NAME }}
  */
-class MainSystemMenuBlockTest extends ThemeKernelTestBase {
-
-  use BlockCreationTrait;
+class MainSystemMenuBlockTest extends BlockTestBase {
 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'block',
-    'link',
-    'menu_link_content',
-    'system',
-    'user',
-  ];
-
-  /**
-   * The main menu block under test.
-   *
-   * @var \Drupal\block\Entity\Block
-   */
-  protected $block;
+  protected static $modules = ['link', 'menu_link_content'];
 
   /**
    * {@inheritdoc}
@@ -69,41 +52,96 @@ class MainSystemMenuBlockTest extends ThemeKernelTestBase {
       'parent' => $child->getPluginId(),
       'link' => 'https://example.com/child/grandchild',
     ])->save();
-
-    $this->block = $this->placeBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
   }
 
   /**
    * Tests base output.
    */
   public function testBaseOutput() {
-    $this->isolatedRender($this->block->getPlugin()->build());
+    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
 
-    $elements = $this->cssSelect('[class="js-main-menu c-main-menu is-menu-loading"]');
+    $elements = $this->cssSelect('.c-main-menu');
     $this->assertCount(1, $elements, 'Main menu wrapper.');
+    $main_menu = reset($elements);
+    $this->assertStringList(
+      ['js-main-menu', 'c-main-menu', 'is-menu-loading'],
+      (string) $main_menu->attributes()->class,
+      'Main menu wrapper classes.'
+    );
 
-    $elements = $this->cssSelect('.c-main-menu > ul[class="c-main-menu__top-menu"]');
+    $elements = $main_menu->xpath('./ul[@class="c-main-menu__top-menu"]');
     $this->assertCount(1, $elements, 'Top level main menu.');
 
-    $elements = $this->cssSelect('.c-main-menu__top-menu > li > a[class="c-main-menu__link c-main-menu__link--top"]');
+    $elements = reset($elements)->xpath('./li');
+    $this->assertCount(1, $elements, 'Top level main menu item.');
+    $element = reset($elements);
+    $this->assertStringList(
+      ['c-main-menu__item', 'c-main-menu__item--top'],
+      (string) $element->attributes()->class,
+      'Top level main menu item classes.'
+    );
+    
+    $elements = $element->xpath('./a');
     $this->assertCount(1, $elements, 'Top level link.');
+    $element = reset($elements);
+    $this->assertStringList(
+      ['c-main-menu__link', 'c-main-menu__link--top'],
+      (string) $element->attributes()->class,
+      'Top level link classes.'
+    );
 
-    $elements = $this->cssSelect('.c-main-menu__link--top + ul[class="c-main-menu__sub-menu"]');
+    $elements = $element->xpath('./following-sibling::ul[class="c-main-menu__sub-menu"]');
     $this->assertCount(1, $elements, 'Sub-level menu list.');
 
-    $elements = $this->cssSelect('[class="c-main-menu__sub-menu"] > li > a[class="c-main-menu__link c-main-menu__link--sub"]');
-    $this->assertCount(1, $elements, 'Sub-level menu link.');
+    $elements = reset($elements)->xpath('./li');
+    $this->assertCount(1, $elements, 'Sub-level main menu item.');
+    $element = reset($elements);
+    $this->assertStringList(
+      ['c-main-menu__item', 'c-main-menu__item--sub'],
+      (string) $element->attributes()->class,
+      'Sub-level main menu item classes.'
+    );
 
-    $elements = $this->cssSelect('.c-main-menu__link--sub + ul[class="c-main-menu__sub-menu c-main-menu__sub-menu--deep"]');
+    $elements = $element->xpath('./a');
+    $this->assertCount(1, $elements, 'Sub-level link.');
+    $element = reset($elements);
+    $this->assertStringList(
+      ['c-main-menu__link', 'c-main-menu__link--sub'],
+      (string) $element->attributes()->class,
+      'Sub-level link classes.'
+    );
+
+    $elements = reset($elements)->xpath('./following-sibling::ul');
     $this->assertCount(1, $elements, 'Deep level menu list.');
+    $element = reset($elements);
+    $this->assertStringList(
+      ['c-main-menu__sub-menu', 'c-main-menu__sub-menu--deep'],
+      (string) $element->attributes()->class,
+      'Deep level menu list classes.'
+    );
 
-    $elements = $this->cssSelect('.c-main-menu__sub-menu--deep > li > a[class="c-main-menu__link c-main-menu__link--sub"]');
-    $this->assertCount(1, $elements, 'Deep level menu link.');
+    $elements = $element->xpath('./li');
+    $this->assertCount(1, $elements, 'Deep level main menu item.');
+    $element = reset($elements);
+    $this->assertStringList(
+      ['c-main-menu__item', 'c-main-menu__item--sub'],
+      (string) $element->attributes()->class,
+      'Deep level main menu item classes.'
+    );
 
-    $elements = $this->cssSelect('.c-main-menu > [class="c-main-menu__drawer"]');
+    $elements = $element->xpath('./a');
+    $this->assertCount(1, $elements, 'Deep level link.');
+    $element = reset($elements);
+    $this->assertStringList(
+      ['c-main-menu__link', 'c-main-menu__link--sub'],
+      (string) $element->attributes()->class,
+      'Deep level link classes.'
+    );
+
+    $elements = $main_menu->xpath('./[@class="c-main-menu__drawer"]');
     $this->assertCount(1, $elements, 'Drawer button wrapper.');
 
-    $elements = $this->cssSelect('.c-main-menu__drawer button[class="c-main-menu__open-btn"]');
+    $elements = reset($elements)->xpath('./button[@class="c-main-menu__open-btn"]');
     $this->assertCount(1, $elements, 'Drawer open button.');
   }
 
@@ -123,13 +161,13 @@ class MainSystemMenuBlockTest extends ThemeKernelTestBase {
     }
 
     $request_stack->push(Request::create('/', 'GET', [], ['{{ NAME }}_menu_break' => 1]));
-    $this->isolatedRender($this->block->getPlugin()->build());
+    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
 
     $elements = $this->cssSelect('.c-main-menu__top-menu.is-compact');
     $this->assertCount(1, $elements, 'Main menu wrapper has "is-compact" class with line break of 1.');
 
     $request_stack->push(Request::create('/', 'GET', [], ['{{ NAME }}_menu_break' => 2]));
-    $this->isolatedRender($this->block->getPlugin()->build());
+    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
 
     $elements = $this->cssSelect('.c-main-menu__top-menu > li[style*="visibility:hidden"]');
     $this->assertCount(2, $elements, 'Top-level menu items hidden per line break value.');
@@ -139,7 +177,7 @@ class MainSystemMenuBlockTest extends ThemeKernelTestBase {
    * Tests out with drawer open button.
    */
   public function testDrawerWrapperCookieOutput() {
-    $this->isolatedRender($this->block->getPlugin()->build());
+    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
 
     $elements = $this->cssSelect('.c-main-menu__drawer[style*="display:none"]');
     $this->assertCount(1, $elements, 'Drawer button wrapper has "display: none" with no cookie set.');
@@ -147,7 +185,7 @@ class MainSystemMenuBlockTest extends ThemeKernelTestBase {
     $this->container
       ->get('request_stack')
       ->push(Request::create('/', 'GET', [], ['{{ NAME }}_menu_drawer' => '1']));
-    $this->isolatedRender($this->block->getPlugin()->build());
+    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
 
     $elements = $this->cssSelect('.c-main-menu__drawer:not([style*="display:none"])');
     $this->assertCount(1, $elements, 'Drawer button has no display style set with cookie set.');
