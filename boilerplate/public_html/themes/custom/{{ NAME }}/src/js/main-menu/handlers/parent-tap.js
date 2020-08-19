@@ -11,42 +11,71 @@
 const OPEN_CLASS = 'is-open';
 
 /**
+ * Finds open sub-menu items within a parent element.
+ *
+ * @param {Element} parent
+ *   The parent element.
+ *
+ * @return {Element[]}
+ *   The open sub-menu item elements.
+ */
+const findAllOpen = parent => [...parent.querySelectorAll(`.${OPEN_CLASS}`)];
+
+/**
+ * Closes a sub-menu item.
+ *
+ * @param {Element} node
+ *   The sub-menu item element.
+ */
+const closeOpen = node => node.classList.remove(OPEN_CLASS);
+
+/**
+ * Closes all open sub-menu items within a parent element.
+ *
+ * @param {Element} parent
+ *   The parent element.
+ */
+const closeAllOpen = parent => findAllOpen(parent).forEach(closeOpen);
+
+/**
  * Creates a touch handler for a menu widget.
  *
- * @param {HTMLElement} menu
- *   Top-level menu item to manage touch on.
+ * @param {HTMLElement} nav
+ *   Menu element to manage touch on.
  *
  * @return {(event: TouchEvent) => void}
  *   The touch handler.
  */
-function onTouchHandler(menu) {
-  let openParent = null;
+const onTouchHandler = nav => event => {
+  const { pageX, pageY } = event.changedTouches.item(0);
 
-  return event => {
-    const li = event.target.closest('li');
+  /** @type {HTMLLIElement || null} */
+  const li = document.elementFromPoint(pageX, pageY).closest('li');
 
-    // Not a tap in menu, close any open parent and return early.
-    if (!menu.contains(event.target) || !li) {
-      if (openParent) openParent.classList.remove(OPEN_CLASS);
-      openParent = null;
-      return;
-    }
+  // Not a tap in menu, close any open parent and return early.
+  if (!nav.contains(event.target) || !li) {
+    closeAllOpen(nav);
+    return;
+  }
 
-    // No sub menu to open or has already been open, return early.
-    const subMenu = li.querySelector('ul');
-    if (!subMenu || li === openParent) {
-      return;
-    }
+  // No sub menu to open or is already open, return early.
+  const subMenu = li.querySelector('ul');
+  if (!subMenu || li.classList.contains(OPEN_CLASS)) {
+    // Wait a frame so normal interactions still work.
+    setTimeout(() => closeAllOpen(nav));
+    return;
+  }
 
-    // Close previously opened parent if any.
-    if (openParent) openParent.classList.remove(OPEN_CLASS);
+  // Close unrelated open nodes.
+  findAllOpen(nav)
+    .filter(node => !node.contains(li))
+    .forEach(closeOpen);
 
-    li.classList.add(OPEN_CLASS);
-    openParent = li;
-    event.preventDefault();
-    event.stopPropagation();
-  };
-}
+  li.classList.add(OPEN_CLASS);
+
+  event.preventDefault();
+  event.stopPropagation();
+};
 
 /**
  * Initializes this handler.
@@ -60,12 +89,10 @@ export default ({ menu }) => {
   const callback = onTouchHandler(menu);
   const options = { passive: false };
 
-  document.body.addEventListener('touchstart', callback, options);
+  document.body.addEventListener('touchend', callback, options);
 
   return () => {
-    document.body.removeEventListener('touchstart', callback, options);
-    [...menu.querySelectorAll(`.${OPEN_CLASS}`)].forEach(subMenu =>
-      subMenu.classList.remove(OPEN_CLASS),
-    );
+    document.body.removeEventListener('touchend', callback, options);
+    closeAllOpen(menu);
   };
 };
