@@ -5,4 +5,4 @@
 
 const baseConfig = require('./webpack.config.base');
 
-module.exports = baseConfig.map(config => config(true));
+module.exports = baseConfig.map(config => ({ mode: 'production', ...config }));

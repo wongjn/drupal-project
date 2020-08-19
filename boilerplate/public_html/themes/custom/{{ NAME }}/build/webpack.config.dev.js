@@ -7,8 +7,12 @@ const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const baseConfig = require('./webpack.config.base');
 
-module.exports = baseConfig.map(config =>
-  merge(config(false), {
+module.exports = baseConfig.map(config => {
+  // Set dev option on svelte loader to true.
+  config.module.rules[1].use.options.dev = true;
+
+  return merge(config, {
+    mode: 'development',
     entry: {
       // HMR client relies on EventSource that is not supported for the legacy
       // bundle targets, hence only add it for modern config.
@@ -19,5 +23,5 @@ module.exports = baseConfig.map(config =>
     },
     devtool: 'eval-source-map',
     plugins: [new webpack.HotModuleReplacementPlugin()],
-  }),
-);
+  });
+});

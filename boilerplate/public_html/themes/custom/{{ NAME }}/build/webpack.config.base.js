@@ -5,10 +5,10 @@
 
 const path = require('path');
 const { DefinePlugin } = require('webpack');
-const svelteConfig = require('../svelte.config');
 const ChunkRenamePlugin = require('webpack-chunk-rename-plugin');
+const svelteConfig = require('../svelte.config');
 
-const getBase = name => (production = true) => ({
+const getBase = name => ({
   name,
   context: path.resolve(__dirname, '../'),
   entry: {
@@ -19,12 +19,11 @@ const getBase = name => (production = true) => ({
       ...(name === 'legacy' ? ['./src/js/svg-polyfill.js'] : []),
     ],
   },
-  mode: production ? 'production' : 'development',
   output: {
     filename: `[name].${name}.js`,
     chunkFilename: '[chunkhash].js',
     path: path.resolve(__dirname, '../dist/js'),
-    publicPath: '/themes/custom/{{ NAME }}/dist/js/',
+    publicPath: '/themes/custom/ttvs/dist/js/',
   },
   optimization: {
     moduleIds: 'hashed',
@@ -45,7 +44,7 @@ const getBase = name => (production = true) => ({
         exclude: /node_modules/,
         use: {
           loader: 'svelte-loader',
-          options: { ...svelteConfig, dev: !production },
+          options: { ...svelteConfig },
         },
       },
       {
