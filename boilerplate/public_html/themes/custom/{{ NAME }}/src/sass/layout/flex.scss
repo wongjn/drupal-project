@@ -8,7 +8,9 @@
   flex-wrap: wrap;
 
   // 1. Ensures item will always stay within parent width.
+  // 2. Set to 1px to work-around IE11 bug whereby nested flex items do not
+  //    wrap.
   &__item {
-    min-width: 0; // 1
+    min-width: 1px; // 1, 2
   }
 }
