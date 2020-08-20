@@ -6,11 +6,14 @@ use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
+use Drupal\Tests\TestFileCreationTrait;
 
 /**
  * Base class for fieldable entity tests.
  */
 abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
+
+  use TestFileCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -40,13 +43,6 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
    * @var array|string[]
    */
   protected $fields = [];
-
-  /**
-   * Test file entity to use as a field value in tests.
-   *
-   * @var \Drupal\file\Entity\File
-   */
-  protected $file;
 
   /**
    * Entity view display repository.
@@ -170,25 +166,22 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
 
   /**
    * Creates a file entity if the file module is enabled on the test.
+   *
+   * @param string $type
+   *   File type, possible values: 'binary', 'html', 'image', 'javascript',
+   *   'php', 'sql', 'text'.
+   *
+   * @return \Drupal\file\Entity\File
+   *   A file entity.
    */
-  protected function maybeCreateFile() {
-    $class = get_class($this);
-    while ($class) {
-      if (property_exists($class, 'modules')) {
-        // Only check the modules, if the $modules property was not inherited.
-        $rp = new \ReflectionProperty($class, 'modules');
-        if ($rp->class == $class && in_array('file', $class::$modules, TRUE)) {
-          $this->installEntitySchema('file');
-          $this->installSchema('file', ['file_usage']);
+  protected function getFileEntity($type) {
+    $file = $this->getTestFiles($type)[0];
 
-          $file = File::create(['uri' => 'public://file.jpg']);
-          $file->setPermanent();
-          $file->save();
-          return $file;
-        }
-      }
-      $class = get_parent_class($class);
-    }
+    $entity = File::create(['uri' => $file->uri]);
+    $entity->setPermanent();
+    $entity->save();
+
+    return $entity;
   }
 
   /**
