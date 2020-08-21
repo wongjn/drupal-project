@@ -5,7 +5,7 @@
 
 const path = require('path');
 const { DefinePlugin } = require('webpack');
-const ChunkRenamePlugin = require('webpack-chunk-rename-plugin');
+const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const svelteConfig = require('../svelte.config');
 
 const getBase = name => ({
@@ -23,12 +23,10 @@ const getBase = name => ({
     filename: `[name].${name}.js`,
     chunkFilename: '[chunkhash].js',
     path: path.resolve(__dirname, '../dist/js'),
-    publicPath: '/themes/custom/ttvs/dist/js/',
+    publicPath: '/themes/custom/{{ NAME }}/dist/js/',
+    ecmaVersion: name === 'legacy' ? 5 : 6,
   },
-  optimization: {
-    moduleIds: 'hashed',
-    runtimeChunk: 'single',
-  },
+  optimization: { splitChunks: { chunks: 'all' } },
   module: {
     rules: [
       {
@@ -61,7 +59,10 @@ const getBase = name => ({
   },
   plugins: [
     new DefinePlugin({ BUNDLE_TYPE: JSON.stringify(name) }),
-    new ChunkRenamePlugin({ initialChunksWithEntry: true }),
+    new StatsWriterPlugin({
+      filename: `stats.${name}.json`,
+      fields: ['entrypoints'],
+    }),
   ],
 });
 

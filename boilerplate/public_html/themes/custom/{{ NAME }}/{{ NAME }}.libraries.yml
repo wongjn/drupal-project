@@ -15,11 +15,8 @@ global:
       dist/css/objects/title.css: {}
     theme:
       dist/css/utilities.css: {}
-  js:
-    dist/js/main.modern.js: { differential_serve: 'modern', minified: true }
-    dist/js/main.legacy.js: { differential_serve: 'legacy', minified: true }
   dependencies:
-    - {{ NAME }}/global.runtime
+    - {{ NAME }}/js.main
     - core/drupal
 
 global.polyfill:
@@ -31,14 +28,6 @@ global.polyfill:
     https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Array.prototype.fill,CustomEvent,Element.prototype.closest,Element.prototype.matches,IntersectionObserver,Map,Node.prototype.contains,Object.entries,Promise,ResizeObserver,Set,WeakMap,queueMicrotask:
       type: external
       minified: true
-
-global.runtime:
-  js:
-    dist/js/runtime.modern.js: { differential_serve: 'modern', minified: true }
-    dist/js/runtime.legacy.js: { differential_serve: 'legacy', minified: true }
-  dependencies:
-    - differential_serve/legacy-loader
-    - {{ NAME }}/global.polyfill
 
 align.module:
   css:

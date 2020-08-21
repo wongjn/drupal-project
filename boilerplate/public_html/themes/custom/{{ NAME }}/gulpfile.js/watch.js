@@ -54,6 +54,7 @@ function watcher() {
       webpackDevMiddleware(webpackCompiler, {
         stats: statsConfig,
         publicPath: webpackDevConfig[0].output.publicPath,
+        writeToDisk: filePath => /\/stats\.\w+\.json$/.test(filePath),
       }),
       webpackHotMiddleware(webpackCompiler),
     ],

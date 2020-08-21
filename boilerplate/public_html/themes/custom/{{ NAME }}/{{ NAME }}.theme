@@ -37,6 +37,47 @@ function {{ NAME }}_theme_registry_alter(array &$theme_registry) {
 }
 
 /**
+ * Implements hook_library_info_build().
+ */
+function {{ NAME }}_library_info_build() {
+  $libraries = [];
+  $theme_path = drupal_get_path('theme', '{{ NAME }}');
+
+  // Add Webpack-built entry files.
+  foreach (['modern', 'legacy'] as $script_type) {
+    $stats_file = "$theme_path/dist/js/stats.$script_type.json";
+
+    if (file_exists($stats_file)) {
+      foreach (json_decode(file_get_contents($stats_file), TRUE)['entrypoints'] as $name => $entry) {
+        foreach ($entry['assets'] as $asset) {
+          $libraries["js.$name"]['js']["dist/js/$asset"] = [
+            'minimized' => TRUE,
+            'differential_serve' => $script_type,
+          ];
+        }
+
+        // All scripts may depend on the Polyfill service.
+        $libraries["js.$name"]['dependencies'][] = '{{ NAME }}/global.polyfill';
+
+        // Legacy scripts need to be loaded via the loader script.
+        if ($script_type == 'legacy') {
+          $libraries["js.$name"]['dependencies'][] = 'differential_serve/legacy-loader';
+        }
+
+        // Main is the global script that appears for every page. As such, it
+        // has the main boilerplate code for other scripts to use.
+        // @see build/webpack.config.base.js.
+        if ($name != 'main') {
+          $libraries["js.$name"]['dependencies'][] = '{{ NAME }}/js.main';
+        }
+      }
+    }
+  }
+
+  return $libraries;
+}
+
+/**
  * Implements hook_css_alter().
  */
 function {{ NAME }}_css_alter(&$css) {
@@ -53,20 +94,6 @@ function {{ NAME }}_css_alter(&$css) {
 
   foreach (array_intersect(array_keys($css), $global_stylesheets) as $stylesheet) {
     $css[$stylesheet]['group'] = 10;
-  }
-}
-
-/**
- * Implements hook_js_alter().
- */
-function {{ NAME }}_js_alter(&$javascript) {
-  $preprocess = \Drupal::config('system.performance')->get('js.preprocess');
-  $theme_path = drupal_get_path('theme', '{{ NAME }}');
-
-  foreach ($javascript as $file_path => $options) {
-    if (!$preprocess && strpos($file_path, $theme_path) === 0 && $options['type'] == 'file') {
-      $javascript[$file_path]['cache'] = FALSE;
-    }
   }
 }
 

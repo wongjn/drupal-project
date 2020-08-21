@@ -8,8 +8,6 @@ regions:
   primary_menu: Primary menu
   content: Content
   footer: Footer
-# dependencies:
-#   - differential_serve
 libraries:
   - {{ NAME }}/global
 libraries-extend:
