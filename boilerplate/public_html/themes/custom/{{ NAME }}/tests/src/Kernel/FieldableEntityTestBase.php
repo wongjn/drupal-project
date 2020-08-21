@@ -2,18 +2,14 @@
 
 namespace Drupal\Tests\{{ NAME }}\Kernel;
 
-use Drupal\Core\Entity\Entity\EntityViewMode;
-use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\file\Entity\File;
-use Drupal\Tests\TestFileCreationTrait;
+use Drupal\Tests\{{ NAME }}\Traits\EntityTestTrait;
 
 /**
  * Base class for fieldable entity tests.
  */
 abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
 
-  use TestFileCreationTrait;
+  use EntityTestTrait;
 
   /**
    * {@inheritdoc}
@@ -71,7 +67,6 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
   protected function setUp() {
     parent::setUp();
     $this->setUpEntityBundle();
-    $this->file = $this->maybeCreateFile();
   }
 
   /**
@@ -97,7 +92,18 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
       ->create([$bundle_entity->getKey('id') => $this->bundle])
       ->save();
 
-    $this->createEntityFields($this->fields);
+    foreach ($this->fields as $field_name => $parameters) {
+      $field = (is_array($parameters) ? $parameters : ['type' => $parameters]);
+      $field['field_name'] = $field_name;
+      $field['entity_type'] = $this->entityType;
+      $this->createEntityField($this->bundle, $field);
+    }
+
+    $display = $this->displayRepository->getViewDisplay($this->entityType, $this->bundle);
+    foreach (array_keys($this->fields) as $field_name) {
+      $display->setComponent($field_name);
+    }
+    $display->save();
   }
 
   /**
@@ -122,87 +128,6 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
     $this->isolatedRender($this->viewBuilder->view($entity, $view_mode));
 
     return $entity;
-  }
-
-  /**
-   * Creates fields on a particular entity bundle.
-   *
-   * @param array[] $fields
-   *   The list of fields to create. Keys are the field names, values can be
-   *   a string to only state the field type (with the other storage settings as
-   *   default) or an array of field storage settings.
-   * @param string $view_mode
-   *   (optional) The view mode display to display the fields in or NULL to not
-   *   add to any display. Default 'default'.
-   */
-  protected function createEntityFields(array $fields, $view_mode = 'default') {
-    // Create fields from the class property.
-    foreach ($fields as $field_name => $field_parameters) {
-      $storage_settings = is_array($field_parameters)
-        ? $field_parameters
-        : ['type' => $field_parameters];
-      $storage = FieldStorageConfig::create([
-        'entity_type' => $this->entityType,
-        'field_name' => $field_name,
-      ] + $storage_settings);
-      $storage->save();
-
-      FieldConfig::create([
-        'field_storage' => $storage,
-        'bundle' => $this->bundle,
-      ])->save();
-    }
-
-    if ($view_mode) {
-      $display = $this->getViewDisplay($view_mode);
-
-      foreach (array_keys($fields) as $field_name) {
-        $display->setComponent($field_name);
-      }
-
-      $display->save();
-    }
-  }
-
-  /**
-   * Creates a file entity if the file module is enabled on the test.
-   *
-   * @param string $type
-   *   File type, possible values: 'binary', 'html', 'image', 'javascript',
-   *   'php', 'sql', 'text'.
-   *
-   * @return \Drupal\file\Entity\File
-   *   A file entity.
-   */
-  protected function getFileEntity($type) {
-    $file = $this->getTestFiles($type)[0];
-
-    $entity = File::create(['uri' => $file->uri]);
-    $entity->setPermanent();
-    $entity->save();
-
-    return $entity;
-  }
-
-  /**
-   * Gets an entity view display for a view mode.
-   *
-   * @param string $view_mode
-   *   The ID of the view mode display to get.
-   *
-   * @return \Drupal\Core\Entity\Display\EntityViewDisplayInterface
-   *   The display.
-   */
-  protected function getViewDisplay($view_mode) {
-    if ($view_mode != 'default' && !EntityViewMode::load("$this->entityType.$view_mode")) {
-      $mode = EntityViewMode::create([
-        'id' => "$this->entityType.$view_mode",
-        'targetEntityType' => $this->entityType,
-      ]);
-      $mode->save();
-    }
-
-    return $this->displayRepository->getViewDisplay($this->entityType, $this->bundle, $view_mode);
   }
 
 }
