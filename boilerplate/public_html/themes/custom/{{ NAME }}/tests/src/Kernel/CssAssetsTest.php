@@ -2,19 +2,22 @@
 
 namespace Drupal\Tests\{{ NAME }}\Kernel;
 
-use Drupal\Core\Render\HtmlResponse;
+use Drupal\Tests\{{ NAME }}\Traits\KernelPageRenderTrait;
 
 /**
  * Tests CSS output.
  *
  * @group {{ NAME }}
+ * @requires module differential_serve
  */
-class CssTest extends ThemeKernelTestBase {
+class CssAssetsTest extends ThemeKernelTestBase {
+
+  use KernelPageRenderTrait;
 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system'];
+  protected static $modules = ['differential_serve'];
 
   /**
    * {@inheritdoc}
@@ -58,29 +61,6 @@ class CssTest extends ThemeKernelTestBase {
     $href = (string) prev($elements)->attributes()->href;
     $css  = file_get_contents(preg_replace('`.*(?=vfs://)`', '', $href));
     $this->assertStringContainsString('}table.diff .diff-context{', $css, 'Non-global CSS in different aggregate group.');
-  }
-
-  /**
-   * Builds a plain page with attachments rendered.
-   *
-   * @param string[] $libraries
-   *   (optional) Additional libraries to attach to the page render.
-   */
-  protected function buildPlainPage(array $libraries = []) {
-    $build = [
-      '#type' => 'html',
-      'page' => ['#type' => 'page'],
-      '#attached' => ['library' => $libraries],
-    ];
-    $this->container->get('main_content_renderer.html')->invokePageAttachmentHooks($build['page']);
-    $this->container->get('renderer')->renderRoot($build);
-
-    $response = (new HtmlResponse())->setContent($build);
-    $response = $this->container
-      ->get('html_response.attachments_processor')
-      ->processAttachments($response);
-
-    $this->setRawContent($response->getContent());
   }
 
 }
