@@ -1,8 +1,8 @@
 name: {{ LABEL }}
 type: theme
 description: Bespoke theme for the {{ LABEL }} website designed and developed by Cosmic.
-core_version_requirement: ^8.8 || ^9
-base theme: stable
+core_version_requirement: ^9
+base theme: stable9
 regions:
   header: Header
   primary_menu: Primary menu
