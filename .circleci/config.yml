@@ -13,4 +13,6 @@ workflows:
             - drupal/build
       - drupal/phpunit:
           <<: *require_build
-          path: [public_html/modules/custom, public_html/themes/custom]
+          matrix:
+            parameters:
+              path: [public_html/modules/custom, public_html/themes/custom]
