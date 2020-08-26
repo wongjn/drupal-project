@@ -352,6 +352,10 @@ function {{ NAME }}_preprocess_node(&$variables) {
   // added here for consistent spacing.
   if ($variables['view_mode'] == 'full') {
     foreach (Element::getVisibleChildren($variables['content']) as $key) {
+      if (isset($variables['content'][$key]['#lazy_builder'])) {
+        continue;
+      }
+
       $variables['content'][$key]['#attributes']['class'][] = 'l-container__module';
     }
   }
