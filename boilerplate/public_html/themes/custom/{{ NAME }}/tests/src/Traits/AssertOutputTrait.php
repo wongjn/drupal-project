@@ -2,10 +2,31 @@
 
 namespace Drupal\Tests\{{ NAME }}\Traits;
 
+use Symfony\Component\CssSelector\CssSelectorConverter;
+
 /**
  * Trait to add extra output assertion methods.
  */
 trait AssertOutputTrait {
+
+  /**
+   * Asserts an element has text.
+   *
+   * @param string $css_selector
+   *   The element to search for.
+   * @param string $text
+   *   Text the element should contain.
+   * @param string $message
+   *   (optional) Message for the test.
+   */
+  protected function assertElementText($css_selector, $text, $message = NULL) {
+    $selector = (new CssSelectorConverter())->toXPath($css_selector);
+    $this->assertCount(
+      1,
+      $this->xpath("${selector}[normalize-space(text())=:text]", [':text' => $text]),
+      $message ?: sprintf('%s has text "%s".', $css_selector, $text)
+    );
+  }
 
   /**
    * Asserts a string is a space-separated list of values.
@@ -40,36 +61,6 @@ trait AssertOutputTrait {
    */
   protected function assertStringListContains(array $expected, $actual, $message = '') {
     $actual_list = explode(' ', $actual);
-    $this->assertEmpty(array_diff($expected, $actual_list), $message);
-  }
-
-  /**
-   * Asserts a SimpleXMLElement class attribute matches expected list.
-   *
-   * @param string[] $expected
-   *   Expected values.
-   * @param \SimpleXMLElement $actual
-   *   Actual value.
-   * @param string $message
-   *   (optional) Message for the test.
-   */
-  protected function assertElementClasses(array $expected, \SimpleXMLElement $actual, $message = '') {
-    $actual_list = explode(' ', (string) $actual->attributes()->class);
-    $this->assertEqualsCanonicalizing($expected, $actual_list, $message);
-  }
-
-  /**
-   * Asserts a SimpleXMLElement class attribute contains expected list.
-   *
-   * @param string[] $expected
-   *   Expected values.
-   * @param \SimpleXMLElement $actual
-   *   Actual value.
-   * @param string $message
-   *   (optional) Message for the test.
-   */
-  protected function assertElementHasClasses(array $expected, \SimpleXMLElement $actual, $message = '') {
-    $actual_list = explode(' ', (string) $actual->attributes()->class);
     $this->assertEmpty(array_diff($expected, $actual_list), $message);
   }
 
