@@ -35,27 +35,19 @@ abstract class BlockContentTestBase extends FieldableEntityTestBase {
   /**
    * Renders a placed custom block with the given parameters/field values.
    *
-   * @param array $parameters
-   *   (optional) Parameters to create a custom block.
+   * @param array $values
+   *   (optional) Field values for the custom block entity.
+   * @param array $block_settings
+   *   (optional) Settings to place the block with.
    *
    * @return \Drupal\block_content\BlockContentInterface
    *   The block content entity.
    */
-  protected function renderEntity(array $parameters = []) {
-    $parameters += ['region' => 'content'];
-
-    $block_settings = [];
-    foreach (['id', 'label', 'region', 'view_mode', 'visibility', 'weight'] as $key) {
-      if (isset($parameters[$key])) {
-        $block_settings[$key] = $parameters[$key];
-        // Remove extra values that do not belong in the parameters array.
-        unset($parameters[$key]);
-      }
-    }
-
-    $block_content = BlockContent::create(['type' => $this->bundle] + $parameters);
+  protected function renderEntity(array $values = [], array $block_settings = []) {
+    $block_content = BlockContent::create(['type' => $this->bundle] + $values);
     $block_content->save();
 
+    $block_settings += ['region' => 'content', 'id' => 'block'];
     $block = $this->placeBlock("block_content:{$block_content->uuid()}", $block_settings);
     $this->isolatedRender($this->viewBuilder->view($block));
 
