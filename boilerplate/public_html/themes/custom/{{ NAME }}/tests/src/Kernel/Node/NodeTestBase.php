@@ -25,7 +25,6 @@ abstract class NodeTestBase extends FieldableEntityTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    $this->setDefaultTheme();
 
     // Hide display submitted by default.
     $node_type = NodeType::load($this->bundle);
