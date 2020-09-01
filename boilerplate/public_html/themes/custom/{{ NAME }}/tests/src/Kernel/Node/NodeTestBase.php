@@ -39,6 +39,7 @@ abstract class NodeTestBase extends FieldableEntityTestBase {
     $this->installSchema('node', ['node_access']);
     // Install system config for date formats.
     $this->installConfig(['system']);
+    $this->setDefaultTheme();
 
     parent::setUpEntityBundle();
   }
