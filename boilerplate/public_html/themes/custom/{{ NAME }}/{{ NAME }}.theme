@@ -285,6 +285,15 @@ function {{ NAME }}_preprocess_image_formatter(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for media.html.twig.
+ */
+function {{ NAME }}_preprocess_media(&$variables) {
+  if (isset($variables['elements']['#embed'])) {
+    $variables['attributes']['class'][] = 'c-text-body__media';
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK() for menu.html.twig.
  */
 function {{ NAME }}_preprocess_menu(&$variables) {
@@ -333,15 +342,6 @@ function {{ NAME }}_preprocess_menu__main(&$variables) {
     $variables['drawer_attributes']->setAttribute('style', 'display:none');
   }
   $variables['#cache']['contexts'][] = 'cookies:{{ NAME }}_menu_drawer';
-}
-
-/**
- * Implements hook_preprocess_HOOK() for media.html.twig.
- */
-function {{ NAME }}_preprocess_media(&$variables) {
-  if (isset($variables['elements']['#embed'])) {
-    $variables['attributes']['class'][] = 'c-text-body__media';
-  }
 }
 
 /**
