@@ -23,18 +23,6 @@ abstract class NodeTestBase extends FieldableEntityTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
-    parent::setUp();
-
-    // Hide display submitted by default.
-    $node_type = NodeType::load($this->bundle);
-    $node_type->setDisplaySubmitted(FALSE);
-    $node_type->save();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function setUpEntityBundle() {
     $this->installSchema('node', ['node_access']);
     // Install system config for date formats.
@@ -42,6 +30,11 @@ abstract class NodeTestBase extends FieldableEntityTestBase {
     $this->setDefaultTheme();
 
     parent::setUpEntityBundle();
+
+    // Hide display submitted by default.
+    $node_type = NodeType::load($this->bundle);
+    $node_type->setDisplaySubmitted(FALSE);
+    $node_type->save();
   }
 
   /**
