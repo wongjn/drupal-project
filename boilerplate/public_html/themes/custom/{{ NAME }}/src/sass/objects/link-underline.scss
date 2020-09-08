@@ -1,0 +1,19 @@
+/*
+Link Underline
+
+Markup:
+<a href="" class="o-link-underline">Link text</a>
+
+Styleguide: Objects.LinkUnderline
+*/
+
+.o-link-underline {
+  background: linear-gradient(0deg, currentColor, currentColor) no-repeat right bottom / 0 2px;
+  transition: background-size 350ms;
+
+  &:focus,
+  &:hover {
+    background-position-x: left;
+    background-size: 100% 2px;
+  }
+}

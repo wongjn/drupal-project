@@ -44,6 +44,11 @@ inline-error:
     component:
       dist/css/objects/inline-error.css: {}
 
+link-underline:
+  css:
+    component:
+      dist/css/objects/link-underline.css: {}
+
 messages:
   css:
     component:
