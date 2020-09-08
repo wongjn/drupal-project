@@ -39,7 +39,9 @@ trait EntityTestTrait {
       'entity_type' => 'media',
     ]);
 
-    $display = $this->displayRepository->getViewDisplay('media', 'image');
+    $display = $this->container
+      ->get('entity_display.repository')
+      ->getViewDisplay('media', 'image');
     foreach (array_keys($display->getComponents()) as $name) {
       $display->removeComponent($name);
     }
