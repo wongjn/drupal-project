@@ -5,7 +5,7 @@
 @use '../lib/layout';
 @use '../lib/viewport';
 
-$fallback-gutter: 20px;
+$_fallback_gutter_y: 40px;
 
 // Site width container.
 //
@@ -13,9 +13,9 @@ $fallback-gutter: 20px;
 .l-container {
   margin-right: auto;
   margin-left: auto;
-  padding: ($fallback-gutter / 2) $fallback-gutter;
+  padding: ($_fallback_gutter_y / 2) layout.$GUTTER_FALLBACK;
   padding: calc(var(--container-space-y) / 2) var(--container-space-x);
-  max-width: (layout.$SITE-WIDTH-PX + ($fallback-gutter * 2)); // 1
+  max-width: (layout.$SITE-WIDTH-PX + (layout.$GUTTER_FALLBACK * 2)); // 1
   max-width: calc(#{layout.$SITE-WIDTH-PX} + (var(--container-space-x) * 2)); // 1
   --container-space-y: 40px;
   --container-space-x: 20px;
@@ -25,8 +25,8 @@ $fallback-gutter: 20px;
   }
 
   &__module {
-    padding-top: ($fallback-gutter / 2);
-    padding-bottom: ($fallback-gutter / 2);
+    padding-top: ($_fallback_gutter_y / 2);
+    padding-bottom: ($_fallback_gutter_y / 2);
     padding-top: calc(var(--container-space-y) / 2);
     padding-bottom: calc(var(--container-space-y) / 2);
   }
