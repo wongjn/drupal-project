@@ -279,7 +279,9 @@ function {{ NAME }}_preprocess_image_formatter(&$variables) {
  * Implements hook_preprocess_HOOK() for media.html.twig.
  */
 function {{ NAME }}_preprocess_media(&$variables) {
-  if (isset($variables['elements']['#embed'])) {
+  $variables['is_embedded'] = isset($variables['elements']['#embed']);
+
+  if ($variables['is_embedded']) {
     $variables['attributes']['class'][] = 'c-text-body__media';
   }
 }
