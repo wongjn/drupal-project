@@ -1,4 +1,4 @@
-# {{ LABEL }} Drupal 8 project managed with [Composer](https://getcomposer.org/)
+# {{ LABEL }} Drupal 9 project managed with [Composer](https://getcomposer.org/)
 
 ## Usage
 
