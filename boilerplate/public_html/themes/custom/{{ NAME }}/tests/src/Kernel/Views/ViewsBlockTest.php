@@ -21,7 +21,7 @@ class ViewsBlockTest extends ViewsTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['block', 'block_test_views'];
+  protected static $modules = ['block', 'block_test_views'];
 
   /**
    * {@inheritdoc}

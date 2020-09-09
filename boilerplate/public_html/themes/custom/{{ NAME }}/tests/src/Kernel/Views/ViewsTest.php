@@ -14,7 +14,7 @@ class ViewsTest extends ViewsTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['views_test_config'];
+  protected static $modules = ['views_test_config'];
 
   /**
    * {@inheritdoc}

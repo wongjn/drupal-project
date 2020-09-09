@@ -16,7 +16,7 @@ class InviewTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     '{{ NAME }}_helper',
     '{{ NAME }}_helper_test_views',
   ];
