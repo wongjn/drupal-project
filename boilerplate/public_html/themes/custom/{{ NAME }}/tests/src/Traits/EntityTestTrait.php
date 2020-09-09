@@ -4,87 +4,88 @@ namespace Drupal\Tests\{{ NAME }}\Traits;
 
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
 use Drupal\media\Entity\MediaType;
-use Drupal\Tests\TestFileCreationTrait;
-use Drupal\Tests\user\Traits\UserCreationTrait;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 
 /**
  * Trait for useful methods related to entities.
  */
 trait EntityTestTrait {
 
-  use TestFileCreationTrait;
-  use UserCreationTrait;
-
   /**
-   * Sets up media entities.
+   * Sets up for media entity usage.
    */
-  protected function setUpMediaEntity() {
+  protected function setUpMedia() {
     $this->installEntitySchema('media');
     $this->installEntitySchema('file');
+    $this->installEntitySchema('user');
     $this->installSchema('file', ['file_usage']);
-    $this->setUpCurrentUser([], ['view media']);
 
-    MediaType::create([
-      'id' => 'image',
-      'source' => 'image',
-      'source_configuration' => ['source_field' => 'field_media_image'],
-    ])->save();
-
-    $this->createEntityField('image', [
-      'type' => 'image',
-      'field_name' => 'field_media_image',
-      'entity_type' => 'media',
-    ]);
-
-    $display = $this->container
-      ->get('entity_display.repository')
-      ->getViewDisplay('media', 'image');
-    foreach (array_keys($display->getComponents()) as $name) {
-      $display->removeComponent($name);
-    }
-
-    $display
-      ->setComponent('field_media_image', ['type' => 'image', 'settings' => []])
+    $this->installConfig(['user']);
+    Role::load(RoleInterface::ANONYMOUS_ID)
+      ->grantPermission('view media')
       ->save();
   }
 
   /**
-   * Creates an image media entity.
+   * Creates a media entity type.
    *
-   * @return \Drupal\media\Entity\Media
-   *   The image media entity.
+   * @param string $type
+   *   The media entity bundle name.
+   * @param string $source_plugin
+   *   (optional) The media source plugin, use NULL to use the value of $type.
+   *   Default NULL.
    */
-  protected function createMediaEntity() {
-    $media = Media::create([
-      'bundle' => 'image',
-      'field_media_image' => $this->getFileEntity('image')->id(),
-    ]);
-    $media->save();
+  protected function createMediaType($type, $source_plugin = NULL) {
+    $media_type = MediaType::create(['id' => $type, 'source' => $source_plugin ?: $type]);
+    $media_type->save();
 
-    return $media;
+    $source = $media_type->getSource();
+
+    $source_field = $source->createSourceField($media_type);
+    $source_field->getFieldStorageDefinition()->save();
+    $source_field->save();
+
+    $source_config = $media_type->getSource()->getConfiguration();
+    $source_config['source_field'] = $source_field->getName();
+    $media_type->getSource()->setConfiguration($source_config);
+    $media_type->save();
+
+    $display = $this->container
+      ->get('entity_display.repository')
+      ->getViewDisplay('media', $media_type->id());
+
+    // Remove all default components.
+    foreach (array_keys($display->getComponents()) as $name) {
+      $display->removeComponent($name);
+    }
+    $source->prepareViewDisplay($media_type, $display);
+    $display->save();
   }
 
   /**
-   * Creates a file entity if the file module is enabled on the test.
+   * Creates a media entity.
    *
    * @param string $type
-   *   File type, possible values: 'binary', 'html', 'image', 'javascript',
-   *   'php', 'sql', 'text'.
+   *   The media entity bundle name.
    *
-   * @return \Drupal\file\Entity\File
-   *   A file entity.
+   * @return \Drupal\media\Entity\Media
+   *   The media entity.
    */
-  protected function getFileEntity($type) {
-    $file = $this->getTestFiles($type)[0];
+  protected function createMediaEntity($type) {
+    $media_type = MediaType::load($type);
+    $field_name = $media_type
+      ->getSource()
+      ->getSourceFieldDefinition($media_type)
+      ->getName();
 
-    $entity = File::create(['uri' => $file->uri]);
-    $entity->setPermanent();
-    $entity->save();
+    $media = Media::create(['bundle' => $type]);
+    $media->{$field_name}->generateSampleItems();
+    $media->save();
 
-    return $entity;
+    return $media;
   }
 
   /**
