@@ -30,7 +30,7 @@ settings:
     title: ''
     width: null
     height: null
-  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_directory: 'media/[date:custom:Y]-[date:custom:m]'
   max_filesize: 2M
   handler: 'default:file'
   handler_settings: {  }

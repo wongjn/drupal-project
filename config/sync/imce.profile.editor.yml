@@ -18,3 +18,8 @@ conf:
       path: content
       permissions:
         all: true
+    -
+      path: media
+      permissions:
+        browse_files: true
+        browse_subfolders: true
