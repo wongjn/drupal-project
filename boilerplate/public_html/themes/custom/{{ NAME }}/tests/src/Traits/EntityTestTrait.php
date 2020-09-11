@@ -6,6 +6,9 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\media\Entity\Media;
 use Drupal\media\Entity\MediaType;
+use Drupal\media\OEmbed\Resource;
+use Drupal\media\OEmbed\ResourceFetcherInterface;
+use Drupal\media\OEmbed\UrlResolverInterface;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
@@ -86,6 +89,18 @@ trait EntityTestTrait {
     $media->save();
 
     return $media;
+  }
+
+  /**
+   * Mocks the media oembed URL services.
+   */
+  protected function mockMediaOembed() {
+    $this->container->set('media.oembed.url_resolver', $this->createMock(UrlResolverInterface::class));
+
+    $resource = $this->createMock(Resource::class);
+    $resource_fetcher = $this->createMock(ResourceFetcherInterface::class);
+    $resource_fetcher->method('fetchResource')->willReturn($resource);
+    $this->container->set('media.oembed.resource_fetcher', $resource_fetcher);
   }
 
   /**
