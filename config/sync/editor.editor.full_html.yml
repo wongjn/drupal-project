@@ -52,10 +52,13 @@ settings:
             - ShowBlocks
             - Source
   plugins:
-    language:
-      language_list: un
+    drupallink:
+      linkit_enabled: true
+      linkit_profile: default
     stylescombo:
       styles: 'p.c-text-body__emphasize|Emphasize paragraph'
+    language:
+      language_list: un
 image_upload:
   status: false
   scheme: public

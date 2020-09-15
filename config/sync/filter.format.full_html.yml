@@ -4,6 +4,7 @@ dependencies:
   config:
     - core.entity_view_mode.media.body_content
   module:
+    - linkit
     - media
 _core:
   default_config_hash: 6Dw8OWCJiJtO3QsI1hpo_kONGmLmEZLhNd5CwuP5Nsk
@@ -17,7 +18,7 @@ filters:
     status: true
     weight: -10
     settings:
-      allowed_html: '<a href target rel> <em> <strong> <ul type> <ol start type> <li> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <hr> <br> <p class=" text-align-left text-align-center text-align-right c-text-body__emphasize"> <drupal-media data-entity-type data-entity-uuid data-view-mode data-align data-caption alt title>'
+      allowed_html: '<a href target rel data-entity-substitution data-entity-type data-entity-uu> <em> <strong> <ul type> <ol start type> <li> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <hr> <br> <p class=" text-align-left text-align-center text-align-right c-text-body__emphasize"> <drupal-media data-entity-type data-entity-uuid data-view-mode data-align data-caption alt title>'
       filter_html_help: true
       filter_html_nofollow: false
   filter_align:
@@ -43,3 +44,10 @@ filters:
         image: image
       allowed_view_modes:
         body_content: body_content
+  linkit:
+    id: linkit
+    provider: linkit
+    status: true
+    weight: -15
+    settings:
+      title: false

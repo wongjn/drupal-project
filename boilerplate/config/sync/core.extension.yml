@@ -28,6 +28,7 @@ module:
   imce: 0
   inline_form_errors: 0
   link: 0
+  linkit: 0
   media: 0
   media_library: 0
   menu_trail_by_path: 0

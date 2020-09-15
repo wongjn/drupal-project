@@ -40,14 +40,15 @@
         "drupal/block_content_permissions": "^1.6",
         "drupal/core-composer-scaffold": "~9.0.3",
         "drupal/core-recommended": "~9.0.3",
-        "drupal/differential_serve": "^1.0@beta",
+        "drupal/differential_serve": "^1.0-beta",
         "drupal/ex_icons": "^1.0",
         "drupal/imce": "^2.2",
+        "drupal/linkit": "^6.0-beta",
         "drupal/menu_admin_per_menu": "^1.0",
         "drupal/menu_trail_by_path": "^1.1",
         "drupal/pathauto": "^1.5",
         "drush/drush": "^10.1",
-        "projectcosmic/config_import_missing_content": "^1.0@alpha",
+        "projectcosmic/config_import_missing_content": "^1.0-alpha",
         "projectcosmic/deny_tainted_urls": "^1.0"
     },
     "require-dev": {
@@ -85,6 +86,9 @@
         "patches": {
             "drupal/core": {
                 "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch"
+            },
+            "drupal/linkit": {
+                "Show path alias in widget": "patches/linkit-show-path-alias-in-widget-2877535-12.patch"
             },
             "drupal/multiline_config": {
                 "Drupal 9 support": "patches/multiline_config-drupal_9.patch"
