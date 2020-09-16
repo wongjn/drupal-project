@@ -96,7 +96,8 @@ abstract class FieldableEntityTestBase extends ThemeKernelTestBase {
       $field = (is_array($parameters) ? $parameters : ['type' => $parameters]);
       $field['field_name'] = $field_name;
       $field['entity_type'] = $this->entityType;
-      $this->createEntityField($this->bundle, $field);
+      $field['bundle'] = $this->bundle;
+      $this->createEntityField($field);
     }
 
     $display = $this->displayRepository->getViewDisplay($this->entityType, $this->bundle);

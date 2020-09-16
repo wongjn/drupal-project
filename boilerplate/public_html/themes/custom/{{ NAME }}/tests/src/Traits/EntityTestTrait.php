@@ -9,6 +9,7 @@ use Drupal\media\Entity\MediaType;
 use Drupal\media\OEmbed\Resource;
 use Drupal\media\OEmbed\ResourceFetcherInterface;
 use Drupal\media\OEmbed\UrlResolverInterface;
+use Drupal\Tests\media\Traits\MediaTypeCreationTrait;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
@@ -16,6 +17,10 @@ use Drupal\user\RoleInterface;
  * Trait for useful methods related to entities.
  */
 trait EntityTestTrait {
+
+  use MediaTypeCreationTrait {
+    createMediaType as drupalCreateMediaType;
+  }
 
   /**
    * Sets up for media entity usage.
@@ -35,26 +40,19 @@ trait EntityTestTrait {
   /**
    * Creates a media entity type.
    *
-   * @param string $type
-   *   The media entity bundle name.
-   * @param string $source_plugin
-   *   (optional) The media source plugin, use NULL to use the value of $type.
-   *   Default NULL.
+   * @param string $source_plugin_id
+   *   The media source plugin ID.
+   * @param mixed[] $values
+   *   (optional) Additional values for the media type entity:
+   *   - id: The ID of the media type. If none is provided, the media source
+   *     plugin ID will be used.
+   *
+   * @return \Drupal\media\MediaTypeInterface
+   *   The created media type.
    */
-  protected function createMediaType($type, $source_plugin = NULL) {
-    $media_type = MediaType::create(['id' => $type, 'source' => $source_plugin ?: $type]);
-    $media_type->save();
-
-    $source = $media_type->getSource();
-
-    $source_field = $source->createSourceField($media_type);
-    $source_field->getFieldStorageDefinition()->save();
-    $source_field->save();
-
-    $source_config = $media_type->getSource()->getConfiguration();
-    $source_config['source_field'] = $source_field->getName();
-    $media_type->getSource()->setConfiguration($source_config);
-    $media_type->save();
+  protected function createMediaType($source_plugin_id = NULL, array $values = []) {
+    $values += ['id' => $source_plugin_id];
+    $media_type = $this->drupalCreateMediaType($source_plugin_id, $values);
 
     $display = $this->container
       ->get('entity_display.repository')
@@ -64,8 +62,11 @@ trait EntityTestTrait {
     foreach (array_keys($display->getComponents()) as $name) {
       $display->removeComponent($name);
     }
-    $source->prepareViewDisplay($media_type, $display);
+
+    $media_type->getSource()->prepareViewDisplay($media_type, $display);
     $display->save();
+
+    return $media_type;
   }
 
   /**
@@ -104,23 +105,25 @@ trait EntityTestTrait {
   }
 
   /**
-   * Creates fields on a particular entity bundle.
+   * Creates a field storage and a corresponding instance.
    *
-   * @param string $bundle
-   *   The bundle to attach the field instance to.
    * @param array $field
-   *   The arguments to create the field base with.
-   * @param array $instance_options
-   *   (optional) Any extra options to create the field instance with.
+   *   The arguments to create the field base with including:
+   *   - type: The field type.
+   *   - field_name: Machine name of the field.
+   *   - entity_type: The entity type ID to create the field on.
+   *   - cardinality: (optional) The cardinality of the field.
+   *   - settings: (optional) Settings for the field storage.
+   *   - bundle: (optional) The bundle of the entity type to add the field
+   *     instance to. If omitted, will use entity_type.
    */
-  protected function createEntityField($bundle, array $field, array $instance_options = []) {
+  protected function createEntityField(array $field) {
+    $instance_options = ['bundle' => isset($field['bundle']) ? $field['bundle'] : $field['entity_type']];
+    unset($field['bundle']);
+
     $storage = FieldStorageConfig::create($field);
     $storage->save();
-
-    FieldConfig::create([
-      'field_storage' => $storage,
-      'bundle' => $bundle,
-    ] + $instance_options)->save();
+    FieldConfig::create(['field_storage' => $storage] + $instance_options)->save();
   }
 
 }
