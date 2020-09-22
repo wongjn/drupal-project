@@ -13,7 +13,10 @@ class PageTitleBlockTest extends BlockTestBase {
    * Tests output.
    */
   public function testOutput() {
-    $block = $this->placeBlock('page_title_block', ['id' => 'block', 'region' => 'content']);
+    $block = $this->placeBlock('page_title_block', [
+      'id' => 'block',
+      'region' => 'content',
+    ]);
     $block->getPlugin()->setTitle($this->randomMachineName());
     $this->isolatedRender($this->viewBuilder->view($block));
 

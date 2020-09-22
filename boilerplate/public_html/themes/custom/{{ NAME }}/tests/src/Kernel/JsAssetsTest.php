@@ -36,7 +36,9 @@ class JsAssetsTest extends ThemeKernelTestBase {
       }
       file_put_contents($stats, json_encode([
         'entrypoints' => [
-          'main' => ['assets' => ["52.$script_type.js", "main.$script_type.js"]],
+          'main' => [
+            'assets' => ["52.$script_type.js", "main.$script_type.js"],
+          ],
           'test' => ['assets' => ["foo-bar.$script_type.js"]],
         ],
       ]));

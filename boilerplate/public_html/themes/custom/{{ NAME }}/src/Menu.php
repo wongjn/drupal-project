@@ -3,7 +3,7 @@
 namespace Drupal\{{ NAME }};
 
 /**
- * Menu processor.
+ * Static class of helper functions for menu processing.
  */
 class Menu {
 

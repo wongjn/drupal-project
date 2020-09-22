@@ -58,7 +58,9 @@ class MainSystemMenuBlockTest extends BlockTestBase {
    * Tests base output.
    */
   public function testBaseOutput() {
-    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
+    $this->placeRenderBlock('system_menu_block:main', [
+      'expand_all_items' => TRUE,
+    ]);
 
     $elements = $this->cssSelect('.c-main-menu');
     $this->assertCount(1, $elements, 'Main menu wrapper.');
@@ -160,14 +162,20 @@ class MainSystemMenuBlockTest extends BlockTestBase {
       ])->save();
     }
 
-    $request_stack->push(Request::create('/', 'GET', [], ['{{ NAME }}_menu_break' => 1]));
-    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
+    $request = Request::create('/', 'GET', [], ['{{ NAME }}_menu_break' => 1]);
+    $request_stack->push($request);
+    $this->placeRenderBlock('system_menu_block:main', [
+      'expand_all_items' => TRUE,
+    ]);
 
     $elements = $this->cssSelect('.c-main-menu__top-menu.is-compact');
     $this->assertCount(1, $elements, 'Main menu wrapper has "is-compact" class with line break of 1.');
 
-    $request_stack->push(Request::create('/', 'GET', [], ['{{ NAME }}_menu_break' => 2]));
-    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
+    $request = Request::create('/', 'GET', [], ['{{ NAME }}_menu_break' => 2]);
+    $request_stack->push($request);
+    $this->placeRenderBlock('system_menu_block:main', [
+      'expand_all_items' => TRUE,
+    ]);
 
     $elements = $this->cssSelect('.c-main-menu__top-menu > li[style*="visibility:hidden"]');
     $this->assertCount(2, $elements, 'Top-level menu items hidden per line break value.');
@@ -177,15 +185,20 @@ class MainSystemMenuBlockTest extends BlockTestBase {
    * Tests out with drawer open button.
    */
   public function testDrawerWrapperCookieOutput() {
-    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
+    $this->placeRenderBlock('system_menu_block:main', [
+      'expand_all_items' => TRUE,
+    ]);
 
     $elements = $this->cssSelect('.c-main-menu__drawer[style*="display:none"]');
     $this->assertCount(1, $elements, 'Drawer button wrapper has "display: none" with no cookie set.');
 
-    $this->container
-      ->get('request_stack')
-      ->push(Request::create('/', 'GET', [], ['{{ NAME }}_menu_drawer' => '1']));
-    $this->placeRenderBlock('system_menu_block:main', ['expand_all_items' => TRUE]);
+    $request = Request::create('/', 'GET', [], [
+      '{{ NAME }}_menu_drawer' => '1',
+    ]);
+    $this->container->get('request_stack')->push($request);
+    $this->placeRenderBlock('system_menu_block:main', [
+      'expand_all_items' => TRUE,
+    ]);
 
     $elements = $this->cssSelect('.c-main-menu__drawer:not([style*="display:none"])');
     $this->assertCount(1, $elements, 'Drawer button has no display style set with cookie set.');

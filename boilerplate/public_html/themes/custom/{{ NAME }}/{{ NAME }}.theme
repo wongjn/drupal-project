@@ -418,9 +418,15 @@ function {{ NAME }}_form_contact_message_form_alter(&$form, FormStateInterface $
  * Implements hook_element_info_alter().
  */
 function {{ NAME }}_element_info_alter(array &$info) {
-  $info['processed_text']['#pre_render'][]  = [{{ UCAMEL }}PreRender::class, 'processedText'];
-  $info['status_messages']['#pre_render'][] = [{{ UCAMEL }}PreRender::class, 'statusMessages'];
-  $info['view']['#pre_render'][]            = [{{ UCAMEL }}PreRender::class, 'view'];
+  $info['processed_text']['#pre_render'][] = [
+    {{ UCAMEL }}PreRender::class,
+    'processedText',
+  ];
+  $info['status_messages']['#pre_render'][] = [
+    {{ UCAMEL }}PreRender::class,
+    'statusMessages',
+  ];
+  $info['view']['#pre_render'][] = [{{ UCAMEL }}PreRender::class, 'view'];
 
   // Remove unused off-canvas page wrapping markup.
   unset($info['page']['#theme_wrappers']['off_canvas_page_wrapper']);
