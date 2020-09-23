@@ -1,0 +1,12 @@
+/**
+ * @file
+ * Improves Seven form styling.
+ */
+
+.field-multiple-table th {
+  border-width: 1px;
+}
+
+.field-multiple-table tr {
+  border: 1px solid #e6e4df;
+}

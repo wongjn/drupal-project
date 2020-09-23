@@ -1,0 +1,43 @@
+/**
+ * @file
+ * Improvements to the Paragraphs widget styling with the Seven theme.
+ */
+
+.field--widget-paragraphs {
+  margin-bottom: 2em;
+}
+
+* + .field--widget-paragraphs {
+  margin-top: 2em;
+}
+
+.js .field--widget-paragraphs .field-multiple-table {
+  margin-bottom: 0;
+}
+
+/**
+ * Improves alignment between drag handles of rows and text.
+ */
+.js .field--widget-paragraphs .tabledrag-handle .handle {
+  margin-top: 0;
+}
+
+/**
+ * Improves alignment between drag bullet of a row and text.
+ */
+ @media (min-width: 768px) {
+  .paragraph-bullet:after {
+    line-height: 3em;
+  }
+}
+
+.js .paragraphs-subform {
+  padding-right: 1em;
+}
+
+.paragraphs-add-wrapper {
+  border: 1px solid #e6e4df;
+  border-top: 0;
+  background-color: #fcfcfa;
+  padding: 0 0.5em 0.5em;
+}

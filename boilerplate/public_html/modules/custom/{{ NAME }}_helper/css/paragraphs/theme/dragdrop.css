@@ -1,0 +1,57 @@
+/**
+ * @file
+ * Improve styling of Paragraphs drag and drop in Seven.
+ */
+
+/**
+ * Layout "Complete drag & drop" button next to header.
+ */
+.field-dragdrop-mode-submit.button--primary {
+  z-index: 1;
+  float: right;
+  margin: 0;
+  transform: translate(-6px, 6px);
+}
+
+/**
+ * Style header of the drag and drop like a table header.
+ */
+.paragraphs-dragdrop__label--field {
+  margin: 0;
+  border: 1px solid #bfbfba;
+  background: #f5f5f2;
+  padding: 10px 12px;
+  text-transform: uppercase;
+}
+
+/**
+ * Clear floated "Complete drag & drop" button.
+ */
+.paragraphs-dragdrop__label--field::after {
+  clear: both;
+  display: table;
+  content: '';
+}
+
+/**
+ * Add border around the top list.
+ */
+.paragraphs-dragdrop__label--field + .paragraphs-dragdrop__list {
+  border: 1px solid #e6e4df;
+  border-top: 0;
+  padding-top: 1em;
+}
+
+/**
+ * Use consistent spacing with items.
+ */
+.paragraphs-dragdrop__item {
+  margin: 0 1em 1em;
+}
+
+/**
+ * Improves alignment of drag handle with text if the row has a sublist.
+ */
+.paragraphs-dragdrop__item .paragraphs-summary-wrapper {
+  height: 2em;
+}
