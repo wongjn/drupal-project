@@ -7,6 +7,7 @@ import attachLineBreak from './handlers/line-break';
 import attachSubmenuEdge from './handlers/submenu-edge';
 import attachDrawer from './handlers/drawer';
 import attachParentTap from './handlers/parent-tap';
+import attachHoverHide from './hover-hide';
 
 const wrapper = document.querySelector('.js-main-menu');
 const menu = wrapper && wrapper.querySelector('.c-main-menu__top-menu');
@@ -18,6 +19,7 @@ if (wrapper && menu) {
     attachSubmenuEdge({ wrapper, menu }),
     attachDrawer({ wrapper, menu }),
     attachParentTap({ wrapper, menu }),
+    attachHoverHide({ wrapper, menu }),
   ];
 
   wrapper.classList.remove('is-menu-loading');
