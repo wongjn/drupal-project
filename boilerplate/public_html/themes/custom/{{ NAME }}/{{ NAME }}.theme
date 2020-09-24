@@ -408,6 +408,8 @@ function {{ NAME }}_form_contact_message_form_alter(&$form, FormStateInterface $
   $form['message']['widget'][0]['value']['#title'] = t('Query');
 
   $form['actions']['preview']['#access'] = FALSE;
+  $form['langcode']['#access'] = FALSE;
+  $form['copy']['#access'] = FALSE;
 
   $form['actions']['submit']['#value'] = t('Submit');
 }
