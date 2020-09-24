@@ -41,15 +41,15 @@
         "drupal/block_content_permissions": "^1.6",
         "drupal/core-composer-scaffold": "~9.0.3",
         "drupal/core-recommended": "~9.0.3",
-        "drupal/differential_serve": "^1.0-beta",
+        "drupal/differential_serve": "^1.0@beta",
         "drupal/ex_icons": "^1.0",
         "drupal/imce": "^2.2",
-        "drupal/linkit": "^6.0-beta",
+        "drupal/linkit": "^6.0@beta",
         "drupal/menu_admin_per_menu": "^1.0",
         "drupal/menu_trail_by_path": "^1.1",
         "drupal/pathauto": "^1.5",
         "drush/drush": "^10.1",
-        "projectcosmic/config_import_missing_content": "^1.0-alpha",
+        "projectcosmic/config_import_missing_content": "^1.0@alpha",
         "projectcosmic/deny_tainted_urls": "^1.0"
     },
     "require-dev": {
