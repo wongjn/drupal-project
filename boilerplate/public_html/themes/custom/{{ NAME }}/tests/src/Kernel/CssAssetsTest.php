@@ -46,7 +46,7 @@ class CssAssetsTest extends ThemeKernelTestBase {
     $this->config('system.performance')
       ->set('css.preprocess', TRUE)
       ->save();
-    $this->buildPlainPage(['system/diff']);
+    $this->renderPageWithAttachments(['system/diff']);
 
     $elements = $this->cssSelect('link[rel="stylesheet"]');
     $this->assertCount(2, $elements, 'Links per group.');
