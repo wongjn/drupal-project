@@ -11,7 +11,7 @@
 function {{ NAME }}_helper_editor_js_settings_alter(array &$settings) {
   foreach (array_keys($settings['editor']['formats']) as $format) {
     if ($settings['editor']['formats'][$format]['editor'] == 'ckeditor') {
-      $settings['editor']['formats'][$format]['editorSettings']['bodyClass'] = 'c-text-body c-text-body--no-text-crop';
+      $settings['editor']['formats'][$format]['editorSettings']['bodyClass'] = 'c-text-body c-text-body--editor';
     }
   }
 }

@@ -10,13 +10,6 @@
   @include font.crop(font.$LINE-HEIGHT);
   $block-spacing: font.$LINE-HEIGHT * 1rem * ( font.$SIZE / 16 );
 
-  &--no-text-crop {
-    &::before,
-    &::after {
-      margin: 0;
-    }
-  }
-
   // Clearfix
   &::after {
     display: table;
@@ -90,17 +83,31 @@
     margin-left: viewport.scale(20px, 5px);
   }
 
+  &--editor {
+    // Remove text cropping in WYSIWYG.
+    &::before,
+    &::after {
+      margin: 0;
+    }
+  }
+
   &__media {
     &.align-left,
     &.align-right {
-      @media (max-width: 1199px) {
-        float: none;
-        display: table;
-        margin-right: auto;
-        margin-left: auto;
+      .c-text-body:not(.c-text-body--editor) & {
+        @media (max-width: 799px) {
+          float: none;
+          display: table;
+          margin-right: auto;
+          margin-left: auto;
+        }
+
+        @media (min-width: 800px) {
+          max-width: 50%;
+        }
       }
 
-      @media (min-width: 1200px) {
+      .c-text-body--editor & {
         max-width: 50%;
       }
     }
