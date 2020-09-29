@@ -19,7 +19,7 @@ Install the Drupal site with drush:
 ```
 ./vendor/bin/drush site-install minimal \
     --db-url=mysql://DBUSER:DBPASS@localhost/DBNAME \
-    --config-dir=../config/sync
+    --existing-config
 ```
 
 With `composer require ...` you can download new dependencies to your
