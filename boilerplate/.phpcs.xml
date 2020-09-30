@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ruleset name="{{ LABEL }}">
 
-  <arg name="extensions" value="inc,info,install,md,module,php,profile,test,theme,txt,yml"/>
+  <arg name="extensions" value="inc,install,md,module,php,profile,theme,txt,yml"/>
 
   <file>./public_html/themes/custom</file>
   <file>./public_html/modules/custom</file>
