@@ -6,15 +6,27 @@
   <file>./public_html/themes/custom</file>
   <file>./public_html/modules/custom</file>
 
-  <!-- Ignore third party code -->
+  <!-- Ignore third party code. -->
   <exclude-pattern>*/node_modules/*</exclude-pattern>
 
   <rule ref="Drupal"/>
   <rule ref="DrupalPractice"/>
 
+  <!-- Allow drupal.org properties in custom extension .info.yml files. -->
+  <rule ref="Drupal.InfoFiles.AutoAddedKeys">
+    <exclude-pattern>*/modules/custom/*</exclude-pattern>
+    <exclude-pattern>*/profiles/custom/*</exclude-pattern>
+    <exclude-pattern>*/themes/custom/*</exclude-pattern>
+  </rule>
+
   <!-- Ignore t() usage in test classes -->
-  <rule ref="DrupalPractice.Objects.GlobalFunction.GlobalFunction">
+  <rule ref="DrupalPractice.Objects.GlobalFunction">
     <exclude-pattern>*/tests/src/*</exclude-pattern>
+  </rule>
+
+  <!-- Disable open page callback route warnings in test modules. -->
+  <rule ref="DrupalPractice.Yaml.RoutingAccess">
+    <exclude-pattern>*/tests/modules/*</exclude-pattern>
   </rule>
 
 </ruleset>
