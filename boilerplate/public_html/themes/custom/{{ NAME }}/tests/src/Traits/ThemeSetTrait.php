@@ -16,7 +16,7 @@ trait ThemeSetTrait {
    *   The name of the theme to make default.
    */
   protected function setDefaultTheme($theme = '{{ NAME }}') {
-    $this->container->get('theme_installer')->install([$theme], TRUE);
+    $this->container->get('theme_installer')->install([$theme]);
     $this->config('system.theme')->set('default', $theme)->save();
   }
 
