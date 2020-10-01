@@ -70,7 +70,7 @@ function {{ NAME }}_helper_library_info_alter(&$libraries, $extension) {
 
     case 'paragraphs':
       $libraries['drupal.paragraphs.widget']['css']['theme']["/$path/css/paragraphs/theme/widget.css"] = [];
-      $libraries['paragraphs-dragdrop']['css']['theme']["/$path/css/paragraphs/theme/dragdrop.css.css"] = [];
+      $libraries['paragraphs-dragdrop']['css']['theme']["/$path/css/paragraphs/theme/dragdrop.css"] = [];
       break;
   }
 }
