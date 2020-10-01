@@ -25,7 +25,7 @@
 /**
  * Improves alignment between drag bullet of a row and text.
  */
- @media (min-width: 768px) {
+@media (min-width: 768px) {
   .paragraph-bullet:after {
     line-height: 3em;
   }
