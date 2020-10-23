@@ -12,7 +12,7 @@ const { sassSrc, compileSass } = require('./css');
 const { compileStyleguide, kssConfig } = require('./styleguide');
 const { iconSrc, compileIcons } = require('./icons');
 const { statsConfig } = require('./js');
-const webpackDevConfig = require('../build/webpack.config.dev');
+const webpackConfig = require('../webpack.config');
 
 // Browsersync instance for website development.
 const website = create('website');
@@ -44,7 +44,8 @@ function styleguideReload(done) {
  * Initiates file watching and Browsersync instance servers.
  */
 function watcher() {
-  const webpackCompiler = webpack(webpackDevConfig);
+  const config = webpackConfig();
+  const webpackCompiler = webpack(config);
 
   website.init({
     proxy: '{{ UPPER }}_URL' in process.env
@@ -53,7 +54,6 @@ function watcher() {
     middleware: [
       webpackDevMiddleware(webpackCompiler, {
         stats: statsConfig,
-        publicPath: webpackDevConfig[0].output.publicPath,
         writeToDisk: filePath => /\/stats\.\w+\.json$/.test(filePath),
       }),
       webpackHotMiddleware(webpackCompiler),

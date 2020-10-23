@@ -6,7 +6,7 @@
 /* eslint no-console: "off" */
 
 const webpack = require('webpack');
-const webpackProdConfig = require('../build/webpack.config.prod');
+const webpackConfig = require('../webpack.config');
 
 // Config for Webpack stats output.
 const statsConfig = {
@@ -25,7 +25,7 @@ const statsConfig = {
  *   was an error, it will be passed to the callback as the first argument.
  */
 function compileJS(done) {
-  webpack(webpackProdConfig, (err, stats) => {
+  webpack(webpackConfig({ production: true }), (err, stats) => {
     if (err) return done(err);
     console.log(stats.toString(statsConfig));
     done();

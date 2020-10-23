@@ -50,7 +50,7 @@ function {{ NAME }}_library_info_build() {
     if (file_exists($stats_file)) {
       foreach (json_decode(file_get_contents($stats_file), TRUE)['entrypoints'] as $name => $entry) {
         foreach ($entry['assets'] as $asset) {
-          $libraries["js.$name"]['js']["dist/js/$asset"] = [
+          $libraries["js.$name"]['js']["dist/js/$asset[name]"] = [
             'minimized' => TRUE,
             'differential_serve' => $script_type,
           ];
