@@ -38,7 +38,7 @@
     "fibers": "^4.0.1",
     "gulp": "^4.0.0",
     "gulp-cached": "^1.1.1",
-    "gulp-dependents": "github:wongjn/gulp-dependents#26e5ac1",
+    "gulp-dependents": "^1.2.5",
     "gulp-postcss": "^8.0.0",
     "gulp-sass": "^4.0.2",
     "gulp-svgmin": "^2.2.0",
