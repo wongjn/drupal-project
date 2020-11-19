@@ -11,7 +11,6 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const { sassSrc, compileSass } = require('./css');
 const { compileStyleguide, kssConfig } = require('./styleguide');
 const { iconSrc, compileIcons } = require('./icons');
-const { statsConfig } = require('./js');
 const webpackConfig = require('../webpack.config');
 
 // Browsersync instance for website development.
@@ -53,7 +52,6 @@ function watcher() {
       : '{{ NAME }}.test',
     middleware: [
       webpackDevMiddleware(webpackCompiler, {
-        stats: statsConfig,
         writeToDisk: filePath => /\/stats\.\w+\.json$/.test(filePath),
       }),
       webpackHotMiddleware(webpackCompiler),
