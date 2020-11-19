@@ -1,6 +1,6 @@
 /**
  * @file
- * SVG external-use polfill.
+ * SVG external-use polyfill.
  */
 
 import svg4everybody from 'svg4everybody';
