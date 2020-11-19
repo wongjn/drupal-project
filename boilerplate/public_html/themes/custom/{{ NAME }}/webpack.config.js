@@ -42,7 +42,7 @@ const buildConfig = ({ production = false } = {}) => name => ({
     filename: `[name].${name}.js`,
     chunkFilename: '[chunkhash].js',
     path: path.resolve(__dirname, './dist/js'),
-    publicPath: '/themes/custom/dmhf/dist/js/',
+    publicPath: '/themes/custom/{{ NAME }}/dist/js/',
     environment: {
       arrowFunction: name === 'modern',
       bigIntLiteral: name === 'modern',
