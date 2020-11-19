@@ -44,7 +44,11 @@ function {{ NAME }}_library_info_build() {
   $theme_path = drupal_get_path('theme', '{{ NAME }}');
 
   // Add Webpack-built entry files.
-  foreach (['modern', 'legacy'] as $script_type) {
+  $js_build_types = ['legacy'];
+  if (\Drupal::moduleHandler()->moduleExists('differential_serve')) {
+    $js_build_types[] = 'modern';
+  }
+  foreach ($js_build_types as $script_type) {
     $stats_file = "$theme_path/dist/js/stats.$script_type.json";
 
     if (file_exists($stats_file)) {
@@ -59,14 +63,9 @@ function {{ NAME }}_library_info_build() {
         // All scripts may depend on the Polyfill service.
         $libraries["js.$name"]['dependencies'][] = '{{ NAME }}/global.polyfill';
 
-        // Legacy scripts need to be loaded via the loader script.
-        if ($script_type == 'legacy') {
-          $libraries["js.$name"]['dependencies'][] = 'differential_serve/legacy-loader';
-        }
-
         // Main is the global script that appears for every page. As such, it
         // has the main boilerplate code for other scripts to use.
-        // @see build/webpack.config.base.js.
+        // @see webpack.config.js.
         if ($name != 'main') {
           $libraries["js.$name"]['dependencies'][] = '{{ NAME }}/js.main';
         }
