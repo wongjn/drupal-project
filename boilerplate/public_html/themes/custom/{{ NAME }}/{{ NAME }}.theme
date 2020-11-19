@@ -66,9 +66,9 @@ function {{ NAME }}_library_info_build() {
         // Main is the global script that appears for every page. As such, it
         // has the main boilerplate code for other scripts to use.
         // @see webpack.config.js.
-        if ($name != 'main') {
-          $libraries["js.$name"]['dependencies'][] = '{{ NAME }}/js.main';
-        }
+        $libraries["js.$name"]['dependencies'][] = $name == 'main'
+          ? 'core/drupal'
+          : '{{ NAME }}/js.main';
       }
     }
   }
