@@ -19,11 +19,6 @@
     <exclude-pattern>*/themes/custom/*</exclude-pattern>
   </rule>
 
-  <!-- Ignore t() usage in test classes -->
-  <rule ref="DrupalPractice.Objects.GlobalFunction">
-    <exclude-pattern>*/tests/src/*</exclude-pattern>
-  </rule>
-
   <!-- Disable open page callback route warnings in test modules. -->
   <rule ref="DrupalPractice.Yaml.RoutingAccess">
     <exclude-pattern>*/tests/modules/*</exclude-pattern>
