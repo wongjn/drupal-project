@@ -1,5 +1,4 @@
 {
-  "name": "{{ NAME }}",
   "private": true,
   "scripts": {
     "postinstall": "node ./build/patch.js",
@@ -9,14 +8,6 @@
     "lint": "eslint --ignore-path .gitignore .",
     "format": "prettier --write \"./**/*.js\" --ignore-path .gitignore&&eslint --fix --ignore-path .gitignore .",
     "analyze": "webpack --config webpack.analyze.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://bitbucket.org/projectcosmic/{{ NAME }}.git"
-  },
-  "author": {
-    "name": "Justin Wong",
-    "email": "justin@cosmic.org.uk"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.0",
