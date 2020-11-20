@@ -83,13 +83,12 @@ const isHiddenInput = node =>
  *   Array of focusable elements.
  */
 const getFocusables = node =>
-  [
-    ...node.querySelectorAll(
-      'a,button,input,textarea,select,details,[tabindex]:not([tabindex="-1"])',
-    ),
-  ]
-    .filter(element => !element.hasAttribute('disabled'))
-    .filter(element => !isHiddenInput(element));
+  matchChildren(
+    'a,button,input,textarea,select,details,[tabindex]:not([tabindex="-1"])',
+    node,
+  ).filter(
+    element => !element.hasAttribute('disabled') && !isHiddenInput(element),
+  );
 
 /**
  * Creates a trapping focusin event listener.
