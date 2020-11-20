@@ -1,0 +1,20 @@
+{
+  "root": true,
+  "extends": "drupal",
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      2,
+      {
+        "devDependencies": [
+          "./build/*.js",
+          "**/gulpfile.js/**/*.js",
+          "**/postcss.config.js",
+          "**/svelte.config.js",
+          "**/webpack.*.js"
+        ],
+        "optionalDependencies": false
+      }
+    ],
+    "valid-jsdoc": 0
+  }
+}

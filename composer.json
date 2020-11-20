@@ -103,6 +103,8 @@
             "file-mapping": {
                 "[web-root]/.ht.router.php": false,
                 "[web-root]/.csslintrc": false,
+                "[web-root]/.eslintignore": false,
+                "[web-root]/.eslintrc.json": false,
                 "[web-root]/example.gitignore": false,
                 "[web-root]/sites/development.services.yml": false,
                 "[web-root]/sites/example.settings.local.php": false,
