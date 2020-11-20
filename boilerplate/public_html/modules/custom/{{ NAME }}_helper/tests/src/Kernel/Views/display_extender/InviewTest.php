@@ -46,7 +46,7 @@ class InviewTest extends ViewsKernelTestBase {
     $build = $view->preview('embed_1');
     $this->render($build);
 
-    $elements = $this->cssSelect('[class*="js-view-dom-id-"].js-inview-list[data-selector=".select"][data-ratio="0.5"]');
+    $elements = $this->cssSelect('[class*="js-view-dom-id-"].js-inview-list[data-selector=".select"]');
     $this->assertCount(1, $elements);
   }
 

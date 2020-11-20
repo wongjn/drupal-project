@@ -58,7 +58,7 @@ const buildConfig = ({ production = false } = {}) => name => ({
     rules: [
       {
         test: /\.(m?js|svelte)$/,
-        exclude: /node_modules\/(?!(rambda|svelte))/,
+        exclude: /node_modules\/(?!svelte)/,
         use: {
           loader: 'babel-loader',
           options: { envName: name },

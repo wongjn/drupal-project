@@ -24,7 +24,6 @@ class InView extends DisplayExtenderPluginBase {
   protected function defineOptions() {
     return [
       'selector' => ['default' => NULL],
-      'ratio' => ['default' => 0.2],
     ];
   }
 
@@ -40,17 +39,6 @@ class InView extends DisplayExtenderPluginBase {
         '#size' => 30,
         '#default_value' => $this->options['selector'],
       ];
-
-      $form['ratio'] = [
-        '#type' => 'number',
-        '#title' => $this->t('Intersection ratio'),
-        '#description' => $this->t('The ratio of an element to be visible before loading.'),
-        '#min' => 0,
-        '#max' => 1,
-        '#step' => 0.01,
-        '#required' => TRUE,
-        '#default_value' => $this->options['ratio'],
-      ];
     }
   }
 
@@ -60,7 +48,6 @@ class InView extends DisplayExtenderPluginBase {
   public function submitOptionsForm(&$form, FormStateInterface $form_state) {
     if ($form_state->get('section') == 'inview') {
       $this->options['selector'] = $form_state->getValue('selector') ?: NULL;
-      $this->options['ratio'] = $form_state->getValue('ratio');
     }
   }
 
@@ -90,7 +77,6 @@ class InView extends DisplayExtenderPluginBase {
     if ($selector = $this->options['selector']) {
       $variables['attributes']['class'][] = 'js-inview-list';
       $variables['attributes']['data-selector'] = $selector;
-      $variables['attributes']['data-ratio'] = $this->options['ratio'];
     }
   }
 

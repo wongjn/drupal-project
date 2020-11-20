@@ -1,13 +1,9 @@
 /**
  * @file
  * Provides element animation when it is within the viewport.
- *
- * @todo Re-implement single selection if ever needed.
  */
 
-import { curry, forEach, filter, pipe } from 'rambda';
-import { createBehavior } from './lib/behaviors';
-import { match } from './lib/dom';
+import { match, matchChildren } from './lib/dom';
 
 /**
  * CSS variable for animation delay.
@@ -38,6 +34,13 @@ const LOADING_CLASSNAME = 'is-loading';
 const LOADED_CLASSNAME = 'is-loaded';
 
 /**
+ * List of seen elements to avoid repeat animations.
+ *
+ * @type {WeakSet<HTMLElement>}
+ */
+const seen = new WeakSet();
+
+/**
  * Triggers an element in-view animation.
  *
  * @param {HTMLElement} element
@@ -55,53 +58,10 @@ const load = (element, delay = 0) => {
     element.style.removeProperty(CSS_PROPERTY_NAME);
     element.classList.remove(LOADING_CLASSNAME);
     element.classList.add(LOADED_CLASSNAME);
+    seen.add(element);
   };
   element.addEventListener('transitionend', transitionEnder);
 };
-
-/**
- * Sets up the loader for elements.
- *
- * @param {IntersectionObserverCallback} callback
- *   The function to run on any intersection.
- * @param {number} threshold
- *   The threshold parameter for the IntersectionObserver options.
- *
- * @return {(elements: Element[]) => () => void}
- *   The loader that accepts an array of elements to watch for intersection and
- *   that returns a function to destroy the loader.
- */
-const setUpLoader = (callback, threshold) => {
-  const observer = new IntersectionObserver(callback, { threshold });
-
-  return pipe(
-    forEach(element => {
-      element.classList.add(OUTSIDE_VIEWPORT_CLASSNAME);
-      observer.observe(element);
-    }),
-    // Return a function to disable the observer. Must be bound to avoid
-    // 'Illegal invocation' error.
-    () => observer.disconnect.bind(observer),
-  );
-};
-
-/**
- * Builds an on-intersection IntersectionObserver callback.
- *
- * @param {(element: Element, delay: number) => void} loader
- *   The loader to run on an IntersectionObserverEntry.target when it is
- *   intersecting the viewport.
- *
- * @return {IntersectionObserverCallback}
- *   Callback for IntersectionObserver objects.
- */
-const onIntersect = loader => (entries, observer) =>
-  entries
-    .filter(({ isIntersecting }) => isIntersecting)
-    .forEach((entry, index) => {
-      observer.unobserve(entry.target);
-      loader(entry.target, index * 100);
-    });
 
 /**
  * Queries whether an element is currently within the browser window.
@@ -113,40 +73,110 @@ const onIntersect = loader => (entries, observer) =>
  *   True if the element is within the browser window.
  */
 const isInWindow = element => {
-  const { top, height } = element.getBoundingClientRect();
-  return top > window.innerHeight || top < height * -1;
+  const { top, left, right, bottom } = element.getBoundingClientRect();
+  const { innerWidth, innerHeight } = window;
+  return top < innerHeight && bottom > 0 && left < innerWidth && right > 0;
 };
 
 /**
- * Returns a function to create a in-view animating list of elements.
+ * Matches in-view targets in a list.
  *
- * @param {boolean} justInvoked
- *   True if this is the first invocation after script load.
+ * @param {HTMLElement} list
+ *   In-view list parent element.
  *
- * @return {() => void}
- *   The list creator. The creator returns the destroy function.
+ * @return {HTMLElement[]}
+ *   List of target elements.
  */
-const createList = (justInvoked = false) => list => {
-  const createCollection = pipe(
-    curry(match)(list.dataset.selector),
-    justInvoked ? filter(isInWindow) : args => args,
-    setUpLoader(onIntersect(load), parseFloat(list.dataset.ratio) || 0.2),
-  );
+const matchListTargets = list => matchChildren(list.dataset.selector, list);
 
-  // Set on next computation frame so that multiple calls of the above
-  setTimeout(() => {
-    justInvoked = false;
-  }, 0);
+/**
+ * Reacts on element-viewport intersection.
+ *
+ * @param {IntersectionObserverEntry[]} entries
+ *   Intersection event entries.
+ * @param {IntersectionObserver} observer
+ *   The observer.
+ */
+const onIntersect = (entries, observer) => {
+  const parents = new WeakMap();
 
-  return createCollection(list);
+  entries
+    .filter(({ isIntersecting }) => isIntersecting)
+    .forEach(entry => {
+      observer.unobserve(entry.target);
+
+      const parent = entry.target.closest('.js-inview-list[data-selector]');
+      const index = parents.get(parent) || 0;
+      parents.set(parent, index + 1);
+      load(entry.target, index * 100);
+    });
 };
+
+/**
+ * Registers a list with elements to in-view.
+ *
+ * @param {IntersectionObserver} observer
+ *   The observer to register with.
+ *
+ * @return {(list: HTMLElement) => void}
+ *   Register function.
+ */
+const registerList = observer => list =>
+  matchListTargets(list)
+    .filter(child => !seen.has(child))
+    .forEach(child => {
+      if (isInWindow(child)) {
+        seen.add(child);
+      } else {
+        observer.observe(child);
+        child.classList.add(OUTSIDE_VIEWPORT_CLASSNAME);
+      }
+    });
+
+/**
+ * Unregisters a list with elements from in-view.
+ *
+ * @param {IntersectionObserver} observer
+ *   The observer to unregister with.
+ *
+ * @return {(list: HTMLElement) => void}
+ *   Unregister function.
+ */
+const unregisterList = observer => list =>
+  matchListTargets(list).forEach(child => observer.unobserve(child));
+
+/**
+ * Runs a function on each in-view list element in a context.
+ *
+ * @param {(element: HTMLElement) => any} fn
+ *   The function to run.
+ * @param {HTMLDocument|HTMLElement} context
+ *   The element to match within.
+ */
+const forEachList = (fn, context) =>
+  match('.js-inview-list[data-selector]', context).forEach(fn);
+
+/**
+ * The global observer.
+ */
+const viewObserver = new IntersectionObserver(onIntersect, { threshold: 0.2 });
 
 /**
  * Adds lazy-loading and in-viewport animations.
  *
  * @type {Drupal~behavior}
  */
-Drupal.behaviors.{{ CAMEL }}InViewList = createBehavior(
-  '.js-inview-list[data-selector]',
-  createList(true),
-);
+Drupal.behaviors.{{ CAMEL }}InViewList = {
+  attach(context) {
+    forEachList(registerList(viewObserver), context);
+  },
+  detach(context, settings, trigger) {
+    if (trigger === 'unload') {
+      forEachList(unregisterList(viewObserver), context);
+    }
+  },
+};
+
+if (BUNDLE_TYPE === 'legacy' && document.readyState !== 'loading') {
+  Drupal.behaviors.{{ CAMEL }}InViewList.attach(document.body, drupalSettings);
+}
