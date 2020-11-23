@@ -74,7 +74,7 @@ function watcher() {
     { ignoreInitial: false },
     series(streamSass, compileStyleguide, styleguideReload),
   );
-  watch(iconSrc, compileIcons);
+  watch(iconSrc, { ignoreInitial: false }, compileIcons);
 }
 
 exports.watch = series(compileIcons, watcher);
