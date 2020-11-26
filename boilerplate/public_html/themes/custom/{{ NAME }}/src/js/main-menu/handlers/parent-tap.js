@@ -58,23 +58,18 @@ const onTouchHandler = nav => event => {
     return;
   }
 
-  // No sub menu to open or is already open, return early.
-  const subMenu = li.querySelector('ul');
-  if (!subMenu || li.classList.contains(OPEN_CLASS)) {
-    // Wait a frame so normal interactions still work.
-    setTimeout(() => closeAllOpen(nav));
-    return;
-  }
-
   // Close unrelated open nodes.
   findAllOpen(nav)
     .filter(node => !node.contains(li))
     .forEach(closeOpen);
 
-  li.classList.add(OPEN_CLASS);
+  // No sub menu to open or is already open, return early.
+  if (li.querySelector('ul') && !li.classList.contains(OPEN_CLASS)) {
+    li.classList.add(OPEN_CLASS);
 
-  event.preventDefault();
-  event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
+  }
 };
 
 /**
