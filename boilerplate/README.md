@@ -1,5 +1,7 @@
 # {{ LABEL }} Drupal 9 project managed with [Composer](https://getcomposer.org/)
 
+![Build](https://github.com/projectcosmic/{{ NAME }}/workflows/Build/badge.svg)
+
 ## Usage
 
 First you need to [install composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx).

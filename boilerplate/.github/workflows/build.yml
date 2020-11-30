@@ -1,0 +1,193 @@
+name: Build
+
+on:
+  push:
+    branches-ignore: dependabot/*
+  pull_request:
+    branches: master
+    paths: composer.lock
+  workflow_dispatch:
+
+jobs:
+  composer_build:
+    runs-on: ubuntu-18.04
+    outputs:
+      composer-cache-dir: ${{ steps.composer.outputs.dir }}
+      composer-cache-key: ${{ steps.composer.outputs.key }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Composer v1
+      id: composer
+      run: |
+        sudo update-alternatives --set php /usr/bin/php7.3
+        php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+        php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('https://composer.github.io/installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+        php composer-setup.php --1
+        echo "::set-output name=dir::$(php ./composer.phar config cache-dir)"
+        echo "::set-output name=key::v1-composer-${{ hashFiles('composer.lock') }}"
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ${{ steps.composer.outputs.dir }}
+          vendor
+          public_html/core
+          public_html/libraries
+          public_html/*/contrib
+          composer.phar
+        key: ${{ steps.composer.outputs.key }}
+        restore-keys: v1-composer-
+    - run: php ./composer.phar install --no-progress
+  build_assets:
+    runs-on: ubuntu-18.04
+    needs: composer_build
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Composer cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ needs.composer_build.outputs.composer-cache-dir }}
+          vendor
+          public_html/core
+          public_html/libraries
+          public_html/*/contrib
+          composer.phar
+        key: ${{ needs.composer_build.outputs.composer-cache-key }}
+        restore-keys: v1-composer-
+    - run: nvm install --no-progress 10
+    - name: NPM cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.npm
+          public_html/themes/custom/*/node_modules
+        key: v1-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: v1-npm-
+    - run: nvm use 10 && npm install && npm run build
+      working-directory: public_html/themes/custom/{{ NAME }}
+    - uses: actions/upload-artifact@v2
+      with:
+        name: assets
+        path: public_html/themes/custom/{{ NAME }}/dist
+  code_style:
+    runs-on: ubuntu-18.04
+    needs: composer_build
+    steps:
+    - uses: actions/checkout@v2
+    - name: Composer cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ needs.composer_build.outputs.composer-cache-dir }}
+          vendor
+          public_html/core
+          public_html/libraries
+          public_html/*/contrib
+          composer.phar
+        key: ${{ needs.composer_build.outputs.composer-cache-key }}
+        restore-keys: v1-composer-
+    - run: ./vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1 --report-full
+  php_unit:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix: { type: ['themes', 'modules'] }
+    env:
+      SIMPLETEST_DB: mysql://root:root@127.0.0.1/tests
+      SIMPLETEST_BASE_URL: http://localhost:8888
+      BROWSERTEST_OUTPUT_DIRECTORY: public_html/sites/simpletest/browser_output
+    needs: composer_build
+    steps:
+    - uses: actions/checkout@v2
+    - name: Composer cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ needs.composer_build.outputs.composer-cache-dir }}
+          vendor
+          public_html/core
+          public_html/libraries
+          public_html/*/contrib
+          composer.phar
+        key: ${{ needs.composer_build.outputs.composer-cache-key }}
+        restore-keys: v1-composer-
+    - name: Set up and run PHPUnit
+      run: |
+        sudo systemctl start mysql.service
+        mysql -u root -proot -e 'create database tests'
+        sudo update-alternatives --set php /usr/bin/php7.3
+        php_ini=$(php --ini | grep 'Loaded Configuration' | sed -E 's/.*: +//')
+        sudo chmod a+w $php_ini
+        echo 'error_reporting = E_ALL' >> $php_ini
+        php ./composer.phar drupal:scaffold --quiet
+        cd public_html
+        cp core/assets/scaffold/files/ht.router.php .ht.router.php
+        php -S localhost:8888 .ht.router.php >& /dev/null &
+        mkdir -p sites/simpletest/browser_output
+        ../vendor/bin/phpunit -c core ${{ matrix.type }}/custom
+    - uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: ${{ matrix.type }}-test-browser-output
+        path: public_html/sites/simpletest/browser_output
+  update_db:
+    runs-on: ubuntu-18.04
+    needs: composer_build
+    if: github.event_name == 'pull_request' && startsWith(github.event.pull_request.title, 'Bump drupal/')
+    steps:
+    - uses: actions/checkout@v2
+    - name: Composer cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ needs.composer_build.outputs.composer-cache-dir }}
+          vendor
+          public_html/core
+          public_html/libraries
+          public_html/*/contrib
+          composer.phar
+        key: ${{ needs.composer_build.outputs.composer-cache-key }}
+        restore-keys: v1-composer-
+    - name: Attempt any Drupal database updates
+      run: |
+        sudo systemctl start mysql.service
+        mysql -u root -proot -e 'create database site'
+        sudo update-alternatives --set php /usr/bin/php7.3
+        php ./composer.phar drupal:scaffold --quiet
+        echo '<?php
+        $settings["config_sync_directory"] = "../config/sync";' > public_html/sites/default/settings.php
+        ./vendor/bin/drush site:install minimal --db-url=mysql://root:root@localhost/site --existing-config
+        ./vendor/bin/drush updatedb
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email github-actions@github.com
+        ./vendor/bin/drush config:export --commit --message='Update config from database update'
+        git push
+  # deploy:
+  #   runs-on: self-hosted
+  #   needs: [composer_build, build_assets, php_unit]
+  #   if: github.ref == 'refs/heads/master'
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #     with: { fetch-depth: 0 }
+  #   - name: Composer cache
+  #     uses: actions/cache@v2
+  #     with:
+  #       path: |
+  #         vendor
+  #         public_html/core
+  #         public_html/libraries
+  #         public_html/*/contrib
+  #       key: ${{ needs.composer_build.outputs.composer-cache-key }}
+  #       restore-keys: v1-composer-
+  #   - uses: actions/download-artifact@v2
+  #     with:
+  #       name: assets
+  #       path: public_html/themes/custom/{{ NAME }}/dist
+  #   - name: Run deployment
+  #     run: |
+  #       composer install
+  #       dir=themes/custom/{{ NAME }}/dist/; ./vendor/bin/drush rsync @self:$dir @live:$dir --mode=rcmz -- --delete --exclude='*.map' --chmod="Fgo-wx,Dgo-w"
+  #       git push USER@server.projectcosmic.co.uk:site.git master -f
+  #       ./vendor/bin/drush @live deploy
