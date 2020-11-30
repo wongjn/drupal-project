@@ -2,10 +2,9 @@ name: Build
 
 on:
   push:
-    branches-ignore: dependabot/*
+    branches-ignore: dependabot/**
   pull_request:
     branches: master
-    paths: composer.lock
   workflow_dispatch:
 
 jobs:
