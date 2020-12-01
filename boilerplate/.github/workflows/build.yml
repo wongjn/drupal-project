@@ -96,7 +96,7 @@ jobs:
     env:
       SIMPLETEST_DB: mysql://root:root@127.0.0.1/tests
       SIMPLETEST_BASE_URL: http://localhost:8888
-      BROWSERTEST_OUTPUT_DIRECTORY: public_html/sites/simpletest/browser_output
+      BROWSERTEST_OUTPUT_DIRECTORY: sites/simpletest/browser_output
     needs: composer_build
     steps:
     - uses: actions/checkout@v2
