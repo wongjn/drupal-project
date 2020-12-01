@@ -77,7 +77,10 @@ class Menu {
       ],
     ]);
 
-    $item['attributes']->addClass(['c-main-menu__item', "c-main-menu__item--$suffix"]);
+    $item['attributes']->addClass([
+      'c-main-menu__item',
+      "c-main-menu__item--$suffix",
+    ]);
   }
 
 }
