@@ -13,9 +13,9 @@ $_fallback_gutter_y: 40px;
 .l-container {
   margin-right: auto;
   margin-left: auto;
-  padding: ($_fallback_gutter_y / 2) layout.$GUTTER_FALLBACK;
+  padding: ($_fallback_gutter_y / 2) layout.$GUTTER_FALLBACK_PX;
   padding: calc(var(--container-space-y) / 2) var(--container-space-x);
-  max-width: (layout.$SITE-WIDTH-PX + (layout.$GUTTER_FALLBACK * 2)); // 1
+  max-width: (layout.$SITE-WIDTH-PX + (layout.$GUTTER_FALLBACK_PX * 2)); // 1
   max-width: calc(#{layout.$SITE-WIDTH-PX} + (var(--container-space-x) * 2)); // 1
   --container-space-y: 40px;
   --container-space-x: 20px;
