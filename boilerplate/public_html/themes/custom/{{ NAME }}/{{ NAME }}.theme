@@ -115,19 +115,38 @@ function {{ NAME }}_page_attachments_alter(array &$attachments) {
     '{{ NAME }}_favicons',
   ];
 
-  // $critical_fonts = [
-  //   'font1.woff2',
-  //   'font2.woff2',
+  // phpcs:disable
+  // Google Fonts origin preconnect.
+  // $attachments['#attached']['html_head_link'][][] = [
+  //   'rel' => 'preconnect',
+  //   'href' => 'https://fonts.gstatic.com',
+  //   'crossorigin' => TRUE,
   // ];
-  // foreach ($critical_fonts as $font) {
-  //   $attachments['#attached']['html_head_link'][][] = [
-  //     'as' => 'font',
-  //     'rel' => 'preload',
-  //     'type' => 'font/woff2',
-  //     'href' => file_url_transform_relative(file_create_url("$theme_path/fonts/$font")),
-  //     'crossorigin' => TRUE,
-  //   ];
-  // }
+
+  // $font_file = 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&display=swap';
+  // $attachments['#attached']['html_head_link'][][] = [
+  //   'rel' => 'preload',
+  //   'href' => $font_file,
+  //   'as' => 'style',
+  // ];
+  // $attachments['#attached']['html_head_link'][][] = [
+  //   'rel' => 'stylesheet',
+  //   'href' => $font_file,
+  //   'media' => 'print',
+  //   'onload' => 'this.media="all"',
+  // ];
+  // $attachments['#attached']['html_head'][] = [
+  //   [
+  //     '#tag' => 'link',
+  //     '#attributes' => [
+  //       'rel' => 'stylesheet',
+  //       'href' => $font_file,
+  //     ],
+  //     '#noscript' => TRUE,
+  //   ],
+  //   '{{ NAME }}_google_font_noscript_load',
+  // ];
+  // phpcs:enable
 
   // Remove telephone number detection in Safari and Edge.
   $attachments['#attached']['html_head'][] = [
