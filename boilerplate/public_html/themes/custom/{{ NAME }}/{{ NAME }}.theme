@@ -377,7 +377,10 @@ function {{ NAME }}_preprocess_responsive_image(&$variables) {
     ->getFallbackImageStyle();
   if ($fallback_style) {
     $variables += ['height' => NULL, 'width' => NULL];
-    $dimensions = ['height' => $variables['height'], 'width' => $variables['width']];
+    $dimensions = [
+      'height' => $variables['height'],
+      'width' => $variables['width'],
+    ];
 
     \Drupal::entityTypeManager()
       ->getStorage('image_style')
