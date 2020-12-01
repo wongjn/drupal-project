@@ -16,7 +16,7 @@ class Form {
    * @return string
    *   The attribute key for the wrapper HTML element for the form element.
    */
-  public static function getWrapperAttributeKey(array $element) {
+  public static function getWrapperAttributesKey(array $element) {
     $attributes_key = '#attributes';
 
     // If not a container type:
