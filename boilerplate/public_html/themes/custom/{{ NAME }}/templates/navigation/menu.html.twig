@@ -23,16 +23,14 @@
  * @see {{ NAME }}_preprocess_menu()
  */
 #}
-{% import _self as menus %}
 
 {#
   We call a macro which calls itself to render the full tree.
   @see http://twig.sensiolabs.org/doc/tags/macro.html
 #}
-{{ menus.menu_links(items, attributes, attributes_set) }}
+{{ _self.menu_links(items, attributes, attributes_set) }}
 
 {% macro menu_links(items, attributes, attributes_set = []) %}
-  {% import _self as menus %}
   {% if items %}
     <ul{{ attributes }}>
       {% for item in items %}
@@ -40,7 +38,7 @@
           {{ link(item.title, item.url) }}
           {% if item.below %}
             {{
-              menus.menu_links(
+              _self.menu_links(
                 item.below,
                 attributes_set ? attributes_set|first : attributes,
                 attributes_set ? attributes_set[1:] : []
