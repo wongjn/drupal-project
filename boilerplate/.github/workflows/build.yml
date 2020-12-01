@@ -3,6 +3,10 @@ name: Build
 on:
   push:
     branches-ignore: dependabot/**
+    paths-ignore:
+      - .github/**
+      - '!.github/workflows/*'
+      - .vscode/**
   pull_request:
     branches: master
   workflow_dispatch:
@@ -10,6 +14,7 @@ on:
 jobs:
   composer_build:
     runs-on: ubuntu-18.04
+    if: 'github.event_name == ''push'' && !contains(github.event.head_commit.message, ''[skip ci]'')'
     outputs:
       composer-cache-dir: ${{ steps.composer.outputs.dir }}
       composer-cache-key: ${{ steps.composer.outputs.key }}
