@@ -32,8 +32,14 @@ class PageRenderTest extends ThemeKernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    $this->markTestIncomplete('Add tests');
     $this->routeMatch = $this->createMock('Drupal\Core\Routing\RouteMatchInterface');
+  }
+
+  /**
+   * Placeholder test method.
+   */
+  public function testSomething() {
+    $this->markTestIncomplete('Add tests');
   }
 
   /**
