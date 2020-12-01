@@ -92,7 +92,7 @@ class MainSystemMenuBlockTest extends BlockTestBase {
       'Top level link classes.'
     );
 
-    $elements = $element->xpath('./following-sibling::ul[class="c-main-menu__sub-menu"]');
+    $elements = $element->xpath('./following-sibling::ul[@class="c-main-menu__sub-menu"]');
     $this->assertCount(1, $elements, 'Sub-level menu list.');
 
     $elements = reset($elements)->xpath('./li');
@@ -140,7 +140,7 @@ class MainSystemMenuBlockTest extends BlockTestBase {
       'Deep level link classes.'
     );
 
-    $elements = $main_menu->xpath('./[@class="c-main-menu__drawer"]');
+    $elements = $main_menu->xpath('./*[@class="c-main-menu__drawer"]');
     $this->assertCount(1, $elements, 'Drawer button wrapper.');
 
     $elements = reset($elements)->xpath('./button[@class="c-main-menu__open-btn"]');
