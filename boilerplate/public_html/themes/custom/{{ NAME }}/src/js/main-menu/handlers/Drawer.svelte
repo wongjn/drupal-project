@@ -197,16 +197,4 @@ onDestroy(() => toggleScrolling(false));
 :global(.drawer__link--top) {
   text-transform: uppercase;
 }
-
-:global(.drawer__link-text) {
-  background: linear-gradient(0deg, currentColor, currentColor) no-repeat bottom right / 0% 2px;
-  transition: background-size 300ms;
-  padding-bottom: 2px;
-
-  :global(.drawer__link):focus > &,
-  :global(.drawer__link):hover > & {
-    background-position-x: left;
-    background-size: 100% 2px;
-  }
-}
 </style>

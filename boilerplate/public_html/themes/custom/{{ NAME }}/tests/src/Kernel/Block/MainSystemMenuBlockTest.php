@@ -82,17 +82,23 @@ class MainSystemMenuBlockTest extends BlockTestBase {
       (string) $element->attributes()->class,
       'Top level main menu item classes.'
     );
-    
+
     $elements = $element->xpath('./a');
     $this->assertCount(1, $elements, 'Top level link.');
     $element = reset($elements);
     $this->assertStringList(
-      ['c-main-menu__link', 'c-main-menu__link--top'],
+      [
+        'c-main-menu__link',
+        'c-main-menu__link--top',
+        'u-link-underline-wrapped',
+      ],
       (string) $element->attributes()->class,
       'Top level link classes.'
     );
+    $elements = $element->xpath('./span[@class="u-link-underline-wrapped__text"]');
+    $this->assertCount(1, $elements, 'Top level link text wrapper.');
 
-    $elements = $element->xpath('./following-sibling::ul[@class="c-main-menu__sub-menu"]');
+    $elements = reset($elements)->xpath('../following-sibling::ul[@class="c-main-menu__sub-menu"]');
     $this->assertCount(1, $elements, 'Sub-level menu list.');
 
     $elements = reset($elements)->xpath('./li');
@@ -108,12 +114,18 @@ class MainSystemMenuBlockTest extends BlockTestBase {
     $this->assertCount(1, $elements, 'Sub-level link.');
     $element = reset($elements);
     $this->assertStringList(
-      ['c-main-menu__link', 'c-main-menu__link--sub'],
+      [
+        'c-main-menu__link',
+        'c-main-menu__link--sub',
+        'u-link-underline-wrapped',
+      ],
       (string) $element->attributes()->class,
       'Sub-level link classes.'
     );
+    $elements = $element->xpath('./span[@class="u-link-underline-wrapped__text"]');
+    $this->assertCount(1, $elements, 'Sub-level link text wrapper.');
 
-    $elements = reset($elements)->xpath('./following-sibling::ul');
+    $elements = reset($elements)->xpath('../following-sibling::ul');
     $this->assertCount(1, $elements, 'Deep level menu list.');
     $element = reset($elements);
     $this->assertStringList(
@@ -135,10 +147,16 @@ class MainSystemMenuBlockTest extends BlockTestBase {
     $this->assertCount(1, $elements, 'Deep level link.');
     $element = reset($elements);
     $this->assertStringList(
-      ['c-main-menu__link', 'c-main-menu__link--sub'],
+      [
+        'c-main-menu__link',
+        'c-main-menu__link--sub',
+        'u-link-underline-wrapped',
+      ],
       (string) $element->attributes()->class,
       'Deep level link classes.'
     );
+    $elements = $element->xpath('./span[@class="u-link-underline-wrapped__text"]');
+    $this->assertCount(1, $elements, 'Deep level link text wrapper.');
 
     $elements = $main_menu->xpath('./*[@class="c-main-menu__drawer"]');
     $this->assertCount(1, $elements, 'Drawer button wrapper.');

@@ -2,6 +2,8 @@
 
 namespace Drupal\{{ NAME }};
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Static class of helper functions for menu processing.
  */
@@ -58,24 +60,34 @@ class Menu {
   }
 
   /**
-   * Adds link classes to a main menu link.
+   * Pre-processes a main menu item.
    *
    * @param array $item
    *   A single menu item from template_preprocess_menu() or similar.
    * @param int $depth
    *   Depth of the menu being processed.
    */
-  public static function mainMenuAddClasses(array $item, $depth = 0) {
+  public static function mainMenuItemPreprocess(array &$item, $depth = 0) {
     $suffix = $depth === 0 ? 'top' : 'sub';
 
     $item['url']->mergeOptions([
       'attributes' => [
         'class' => [
+          'u-link-underline-wrapped',
           'c-main-menu__link',
           "c-main-menu__link--$suffix",
         ],
       ],
     ]);
+
+    $item['title'] = [
+      '#type' => 'inline_template',
+      '#template' => '<span{{ attributes }}>{{ title }}</span>',
+      '#context' => [
+        'attributes' => new Attribute(['class' => ['u-link-underline-wrapped__text']]),
+        'title' => $item['title'],
+      ],
+    ];
 
     $item['attributes']->addClass([
       'c-main-menu__item',
