@@ -97,11 +97,11 @@ onDestroy(() => toggleScrolling(false));
     background-color: skyblue;
     padding: $title-padding (($title-padding * 2) + $title-size) $title-padding $title-padding;
     flex: 0 0 auto;
-    transform: translateY(-30px);
-    opacity: 0;
     color: red;
-    font: 700 #{$title-size} / 1;
+    font-weight: 700;
+    font-size: #{$title-size};
     text-transform: uppercase;
+    outline: 0;
   }
 
   &__close {
