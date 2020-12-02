@@ -236,7 +236,7 @@ function {{ NAME }}_preprocess_form_element(&$variables) {
     $variables['element'] += ['#label_display' => 'above'];
 
     if ($variables['element']['#label_display'] == 'above') {
-      $variables['label']['#attributes']['class'][] = 'u-margin-bottom-30';
+      $variables['label']['#attributes']['class'][] = 'u-mb-30';
     }
   }
 }
