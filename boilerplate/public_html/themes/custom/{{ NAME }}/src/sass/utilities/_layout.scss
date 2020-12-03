@@ -32,5 +32,6 @@
 
 @include _offset-utility('margin-bottom', (), '.u-mb');
 @include _offset-utility('margin-top', (10), '.u-mt');
-@include _offset-utility('margin-top', (), '* + .u-margin-neighbor-vertical');
-@include _offset-utility('margin-left', (), '* + .u-margin-neighbor-horizontal');
+// Add margins only if there is an element before it.
+@include _offset-utility('margin-top', (), '* + .u-mv');
+@include _offset-utility('margin-left', (), '* + .u-mh');
