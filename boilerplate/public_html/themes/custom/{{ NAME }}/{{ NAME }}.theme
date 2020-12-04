@@ -86,6 +86,14 @@ function {{ NAME }}_css_alter(&$css) {
     $library_manager->getLibraryByName('system', 'base')['css'],
     $library_manager->getLibraryByName('{{ NAME }}', 'global')['css']
   );
+
+  if (\Drupal::moduleHandler()->moduleExists('cosmic_attribution')) {
+    $global_stylesheets = array_merge(
+      $global_stylesheets,
+      $library_manager->getLibraryByName('cosmic_attribution', 'cosmic-logo')['css']
+    );
+  }
+
   $global_stylesheets = array_map(function ($css) {
     return $css['data'];
   }, $global_stylesheets);
