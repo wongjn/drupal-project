@@ -189,9 +189,15 @@ jobs:
   #     with:
   #       name: assets
   #       path: public_html/themes/custom/{{ NAME }}/dist
+  #  - run: composer install
+  #  - name: Query for any uninstalled Drupal extensions
+  #    id: uninstall
+  #    run: echo "::set-output name=extensions::`sed -E 's/[[:space:]]*(.+):.+/\1/' <(comm -13 <(sort config/sync/core.extension.yml) <(git show ${{ github.event.before }}:config/sync/core.extension.yml | sort))`"
+  #  - name: Uninstall removed Drupal extensions
+  #    if: steps.uninstall.extensions != ''
+  #    run: ./vendor/bin/drush @live pm:uninstall ${{ steps.uninstall.extensions }}
   #   - name: Run deployment
   #     run: |
-  #       composer install
   #       dir=themes/custom/{{ NAME }}/dist/; ./vendor/bin/drush rsync @self:$dir @live:$dir --mode=rcmz -- --delete --exclude='*.map' --chmod="Fgo-wx,Dgo-w"
   #       git push USER@server.projectcosmic.co.uk:site.git master -f
   #       ./vendor/bin/drush @live deploy
