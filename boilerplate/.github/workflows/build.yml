@@ -142,6 +142,7 @@ jobs:
     if: github.event_name == 'pull_request' && startsWith(github.event.pull_request.title, 'Bump drupal/')
     steps:
     - uses: actions/checkout@v2
+      with: { fetch-depth: 0 }
     - name: Composer cache
       uses: actions/cache@v2
       with:
