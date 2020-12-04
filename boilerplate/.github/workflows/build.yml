@@ -14,7 +14,7 @@ on:
 jobs:
   composer_build:
     runs-on: ubuntu-18.04
-    if: 'github.event_name != ''push'' || !contains(github.event.head_commit.message, ''[skip ci]'')'
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip ci]')
     outputs:
       composer-cache-dir: ${{ steps.composer.outputs.dir }}
       composer-cache-key: ${{ steps.composer.outputs.key }}
@@ -44,6 +44,7 @@ jobs:
   build_assets:
     runs-on: ubuntu-18.04
     needs: composer_build
+    if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'dependabot/npm_and_yarn/')
     defaults:
       run:
         shell: bash -l {0}
@@ -79,6 +80,7 @@ jobs:
   code_style:
     runs-on: ubuntu-18.04
     needs: composer_build
+    if: github.event_name == 'push'
     steps:
     - uses: actions/checkout@v2
     - name: Composer cache
@@ -103,6 +105,7 @@ jobs:
       SIMPLETEST_BASE_URL: http://localhost:8888
       BROWSERTEST_OUTPUT_DIRECTORY: sites/simpletest/browser_output
     needs: composer_build
+    if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'dependabot/composer/')
     steps:
     - uses: actions/checkout@v2
     - name: Composer cache
@@ -139,10 +142,12 @@ jobs:
   update_db:
     runs-on: ubuntu-18.04
     needs: composer_build
-    if: github.event_name == 'pull_request' && startsWith(github.event.pull_request.title, 'Bump drupal/')
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'dependabot/composer/drupal/')
     steps:
     - uses: actions/checkout@v2
-      with: { fetch-depth: 0 }
+      with:
+        ref: ${{ github.head_ref }}
+        fetch-depth: 0
     - name: Composer cache
       uses: actions/cache@v2
       with:
