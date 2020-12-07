@@ -167,8 +167,10 @@ jobs:
         sudo update-alternatives --set php /usr/bin/php7.3
         php ./composer.phar drupal:scaffold --quiet
         echo '<?php
-        $settings["config_sync_directory"] = "../config/sync";' > public_html/sites/default/settings.php
+        $settings["config_sync_directory"] = "../config/sync";
+        $settings["config_exclude_modules"][] = "multiline_config";' > public_html/sites/default/settings.php
         ./vendor/bin/drush site:install minimal --db-url=mysql://root:root@localhost/site --existing-config
+        ./vendor/bin/drush pm:enable multiline_config
         ./vendor/bin/drush updatedb
         git config --global user.name 'GitHub Actions'
         git config --global user.email github-actions@github.com
