@@ -40,7 +40,7 @@ class CssAssetsTest extends ThemeKernelTestBase {
     $this->config('system.performance')->set('css.preprocess', TRUE)->save();
     $this->renderPageWithAttachments(['system/diff']);
 
-    $elements = $this->cssSelect('link[rel="stylesheet"]');
+    $elements = $this->cssSelect('link[rel="stylesheet"][href^="/vfs://"]');
     $this->assertCount(2, $elements, 'Links per group.');
 
     $href = (string) end($elements)->attributes()->href;
