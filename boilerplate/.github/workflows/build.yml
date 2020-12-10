@@ -125,9 +125,6 @@ jobs:
         sudo systemctl start mysql.service
         mysql -u root -proot -e 'create database tests'
         sudo update-alternatives --set php /usr/bin/php7.3
-        php_ini=$(php --ini | grep 'Loaded Configuration' | sed -E 's/.*: +//')
-        sudo chmod a+w $php_ini
-        echo 'error_reporting = E_ALL' >> $php_ini
         php ./composer.phar drupal:scaffold --quiet
         cd public_html
         cp core/assets/scaffold/files/ht.router.php .ht.router.php
