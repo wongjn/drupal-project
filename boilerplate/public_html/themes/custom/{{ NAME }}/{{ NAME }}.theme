@@ -227,7 +227,7 @@ function {{ NAME }}_preprocess_file_link(&$variables) {
   $file = $variables['file'];
 
   $variables['attributes']['href'] = file_url_transform_relative(file_create_url($file->getFileUri()));
-  $variables['attributes']['type'] = sprintf('%s; length=%s',$file->getMimeType(),$file->getSize());
+  $variables['attributes']['type'] = $file->getMimeType();
   $variables['attributes']['download'] = TRUE;
 
   if (empty($variables['description'])) {

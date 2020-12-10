@@ -37,8 +37,7 @@ class FileLinkTest extends ThemeKernelTestBase {
    */
   public function testFileLinkTheme() {
     $test_file = $this->getTestFiles('text')[0];
-    $file_size = filesize($test_file->uri);
-    $file = File::create((array) $test_file + ['filesize' => $file_size]);
+    $file = File::create((array) $test_file);
 
     $this->isolatedRender([
       '#theme' => 'file_link',
@@ -53,7 +52,7 @@ class FileLinkTest extends ThemeKernelTestBase {
 
     $attributes = $element->attributes();
     $this->assertNotNull($attributes->href, 'Href attribute is present.');
-    $this->assertEquals("text/plain; length=$file_size", (string) $attributes->type, 'Expected type attribute.');
+    $this->assertEquals('text/plain', (string) $attributes->type, 'Expected type attribute.');
     $this->assertEquals('', (string) $attributes->download, 'Expected download attribute.');
   }
 
