@@ -3,6 +3,7 @@
 namespace Drupal\Tests\{{ NAME }}\Kernel;
 
 use Drupal\Tests\{{ NAME }}\Traits\KernelPageRenderTrait;
+use Drupal\Tests\{{ NAME }}\Traits\ThemeFixturesTrait;
 
 /**
  * Tests CSS output.
@@ -12,24 +13,22 @@ use Drupal\Tests\{{ NAME }}\Traits\KernelPageRenderTrait;
 class CssAssetsTest extends ThemeKernelTestBase {
 
   use KernelPageRenderTrait;
+  use ThemeFixturesTrait;
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
-    parent::setUp();
-    $this->markTestIncomplete('Specify theme CSS to use in test.');
+  public static function setUpBeforeClass(): void {
+    parent::setUpBeforeClass();
+    self::setUpFixtureFile('dist/css/base/typography.css', 'test{}');
+  }
 
-    // Create stub built stylesheet for testing environments that do no have
-    // node-built assets, such as CI.
-    $stylesheet = __DIR__ . '/../../../dist/css/base/variables.css';
-    if (!file_exists($stylesheet)) {
-      if (!file_exists(dirname($stylesheet))) {
-        mkdir(dirname($stylesheet), 0777, TRUE);
-      }
-
-      file_put_contents($stylesheet, 'test{SPECIFY CSS HERE}');
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public static function tearDownAfterClass(): void {
+    self::tearDownFixtureFiles();
+    parent::tearDownAfterClass();
   }
 
   /**
@@ -38,11 +37,7 @@ class CssAssetsTest extends ThemeKernelTestBase {
    * @see {{ NAME }}_css_alter()
    */
   public function testAlteredGrouping() {
-    $this->markTestIncomplete('Specify theme CSS to use in test.');
-
-    $this->config('system.performance')
-      ->set('css.preprocess', TRUE)
-      ->save();
+    $this->config('system.performance')->set('css.preprocess', TRUE)->save();
     $this->renderPageWithAttachments(['system/diff']);
 
     $elements = $this->cssSelect('link[rel="stylesheet"]');
@@ -51,7 +46,7 @@ class CssAssetsTest extends ThemeKernelTestBase {
     $href = (string) end($elements)->attributes()->href;
     $css  = file_get_contents(preg_replace('`.*(?=vfs://)`', '', $href));
 
-    $this->assertStringContainsString('SPECIFY CSS HERE', $css, 'Theme global CSS in altered, custom CSS aggregate group.');
+    $this->assertEquals('test{}', $css, 'Theme global CSS in altered, custom CSS aggregate group.');
     $this->assertStringContainsString('}.text-align-right{', $css, 'System base CSS in altered, custom CSS aggregate group.');
     $this->assertStringNotContainsString('}table.diff .diff-context{', $css, 'Non-global CSS not in altered, custom CSS aggregate group.');
 

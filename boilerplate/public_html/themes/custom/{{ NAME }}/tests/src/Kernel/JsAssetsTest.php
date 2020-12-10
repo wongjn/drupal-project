@@ -3,6 +3,7 @@
 namespace Drupal\Tests\{{ NAME }}\Kernel;
 
 use Drupal\Tests\{{ NAME }}\Traits\KernelPageRenderTrait;
+use Drupal\Tests\{{ NAME }}\Traits\ThemeFixturesTrait;
 
 /**
  * Tests JavaScript asset handling.
@@ -12,23 +13,17 @@ use Drupal\Tests\{{ NAME }}\Traits\KernelPageRenderTrait;
 class JsAssetsTest extends ThemeKernelTestBase {
 
   use KernelPageRenderTrait;
+  use ThemeFixturesTrait;
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
-    parent::setUp();
+  public static function setUpBeforeClass(): void {
+    parent::setUpBeforeClass();
 
     foreach (['modern', 'legacy'] as $script_type) {
       // Use stub Webpack stats.json files.
-      $stats = __DIR__ . "/../../../dist/js/stats.$script_type.json";
-      if (file_exists($stats)) {
-        rename($stats, "$stats.real");
-      }
-      if (!file_exists(dirname($stats))) {
-        mkdir(dirname($stats), 0777, TRUE);
-      }
-      file_put_contents($stats, json_encode([
+      self::setUpFixtureFile("dist/js/stats.$script_type.json", json_encode([
         'entrypoints' => [
           'main' => [
             'assets' => [
@@ -45,19 +40,9 @@ class JsAssetsTest extends ThemeKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown(): void {
-    foreach (['modern', 'legacy'] as $script_type) {
-      // Restore real Webpack stats.json files if they existed before.
-      $stats = __DIR__ . "/../../../dist/js/stats.$script_type.json";
-      if (file_exists("$stats.real")) {
-        rename("$stats.real", $stats);
-      }
-      else {
-        unlink($stats);
-      }
-    }
-
-    parent::tearDown();
+  public static function tearDownAfterClass(): void {
+    self::tearDownFixtureFiles();
+    parent::tearDownAfterClass();
   }
 
   /**
