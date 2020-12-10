@@ -16,7 +16,7 @@ class CssAssetsTest extends ThemeKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->markTestIncomplete('Specify theme CSS to use in test.');
 

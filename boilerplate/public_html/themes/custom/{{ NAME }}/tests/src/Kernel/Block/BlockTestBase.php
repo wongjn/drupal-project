@@ -27,7 +27,7 @@ class BlockTestBase extends ThemeKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->viewBuilder = $this->container->get('entity_type.manager')->getViewBuilder('block');

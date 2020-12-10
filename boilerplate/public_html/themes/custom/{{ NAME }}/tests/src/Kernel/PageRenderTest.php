@@ -30,7 +30,7 @@ class PageRenderTest extends ThemeKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->routeMatch = $this->createMock('Drupal\Core\Routing\RouteMatchInterface');
   }

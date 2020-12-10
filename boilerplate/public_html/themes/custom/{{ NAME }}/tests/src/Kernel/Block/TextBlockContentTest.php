@@ -29,7 +29,7 @@ class TextBlockContentTest extends BlockContentTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     FilterFormat::create(['format' => 'full_html'])->save();

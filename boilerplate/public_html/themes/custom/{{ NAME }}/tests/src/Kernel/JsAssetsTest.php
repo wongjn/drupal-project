@@ -16,7 +16,7 @@ class JsAssetsTest extends ThemeKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     foreach (['modern', 'legacy'] as $script_type) {
@@ -45,7 +45,7 @@ class JsAssetsTest extends ThemeKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     foreach (['modern', 'legacy'] as $script_type) {
       // Restore real Webpack stats.json files if they existed before.
       $stats = __DIR__ . "/../../../dist/js/stats.$script_type.json";

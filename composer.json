@@ -39,8 +39,8 @@
         "drupal/admin_toolbar": "^2.0",
         "drupal/antibot": "^1.4",
         "drupal/block_content_permissions": "^1.6",
-        "drupal/core-composer-scaffold": "~9.0.3",
-        "drupal/core-recommended": "~9.0.3",
+        "drupal/core-composer-scaffold": "~9.1.0",
+        "drupal/core-recommended": "~9.1.0",
         "drupal/differential_serve": "^1.0@beta",
         "drupal/ex_icons": "^1.0",
         "drupal/imce": "^2.2",
@@ -54,7 +54,7 @@
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-        "drupal/core-dev": "~9.0.3",
+        "drupal/core-dev": "~9.1.0",
         "drupal/devel": "^4.0",
         "drupal/multiline_config": "^1.0",
         "zaporylie/composer-drupal-optimizations": "^1.0"
@@ -87,7 +87,8 @@
         },
         "patches": {
             "drupal/core": {
-                "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch"
+                "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch",
+                "Fix undefined method ::getAnnotations() with PHPUnit 9.5": "https://www.drupal.org/files/issues/2020-12-04/3186443-1.patch"
             },
             "drupal/linkit": {
                 "Show path alias in widget": "patches/linkit-show-path-alias-in-widget-2877535-12.patch"

@@ -24,7 +24,7 @@ class ViewsTest extends ViewsTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE) {
+  protected function setUp($import_test_views = TRUE): void {
     parent::setUp(FALSE);
     ViewTestData::createTestViews(get_class($this), ['views_test_config']);
   }
