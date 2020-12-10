@@ -62,7 +62,7 @@ jobs:
           composer.phar
         key: ${{ needs.composer_build.outputs.composer-cache-key }}
         restore-keys: v1-composer-
-    - run: nvm install --no-progress 10
+    - run: nvm install --no-progress 12
     - name: NPM cache
       uses: actions/cache@v2
       with:
@@ -71,7 +71,7 @@ jobs:
           public_html/themes/custom/*/node_modules
         key: v1-npm-${{ hashFiles('**/package-lock.json') }}
         restore-keys: v1-npm-
-    - run: nvm use 10 && npm install && npm run build
+    - run: nvm use 12 && npm install && npm run build
       working-directory: public_html/themes/custom/{{ NAME }}
     - uses: actions/upload-artifact@v2
       with:
