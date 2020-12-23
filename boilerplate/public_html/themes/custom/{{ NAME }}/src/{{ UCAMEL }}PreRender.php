@@ -29,9 +29,7 @@ class {{ UCAMEL }}PreRender implements RenderCallbackInterface {
   public static function statusMessages(array $element) {
     // Add extra class into fallback element.
     if (isset($element['fallback'])) {
-      // phpcs:ignore
-      // $element['fallback']['#markup'] = str_replace('class="', 'class="l-container__module ', $element['fallback']['#markup']);
-      $element['fallback']['#markup'] = str_replace('class="', 'class="container ', $element['fallback']['#markup']);
+      $element['fallback']['#markup'] = str_replace('class="', 'class="l-container__module ', $element['fallback']['#markup']);
     }
 
     return $element;
