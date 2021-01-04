@@ -97,6 +97,7 @@ jobs:
   php_unit:
     runs-on: ubuntu-18.04
     strategy:
+      fail-fast: false
       matrix: { type: ['themes', 'modules'] }
     env:
       SIMPLETEST_DB: mysql://root:root@127.0.0.1/tests
