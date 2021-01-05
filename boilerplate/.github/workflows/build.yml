@@ -78,7 +78,7 @@ jobs:
   code_style:
     runs-on: ubuntu-18.04
     needs: composer_build
-    if: github.event_name == 'push' && !(startsWith(github.event.head_commit.message, 'Merge ') || contains(github.event.head_commit.message, '[skip tests]'))
+    if: github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip tests]')
     steps:
     - uses: actions/checkout@v2
     - name: Composer cache
@@ -104,7 +104,7 @@ jobs:
       SIMPLETEST_BASE_URL: http://localhost:8888
       BROWSERTEST_OUTPUT_DIRECTORY: sites/simpletest/browser_output
     needs: composer_build
-    if: (github.event_name != 'pull_request' && !(startsWith(github.event.head_commit.message, 'Merge ') || contains(github.event.head_commit.message, '[skip tests]'))) || startsWith(github.head_ref, 'dependabot/composer/')
+    if: (github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[skip tests]')) || startsWith(github.head_ref, 'dependabot/composer/')
     steps:
     - uses: actions/checkout@v2
     - name: Composer cache
