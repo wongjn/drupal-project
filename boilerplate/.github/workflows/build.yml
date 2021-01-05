@@ -135,43 +135,6 @@ jobs:
       with:
         name: ${{ matrix.type }}-test-browser-output
         path: public_html/sites/simpletest/browser_output
-  update_db:
-    runs-on: ubuntu-18.04
-    needs: composer_build
-    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'dependabot/composer/drupal/')
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ github.head_ref }}
-        fetch-depth: 0
-    - name: Composer cache
-      uses: actions/cache@v2
-      with:
-        path: |
-          ${{ needs.composer_build.outputs.composer-cache-dir }}
-          vendor
-          public_html/core
-          public_html/libraries
-          public_html/*/contrib
-          composer.phar
-        key: ${{ needs.composer_build.outputs.composer-cache-key }}
-        restore-keys: v1-composer-
-    - name: Attempt any Drupal database updates
-      run: |
-        sudo systemctl start mysql.service
-        mysql -u root -proot -e 'create database site'
-        sudo update-alternatives --set php /usr/bin/php7.3
-        php ./composer.phar drupal:scaffold --quiet
-        echo '<?php
-        $settings["config_sync_directory"] = "../config/sync";
-        $settings["config_exclude_modules"][] = "multiline_config";' > public_html/sites/default/settings.php
-        ./vendor/bin/drush site:install minimal --db-url=mysql://root:root@localhost/site --existing-config
-        ./vendor/bin/drush pm:enable multiline_config
-        ./vendor/bin/drush updatedb
-        git config --global user.name 'GitHub Actions'
-        git config --global user.email github-actions@github.com
-        ./vendor/bin/drush config:export --commit --message='Update config from database update'
-        git push
   # deploy:
   #   runs-on: self-hosted
   #   needs: [composer_build, build_assets]
