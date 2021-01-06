@@ -2,19 +2,33 @@ name: Build
 
 on:
   push:
+    # Ignore pushes to dependabot/** branches since these are guaranteed to have
+    # pull requests into master. This avoids duplicate workflow runs.
     branches-ignore: dependabot/**
     paths-ignore:
+      # Files in .github do not affect the build; only for GitHub interaction.
       - .github/**
-      - '!.github/workflows/*'
+      # Exception is workflows subdirectory, where this file sits.
+      - '!.github/workflows/**'
+      # Files in .vscode do not affect the build; for VSCode config only.
       - .vscode/**
   pull_request:
     branches: master
   workflow_dispatch:
 
+env:
+  # Theme name.
+  THEME_NAME: {{ NAME }}
+  # Node version to build theme assets with.
+  NODE_VERSION: '12'
+  # Deployment target.
+  DEPLOY_TARGET: user@serverX.projectcosmic.co.uk:site.git
+
 jobs:
   composer_build:
     runs-on: ubuntu-18.04
-    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip ci]')
+    # Skip entire workflow run with [skip ci] in latest commit message.
+    if: '!contains(github.event.head_commit.message, ''[skip ci]'')'
     outputs:
       composer-cache-dir: ${{ steps.composer.outputs.dir }}
       composer-cache-key: ${{ steps.composer.outputs.key }}
@@ -44,7 +58,10 @@ jobs:
   build_assets:
     runs-on: ubuntu-18.04
     needs: composer_build
-    if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'dependabot/npm_and_yarn/')
+    # Run job on push or npm dependabot pull requests.
+    if: |
+      (github.event_name != 'pull_request' || startsWith(github.head_ref, 'dependabot/npm_and_yarn/'))
+      && !contains(github.event.head_commit.message, '[skip assets]')
     steps:
     - uses: actions/checkout@v2
     - name: Composer cache
@@ -60,7 +77,7 @@ jobs:
         key: ${{ needs.composer_build.outputs.composer-cache-key }}
         restore-keys: v1-composer-
     - uses: actions/setup-node@v2
-      with: { node-version: '12' }
+      with: { node-version: '${{ env.NODE_VERSION }}' }
     - name: NPM cache
       uses: actions/cache@v2
       with:
@@ -70,14 +87,16 @@ jobs:
         key: v1-npm-${{ hashFiles('**/package-lock.json') }}
         restore-keys: v1-npm-
     - run: npm install && npm run build
-      working-directory: public_html/themes/custom/{{ NAME }}
+      working-directory: public_html/themes/custom/${{ env.THEME_NAME }}
     - uses: actions/upload-artifact@v2
       with:
         name: assets
-        path: public_html/themes/custom/{{ NAME }}/dist
+        path: public_html/themes/custom/${{ env.THEME_NAME }}/dist
   code_style:
     runs-on: ubuntu-18.04
     needs: composer_build
+    # Run job only on push, since we only expect human-written code in pushes
+    # and not in pull requests.
     if: github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip tests]')
     steps:
     - uses: actions/checkout@v2
@@ -104,7 +123,10 @@ jobs:
       SIMPLETEST_BASE_URL: http://localhost:8888
       BROWSERTEST_OUTPUT_DIRECTORY: sites/simpletest/browser_output
     needs: composer_build
-    if: (github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[skip tests]')) || startsWith(github.head_ref, 'dependabot/composer/')
+    # Run job on push or composer dependabot pull requests.
+    if: |
+      (github.event_name != 'pull_request' || startsWith(github.head_ref, 'dependabot/composer/'))
+      && !contains(github.event.head_commit.message, '[skip tests]')
     steps:
     - uses: actions/checkout@v2
     - name: Composer cache
@@ -137,8 +159,16 @@ jobs:
         path: public_html/sites/simpletest/browser_output
   # deploy:
   #   runs-on: self-hosted
-  #   needs: [composer_build, build_assets]
-  #   if: github.ref == 'refs/heads/master'
+  #   needs: [composer_build, build_assets, code_style, php_unit]
+  #   # Run job only on main branch, allowing some skipped jobs but no failures or
+  #   # cancellations.
+  #   if: |
+  #     github.ref == 'refs/heads/master'
+  #     && !cancelled()
+  #     && needs.composer_build.result == 'success'
+  #     && needs.build_assets.result != 'failure'
+  #     && needs.code_style.result != 'failure'
+  #     && needs.php_unit.result != 'failure'
   #   steps:
   #   - uses: actions/checkout@v2
   #     with: { fetch-depth: 0 }
@@ -153,18 +183,21 @@ jobs:
   #       key: ${{ needs.composer_build.outputs.composer-cache-key }}
   #       restore-keys: v1-composer-
   #   - uses: actions/download-artifact@v2
+  #     if: '!contains(github.event.head_commit.message, ''[skip assets]'')'
   #     with:
   #       name: assets
-  #       path: public_html/themes/custom/{{ NAME }}/dist
-  #  - run: composer install
-  #  - name: Query for any uninstalled Drupal extensions
-  #    id: uninstall
-  #    run: echo "::set-output name=extensions::`sed -E 's/[[:space:]]*(.+):.+/\1/' <(comm -13 <(sort config/sync/core.extension.yml) <(git show ${{ github.event.before }}:config/sync/core.extension.yml | sort))`"
-  #  - name: Uninstall removed Drupal extensions
-  #    if: steps.uninstall.extensions != ''
-  #    run: ./vendor/bin/drush @live pm:uninstall ${{ steps.uninstall.extensions }}
-  #   - name: Run deployment
+  #       path: public_html/themes/custom/${{ env.THEME_NAME }}/dist
+  #   - run: composer install
+  #   - name: Query for any uninstalled Drupal extensions
+  #     id: uninstall
+  #     run: echo "::set-output name=extensions::`sed -E 's/[[:space:]]*(.+):.+/\1/' <(comm -13 <(sort config/sync/core.extension.yml) <(git show ${{ github.event.before }}:config/sync/core.extension.yml | sort))`"
+  #   - name: Uninstall removed Drupal extensions
+  #     if: steps.uninstall.extensions != ''
+  #     run: ./vendor/bin/drush @live pm:uninstall ${{ steps.uninstall.extensions }}
+  #   - name: Deploy built assets
+  #     if: '!contains(github.event.head_commit.message, ''[skip assets]'')'
+  #     run: dir=themes/custom/${{ env.THEME_NAME }}/dist/; ./vendor/bin/drush rsync @self:$dir @live:$dir --mode=rcmz -- --delete --exclude='*.map' --chmod="Fgo-wx,Dgo-w"
+  #   - name: Deploy checked-in code
   #     run: |
-  #       dir=themes/custom/{{ NAME }}/dist/; ./vendor/bin/drush rsync @self:$dir @live:$dir --mode=rcmz -- --delete --exclude='*.map' --chmod="Fgo-wx,Dgo-w"
-  #       git push USER@server.projectcosmic.co.uk:site.git master -f
+  #       git push ${{ env.DEPLOY_TARGET }} master -f
   #       ./vendor/bin/drush @live deploy
