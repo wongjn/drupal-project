@@ -17,10 +17,11 @@
  * - status_headings: List of all status types.
  * - display: (optional) May have a value of 'status' or 'error' when only
  *   displaying messages of that specific type.
+ * - attributes: HTML attributes for the element.
  */
 #}
 {{ attach_library('{{ NAME }}/messages') }}
-<div class="l-container__module" data-drupal-messages>
+<div{{ attributes.setAttribute('data-drupal-messages', TRUE) }}>
   {#
     Drupal.Message.defaultWrapper() in message(.es6).js in core/drupal.message
     needs an extra internal wrapper element.

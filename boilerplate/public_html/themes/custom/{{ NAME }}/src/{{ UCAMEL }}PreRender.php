@@ -24,15 +24,33 @@ class {{ UCAMEL }}PreRender implements RenderCallbackInterface {
   }
 
   /**
-   * Pre-render callback for the 'status_messages' render element.
+   * Pre-render callback for the 'status_messages' render element in its block.
+   *
+   * @see \Drupal\Core\Render\Element\StatusMessages::generatePlaceholder()
    */
-  public static function statusMessages(array $element) {
-    // Add extra class into fallback element.
-    if (isset($element['fallback'])) {
-      $element['fallback']['#markup'] = str_replace('class="', 'class="l-container__module ', $element['fallback']['#markup']);
-    }
+  public static function statusMessagesBlock(array $element) {
+    $build = [
+      '#lazy_builder' => [
+        '\Drupal\{{ NAME }}\{{ UCAMEL }}LazyBuilders::renderStatusMessagesBlock',
+        [$element['#display']],
+      ],
+      '#create_placeholder' => TRUE,
+    ];
 
-    return $element;
+    // Directly create a placeholder as we need this to be placeholdered
+    // regardless if this is a POST or GET request.
+    // @todo remove this when https://www.drupal.org/node/2367555 lands.
+    $build = \Drupal::service('render_placeholder_generator')->createPlaceholder($build);
+
+    if ($element['#include_fallback']) {
+      return [
+        'fallback' => [
+          '#markup' => '<div data-drupal-messages-fallback class="hidden l-container__module"></div>',
+        ],
+        'messages' => $build,
+      ];
+    }
+    return $build;
   }
 
   /**
