@@ -1,0 +1,9 @@
+////
+//// Compatibility for Drupal core's vertical tabs UI.
+////
+
+.vertical-tabs {
+  &__pane {
+    padding: 1em;
+  }
+}

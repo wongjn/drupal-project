@@ -33,6 +33,11 @@ align.module:
     component:
       dist/css/components/align.module.css: {}
 
+drupal.vertical-tabs:
+  css:
+    component:
+      dist/css/components/drupal.vertical-tabs.css: {}
+
 imce-file-manager:
   css:
     component:

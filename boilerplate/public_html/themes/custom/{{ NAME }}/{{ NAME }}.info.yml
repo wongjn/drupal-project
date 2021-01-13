@@ -11,6 +11,8 @@ regions:
 libraries:
   - {{ NAME }}/global
 libraries-extend:
+  core/drupal.vertical-tabs:
+    - {{ NAME }}/drupal.vertical-tabs
   system/base:
     - {{ NAME }}/align.module
 libraries-override:
