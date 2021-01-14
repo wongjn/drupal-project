@@ -11,12 +11,15 @@ use Drupal\Core\Render\Element\StatusMessages;
 class {{ UCAMEL }}LazyBuilders implements RenderCallbackInterface {
 
   /**
-   * Renders status messages for the status messages block.
+   * Lazy builder for rendering status messages.
    *
    * @param string|null $type
    *   Limit the messages returned by type. See
    *   \Drupal\Core\Render\Element\StatusMessages::renderMessages() for all
    *   possible values.
+   * @param string|null $attributes
+   *   (optional) JSON-encoded array of HTML attributes to apply to the status
+   *   messages wrapper element.
    *
    * @return array
    *   A renderable array containing the messages.
@@ -24,9 +27,13 @@ class {{ UCAMEL }}LazyBuilders implements RenderCallbackInterface {
    * @see \Drupal\Core\Messenger\Messenger::deleteByType()
    * @see \Drupal\Core\Render\Element\StatusMessages::renderMessages()
    */
-  public static function renderStatusMessagesBlock($type = NULL) {
+  public static function renderStatusMessages($type = NULL, $attributes = NULL) {
     $build = StatusMessages::renderMessages($type);
-    $build['#attributes']['class'][] = 'l-container__module';
+
+    if ($attributes != NULL && $attributes != '[]') {
+      $build['#attributes'] = json_decode($attributes);
+    }
+
     return $build;
   }
 

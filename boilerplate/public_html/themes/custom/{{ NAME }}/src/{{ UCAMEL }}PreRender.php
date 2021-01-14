@@ -24,15 +24,17 @@ class {{ UCAMEL }}PreRender implements RenderCallbackInterface {
   }
 
   /**
-   * Pre-render callback for the 'status_messages' render element in its block.
+   * Pre-render callback for the 'status_messages' render element.
    *
    * @see \Drupal\Core\Render\Element\StatusMessages::generatePlaceholder()
    */
-  public static function statusMessagesBlock(array $element) {
+  public static function preRenderStatusMessages(array $element) {
+    $attributes = isset($element['#attributes']) ? $element['#attributes'] : [];
+
     $build = [
       '#lazy_builder' => [
-        '\Drupal\{{ NAME }}\{{ UCAMEL }}LazyBuilders::renderStatusMessagesBlock',
-        [$element['#display']],
+        '\Drupal\{{ NAME }}\{{ UCAMEL }}LazyBuilders::renderStatusMessages',
+        [$element['#display'], json_encode($attributes)],
       ],
       '#create_placeholder' => TRUE,
     ];
@@ -43,9 +45,14 @@ class {{ UCAMEL }}PreRender implements RenderCallbackInterface {
     $build = \Drupal::service('render_placeholder_generator')->createPlaceholder($build);
 
     if ($element['#include_fallback']) {
+      // Apply attributes for the fallback element.
+      $attributes['data-drupal-messages-fallback'] = TRUE;
+      $attributes['class'][] = 'hidden';
+
       return [
         'fallback' => [
-          '#markup' => '<div data-drupal-messages-fallback class="hidden l-container__module"></div>',
+          '#theme' => 'container',
+          '#attributes' => $attributes,
         ],
         'messages' => $build,
       ];

@@ -213,7 +213,7 @@ function {{ NAME }}_preprocess_block__system_main_block(&$variables) {
  * Implements hook_preprocess_HOOK() for block--system-messages-block.html.twig.
  */
 function {{ NAME }}_preprocess_block__system_messages_block(&$variables) {
-  $variables['content']['#pre_render'][] = '\Drupal\{{ UCAMEL }}\PreRender::statusMessagesBlock';
+  $variables['content']['#attributes']['class'][] = 'l-container__module';
 }
 
 /**
@@ -452,6 +452,7 @@ function {{ NAME }}_form_contact_message_form_alter(&$form, FormStateInterface $
  */
 function {{ NAME }}_element_info_alter(array &$info) {
   $info['processed_text']['#pre_render'][] = '\Drupal\{{ NAME }}\{{ UCAMEL }}PreRender::processedText';
+  $info['status_messages']['#pre_render'] = ['\Drupal\{{ NAME }}\{{ UCAMEL }}PreRender::statusMessages'];
   $info['view']['#pre_render'][] = '\Drupal\{{ NAME }}\{{ UCAMEL }}PreRender::view';
 
   // Remove unused off-canvas page wrapping markup.
