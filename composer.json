@@ -87,8 +87,7 @@
         },
         "patches": {
             "drupal/core": {
-                "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch",
-                "Fix undefined method ::getAnnotations() with PHPUnit 9.5": "https://www.drupal.org/files/issues/2020-12-04/3186443-1.patch"
+                "Introduce current page redirection on contact form submission": "https://www.drupal.org/files/issues/2018-09-10/contact-form-redirect-2636976-23.patch"
             },
             "drupal/linkit": {
                 "Show path alias in widget": "patches/linkit-show-path-alias-in-widget-2877535-12.patch"
