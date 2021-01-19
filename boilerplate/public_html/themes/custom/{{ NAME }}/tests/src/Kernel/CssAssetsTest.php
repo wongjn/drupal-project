@@ -46,7 +46,7 @@ class CssAssetsTest extends ThemeKernelTestBase {
     $href = (string) end($elements)->attributes()->href;
     $css  = file_get_contents(preg_replace('`.*(?=vfs://)`', '', $href));
 
-    $this->assertEquals('test{}', $css, 'Theme global CSS in altered, custom CSS aggregate group.');
+    $this->assertStringContainsString('test{}', $css, 'Theme global CSS in altered, custom CSS aggregate group.');
     $this->assertStringContainsString('}.text-align-right{', $css, 'System base CSS in altered, custom CSS aggregate group.');
     $this->assertStringNotContainsString('}table.diff .diff-context{', $css, 'Non-global CSS not in altered, custom CSS aggregate group.');
 
