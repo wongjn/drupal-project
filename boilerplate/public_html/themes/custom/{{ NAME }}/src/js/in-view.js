@@ -162,7 +162,7 @@ const forEachList = (fn, context) =>
 const viewObserver = new IntersectionObserver(onIntersect, { threshold: 0.2 });
 
 /**
- * Adds lazy-loading and in-viewport animations.
+ * Adds classes for elements for their positions relative to the viewport.
  *
  * @type {Drupal~behavior}
  */
