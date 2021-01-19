@@ -18,19 +18,14 @@
         },
         {
             "type": "composer",
-            "url": "https://packages.drupal.org/8"
+            "url": "https://packages.drupal.org/8",
+            "exclude": [
+                "drupal/multiline_config"
+            ]
         },
         {
-            "type": "package",
-            "package": {
-                "name": "drupal/multiline_config",
-                "type": "drupal-module",
-                "version": "1.0.0",
-                "dist": {
-                    "url": "https://ftp.drupal.org/files/projects/multiline_config-8.x-1.0.zip",
-                    "type": "zip"
-                }
-            }
+            "type": "vcs",
+            "url": "https://git.drupalcode.org/project/multiline_config"
         }
     ],
     "require": {
@@ -56,7 +51,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "drupal/core-dev": "^9",
         "drupal/devel": "^4.0",
-        "drupal/multiline_config": "^1.0",
+        "drupal/multiline_config": "dev-8.x-1.x#0c88220",
         "zaporylie/composer-drupal-optimizations": "^1.0"
     },
     "conflict": {
@@ -91,9 +86,6 @@
             },
             "drupal/linkit": {
                 "Show path alias in widget": "patches/linkit-show-path-alias-in-widget-2877535-12.patch"
-            },
-            "drupal/multiline_config": {
-                "Drupal 9 support": "patches/multiline_config-drupal_9.patch"
             }
         },
         "drupal-scaffold": {
