@@ -34,14 +34,11 @@ jobs:
       composer-cache-key: ${{ steps.composer.outputs.key }}
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Composer v1
+    - name: Set up
       id: composer
       run: |
         sudo update-alternatives --set php /usr/bin/php7.3
-        php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-        php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('https://composer.github.io/installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-        php composer-setup.php --1
-        echo "::set-output name=dir::$(php ./composer.phar config cache-dir)"
+        echo "::set-output name=dir::$(composer config cache-dir)"
         echo "::set-output name=key::v1-composer-${{ hashFiles('composer.lock') }}"
     - uses: actions/cache@v2
       with:
@@ -51,10 +48,9 @@ jobs:
           public_html/core
           public_html/libraries
           public_html/*/contrib
-          composer.phar
         key: ${{ steps.composer.outputs.key }}
         restore-keys: v1-composer-
-    - run: php ./composer.phar install --no-progress
+    - run: composer install --no-progress
   build_assets:
     runs-on: ubuntu-18.04
     needs: composer_build
@@ -73,7 +69,6 @@ jobs:
           public_html/core
           public_html/libraries
           public_html/*/contrib
-          composer.phar
         key: ${{ needs.composer_build.outputs.composer-cache-key }}
         restore-keys: v1-composer-
     - uses: actions/setup-node@v2
@@ -109,7 +104,6 @@ jobs:
           public_html/core
           public_html/libraries
           public_html/*/contrib
-          composer.phar
         key: ${{ needs.composer_build.outputs.composer-cache-key }}
         restore-keys: v1-composer-
     - run: ./vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1 --report-full
@@ -138,7 +132,6 @@ jobs:
           public_html/core
           public_html/libraries
           public_html/*/contrib
-          composer.phar
         key: ${{ needs.composer_build.outputs.composer-cache-key }}
         restore-keys: v1-composer-
     - name: Set up and run PHPUnit
@@ -146,7 +139,7 @@ jobs:
         sudo systemctl start mysql.service
         mysql -u root -proot -e 'create database tests'
         sudo update-alternatives --set php /usr/bin/php7.3
-        php ./composer.phar drupal:scaffold --quiet
+        composer drupal:scaffold --quiet
         cd public_html
         cp core/assets/scaffold/files/ht.router.php .ht.router.php
         php -S localhost:8888 .ht.router.php >& /dev/null &
