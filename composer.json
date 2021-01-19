@@ -39,8 +39,8 @@
         "drupal/admin_toolbar": "^2.0",
         "drupal/antibot": "^1.4",
         "drupal/block_content_permissions": "^1.6",
-        "drupal/core-composer-scaffold": "~9.1.0",
-        "drupal/core-recommended": "~9.1.0",
+        "drupal/core-composer-scaffold": "^9",
+        "drupal/core-recommended": "^9",
         "drupal/differential_serve": "^1.0@beta",
         "drupal/ex_icons": "^1.0",
         "drupal/imce": "^2.2",
@@ -54,7 +54,7 @@
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-        "drupal/core-dev": "~9.1.0",
+        "drupal/core-dev": "^9",
         "drupal/devel": "^4.0",
         "drupal/multiline_config": "^1.0",
         "zaporylie/composer-drupal-optimizations": "^1.0"
