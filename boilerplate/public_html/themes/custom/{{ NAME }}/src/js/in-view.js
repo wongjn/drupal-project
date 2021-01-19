@@ -125,9 +125,9 @@ const registerList = observer => list =>
   matchListTargets(list)
     .filter(child => !seen.has(child))
     .forEach(child => {
-      if (isInWindow(child)) {
-        seen.add(child);
-      } else {
+      seen.add(child);
+
+      if (!isInWindow(child)) {
         observer.observe(child);
         child.classList.add(OUTSIDE_VIEWPORT_CLASSNAME);
       }
