@@ -52,6 +52,7 @@
         "drupal/core-dev": "^9",
         "drupal/devel": "^4.0",
         "drupal/multiline_config": "dev-8.x-1.x#0c88220",
+        "phpspec/prophecy-phpunit": "^2",
         "zaporylie/composer-drupal-optimizations": "^1.0"
     },
     "conflict": {
