@@ -28,7 +28,7 @@ class {{ UCAMEL }}PreRender implements RenderCallbackInterface {
    *
    * @see \Drupal\Core\Render\Element\StatusMessages::generatePlaceholder()
    */
-  public static function preRenderStatusMessages(array $element) {
+  public static function statusMessages(array $element) {
     $attributes = isset($element['#attributes']) ? $element['#attributes'] : [];
 
     $build = [
