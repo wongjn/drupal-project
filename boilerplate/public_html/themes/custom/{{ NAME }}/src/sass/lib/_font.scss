@@ -19,8 +19,6 @@ $_SIZE-PRESETS: (
   48: 30,
   36: 24,
   30: 24,
-  24: 24,
-  18: 18,
 );
 
 // Default font size.
@@ -30,7 +28,7 @@ $SIZE: 16;
 $LINE-HEIGHT: (24 / $SIZE);
 
 // Minimum font size for viewport scaling.
-$_SIZE_MIN: 18;
+$_SIZE_MIN: 24;
 
 /// Returns a minimum value to use for a particular font scale size.
 ///
