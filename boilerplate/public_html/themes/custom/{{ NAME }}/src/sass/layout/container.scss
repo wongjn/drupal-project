@@ -18,11 +18,7 @@ $_fallback_gutter_y: 40px;
   max-width: (layout.$SITE-WIDTH-PX + (layout.$GUTTER_FALLBACK_PX * 2)); // 1
   max-width: calc(#{layout.$SITE-WIDTH-PX} + (var(--container-space-x) * 2)); // 1
   --container-space-y: 40px;
-  --container-space-x: 20px;
-
-  @supports (top: min(0%, 1%)) {
-    --container-space-x: #{viewport.scale(40px, 20px)};
-  }
+  --container-space-x: var(--site-gutter);
 
   &__module {
     padding-top: ($_fallback_gutter_y / 2);
