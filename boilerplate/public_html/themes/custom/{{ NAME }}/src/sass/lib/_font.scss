@@ -69,7 +69,7 @@ $_SIZE_MIN: 24;
     --font-size-#{$size}: #{unit.px_to_rem($min)};
 
     @supports (top: min(0%, 1%)) {
-      --font-size-#{$size}: #{viewport.scale($size * 1px, $min * 1px)};
+      --font-size-#{$size}: #{viewport.scale(unit.px_to_rem($size), unit.px_to_rem($min))};
     }
   }
 }
