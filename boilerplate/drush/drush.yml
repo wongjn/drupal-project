@@ -3,4 +3,4 @@
 #
 
 options:
-  uri: 'http://{{ NAME }}.test'
+  uri: 'http://{{ NAME_SNAKE }}.test'

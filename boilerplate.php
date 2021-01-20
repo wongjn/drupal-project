@@ -11,18 +11,20 @@ if ($argc < 2) {
 
 const BOILERPLATE_ROOT = 'boilerplate';
 
-$machine_name = basename(realpath('.'));
-$human_name   = $argv[1];
-$vendor       = isset($argv[2]) ? $argv[2] : 'vendor';
-$upper_camel  = upper_camel($machine_name);
+$snake_name = basename(realpath('.'));
+$machine_name = str_replace('-', '_', $snake_name);
+$human_name = $argv[1];
+$vendor = isset($argv[2]) ? $argv[2] : 'vendor';
+$upper_camel = upper_camel($machine_name);
 
 // Token replacements in filenames or file content.
 $replacements = [
-  '{{ NAME }}'   => $machine_name,
-  '{{ LABEL }}'  => $human_name,
-  '{{ CAMEL }}'  => lcfirst($upper_camel),
+  '{{ NAME }}' => $machine_name,
+  '{{ NAME_SNAKE }}' => $snake_name,
+  '{{ LABEL }}' => $human_name,
+  '{{ CAMEL }}' => lcfirst($upper_camel),
   '{{ UCAMEL }}' => $upper_camel,
-  '{{ UPPER }}'  => strtoupper($machine_name),
+  '{{ UPPER }}' => strtoupper($machine_name),
 ];
 
 $finfo = new finfo(FILEINFO_MIME_TYPE);

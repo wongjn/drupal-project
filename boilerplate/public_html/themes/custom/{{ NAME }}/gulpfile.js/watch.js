@@ -49,7 +49,7 @@ function watcher() {
   website.init({
     proxy: '{{ UPPER }}_URL' in process.env
       ? process.env.{{ UPPER }}_URL
-      : '{{ NAME }}.test',
+      : '{{ NAME_SNAKE }}.test',
     middleware: [
       webpackDevMiddleware(webpackCompiler, {
         writeToDisk: filePath => /\/stats\.\w+\.json$/.test(filePath),
