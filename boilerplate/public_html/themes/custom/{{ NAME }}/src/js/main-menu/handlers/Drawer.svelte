@@ -160,41 +160,41 @@ onDestroy(() => toggleScrolling(false));
   }
 }
 
-:global(.drawer__top-menu) {
-  > :global(li) {
-    border-bottom: 1px solid rgba(#fff, 0.2);
-    padding: 1rem;
+:global {
+  .drawer {
+    &__sub-menu {
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 0.6em;
+
+      &--deep {
+        display: block;
+        font-size: 1em;
+      }
+    }
+
+    &__item {
+      &--top {
+        border-bottom: 1px solid rgba(#fff, 0.2);
+        padding: 1rem;
+      }
+
+      &--sub {
+        background-color: rgba(#fff, 0.08);
+        min-width: 0;
+        margin: 1rem;
+        overflow: hidden;
+      }
+    }
+
+    &__link {
+      display: table;
+      color: inherit;
+
+      &--top {
+        text-transform: uppercase;
+      }
+    }
   }
-}
-
-:global(.drawer__sub-menu) {
-  display: flex;
-  flex-wrap: wrap;
-  font-size: 0.6em;
-
-  > :global(li) {
-    background-color: rgba(#fff, 0.08);
-    min-width: 0;
-    margin: 1rem;
-    overflow: hidden;
-  }
-}
-
-:global(.drawer__sub-menu--deep) {
-  display: block;
-  font-size: 1em;
-
-  > :global(li) {
-    margin-top: 0;
-  }
-}
-
-:global(.drawer__link) {
-  display: table;
-  color: inherit;
-}
-
-:global(.drawer__link--top) {
-  text-transform: uppercase;
 }
 </style>
