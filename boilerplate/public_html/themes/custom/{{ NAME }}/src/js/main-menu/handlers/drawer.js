@@ -4,7 +4,6 @@
  */
 
 import { parse } from 'cookie';
-import Drawer from './Drawer.svelte';
 
 /**
  * 30 days in seconds.
@@ -39,6 +38,24 @@ function openButtonToggler(openButton) {
 }
 
 /**
+ * Sets the loading state.
+ *
+ * @param {HTMLButtonElement} button
+ *   The opening button element.
+ *
+ * @return {() => void}
+ *   Function to call after loading is complete.
+ */
+function setLoading(button) {
+  const id = setTimeout(() => button.classList.add('is-loading'));
+
+  return () => {
+    clearTimeout(id);
+    button.classList.remove('is-loading');
+  };
+}
+
+/**
  * Initializes this handler.
  *
  * @param {Object} elements
@@ -54,18 +71,49 @@ export default ({ wrapper, menu }) => {
   // Set initial button state from cookie.
   openButtonToggle(COOKIE_NAME in parse(document.cookie) ? 'show' : 'hide');
 
-  /** @type {import('svelte').SvelteComponent} */
-  const drawer = new Drawer({
-    target: wrapper.parentElement,
-    props: {
-      menu,
-      open: false,
-    },
-  });
+  let drawerDestroy = false;
 
-  const drawerOpen = () => drawer.$set({ open: true });
-  const drawerClose = () => drawer.$set({ open: false });
-  const onOffsetChange = (_, offsets) => drawer.$set(offsets);
+  const initDrawer = async () => {
+    const finishLoading = setLoading(openButton);
+
+    drawerDestroy = new Promise(resolve =>
+      import('./Drawer.svelte').then(({ default: Drawer }) => {
+        const drawer = new Drawer({
+          target: wrapper.parentElement,
+          props: { menu, open: true },
+          baseUrl: drupalSettings.path.baseUrl,
+        });
+
+        const drawerOpen = () => drawer.$set({ open: true });
+        const drawerClose = () => drawer.$set({ open: false });
+        const onOffsetChange = (_, offsets) => drawer.$set(offsets);
+        drawer.$on('close', drawerClose);
+
+        // Focus on microtask queue so that it is after svelte update.
+        drawer.$on('outroend', () => queueMicrotask(() => openButton.focus()));
+
+        if ('jQuery' in window) {
+          jQuery(document).on('drupalViewportOffsetChange', onOffsetChange);
+        }
+
+        openButton.removeEventListener('click', initDrawer);
+        openButton.addEventListener('click', drawerOpen);
+
+        resolve(() => {
+          openButton.removeEventListener('click', drawerOpen);
+          drawer.$destroy();
+
+          if ('jQuery' in window) {
+            jQuery(document).off('drupalViewportOffsetChange', onOffsetChange);
+          }
+        });
+      }),
+    );
+
+    await drawerDestroy;
+    finishLoading();
+  };
+
   const onLineBreak = ({ detail: isBroken }) => {
     openButtonToggle(isBroken ? 'show' : 'hide');
 
@@ -73,24 +121,12 @@ export default ({ wrapper, menu }) => {
     document.cookie = `${COOKIE_NAME}=1;Max-Age=${cookieAge};path=/`;
   };
 
-  openButton.addEventListener('click', drawerOpen);
+  openButton.addEventListener('click', initDrawer);
   wrapper.addEventListener('linebreak', onLineBreak);
 
-  drawer.$on('close', drawerClose);
-  // Focus on microtask queue so that it is after svelte update.
-  drawer.$on('outroend', () => queueMicrotask(() => openButton.focus()));
-
-  if ('jQuery' in window) {
-    jQuery(document).on('drupalViewportOffsetChange', onOffsetChange);
-  }
-
   return () => {
-    openButton.removeEventListener('click', drawerOpen);
+    openButton.removeEventListener('click', initDrawer);
     wrapper.removeEventListener('linebreak', onLineBreak);
-    drawer.$destroy();
-
-    if ('jQuery' in window) {
-      jQuery(document).off('drupalViewportOffsetChange', onOffsetChange);
-    }
+    drawerDestroy.then(f => f());
   };
 };
