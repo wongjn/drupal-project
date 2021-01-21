@@ -6,7 +6,7 @@ use Drupal\node\Entity\NodeType;
 
 /**
  * Tests the created node base field output.
- * 
+ *
  * @see {{ NAME }}_preprocess_field__node__created()
  *
  * @group {{ NAME }}

@@ -68,9 +68,7 @@ class ViewsBlockTest extends ViewsTestBase {
    * Renders a views block.
    */
   protected function renderBlock() {
-    $block = $this->placeBlock('views_block:test_view_block-block_1', [
-      'id' => 'test'
-    ]);
+    $block = $this->placeBlock('views_block:test_view_block-block_1', ['id' => 'test']);
     $build = $this->container
       ->get('entity_type.manager')
       ->getViewBuilder('block')
