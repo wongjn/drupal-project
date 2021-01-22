@@ -81,6 +81,7 @@ export default ({ wrapper, menu }) => {
         const drawer = new Drawer({
           target: wrapper.parentElement,
           props: { menu, open: true, baseUrl: drupalSettings.path.baseUrl },
+          intro: true,
         });
 
         const drawerOpen = () => drawer.$set({ open: true });
