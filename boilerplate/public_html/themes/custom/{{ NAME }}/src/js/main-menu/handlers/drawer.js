@@ -47,7 +47,7 @@ function openButtonToggler(openButton) {
  *   Function to call after loading is complete.
  */
 function setLoading(button) {
-  const id = setTimeout(() => button.classList.add('is-loading'));
+  const id = setTimeout(() => button.classList.add('is-loading'), 1000);
 
   return () => {
     clearTimeout(id);
