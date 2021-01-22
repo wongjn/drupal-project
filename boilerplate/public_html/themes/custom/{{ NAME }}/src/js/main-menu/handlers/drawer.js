@@ -80,8 +80,7 @@ export default ({ wrapper, menu }) => {
       import('./Drawer.svelte').then(({ default: Drawer }) => {
         const drawer = new Drawer({
           target: wrapper.parentElement,
-          props: { menu, open: true },
-          baseUrl: drupalSettings.path.baseUrl,
+          props: { menu, open: true, baseUrl: drupalSettings.path.baseUrl },
         });
 
         const drawerOpen = () => drawer.$set({ open: true });
