@@ -1,4 +1,4 @@
-# {{ LABEL }} Drupal 9 project managed with [Composer](https://getcomposer.org/)
+# {{ LABEL }} Drupal project managed with [Composer](https://getcomposer.org/)
 
 ![Build](https://github.com/projectcosmic/{{ NAME }}/workflows/Build/badge.svg)
 

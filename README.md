@@ -1,4 +1,4 @@
-# Drupal 9 project managed with composer
+# Drupal project managed with composer
 
 [![Build Status](https://travis-ci.org/drupal-composer/drupal-project.svg?branch=8.x)](https://travis-ci.org/drupal-composer/drupal-project)
 
