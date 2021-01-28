@@ -99,13 +99,6 @@ class FormWrapperFixBlock extends BlockBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public function setConfigurationValue($key, $value) {
-    return $this->inner->setConfigurationValue($key, $value);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function blockForm($form, FormStateInterface $form_state) {
     return $this->inner->blockForm($form, $form_state);
   }
