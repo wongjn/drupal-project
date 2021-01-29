@@ -3,14 +3,8 @@
  * Contains the line break handler.
  */
 
+import Cookies from 'js-cookie';
 import { dispatchEvent } from '../../lib/dom';
-
-/**
- * 30 days in seconds.
- *
- * @constant
- */
-const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
 /**
  * Line break reduction result object.
@@ -69,9 +63,7 @@ const calculateLinebreak = menu => {
   // CSS to possibly do something.
   menu.classList[index < 1 && found ? 'add' : 'remove']('is-compact');
 
-  const cookieAge = found ? THIRTY_DAYS : 0;
-  document.cookie = `{{ NAME }}_menu_break=${index +
-    1};Max-Age=${cookieAge};path=/`;
+  Cookies.set('{{ NAME }}_menu_break', index + 1, { expires: 30, path: '/' });
 
   return index;
 };

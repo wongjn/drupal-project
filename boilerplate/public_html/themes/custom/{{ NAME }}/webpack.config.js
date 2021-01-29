@@ -89,6 +89,7 @@ const buildConfig = ({ production = false } = {}) => name => ({
     },
     mainFields: ['svelte', 'browser', 'module', 'main'],
   },
+  externals: { 'js-cookie': 'Cookies' },
   plugins: [
     new DefinePlugin({ BUNDLE_TYPE: JSON.stringify(name) }),
     new StatsWriterPlugin({

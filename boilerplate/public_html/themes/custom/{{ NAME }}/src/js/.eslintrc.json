@@ -5,5 +5,12 @@
   },
   "globals": {
     "BUNDLE_TYPE": true
+  },
+  "rules": {
+    "import/no-unresolved": ["error", {
+      "commonjs": true,
+      "caseSensitive": true,
+      "ignore": ["^js-cookie$"]
+    }]
   }
 }

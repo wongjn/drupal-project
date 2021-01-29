@@ -3,14 +3,7 @@
  * Full menu drawer menu.
  */
 
-import { parse } from 'cookie';
-
-/**
- * 30 days in seconds.
- *
- * @constant
- */
-const THIRTY_DAYS = 60 * 60 * 24 * 3;
+import Cookies from 'js-cookie';
 
 /**
  * Cookie name for saving state across pages.
@@ -69,7 +62,7 @@ export default ({ wrapper, menu }) => {
   const openButton = wrapper.querySelector('.c-main-menu__open-btn');
   const openButtonToggle = openButtonToggler(openButton);
   // Set initial button state from cookie.
-  openButtonToggle(COOKIE_NAME in parse(document.cookie) ? 'show' : 'hide');
+  openButtonToggle(Cookies.get(COOKIE_NAME) ? 'show' : 'hide');
 
   let drawerDestroy = false;
 
@@ -117,8 +110,11 @@ export default ({ wrapper, menu }) => {
   const onLineBreak = ({ detail: isBroken }) => {
     openButtonToggle(isBroken ? 'show' : 'hide');
 
-    const cookieAge = isBroken ? THIRTY_DAYS : 0;
-    document.cookie = `${COOKIE_NAME}=1;Max-Age=${cookieAge};path=/`;
+    if (isBroken) {
+      Cookies.set(COOKIE_NAME, 1, { expires: 30, path: '/' });
+    } else {
+      Cookies.remove(COOKIE_NAME);
+    }
   };
 
   openButton.addEventListener('click', initDrawer);
