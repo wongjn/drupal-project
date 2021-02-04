@@ -444,7 +444,6 @@ function {{ NAME }}_form_contact_message_form_alter(&$form, FormStateInterface $
   $form['mail']['#title'] = t('Email');
   $form['message']['widget'][0]['value']['#title'] = t('Query');
 
-  $form['actions']['preview']['#access'] = FALSE;
   $form['langcode']['#access'] = FALSE;
   $form['copy']['#access'] = FALSE;
 
