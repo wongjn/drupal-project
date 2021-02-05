@@ -24,7 +24,6 @@
     "browser-sync": "^2.18.8",
     "cssnano": "^4.1.0",
     "del": "^5.0.0",
-    "drupal-plugin": "^1.0.0",
     "eslint-config-drupal": "^5.0.2",
     "fibers": "^4.0.1",
     "gulp": "^4.0.0",
@@ -42,6 +41,7 @@
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^4.1.0",
     "webpack-dev-middleware": "^4.0.2",
+    "webpack-drupal-plugin": "^1.0.0",
     "webpack-hot-middleware": "^2.24.3"
   }
 }

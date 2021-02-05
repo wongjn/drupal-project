@@ -5,7 +5,7 @@
 
 const path = require('path');
 const { DefinePlugin, HotModuleReplacementPlugin } = require('webpack');
-const DrupalPlugin = require('drupal-plugin');
+const DrupalPlugin = require('webpack-drupal-plugin');
 const svelteConfig = require('./svelte.config');
 
 /**
