@@ -4,7 +4,8 @@
     "sourceType": "module"
   },
   "globals": {
-    "BUNDLE_TYPE": true
+    "BUNDLE_TYPE": true,
+    "__webpack_public_path__": true
   },
   "rules": {
     "import/no-unresolved": ["error", {
