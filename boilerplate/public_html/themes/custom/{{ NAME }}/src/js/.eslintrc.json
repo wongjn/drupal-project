@@ -10,7 +10,7 @@
     "import/no-unresolved": ["error", {
       "commonjs": true,
       "caseSensitive": true,
-      "ignore": ["^js-cookie$"]
+      "ignore": ["^(drupalSettings|js-cookie)$", "^Drupal(/.+|$)"]
     }]
   }
 }

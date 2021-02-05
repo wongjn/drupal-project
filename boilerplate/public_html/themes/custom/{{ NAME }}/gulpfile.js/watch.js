@@ -52,7 +52,7 @@ function watcher() {
       : '{{ NAME_SNAKE }}.test',
     middleware: [
       webpackDevMiddleware(webpackCompiler, {
-        writeToDisk: filePath => /\/stats\.\w+\.json$/.test(filePath),
+        writeToDisk: filePath => /\/assets\.\w+\.php$/.test(filePath),
       }),
       webpackHotMiddleware(webpackCompiler),
     ],

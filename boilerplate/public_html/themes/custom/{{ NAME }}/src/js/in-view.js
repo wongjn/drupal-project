@@ -3,6 +3,8 @@
  * Provides element animation when it is within the viewport.
  */
 
+import drupalSettings from 'drupalSettings';
+import Drupal from 'Drupal';
 import { match, matchChildren } from './lib/dom';
 
 /**

@@ -1,4 +1,5 @@
 <script>
+import 'Drupal'; // Ensure Drupal is imported for Drupal.t() calls.
 import { createEventDispatcher, onDestroy } from 'svelte';
 import { fade, fly, scale, slide } from 'svelte/transition';
 import { circInOut } from 'svelte/easing';

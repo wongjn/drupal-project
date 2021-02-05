@@ -5,7 +5,7 @@
 
 const path = require('path');
 const { DefinePlugin, HotModuleReplacementPlugin } = require('webpack');
-const { StatsWriterPlugin } = require('webpack-stats-plugin');
+const DrupalPlugin = require('drupal-plugin');
 const svelteConfig = require('./svelte.config');
 
 /**
@@ -24,7 +24,7 @@ const buildConfig = ({ production = false } = {}) => name => ({
   name,
   context: __dirname,
   entry: {
-    main: [
+    'js.main': [
       './src/js/webpack-path.js',
       './src/js/main-menu/index.js',
       './src/js/in-view.js',
@@ -89,12 +89,14 @@ const buildConfig = ({ production = false } = {}) => name => ({
     },
     mainFields: ['svelte', 'browser', 'module', 'main'],
   },
-  externals: { 'js-cookie': 'Cookies' },
   plugins: [
     new DefinePlugin({ BUNDLE_TYPE: JSON.stringify(name) }),
-    new StatsWriterPlugin({
-      filename: `stats.${name}.json`,
-      fields: ['entrypoints'],
+    new DrupalPlugin({
+      filename: `assets.${name}.php`,
+      processor: args => ({
+        ...DrupalPlugin.maybeMinified(args),
+        differential_serve: name,
+      }),
     }),
     ...(!production ? [new HotModuleReplacementPlugin()] : []),
   ],

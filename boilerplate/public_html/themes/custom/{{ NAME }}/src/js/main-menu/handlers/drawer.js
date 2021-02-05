@@ -123,6 +123,8 @@ export default ({ wrapper, menu }) => {
   return () => {
     openButton.removeEventListener('click', initDrawer);
     wrapper.removeEventListener('linebreak', onLineBreak);
-    drawerDestroy.then(f => f());
+    if (drawerDestroy) {
+      drawerDestroy.then(f => f());
+    }
   };
 };

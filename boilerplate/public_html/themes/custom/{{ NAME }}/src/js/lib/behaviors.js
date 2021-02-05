@@ -4,6 +4,7 @@
  */
 /* eslint-disable import/prefer-default-export */
 
+import drupalSettings from 'drupalSettings';
 import { match } from './dom';
 
 // Noop function.
