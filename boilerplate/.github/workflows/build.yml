@@ -150,47 +150,48 @@ jobs:
       with:
         name: ${{ matrix.type }}-test-browser-output
         path: public_html/sites/simpletest/browser_output
-  # deploy:
-  #   runs-on: self-hosted
-  #   needs: [composer_build, build_assets, code_style, php_unit]
-  #   # Run job only on main branch, allowing some skipped jobs but no failures or
-  #   # cancellations.
-  #   if: |
-  #     github.ref == 'refs/heads/master'
-  #     && !cancelled()
-  #     && needs.composer_build.result == 'success'
-  #     && needs.build_assets.result != 'failure'
-  #     && needs.code_style.result != 'failure'
-  #     && needs.php_unit.result != 'failure'
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #     with: { fetch-depth: 0 }
-  #   - name: Composer cache
-  #     uses: actions/cache@v2
-  #     with:
-  #       path: |
-  #         vendor
-  #         public_html/core
-  #         public_html/libraries
-  #         public_html/*/contrib
-  #       key: ${{ needs.composer_build.outputs.composer-cache-key }}
-  #       restore-keys: v1-composer-
-  #   - uses: actions/download-artifact@v2
-  #     if: '!contains(github.event.head_commit.message, ''[skip assets]'')'
-  #     with:
-  #       name: assets
-  #       path: public_html/themes/custom/${{ env.THEME_NAME }}/dist
-  #   - run: composer install
-  #   - name: Query for any uninstalled Drupal extensions
-  #     id: uninstall
-  #     run: echo "::set-output name=extensions::`sed -E 's/[[:space:]]*(.+):.+/\1/' <(comm -13 <(sort config/sync/core.extension.yml) <(git show ${{ github.event.before }}:config/sync/core.extension.yml | sort))`"
-  #   - name: Uninstall removed Drupal extensions
-  #     if: steps.uninstall.extensions != ''
-  #     run: ./vendor/bin/drush @live pm:uninstall ${{ steps.uninstall.extensions }}
-  #   - name: Deploy built assets
-  #     if: '!contains(github.event.head_commit.message, ''[skip assets]'')'
-  #     run: dir=themes/custom/${{ env.THEME_NAME }}/dist/; ./vendor/bin/drush rsync @self:$dir @live:$dir --mode=rcmz -- --delete --exclude='*.map' --chmod="Fgo-wx,Dgo-w"
-  #   - name: Deploy checked-in code
-  #     run: |
-  #       git push ${{ env.DEPLOY_TARGET }} master -f
-  #       ./vendor/bin/drush @live deploy
+  deploy:
+    runs-on: self-hosted
+    needs: [composer_build, build_assets, code_style, php_unit]
+    if: false
+    # Run job only on main branch, allowing some skipped jobs but no failures or
+    # cancellations.
+    # if: |
+    #   github.ref == 'refs/heads/master'
+    #   && !cancelled()
+    #   && needs.composer_build.result == 'success'
+    #   && needs.build_assets.result != 'failure'
+    #   && needs.code_style.result != 'failure'
+    #   && needs.php_unit.result != 'failure'
+    steps:
+    - uses: actions/checkout@v2
+      with: { fetch-depth: 0 }
+    - name: Composer cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          vendor
+          public_html/core
+          public_html/libraries
+          public_html/*/contrib
+        key: ${{ needs.composer_build.outputs.composer-cache-key }}
+        restore-keys: v1-composer-
+    - uses: actions/download-artifact@v2
+      if: '!contains(github.event.head_commit.message, ''[skip assets]'')'
+      with:
+        name: assets
+        path: public_html/themes/custom/${{ env.THEME_NAME }}/dist
+    - run: composer install
+    - name: Query for any uninstalled Drupal extensions
+      id: uninstall
+      run: echo "::set-output name=extensions::`sed -E 's/[[:space:]]*(.+):.+/\1/' <(comm -13 <(sort config/sync/core.extension.yml) <(git show ${{ github.event.before }}:config/sync/core.extension.yml | sort))`"
+    - name: Uninstall removed Drupal extensions
+      if: steps.uninstall.extensions != ''
+      run: ./vendor/bin/drush @live pm:uninstall ${{ steps.uninstall.extensions }}
+    - name: Deploy built assets
+      if: '!contains(github.event.head_commit.message, ''[skip assets]'')'
+      run: dir=themes/custom/${{ env.THEME_NAME }}/dist/; ./vendor/bin/drush rsync @self:$dir @live:$dir --mode=rcmz -- --delete --exclude='*.map' --chmod="Fgo-wx,Dgo-w"
+    - name: Deploy checked-in code
+      run: |
+        git push ${{ env.DEPLOY_TARGET }} master -f
+        ./vendor/bin/drush @live deploy
