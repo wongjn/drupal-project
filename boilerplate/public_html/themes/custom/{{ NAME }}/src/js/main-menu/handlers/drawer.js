@@ -3,6 +3,7 @@
  * Full menu drawer menu.
  */
 
+import Drupal from 'Drupal';
 import Cookies from 'js-cookie';
 
 /**
@@ -11,6 +12,11 @@ import Cookies from 'js-cookie';
  * @constant
  */
 const COOKIE_NAME = '{{ NAME }}_menu_drawer';
+
+/**
+ * Drupal viewport offset change event listener name.
+ */
+const OFFSET_CHANGE_HOOK = 'drupalViewportOffsetChange.{{ CAMEL }}Drawer';
 
 /**
  * Creates a drawer-open button toggling function.
@@ -73,20 +79,26 @@ export default ({ wrapper, menu }) => {
       import('./Drawer.svelte').then(({ default: Drawer }) => {
         const drawer = new Drawer({
           target: wrapper.parentElement,
-          props: { menu, open: true, baseUrl: drupalSettings.path.baseUrl },
+          props: {
+            menu,
+            open: true,
+            baseUrl: drupalSettings.path.baseUrl,
+            offsets: 'displace' in Drupal ? Drupal.displace.offsets : {},
+          },
           intro: true,
         });
 
         const drawerOpen = () => drawer.$set({ open: true });
         const drawerClose = () => drawer.$set({ open: false });
-        const onOffsetChange = (_, offsets) => drawer.$set(offsets);
         drawer.$on('close', drawerClose);
 
         // Focus on microtask queue so that it is after svelte update.
         drawer.$on('outroend', () => queueMicrotask(() => openButton.focus()));
 
         if ('jQuery' in window) {
-          jQuery(document).on('drupalViewportOffsetChange', onOffsetChange);
+          jQuery(document).on(OFFSET_CHANGE_HOOK, (_, offsets) =>
+            drawer.$set({ offsets }),
+          );
         }
 
         openButton.removeEventListener('click', initDrawer);
@@ -97,7 +109,7 @@ export default ({ wrapper, menu }) => {
           drawer.$destroy();
 
           if ('jQuery' in window) {
-            jQuery(document).off('drupalViewportOffsetChange', onOffsetChange);
+            jQuery(document).off(OFFSET_CHANGE_HOOK);
           }
         });
       }),
