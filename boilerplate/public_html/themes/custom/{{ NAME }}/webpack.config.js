@@ -24,7 +24,7 @@ const buildConfig = ({ production = false } = {}) => name => ({
   name,
   context: __dirname,
   entry: {
-    'js.main': [
+    main: [
       './src/js/webpack-path.js',
       './src/js/main-menu/index.js',
       './src/js/in-view.js',
@@ -97,6 +97,7 @@ const buildConfig = ({ production = false } = {}) => name => ({
         ...DrupalPlugin.maybeMinified(args),
         differential_serve: name,
       }),
+      libraryName: 'js.[name]',
     }),
     ...(!production ? [new HotModuleReplacementPlugin()] : []),
   ],
