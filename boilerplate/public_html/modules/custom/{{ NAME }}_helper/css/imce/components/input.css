@@ -1,0 +1,21 @@
+/**
+ * IMCE input.
+ */
+
+.imce-url-label {
+  display: inline;
+}
+
+.imce-url-button {
+  position: relative;
+  float: right;
+  border-radius: 5px 5px 0 0;
+  background-color: #666;
+  box-shadow: 0 1px 0 0 #666;
+  padding: 0 5px;
+  color: #fff;
+}
+
+.imce-url-button + .imce-url-input {
+  border-top-right-radius: 0px;
+}

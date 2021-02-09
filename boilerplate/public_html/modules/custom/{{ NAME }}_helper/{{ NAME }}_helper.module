@@ -5,6 +5,8 @@
  * {{ LABEL }} helper module.
  */
 
+use Drupal\imce\Imce;
+
 /**
  * Implements hook_editor_js_settings_alter().
  */
@@ -61,17 +63,49 @@ function {{ NAME }}_helper_menu_links_discovered_alter(&$links) {
  * Implements hook_library_info_alter().
  */
 function {{ NAME }}_helper_library_info_alter(&$libraries, $extension) {
-  $path = drupal_get_path('module', '{{ NAME }}_helper');
+  if (\Drupal::theme()->getActiveTheme()->getName() === 'seven') {
+    $path = drupal_get_path('module', '{{ NAME }}_helper');
 
-  switch ($extension) {
-    case 'paragraphs':
-      $libraries['drupal.paragraphs.widget']['css']['theme']["/$path/css/paragraphs/theme/widget.css"] = [];
-      $libraries['paragraphs-dragdrop']['css']['theme']["/$path/css/paragraphs/theme/dragdrop.css"] = [];
-      break;
+    switch ($extension) {
+      case 'imce':
+        $libraries['drupal.imce.input']['css']['component'] = ["/$path/css/imce/components/input.css" => []];
+        break;
 
-    case 'seven':
-      $libraries['global-styling']['css']['component']["/$path/css/seven/components/form.css"] = [];
-      break;
+      case 'paragraphs':
+        $libraries['drupal.paragraphs.widget']['css']['theme']["/$path/css/paragraphs/theme/widget.css"] = [];
+        $libraries['paragraphs-dragdrop']['css']['theme']["/$path/css/paragraphs/theme/dragdrop.css"] = [];
+        break;
+
+      case 'seven':
+        $libraries['global-styling']['css']['component']["/$path/css/seven/components/form.css"] = [];
+        break;
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for editor_link_dialog form.
+ */
+function {{ NAME }}_helper_form_editor_link_dialog_alter(&$form) {
+  {{ NAME }}_helper_imce_url_input_alter($form['attributes']['href']);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for editor_image_dialog form.
+ */
+function {{ NAME }}_helper_form_editor_image_dialog_alter(&$form) {
+  {{ NAME }}_helper_imce_url_input_alter($form['attributes']['src']);
+}
+
+/**
+ * Processes IMCE URL elements for styling.
+ *
+ * @param array $element
+ *   The URL input element.
+ */
+function {{ NAME }}_helper_imce_url_input_alter(array &$element) {
+  if (\Drupal::moduleHandler()->moduleExists('imce') && Imce::access()) {
+    $element['#label_attributes']['class'][] = 'imce-url-label';
   }
 }
 
