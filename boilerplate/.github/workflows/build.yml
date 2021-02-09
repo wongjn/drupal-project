@@ -184,7 +184,7 @@ jobs:
       - run: composer install
       - name: Query for any uninstalled Drupal extensions
         id: uninstall
-        run: echo "::set-output name=extensions::`sed -E 's/[[:space:]]*(.+):.+/\1/' <(comm -13 <(sort config/sync/core.extension.yml) <(git show ${{ github.event.before }}:config/sync/core.extension.yml | sort))`"
+        run: echo "::set-output name=extensions::$(sed -E 's/[[:space:]]*(.+):.+/\1/' <(comm -13 <(sort config/sync/core.extension.yml) <(git show ${{ github.event.before }}:config/sync/core.extension.yml | sort)))"
       - name: Uninstall removed Drupal extensions
         if: steps.uninstall.extensions != ''
         run: ./vendor/bin/drush @live pm:uninstall ${{ steps.uninstall.extensions }}
