@@ -113,7 +113,10 @@ function {{ NAME }}_helper_imce_url_input_alter(array &$element) {
  * Implements hook_block_alter().
  */
 function {{ NAME }}_helper_block_alter(&$definitions) {
-  $form_blocks = ['views_exposed_filter_block'];
+  $form_blocks = [
+    'search_form_block',
+    'views_exposed_filter_block',
+  ];
 
   foreach ($definitions as $id => $definition) {
     // Overrides core class to override ::build() method to prevent form
