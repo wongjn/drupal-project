@@ -1,6 +1,6 @@
 # {{ LABEL }} Drupal project managed with [Composer](https://getcomposer.org/)
 
-![Build](https://github.com/projectcosmic/{{ NAME }}/workflows/Build/badge.svg)
+[![Build status](https://github.com/projectcosmic/{{ NAME }}/workflows/Build/badge.svg)](https://github.com/projectcosmic/{{ NAME }}/actions?query=workflow%3ABuild)
 
 ## Usage
 
