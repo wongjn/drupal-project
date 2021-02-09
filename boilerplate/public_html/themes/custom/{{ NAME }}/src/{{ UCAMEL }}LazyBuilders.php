@@ -31,7 +31,7 @@ class {{ UCAMEL }}LazyBuilders implements RenderCallbackInterface {
     $build = StatusMessages::renderMessages($type);
 
     if ($attributes != NULL && $attributes != '[]') {
-      $build['#attributes'] = json_decode($attributes);
+      $build['#attributes'] = json_decode($attributes, TRUE);
     }
 
     return $build;
