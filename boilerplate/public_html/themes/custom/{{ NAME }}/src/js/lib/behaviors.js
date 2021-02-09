@@ -62,7 +62,9 @@ export const createBehavior = (selector, func, sideEffectsOnly = false) => {
   // an initial Drupal.attachBehaviors() is called for the whole page. Hence
   // attach() is actually called for the first time here for behaviors created
   // in the legacy bundles.
-  if (BUNDLE_TYPE === 'legacy' && document.readyState !== 'loading') {
+  // Modern scripts may also miss out on the Drupal.attachBehaviors() call when
+  // loaded via Drupal.ajax or other async methods.
+  if (document.readyState !== 'loading') {
     behavior.attach(document.body, drupalSettings);
   }
 
