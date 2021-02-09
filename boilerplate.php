@@ -36,7 +36,7 @@ copy('public_html/sites/example.settings.local.php', 'public_html/sites/default/
 echo "Rewriting composer.json\n";
 file_put_contents('composer.json', preg_replace(
   ['/("name": ").+"/', '/("description": ").+"/'],
-  [sprintf('$1%s/%s"', $vendor, $machine_name), sprintf('$1%s Drupal 8 project managed with composer."', $human_name)],
+  [sprintf('$1%s/%s"', $vendor, $machine_name), sprintf('$1%s Drupal project managed with composer."', $human_name)],
   file_get_contents('composer.json'),
   1,
 ));
