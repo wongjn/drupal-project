@@ -2,6 +2,8 @@
 //// Layout items in a grid.
 ////
 
+@use 'sass:list';
+@use 'sass:string';
 @use '../lib/layout';
 @use '../lib/unit';
 @use '../lib/viewport';
@@ -12,28 +14,72 @@
   justify-content: center;
   margin: (layout.$GUTTER_FALLBACK_PX * -0.5);
 
-  @supports (display: grid) {
+  @supports (display: grid) and (top: min(0px, 1px)) {
     display: grid;
     margin: 0;
-    grid-template-columns: repeat(var(--columns), 1fr);
-    grid-gap: var(--site-gutter);
-    --columns: 1;
+    grid-template-columns: repeat(auto-fill, minmax(var(--width), 1fr));
+    grid-gap: 40px var(--site-gutter);
+    // Grid column widths.
+    --l1: 100%;
+    @for $columns from 2 through 4 {
+      $gutter_count: $columns - 1;
+      $gutter: if($gutter_count == 1, var(--site-gutter), '(var(--site-gutter) * #{$gutter_count})');
+      --l#{$columns}: calc((100% - #{$gutter}) / #{$columns});
+    }
   }
 
-  @mixin columns($width, $columns) {
-    @for $i from 2 through $columns {
-      @media (min-width: ($width + 20px) * ($i - 1)) {
-        --columns: #{$i};
+  // Generate variations, where the column count increases once the grid columns
+  // hits the column width at maximum column count. This uses pseudo container
+  // queries as detailed at https://css-tricks.com/the-raven-technique-one-step-closer-to-container-queries/.
+  @each $key, $columns in (thirds: 3, quarters: 4) {
+    &--#{$key} {
+      // The final width definition variable to add to.
+      $width: '';
+      // Breakpoint base measure.
+      $breakpoint_measure: layout.site_columns_width((12 / $columns), 'max');
+
+      // Iterate through the grid column counts.
+      @for $breakpoint_index from $columns through 1 {
+        // Default breakpoint.
+        $value: 1px;
+
+        // Container query pure value clamping trick.
+        @if ($breakpoint_index > 1) {
+          $breakpoint: if(
+            $breakpoint_index > 2,
+            '(#{$breakpoint_measure * ($breakpoint_index - 1)} + (var(--site-gutter) * #{$breakpoint_index - 2}))',
+            $breakpoint_measure
+          );
+          $value: min(max(0px, 100% - #{$breakpoint}), 1px);
+        }
+
+        @if $breakpoint_index != $columns {
+          // Create intermediary value for min(max()) expressions since a bug
+          // in CSSNano causes errors with deeply nested functions in calc().
+          @if $value != 1px {
+            --clamp-#{$breakpoint_index}: #{$value};
+            $value: var(--clamp-#{$breakpoint_index});
+          }
+
+          // Subtract other --is-* custom properties to ensure only one
+          // breakpoint value is active.
+          @for $i from $breakpoint_index + 1 through $columns {
+            $value: "#{$value} - var(--is-#{$i})";
+          }
+
+          $value: calc(#{$value});
+        }
+
+        --is-#{$breakpoint_index}: #{$value};
+        $width: '#{$width} + #{min(var(--l#{$breakpoint_index}), var(--is-#{$breakpoint_index}) * 9999)}';
+      }
+
+      --width: calc(#{string.slice($width, 3)});
+
+      > .l-grid__item {
+        flex-basis: layout.site_width_columns((12 / $columns), true);
       }
     }
-
-    > .l-grid__item {
-      flex-basis: $width;
-    }
-  }
-
-  &--thirds {
-    @include columns(400px, 3);
   }
 
   // 1. When using fallback flexbox layout, ensures items are contained within
@@ -41,9 +87,8 @@
   &__item {
     margin: (layout.$GUTTER_FALLBACK_PX * 0.5);
     min-width: 0; // 1
-    flex-grow: 1;
 
-    @supports (display: grid) {
+    @supports (display: grid) and (top: min(0px, 1px)) {
       margin: 0;
     }
   }

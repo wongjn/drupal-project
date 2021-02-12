@@ -3,8 +3,8 @@
 ////
 
 // The content width of the site, without any gutters.
-$SITE-WIDTH: 1294;
-$SITE-WIDTH-PX: $SITE-WIDTH * 1px;
+$SITE_WIDTH: 1294;
+$SITE_WIDTH_PX: $SITE_WIDTH * 1px;
 
 $GUTTER_FALLBACK: 20;
 $GUTTER_FALLBACK_PX: $GUTTER_FALLBACK * 1px;
@@ -14,3 +14,26 @@ $GUTTER_MAX_PX: $GUTTER_MAX * 1px;
 
 $GUTTER_MIN: 15;
 $GUTTER_MIN_PX: $GUTTER_MIN * 1px;
+
+$_COLUMN_SIZE: ($SITE_WIDTH_PX - ($GUTTER_MAX_PX * 11)) / 12;
+
+/// Returns a width value for a portion of site width in columns.
+///
+/// @param {number} $columns The number of columns. Must be a positive number.
+/// @param {boolean|string} $fallback [false] Pass `true` to return the width as
+///   a value compatible for browsers that do not support CSS variables. Pass
+///   'max' for maximum gutter.
+/// @return {Length} The width.
+@function site_columns_width($columns, $fallback: false) {
+  @if ($columns < 1) {
+    @error "$columns must be a positive number, got '#{$columns}'.";
+  }
+
+  $gutter_multiplier: $columns - 1;
+
+  @if $fallback {
+    @return ($_COLUMN_SIZE * $columns) + (if($fallback == 'max', $GUTTER_MAX_PX, $GUTTER_FALLBACK_PX) * $gutter_multiplier);
+  }
+
+  @return calc(#{$_COLUMN_SIZE * $columns} + (var(--site-gutter) * #{$gutter_multiplier}))
+}
