@@ -399,6 +399,22 @@ function {{ NAME }}_preprocess_responsive_image(&$variables) {
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function {{ NAME }}_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $build_info = $form_state->getBuildInfo();
+  $id = isset($build_info['base_form_id']) ? $build_info['base_form_id'] : $form_id;
+  $enhance = [
+    'contact_message_form',
+    'user_login_form',
+    'user_pass',
+  ];
+  if (in_array($id, $enhance)) {
+    $form['#pre_render'][] = '\Drupal\{{ NAME }}\FormElementThemePluginManager::preRenderFormElement';
+  }
+}
+
+/**
  * Implements hook_form_BASE_FORM_ID_alter() for contact_message_form.
  */
 function {{ NAME }}_form_contact_message_form_alter(&$form, FormStateInterface $form_state) {
