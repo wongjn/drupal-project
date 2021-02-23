@@ -31,7 +31,7 @@
     "require": {
         "composer/installers": "^1.2",
         "cweagans/composer-patches": "^1.6.5",
-        "drupal/admin_toolbar": "^2.0",
+        "drupal/admin_toolbar": "^3.0",
         "drupal/antibot": "^1.4",
         "drupal/block_content_permissions": "^1.6",
         "drupal/core-composer-scaffold": "^9",
