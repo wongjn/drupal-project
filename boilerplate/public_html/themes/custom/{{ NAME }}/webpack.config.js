@@ -73,7 +73,8 @@ const buildConfig = ({ production = false } = {}) => name => ({
         use: {
           loader: 'svelte-loader',
           options: {
-            dev: !production,
+            compilerOptions: { dev: !production },
+            hotReload: !production,
             ...svelteConfig,
           },
         },
