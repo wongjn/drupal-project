@@ -67,7 +67,7 @@ const scaleParams = { duration: 300, start: 0.6 };
       <header>
         <a href={baseUrl}>
           <img
-            src="{baseUrl}themes/custom/{{ name }}/logo.svg"
+            src="{baseUrl}themes/custom/{{ NAME }}/logo.svg"
             width=""
             height=""
             alt={window.Drupal.t('Home')}

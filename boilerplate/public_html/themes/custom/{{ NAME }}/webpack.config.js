@@ -25,7 +25,7 @@ const buildConfig = ({ production = false } = {}) => name => ({
   context: __dirname,
   entry: {
     main: [
-      'Drupal/{{ name }}/global.polyfill',
+      'Drupal/{{ NAME }}/global.polyfill',
       './src/js/webpack-path.js',
       './src/js/main-menu/index.js',
       './src/js/in-view.js',
