@@ -3,7 +3,7 @@
  * Contains the submenu edge handler.
  */
 
-import debounce from 'debounce';
+import { debounce } from 'Drupal/core/drupal.debounce';
 
 /**
  * Moves a menu if it overlaps.
