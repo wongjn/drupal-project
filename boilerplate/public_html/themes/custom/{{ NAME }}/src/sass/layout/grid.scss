@@ -77,7 +77,7 @@
       --width: calc(#{string.slice($width, 3)});
 
       > .l-grid__item {
-        flex-basis: layout.site_width_columns((12 / $columns), true);
+        flex-basis: layout.site_columns_width((12 / $columns), true);
       }
     }
   }
