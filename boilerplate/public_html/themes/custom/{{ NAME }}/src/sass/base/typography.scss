@@ -13,7 +13,7 @@ body {
   @include font.size-custom-properties;
   @include font.size(font.$SIZE);
   color: #333;
-  font-family: font.$SYSTEM;
+  font-family: font.$SANS_SERIF;
   line-height: font.$LINE-HEIGHT;
 }
 *,
