@@ -7,7 +7,7 @@
 @use '../lib/viewport';
 
 .c-text-body {
-  $block-spacing: font.$LINE-HEIGHT * 1rem * ( font.$SIZE / 16 );
+  $block_spacing: font.$LINE_HEIGHT * 1rem * ( font.$SIZE / 16 );
 
   // Clearfix
   &::after {
@@ -17,7 +17,7 @@
   }
 
   * + * {
-    margin-top: $block-spacing;
+    margin-top: $block_spacing;
   }
 
   ul,
@@ -40,14 +40,14 @@
   }
 
   // Sizes for each header tags, 2–6
-  $heading-sizes: (
+  $heading_sizes: (
     2: 30,
     3: 24,
     4: 18,
     5: 16,
     6: 16
   );
-  @each $level, $size in $heading-sizes {
+  @each $level, $size in $heading_sizes {
     h#{$level} {
       @include font.size($size);
     }
@@ -123,7 +123,7 @@
     // Anchor tags that wrap media items do not get margin-top (since they are
     // inline display). Add the margin onto the child media instead.
     a:not(:first-child) > & {
-      margin-top: $block-spacing;
+      margin-top: $block_spacing;
     }
   }
 

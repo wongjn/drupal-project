@@ -78,9 +78,9 @@
 ///   The unitless value.
 @function strip($value) {
   @if meta.type-of($value) != number {
-    $given-value: $value;
+    $given_value: $value;
     $value: _to-number($value);
-    @debug '#{$given-value} given as a #{meta.type-of($given-value)}, converted to #{$value}';
+    @debug '#{$given_value} given as a #{meta.type-of($given_value)}, converted to #{$value}';
   }
 
   @return if(math.is-unitless($value), $value, ($value / ($value * 0 + 1)));

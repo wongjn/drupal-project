@@ -17,14 +17,14 @@
 @mixin _offset-utility($property, $measures, $selector: '.u-#{$property}', $minimum: 20) {
   @each $measure in $measures {
     #{$selector}-#{$measure} {
-      $measure-px: $measure * 1px;
+      $measure_px: $measure * 1px;
 
       @if ($measure > $minimum) {
         #{$property}: ($measure_px * 0.5);
         #{$property}: viewport.scale($measure_px, $minimum * 1px);
       }
       @else {
-        #{$property}: $measure-px;
+        #{$property}: $measure_px;
       }
     }
   }

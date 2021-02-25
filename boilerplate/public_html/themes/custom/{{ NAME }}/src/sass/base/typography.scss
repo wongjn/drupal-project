@@ -14,7 +14,7 @@ body {
   @include font.size(font.$SIZE);
   color: #333;
   font-family: font.$SANS_SERIF;
-  line-height: font.$LINE-HEIGHT;
+  line-height: font.$LINE_HEIGHT;
 }
 *,
 ::before,

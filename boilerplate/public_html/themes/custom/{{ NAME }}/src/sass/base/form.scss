@@ -17,11 +17,11 @@ label {
 input,
 textarea,
 select {
-  border: 2px solid forms.$color-default;
+  border: 2px solid forms.$color_default;
   background-color: transparent;
   font: inherit;
-  @include font.size(forms.$font-size);
-  line-height: forms.$line-height;
+  @include font.size(forms.$font_size);
+  line-height: forms.$line_height;
   color: inherit;
   -webkit-appearance: none;
   appearance: none;
@@ -29,22 +29,22 @@ select {
 
   &:focus {
     outline: 0;
-    border-color: forms.$color-active;
-    box-shadow: 0 0 3px forms.$color-active;
+    border-color: forms.$color_active;
+    box-shadow: 0 0 3px forms.$color_active;
   }
 }
 
 input,
 select,
 textarea {
-  padding: 0 (forms.$height-rem * 0.333);
+  padding: 0 (forms.$height_rem * 0.333);
   max-width: 100%;
 }
 
 input,
 select,
 [type="submit"] {
-  height: forms.$height-rem;
+  height: forms.$height_rem;
 }
 
 textarea {
@@ -90,10 +90,10 @@ select {
       justify-content: center;
       vertical-align: middle;
       margin: 0 0 0 1ch;
-      border-radius: forms.$height-rem / 2;
-      border: 1px solid forms.$color-default;
-      width: forms.$height-rem;
-      height: forms.$height-rem;
+      border-radius: forms.$height_rem / 2;
+      border: 1px solid forms.$color_default;
+      width: forms.$height_rem;
+      height: forms.$height_rem;
       font-size: 1.5em;
       line-height: 1;
       color: transparent;
@@ -106,8 +106,8 @@ select {
   }
 
   &:focus + label::after {
-    border-color: forms.$color-active;
-    box-shadow: 0 0 3px forms.$color-active;
+    border-color: forms.$color_active;
+    box-shadow: 0 0 3px forms.$color_active;
   }
 }
 
@@ -157,8 +157,8 @@ button:disabled {
 // For submit-type `input` form elements
 [type="submit"] {
   @include font.size(24);
-  border-color: forms.$color-active;
-  background-color: forms.$color-active;
+  border-color: forms.$color_active;
+  background-color: forms.$color_active;
   color: #fff;
   cursor: pointer;
   transition: color 250ms, background-color 250ms, transform 250ms;
@@ -166,7 +166,7 @@ button:disabled {
   &:hover,
   &:focus {
     background-color: transparent;
-    color: forms.$color-active;
+    color: forms.$color_active;
   }
 
   &:active {

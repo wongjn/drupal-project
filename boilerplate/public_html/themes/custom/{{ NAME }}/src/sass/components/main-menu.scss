@@ -3,8 +3,8 @@
 ////
 
 .c-main-menu {
-  $y-padding: 10px;
-  $x-padding: 10px;
+  $y_padding: 10px;
+  $x_padding: 10px;
 
   display: flex;
   justify-content: flex-end;
@@ -155,7 +155,7 @@
 
   &__link {
     display: block;
-    padding: $y-padding $x-padding;
+    padding: $y_padding $x_padding;
 
     &.is-active-trail {
       color: #000;
@@ -169,13 +169,13 @@
 
   &__open-btn {
     position: relative;
-    margin-right: ($y-padding * -1);
+    margin-right: ($y_padding * -1);
     background:
-      linear-gradient(0deg, currentColor, currentColor) no-repeat center #{$y-padding} / 1.2em 2px,
+      linear-gradient(0deg, currentColor, currentColor) no-repeat center #{$y_padding} / 1.2em 2px,
       linear-gradient(0deg, currentColor, currentColor) no-repeat center 50% / 1.2em 2px,
-      linear-gradient(0deg, currentColor, currentColor) no-repeat center calc(100% - #{$y-padding}) / 1.2em 2px;
-    width: calc(1.2em + #{$y-padding * 2});
-    height: calc(1em + #{$y-padding * 2});
+      linear-gradient(0deg, currentColor, currentColor) no-repeat center calc(100% - #{$y_padding}) / 1.2em 2px;
+    width: calc(1.2em + #{$y_padding * 2});
+    height: calc(1em + #{$y_padding * 2});
     text-indent: -9999em;
 
     &::after {

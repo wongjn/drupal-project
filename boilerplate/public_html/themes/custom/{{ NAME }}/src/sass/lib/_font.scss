@@ -21,7 +21,7 @@ $_SYSTEM_SERIF: 'Iowan Old Style', 'Apple Garamond', Baskerville, 'Times New Rom
 $SANS_SERIF: $_SYSTEM_SANS_SERIF;
 
 // List of font sizes that will have scalable custom properties
-$_SIZE-PRESETS: (
+$_SIZE_PRESETS: (
   72: 30,
   60: 30,
   48: 30,
@@ -33,7 +33,7 @@ $_SIZE-PRESETS: (
 $SIZE: 16;
 
 // Global default line height ratio
-$LINE-HEIGHT: (24 / $SIZE);
+$LINE_HEIGHT: (24 / $SIZE);
 
 // Minimum font size for viewport scaling.
 $_SIZE_MIN: 24;
@@ -66,7 +66,7 @@ $_SIZE_MIN: 24;
     font-size: if(
       map.has_key($_SIZE_PRESETS, $size),
       var(--font-size-#{$size}),
-      viewport.scale($rem-size, _scale_minimum($size))
+      viewport.scale($rem_size, _scale_minimum($size))
     );
   }
 }

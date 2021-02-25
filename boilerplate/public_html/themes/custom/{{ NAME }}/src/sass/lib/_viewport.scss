@@ -21,7 +21,7 @@
 ///
 /// @return {String}
 ///   The CSS calculation expression.
-@function scaler($amount, $direction: 'vw', $at: layout.$SITE-WIDTH, $from: 600) {
+@function scaler($amount, $direction: 'vw', $at: layout.$SITE_WIDTH, $from: 600) {
   $divisor: 1 / ($at - $from);
 
   $scaler: math.round(1000 * $divisor * $amount) / 10;
@@ -31,10 +31,10 @@
 
 /// Outputs values scaling based on viewport dimensions.
 ///
-/// @param {Length.px|Length.rem|List<Length.px|Length.rem>} $max-values
+/// @param {Length.px|Length.rem|List<Length.px|Length.rem>} $max_values
 ///   The value(s) at maximum *gate* breakpoint. Works with `px` and `rem`
 ///   values only.
-/// @param {Length.px|Length.rem|List<Length.px|Length.rem} $min-values [0px]
+/// @param {Length.px|Length.rem|List<Length.px|Length.rem} $min_values [0px]
 ///   The minimum value(s).
 /// @param {String|Length.vw|Length.vh} $at [layout.$SITE_WIDTH * 1vw]
 ///   The breakpoint where the scaling should stop at. Possible values are:
@@ -48,21 +48,21 @@
 ///
 /// @return {Value|List<Value>}
 ///   Scaling value(s) between minimum and maximum values based on viewport.
-@function scale($max-values, $min-values: 0px, $at: layout.$SITE-WIDTH * 1vw, $from: 600) {
+@function scale($max_values, $min_values: 0px, $at: layout.$SITE_WIDTH * 1vw, $from: 600) {
   @if ($at != 'vmin' and math.unit($at) != 'vw' and math.unit($at) != 'vh') {
     @error '#{$at} should be a CSS value of vw or vh, with the value being the "maximum gate" breakpoint or literally "vmin".';
   }
 
-  // Ensure $min-values matches length of $max-values.
-  @while (list.length($min-values) < list.length($max-values)) {
-    $min-values: list.append($min-values, list.nth($min-values, -1));
+  // Ensure $min_values matches length of $max_values.
+  @while (list.length($min_values) < list.length($max_values)) {
+    $min_values: list.append($min_values, list.nth($min_values, -1));
   }
 
-  $max-values-unitless: ();
-  $min-values-unitless: ();
-  @for $i from 1 through list.length($max-values) {
-    $max: list.nth($max-values, $i);
-    $min: list.nth($min-values, $i);
+  $max_values_unitless: ();
+  $min_values_unitless: ();
+  @for $i from 1 through list.length($max_values) {
+    $max: list.nth($max_values, $i);
+    $min: list.nth($min_values, $i);
 
     $max_unit: math.unit($max);
     $min_unit: math.unit($min);
@@ -74,18 +74,18 @@
       @error 'Min-value #{$i} "#{$min}", must be in px or rem units.';
     }
 
-    $max-values-unitless: list.append($max-values-unitless, unit.strip(
+    $max_values_unitless: list.append($max_values_unitless, unit.strip(
       if($max_unit == 'rem', unit.rem-to-px($max), $max))
     );
-    $min-values-unitless: list.append($min-values-unitless, unit.strip(
+    $min_values_unitless: list.append($min_values_unitless, unit.strip(
       if($min_unit == 'rem', unit.rem-to-px($min), $min))
     );
   }
 
-  $values-unitless: list.zip($min-values-unitless, $max-values-unitless);
+  $values_unitless: list.zip($min_values_unitless, $max_values_unitless);
 
   $scalers: ();
-  @each $min, $max in $values-unitless {
+  @each $min, $max in $values_unitless {
     $scalers: list.append($scalers, if(
       $at == 'vmin',
       '(#{$max - $min} * (100vmin / 980))',
@@ -96,16 +96,16 @@
   // Scaling output.
   $values: ();
   @for $i from 1 through list.length($scalers) {
-    $max: list.nth($max-values, $i);
-    $min: list.nth($min-values, $i);
+    $max: list.nth($max_values, $i);
+    $min: list.nth($min_values, $i);
 
     $value: $max;
 
     @if $max != $min {
       $scale: list.nth($scalers, $i);
 
-      $max_unitless: list.nth($max-values-unitless, $i);
-      $min_unitless: list.nth($min-values-unitless, $i);
+      $max_unitless: list.nth($max_values_unitless, $i);
+      $min_unitless: list.nth($min_values_unitless, $i);
 
       $lower: if($max_unitless > $min_unitless, $min, $max);
       $scale: if(unit.strip($min) != 0, string.insert($scale, '#{$min} + ', 1), $scale);

@@ -5,8 +5,8 @@
 @use 'sass:color';
 
 $accent: hsl(210, 100%, 60%);
-$border-color: #ccc;
-$border-radius: 4px;
+$border_color: #ccc;
+$border_radius: 4px;
 
 // Wrapper.
 //
@@ -23,7 +23,7 @@ $border-radius: 4px;
   box-shadow: none; // 1
   margin: 0; // 1
   border: 0; // 1
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid $border_color;
   background-color: transparent; // 1
 }
 
@@ -37,7 +37,7 @@ $border-radius: 4px;
 // Clickable wrapper for toolbar button.
 .imce-tbb {
   margin: 0.4rem 0 0.4rem 0.4rem;
-  border: 1px solid $border-color;
+  border: 1px solid $border_color;
   border-radius: 999px;
   padding: 0.4rem 1.5rem;
   cursor: pointer;
@@ -78,7 +78,7 @@ $border-radius: 4px;
 .imce-branch-name {
   flex: 1 0 0px;
   margin: 0 0 0 0.2rem;
-  border-radius: $border-radius;
+  border-radius: $border_radius;
   padding: 0.4rem;
 
   &:hover {
@@ -111,7 +111,7 @@ $border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: $border-radius;
+  border-radius: $border_radius;
   width: 1.5rem;
   height: 1.5rem;
   cursor: pointer;
@@ -139,7 +139,7 @@ $border-radius: 4px;
 // Resizing draggable handles.
 #imce-body-resizer,
 #imce-tree-resizer {
-  background-color: $border-color;
+  background-color: $border_color;
 }
 
 // Horizontal resizer icon.
@@ -221,7 +221,7 @@ $border-radius: 4px;
   }
 
   .imce-folder-content & {
-    border-radius: $border-radius;
+    border-radius: $border_radius;
 
     &:hover {
       box-shadow: 0 0 0 1px $accent inset;
@@ -271,7 +271,7 @@ $border-radius: 4px;
 
 // Content folder window pane footer.
 .imce-content-status {
-  border-top: 1px solid $border-color;
+  border-top: 1px solid $border_color;
   background-color: #fff;
   width: 100%;
 
@@ -279,7 +279,7 @@ $border-radius: 4px;
   > * {
     background: transparent; // 1
     border: 0; // 1
-    border-right: 1px solid $border-color;
+    border-right: 1px solid $border_color;
   }
 }
 
@@ -288,12 +288,12 @@ $border-radius: 4px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid $border_color;
 
   // 1. Reset
   > * {
     margin: 0 0 0 -1px;
-    border-color: $border-color;
+    border-color: $border_color;
     border-top: 0; // 1
     border-bottom: 0; // 1
     padding: 0.8rem;

@@ -2,10 +2,10 @@
 //// Variables for forms.
 ////
 
-$color-default: grey;
-$color-active: orange;
-$font-size: 18;
+$color_default: grey;
+$color_active: orange;
+$font_size: 18;
 $height: 55;
-$height-rem: $height * 1rem / 16;
-$line-height: 1.2;
-$padding: ($height - ($font-size * 1px * $line-height)) / 2;
+$height_rem: $height * 1rem / 16;
+$line_height: 1.2;
+$padding: ($height - ($font_size * 1px * $line_height)) / 2;
