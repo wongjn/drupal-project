@@ -150,15 +150,29 @@ $title_size: 1.5em;
 
 header {
   display: flex;
+  display: grid;
   align-items: center;
   justify-content: space-between;
   flex: 0 0 auto;
-  height: 90px; // Matches height of header bar.
+  grid-template-columns: 1fr 1fr;
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr max-content 1fr;
+  }
+
+  > :nth-child(3n + 1) {
+    justify-self: start;
+  }
+
+  > :nth-child(3n) {
+    justify-self: end;
+  }
 }
 
 // Hide using visibility so that it is still involved in layout for the parent
 // `justify-content: space-between` so that the button remains on the right.
 a {
+  padding: 10px 0;
   visibility: hidden;
 
   @media (min-width: 320px) {
