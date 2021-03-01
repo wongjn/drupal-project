@@ -5,6 +5,7 @@
 
 import Drupal from 'Drupal';
 import Cookies from 'js-cookie';
+import { matchChildren } from '../../lib/dom';
 
 /**
  * Cookie name for saving state across pages.
@@ -46,11 +47,22 @@ function openButtonToggler(openButton) {
  *   Function to call after loading is complete.
  */
 function setLoading(button) {
-  const id = setTimeout(() => button.classList.add('is-loading'), 1000);
+  const id = setTimeout(() => {
+    button.insertAdjacentHTML(
+      'beforeend',
+      `
+<svg class="c-main-menu__throbber" viewBox="0 0 20 20">
+  <circle r="9" cx="10" cy="10" pathLength="1"/>
+  <circle r="9" cx="10" cy="10" pathLength="1"/>
+</svg>`,
+    );
+    button.classList.add('is-loading');
+  }, 1000);
 
   return () => {
     clearTimeout(id);
     button.classList.remove('is-loading');
+    matchChildren('svg', button).forEach(svg => svg.remove());
   };
 }
 
