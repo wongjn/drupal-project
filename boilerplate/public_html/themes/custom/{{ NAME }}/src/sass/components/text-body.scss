@@ -82,14 +82,6 @@
     margin-left: viewport.scale(20px, 5px);
   }
 
-  &--editor {
-    // Remove text cropping in WYSIWYG.
-    &::before,
-    &::after {
-      margin: 0;
-    }
-  }
-
   &__media {
     &.align-left,
     &.align-right {
