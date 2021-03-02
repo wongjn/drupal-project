@@ -286,8 +286,15 @@ button {
 
       &--sub {
         margin-top: 1rem;
+        margin-left: layout.$GUTTER_FALLBACK_PX;
+        margin-left: var(--site-gutter);
         min-width: 0;
         overflow: hidden;
+
+        &:first-child,
+        & & {
+          margin-left: 0;
+        }
       }
     }
 
