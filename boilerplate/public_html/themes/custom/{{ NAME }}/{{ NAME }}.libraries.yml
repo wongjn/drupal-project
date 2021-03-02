@@ -12,6 +12,7 @@ global:
     component:
       dist/css/components/main-menu.css: {}
       dist/css/components/text-body.css: {}
+      dist/css/objects/link-underline-wrapped.css: {} # Assumes main menu always exists.
       dist/css/objects/title.css: {}
     theme:
       dist/css/utilities.css: {}

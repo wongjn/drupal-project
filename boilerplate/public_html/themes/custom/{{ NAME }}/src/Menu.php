@@ -73,7 +73,7 @@ class Menu {
     $item['url']->mergeOptions([
       'attributes' => [
         'class' => [
-          'u-link-underline-wrapped',
+          'o-link-underline-wrapped',
           'c-main-menu__link',
           "c-main-menu__link--$suffix",
         ],
@@ -84,7 +84,7 @@ class Menu {
       '#type' => 'inline_template',
       '#template' => '<span{{ attributes }}>{{ title }}</span>',
       '#context' => [
-        'attributes' => new Attribute(['class' => ['u-link-underline-wrapped__text']]),
+        'attributes' => new Attribute(['class' => ['o-link-underline-wrapped__text']]),
         'title' => $item['title'],
       ],
     ];

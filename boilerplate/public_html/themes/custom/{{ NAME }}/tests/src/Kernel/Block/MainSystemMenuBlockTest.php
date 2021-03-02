@@ -90,12 +90,12 @@ class MainSystemMenuBlockTest extends BlockTestBase {
       [
         'c-main-menu__link',
         'c-main-menu__link--top',
-        'u-link-underline-wrapped',
+        'o-link-underline-wrapped',
       ],
       (string) $element->attributes()->class,
       'Top level link classes.'
     );
-    $elements = $element->xpath('./span[@class="u-link-underline-wrapped__text"]');
+    $elements = $element->xpath('./span[@class="o-link-underline-wrapped__text"]');
     $this->assertCount(1, $elements, 'Top level link text wrapper.');
 
     $elements = reset($elements)->xpath('../following-sibling::ul[@class="c-main-menu__sub-menu"]');
@@ -117,12 +117,12 @@ class MainSystemMenuBlockTest extends BlockTestBase {
       [
         'c-main-menu__link',
         'c-main-menu__link--sub',
-        'u-link-underline-wrapped',
+        'o-link-underline-wrapped',
       ],
       (string) $element->attributes()->class,
       'Sub-level link classes.'
     );
-    $elements = $element->xpath('./span[@class="u-link-underline-wrapped__text"]');
+    $elements = $element->xpath('./span[@class="o-link-underline-wrapped__text"]');
     $this->assertCount(1, $elements, 'Sub-level link text wrapper.');
 
     $elements = reset($elements)->xpath('../following-sibling::ul');
@@ -150,12 +150,12 @@ class MainSystemMenuBlockTest extends BlockTestBase {
       [
         'c-main-menu__link',
         'c-main-menu__link--sub',
-        'u-link-underline-wrapped',
+        'o-link-underline-wrapped',
       ],
       (string) $element->attributes()->class,
       'Deep level link classes.'
     );
-    $elements = $element->xpath('./span[@class="u-link-underline-wrapped__text"]');
+    $elements = $element->xpath('./span[@class="o-link-underline-wrapped__text"]');
     $this->assertCount(1, $elements, 'Deep level link text wrapper.');
 
     $elements = $main_menu->xpath('./*[@class="c-main-menu__drawer"]');
