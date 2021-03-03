@@ -29,11 +29,6 @@ global.polyfill:
       type: external
       minified: true
 
-align.module:
-  css:
-    component:
-      dist/css/components/align.module.css: {}
-
 drupal.vertical-tabs:
   css:
     component:
