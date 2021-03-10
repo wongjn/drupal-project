@@ -14,7 +14,7 @@
  */
 #}
 {% if title is not empty or required %}
-  <label{{ attributes.addClass(classes) }}>
+  <label{{ attributes }}>
     {% if required %}<span aria-label="{{ 'Required'|t }}">*</span>{% endif -%}
     {{ title }}
   </label>
