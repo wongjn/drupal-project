@@ -12,6 +12,7 @@ const readDir = promisify(fs.readdir);
 
 // KSS config.
 const kssConfig = {
+  builder: 'builder/twig',
   destination: './styleguide',
   homepage: './README.md',
   title: '{{ LABEL }} Styleguide',
