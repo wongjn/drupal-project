@@ -3,10 +3,9 @@
     "@babel/plugin-syntax-dynamic-import",
     ["@babel/plugin-transform-runtime", { "useESModules": true }]
   ],
+  "browserslistConfigFile": ".browserslistrc",
   "env": {
-    "legacy": {
-      "presets": [["@babel/preset-env", { "modules": false }]]
-    },
+    "legacy": { "presets": [["@babel/preset-env", { "modules": false }]] },
     "modern": {
       "presets": [
         [
